@@ -12,7 +12,10 @@
     "build": "rm -rf dist types && tsc --removeComments",
     "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
     "test": "tsc --noEmit",
-    "clean": "rm -rf node_modules package-lock.json dist types"
+    "clean": "rm -rf node_modules package-lock.json dist types docs",
+    "docs": "rm -rf docs && typedoc src",
+    "prepublishOnly": "npm run build && npm run types",
+    "postpublish": "npm run clean"
   },
   "keywords": [],
   "author": {
@@ -27,6 +30,7 @@
     "directory": "smath"
   },
   "devDependencies": {
+    "typedoc": "^0.25.9",
     "typescript": "^5.3.3"
   }
 }
