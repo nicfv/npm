@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+publish=false
+if [[ "${1}" == 'publish' ]] ; then
+    publish=true
+fi
+
+if "${publish}" ; then
+    if [[ -z "${NPM_TOKEN}" ]] ; then
+        echo 'Missing environment variable NPM_TOKEN'
+        exit 1
+    else
+        npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+    fi
+fi
+
+for dir in */ ; do
+    # Extract package name, changelog version, and package version
+    package_name="$(npm --silent v "${dir}" name)"
+    echo "Package Name   = ${package_name}"
+    local_version="$(npm --silent v "${dir}" version)"
+    echo "Local Version  = ${local_version}"
+    log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "${dir}CHANGELOG.md" | head -n1)"
+    echo "Log Version    = ${log_version}"
+    # Make sure package.json and changelog versions match
+    if [[ "${local_version}" != "${log_version}" ]] ; then
+        echo 'Package and changelog versions do not match!'
+        exit 1
+    fi
+    # Run test script
+    cd "${dir}" || exit 1
+    echo 'Running tests...'
+    npm test
+    if "${publish}" ; then
+        # Determine latest published version on the registry
+        npm_version="$(npm --silent v "${package_name}" version)"
+        echo "Version on NPM = ${npm_version}"
+        if [[ "${local_version}" == "${npm_version}" ]] ; then
+            echo 'Skipping publish step'
+        else
+            echo 'Publishing...'
+            npm publish
+        fi
+    fi
+    cd ..
+done
