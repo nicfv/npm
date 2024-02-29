@@ -7,8 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Nicolas Ventura",
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "smath@nicolasventura.com",
+    "url": "https://nicolasventura.com/"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicfv/npm",
+    "directory": "smath"
+  },
   "devDependencies": {
     "typescript": "^5.3.3"
   }
