@@ -12,12 +12,12 @@
     "email": "smath@nicolasventura.com",
     "url": "https://nicolasventura.com/"
   },
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/nicfv/npm",
     "directory": "smath"
   },
+  "license": "MIT",
   "devDependencies": {
     "typescript": "^5.3.3"
   }
