@@ -9,4 +9,4 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Run tests
-        run: .github/workflows/run && exit 1
+        run: .github/workflows/run
