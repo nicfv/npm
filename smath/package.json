@@ -3,8 +3,16 @@
   "version": "0.0.1",
   "description": "Small math function library",
   "main": "index.js",
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
-    "test": "tsc --noEmit"
+    "dev": "rm -rf dist && tsc --watch",
+    "build": "rm -rf dist types && tsc --removeComments",
+    "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
+    "test": "tsc --noEmit",
+    "clean": "rm -rf node_modules package-lock.json dist types"
   },
   "keywords": [],
   "author": {

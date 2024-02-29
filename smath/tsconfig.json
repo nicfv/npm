@@ -4,8 +4,5 @@
     "module": "CommonJS",
     "rootDir": "src",
     "outDir": "dist",
-    "declaration": true,
-    "declarationDir": "types",
-    "removeComments": true,
   }
 }
