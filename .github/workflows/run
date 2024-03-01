@@ -16,6 +16,10 @@ if "${publish}" ; then
 fi
 
 for dir in */ ; do
+    npm --silent v "${dir}" || {
+        echo "${dir} is not an NPM project"
+        continue
+    }
     # Extract package name, changelog version, and package version
     package_name="$(npm --silent v "${dir}" name)"
     echo "Package Name   = ${package_name}"
