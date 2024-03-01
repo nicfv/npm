@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.2
+
+- Add basic interpolation functions:
+    - `Interpolator.normalize`
+    - `Interpolator.expand`
+    - `Interpolator.translate`
+- Generate documentation with `typedoc`
+
 ## 0.0.1
 
 - Add details in `package.json`

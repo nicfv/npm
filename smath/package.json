@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Small math function library",
   "main": "index.js",
   "files": [
@@ -23,12 +23,13 @@
     "email": "smath@nicolasventura.com",
     "url": "https://nicolasventura.com/"
   },
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/nicfv/npm",
     "directory": "smath"
   },
+  "homepage": "https://npm.nicfv.com/smath",
+  "license": "MIT",
   "devDependencies": {
     "typedoc": "^0.25.9",
     "typescript": "^5.3.3"
