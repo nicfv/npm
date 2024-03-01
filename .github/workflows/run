@@ -10,12 +10,13 @@ if "${publish}" ; then
         echo 'Missing environment variable NPM_TOKEN'
         exit 1
     else
-        mkdir -p .docs
+        mkdir .docs || exit 1
         npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     fi
 fi
 
 for dir in */ ; do
+    # Skip directories that are not an npm project
     npm --silent v "${dir}" || {
         echo "${dir} is not an NPM project"
         continue
