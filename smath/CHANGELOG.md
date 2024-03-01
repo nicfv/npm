@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3
+
+- Fix bugs in scripts
+- Install dependencies before publishing
+- Add type declarations in `package.json`
+
 ## 0.0.2
 
 - Add basic interpolation functions:
