@@ -35,6 +35,8 @@ for dir in */ ; do
     fi
     # Run test script
     cd "${dir}" || exit 1
+    echo 'Installing dependencies...'
+    npm i
     echo 'Running tests...'
     npm test
     if "${publish}" ; then
