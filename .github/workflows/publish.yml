@@ -5,8 +5,16 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -15,7 +23,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install dependencies
+        run: npm i
       - name: Publish packages
         run: .github/workflows/run publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
