@@ -10,6 +10,7 @@ if "${publish}" ; then
         echo 'Missing environment variable NPM_TOKEN'
         exit 1
     else
+        mkdir -p .docs
         npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     fi
 fi
@@ -40,6 +41,9 @@ for dir in */ ; do
         else
             echo 'Publishing...'
             npm publish
+            echo 'Generating documentation...'
+            npm run docs
+            mv docs "../.docs/${dir}"
         fi
     fi
     cd ..
