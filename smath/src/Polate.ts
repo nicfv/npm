@@ -43,7 +43,8 @@ export abstract class Polate {
      * @returns A translated number in the final range
      * @example
      * ```js
-     * const C = 20, F = Polate.translate(C, 0, 100, 32, 212); // 68
+     * const C = 20,
+     *       F = Polate.translate(C, 0, 100, 32, 212); // 68
      * ```
      */
     public static translate(n: number, min1: number, max1: number, min2: number, max2: number): number {
