@@ -1,5 +1,5 @@
 /**
- * Contains useful interpolation functions.
+ * Contains useful interpolation and extrapolation functions.
  */
 export class Interpolator {
     /**
