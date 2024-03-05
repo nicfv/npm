@@ -15,7 +15,7 @@ export abstract class Polate {
      */
     public static normalize(n: number, min: number, max: number): number {
         if (min === max) {
-            return min;
+            return 0;
         }
         return (n - min) / (max - min);
     }
