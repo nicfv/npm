@@ -6,6 +6,7 @@
 - Add and export `SMath` library
 - Minor simplification in `tsconfig.json`
 - Add badges in README
+- Add keywords in `package.json`
 
 ## 0.0.3
 
