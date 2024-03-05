@@ -32,5 +32,8 @@
     "directory": "viridis"
   },
   "homepage": "https://npm.nicfv.com/viridis",
-  "license": "ISC"
+  "license": "MIT",
+  "dependencies": {
+    "smath": "^1.1.1"
+  }
 }
