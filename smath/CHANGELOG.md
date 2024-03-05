@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+- Add rounding function
+- `isNumber` cannot be +/- infinity
+- Fix normalization bug when `min = max`
+
 ## 1.0.1
 
 - Fix minor documentation in `SMath`
