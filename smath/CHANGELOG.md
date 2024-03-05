@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0
+
+- Remove `isNumber`, prefer builtin `isFinite()`
+- Remove `round`, prefer builtin `toFixed()`
+- Move all functions to `SMath` class
+- Move class to index file
+
 ## 1.0.2
 
 - Add rounding function
