@@ -51,4 +51,17 @@ export abstract class SMath {
     public static approx(a: number, b: number, epsilon: number = 1e-6): boolean {
         return a - b < epsilon && b - a < epsilon;
     }
+    /**
+     * Round a number to any number of decimal places.
+     * @param n The number to round
+     * @param d The number of places on the right side of the decimal
+     * @returns The rounded number
+     * @example
+     * ```js
+     * const pi = SMath.round(3.1416, 2); // 3.14
+     * ```
+     */
+    public static round(n: number, d: number): number {
+        return Math.round(n * 10 ** d) / (10 ** d);
+    }
 }
