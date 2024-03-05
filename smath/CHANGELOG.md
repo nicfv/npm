@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0
+
+- Make classes abstract
+- Add short package documentation
+- Add examples in documentation
+- Add installation instructions and example in README
+
 ## 0.0.4
 
 - Rename interpolator class
