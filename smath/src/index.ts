@@ -1,1 +1,1 @@
-export * from './Interpolator';
+export * from './Polate';
