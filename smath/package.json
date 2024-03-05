@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Small math function library",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -17,11 +17,26 @@
     "docs": "rm -rf docs && typedoc src",
     "prepublishOnly": "npm run build && npm run types"
   },
-  "keywords": [],
+  "keywords": [
+    "small",
+    "math",
+    "function",
+    "library",
+    "simple",
+    "number",
+    "interpolate",
+    "interpolation",
+    "extrapolate",
+    "extrapolation"
+  ],
   "author": {
     "name": "Nicolas Ventura",
     "email": "smath@nicolasventura.com",
     "url": "https://nicolasventura.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
   },
   "repository": {
     "type": "git",
