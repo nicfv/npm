@@ -18,9 +18,9 @@
 ## 0.0.2
 
 - Add basic interpolation functions:
-    - `Interpolator.normalize`
-    - `Interpolator.expand`
-    - `Interpolator.translate`
+    - `normalize`
+    - `expand`
+    - `translate`
 - Generate documentation with `typedoc`
 
 ## 0.0.1
