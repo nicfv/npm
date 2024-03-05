@@ -34,6 +34,10 @@
     "email": "smath@nicolasventura.com",
     "url": "https://nicolasventura.com/"
   },
+  "funding": {
+    "type": "paypal",
+    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nicfv/npm",

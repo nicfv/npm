@@ -7,6 +7,7 @@
 - Minor simplification in `tsconfig.json`
 - Add badges in README
 - Add keywords in `package.json`
+- Add funding in `package.json`
 
 ## 0.0.3
 
