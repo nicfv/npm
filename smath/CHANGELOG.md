@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.4
+
+- Rename interpolator class
+- Add and export `SMath` library
+- Minor simplification in `tsconfig.json`
+- Add badges in README
+
 ## 0.0.3
 
 - Fix bugs in scripts
