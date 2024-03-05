@@ -1,12 +1,36 @@
 {
   "name": "viridis",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "Generate color gradients based on the Viridis package for R",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf dist && tsc --removeComments",
+    "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
+    "test": "tsc --noEmit",
+    "clean": "rm -rf node_modules package-lock.json dist types docs",
+    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
+    "prepublishOnly": "npm run build && npm run types"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "viridis@nicolasventura.com",
+    "url": "https://nicolasventura.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicfv/npm",
+    "directory": "viridis"
+  },
+  "homepage": "https://npm.nicfv.com/viridis",
   "license": "ISC"
 }
