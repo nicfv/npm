@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0
+
+- Make classes abstract
+- Add short package documentation
+- Add examples in documentation
+- Add installation instructions and example in README
+
 ## 0.0.4
 
 - Rename interpolator class
@@ -18,9 +25,9 @@
 ## 0.0.2
 
 - Add basic interpolation functions:
-    - `Interpolator.normalize`
-    - `Interpolator.expand`
-    - `Interpolator.translate`
+    - `normalize`
+    - `expand`
+    - `translate`
 - Generate documentation with `typedoc`
 
 ## 0.0.1
