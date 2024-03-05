@@ -35,5 +35,9 @@
   "license": "MIT",
   "dependencies": {
     "smath": "^1.1.1"
+  },
+  "devDependencies": {
+    "typedoc": "^0.25.10",
+    "typescript": "^5.3.3"
   }
 }
