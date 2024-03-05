@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1
+
+- Fix minor documentation in `SMath`
+- Update typedoc version
+- Show package version in documentation
+- Disable links to GitHub and hide generator
+
 ## 1.0.0
 
 - Make classes abstract
