@@ -13,7 +13,7 @@ export abstract class SMath {
      * ```
      */
     public static isNumber(n: any): boolean {
-        return typeof n === 'number';
+        return typeof n === 'number' && n !== Infinity && n !== -Infinity;
     }
     /**
      * Clamp a number within a range.
