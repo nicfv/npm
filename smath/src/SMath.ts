@@ -3,19 +3,6 @@
  */
 export abstract class SMath {
     /**
-     * Determine if a value is numeric.
-     * @param n Any value to check
-     * @returns True if `n` is a number
-     * @example
-     * ```js
-     * const b1 = SMath.isNumber(2),   // true
-     *       b2 = SMath.isNumber('2'); // false
-     * ```
-     */
-    public static isNumber(n: any): boolean {
-        return typeof n === 'number' && n !== Infinity && n !== -Infinity;
-    }
-    /**
      * Clamp a number within a range.
      * @param n The number to clamp
      * @param min The minimum value of the range
