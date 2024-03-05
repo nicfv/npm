@@ -1,7 +1,7 @@
 /**
- * Contains useful interpolation functions.
+ * Contains useful interpolation and extrapolation functions.
  */
-export class Interpolator {
+export class Polate {
     /**
      * Normalize the number `n` from the range `min, max` to the range `0, 1`
      * @param n The number to normalize

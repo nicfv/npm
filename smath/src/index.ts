@@ -1,1 +1,2 @@
-export * from './Interpolator';
+export * from './Polate';
+export * from './SMath';
