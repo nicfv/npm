@@ -61,7 +61,7 @@ export abstract class SMath {
      * const pi = SMath.round(3.1416, 2); // 3.14
      * ```
      */
-    public static round(n: number, d: number): number {
+    public static round(n: number, d: number = 0): number {
         return Math.round(n * 10 ** d) / (10 ** d);
     }
 }
