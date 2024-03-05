@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Small math function library",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -14,7 +14,7 @@
     "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
-    "docs": "rm -rf docs && typedoc src",
+    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepublishOnly": "npm run build && npm run types"
   },
   "keywords": [
@@ -46,7 +46,7 @@
   "homepage": "https://npm.nicfv.com/smath",
   "license": "MIT",
   "devDependencies": {
-    "typedoc": "^0.25.9",
+    "typedoc": "^0.25.10",
     "typescript": "^5.3.3"
   }
 }

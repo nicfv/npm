@@ -1,5 +1,5 @@
 /**
- * Small Math function library
+ * Contains a small math function library.
  */
 export abstract class SMath {
     /**
@@ -8,7 +8,7 @@ export abstract class SMath {
      * @returns True if `n` is a number
      * @example
      * ```js
-     * const b1 = SMath.isNumber(2);   // true
+     * const b1 = SMath.isNumber(2),   // true
      *       b2 = SMath.isNumber('2'); // false
      * ```
      */

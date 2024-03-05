@@ -43,3 +43,7 @@ if (!valid) {
 ```
 
 Visit the [official documentation](https://npm.nicfv.com/smath/) to learn more!
+
+## Contribute
+
+`smath` is an open source software package hosted on a [GitHub repository](https://github.com/nicfv/npm). Bug reports and feature requests can be submitted in [issues](https://github.com/nicfv/npm/issues). Contributions are also accepted by submitting a [pull request](https://github.com/nicfv/npm/pulls). Please follow the code styling if submitting a pull request.
