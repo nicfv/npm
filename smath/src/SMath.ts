@@ -1,7 +1,7 @@
 /**
  * Small Math function library
  */
-export class SMath {
+export abstract class SMath {
     /**
      * Determine if a value is numeric.
      * @param n Any value to check
