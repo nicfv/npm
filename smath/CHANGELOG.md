@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Update example in README
+
 ## 1.1.0
 
 - Remove `isNumber`, prefer builtin `isFinite()`
