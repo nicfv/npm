@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.4
+
+- Export palette
+- Update tagline description
+
 ## 0.0.3
 
 - Add default color gradient palettes
