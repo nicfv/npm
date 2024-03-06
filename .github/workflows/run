@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+# Fail if npm is not found
+npm -v || exit 1
+
+# Check for publish flag
 publish=false
 if [[ "${1}" == 'publish' ]] ; then
     publish=true
 fi
 
+# Check for and set npm token
 if "${publish}" ; then
     if [[ -z "${NPM_TOKEN}" ]] ; then
         echo 'Missing environment variable NPM_TOKEN'
@@ -16,6 +21,7 @@ if "${publish}" ; then
 fi
 
 for dir in */ ; do
+    npx -y wag "Checking directory '${dir}'"
     # Skip directories that are not an npm project
     npm --silent v "${dir}" || {
         echo "${dir} is not an NPM project"
@@ -38,7 +44,7 @@ for dir in */ ; do
     echo 'Installing dependencies...'
     npm i
     echo 'Running tests...'
-    npm test
+    npm test || exit 1
     if "${publish}" ; then
         # Determine latest published version on the registry
         npm_version="$(npm --silent v "${package_name}" version)"
