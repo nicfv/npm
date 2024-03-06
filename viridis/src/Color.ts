@@ -11,7 +11,7 @@ export class Color {
      * @param blue Blue channel intensity [0, 255]
      * @param alpha Alpha channel transparency [0, 100]
      */
-    constructor(private readonly red: number, private readonly green: number, private readonly blue: number, private readonly alpha: number = 100) {
+    constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha: number = 100) {
         this.red = SMath.clamp(red, 0, 255);
         this.green = SMath.clamp(green, 0, 255);
         this.blue = SMath.clamp(blue, 0, 255);
