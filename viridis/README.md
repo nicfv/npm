@@ -1,1 +1,1 @@
-Generate color gradients based on the [Viridis](https://cran.r-project.org/web/packages/viridis/index.html) package for R.
+Generate color gradients based on [MatPlotLib colormaps](https://bids.github.io/colormap/) and the [Viridis](https://cran.r-project.org/web/packages/viridis/index.html) package for R.
