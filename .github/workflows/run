@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Fail if npm is not found
+# Fail if node or npm not found
+node -v || exit 1
 npm -v || exit 1
 
 # Check for publish flag
