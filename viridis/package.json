@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Generate data visualization color gradients",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
