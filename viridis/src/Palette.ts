@@ -1,19 +1,15 @@
-/**
- * @packageDocumentation
- * Credits belong to:
- * - mpl Colormaps: https://bids.github.io/colormap/
- * - Viridis Color Palette Generator: https://waldyrious.net/viridis-palette-generator/
- * - Loading Colors: https://loading.io/color/feature/
- * - Carto Colors: https://carto.com/carto-colors/
- */
-
 import { Color } from './Color';
 import { Gradient } from './Gradient';
 
 /**
  * Contains builtin color palettes.
+ * 
+ * Credits:
+ * - Viridis Color Palette Generator: https://waldyrious.net/viridis-palette-generator/
+ * - Loading Colors: https://loading.io/color/feature/
+ * - Carto Colors: https://carto.com/carto-colors/
  */
-export const Palette: { [index: string]: Gradient } = {
+export const Palette = {
     // https://waldyrious.net/viridis-palette-generator/
     Viridis: new Gradient([
         Color.from('#fde725'),

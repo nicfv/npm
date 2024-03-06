@@ -10,6 +10,10 @@ export class Color {
      * @param green Green channel intensity [0, 255]
      * @param blue Blue channel intensity [0, 255]
      * @param alpha Alpha channel transparency [0, 100]
+     * @example
+     * ```js
+     * const red = new Color(255, 0, 0);
+     * ```
      */
     constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha: number = 100) {
         this.red = SMath.clamp(red, 0, 255);
@@ -21,6 +25,11 @@ export class Color {
      * Return the most contrasting color for
      * text on a background of this color.
      * @returns Black or white
+     * @example
+     * ```js
+     * // Returns the color white (255, 255, 255)
+     * const contrast = red.getContrastingColor();
+     * ```
      */
     public getContrastingColor(): Color {
         if (this.red + this.green * 1.5 + this.blue * 0.5 > 255 * 1.5) {
@@ -32,6 +41,10 @@ export class Color {
     /**
      * Return a string representation of this color.
      * @returns A valid CSS color code
+     * @example
+     * ```js
+     * const css = red.toString(); // rgba(255,0,0,100%)
+     * ```
      */
     public toString(): string {
         return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
@@ -44,6 +57,10 @@ export class Color {
      * - Alpha channel can be included for an additional 2 bits (8 chars total)
      * @param hex Hexadecimal string
      * @returns A new color defined by the hexadecimal string
+     * @example
+     * ```js
+     * const red = Color.from('#ff0000');
+     * ```
      */
     public static from(hex: string): Color {
         const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
