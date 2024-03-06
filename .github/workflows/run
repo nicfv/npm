@@ -56,6 +56,9 @@ for dir in */ ; do
             echo 'Publishing...'
             npm publish
         fi
+        # Always generate documentation because if only one
+        # package generates documentation, then it will
+        # overwrite the GH pages archive with that dir only
         echo 'Generating documentation...'
         npm run docs
         mv docs "../_docs/${dir}"
