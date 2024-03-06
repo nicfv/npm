@@ -46,7 +46,7 @@
   "homepage": "https://npm.nicfv.com/smath",
   "license": "MIT",
   "devDependencies": {
-    "typedoc": "^0.25.10",
+    "typedoc": "0.25.11",
     "typescript": "^5.3.3"
   }
 }
