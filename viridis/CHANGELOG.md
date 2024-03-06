@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.2
+
+- Add and export class to compute linear, uniform gradients based on an array of colors
+
 ## 0.0.1
 
 - Set up package details in `package.json`
