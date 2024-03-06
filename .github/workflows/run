@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
+# Fail if npm is not found
 npm -v || exit 1
 
+# Check for publish flag
 publish=false
 if [[ "${1}" == 'publish' ]] ; then
     publish=true
 fi
 
+# Check for and set npm token
 if "${publish}" ; then
     if [[ -z "${NPM_TOKEN}" ]] ; then
         echo 'Missing environment variable NPM_TOKEN'
