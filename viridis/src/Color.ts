@@ -38,6 +38,7 @@ export class Color {
     }
     /**
      * Create a new color given a hexadecimal string.
+     * Will throw an error if the string is invalid.
      * - Expects 2 bits [0-F] for red, green, blue channels (6 chars total)
      * - String can optionally start with the character '#'
      * - Alpha channel can be included for an additional 2 bits (8 chars total)
