@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# Function for logging messages
-log() {
-    npx -y wag@latest "[$(date)] ${*}"
-}
-
 # Fail if node or npm not found
 node -v || exit 1
 npm -v || exit 1
@@ -18,7 +13,7 @@ fi
 # Check for and set npm token
 if "${publish}" ; then
     if [[ -z "${NPM_TOKEN}" ]] ; then
-        log 'Missing environment variable NPM_TOKEN'
+        echo 'Missing environment variable NPM_TOKEN'
         exit 1
     else
         mkdir _docs || exit 1
@@ -27,44 +22,44 @@ if "${publish}" ; then
 fi
 
 for dir in */ ; do
-    log "Checking directory '${dir}'"
+    npx -y wag "Checking directory '${dir}'"
     # Skip directories that are not an npm project
     npm --silent v "${dir}" || {
-        log "${dir} is not an NPM project"
+        echo "${dir} is not an NPM project"
         continue
     }
     # Extract package name, changelog version, and package version
     package_name="$(npm --silent v "${dir}" name)"
-    log "Package Name   = ${package_name}"
+    echo "Package Name   = ${package_name}"
     local_version="$(npm --silent v "${dir}" version)"
-    log "Local Version  = ${local_version}"
+    echo "Local Version  = ${local_version}"
     log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "${dir}CHANGELOG.md" | head -n1)"
-    log "Log Version    = ${log_version}"
+    echo "Log Version    = ${log_version}"
     # Make sure package.json and changelog versions match
     if [[ "${local_version}" != "${log_version}" ]] ; then
-        log 'Package and changelog versions do not match!'
+        echo 'Package and changelog versions do not match!'
         exit 1
     fi
     # Run test script
     cd "${dir}" || exit 1
-    log 'Installing dependencies...'
+    echo 'Installing dependencies...'
     npm i
-    log 'Running tests...'
+    echo 'Running tests...'
     npm test || exit 1
     if "${publish}" ; then
         # Determine latest published version on the registry
         npm_version="$(npm --silent v "${package_name}" version)"
-        log "Version on NPM = ${npm_version}"
+        echo "Version on NPM = ${npm_version}"
         if [[ "${local_version}" == "${npm_version}" ]] ; then
-            log 'Skipping publish step'
+            echo 'Skipping publish step'
         else
-            log 'Publishing...'
+            echo 'Publishing...'
             npm publish
         fi
         # Always generate documentation because if only one
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
-        log 'Generating documentation...'
+        echo 'Generating documentation...'
         npm run docs
         mv docs "../_docs/${dir}"
     fi
