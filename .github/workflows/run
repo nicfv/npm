@@ -1,21 +1,28 @@
 #!/usr/bin/env bash
 
+# Fail if node or npm not found
+node -v || exit 1
+npm -v || exit 1
+
+# Check for publish flag
 publish=false
 if [[ "${1}" == 'publish' ]] ; then
     publish=true
 fi
 
+# Check for and set npm token
 if "${publish}" ; then
     if [[ -z "${NPM_TOKEN}" ]] ; then
         echo 'Missing environment variable NPM_TOKEN'
         exit 1
     else
-        mkdir .docs || exit 1
+        mkdir _docs || exit 1
         npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     fi
 fi
 
 for dir in */ ; do
+    npx -y wag "Checking directory '${dir}'"
     # Skip directories that are not an npm project
     npm --silent v "${dir}" || {
         echo "${dir} is not an NPM project"
@@ -38,7 +45,7 @@ for dir in */ ; do
     echo 'Installing dependencies...'
     npm i
     echo 'Running tests...'
-    npm test
+    npm test || exit 1
     if "${publish}" ; then
         # Determine latest published version on the registry
         npm_version="$(npm --silent v "${package_name}" version)"
@@ -48,10 +55,13 @@ for dir in */ ; do
         else
             echo 'Publishing...'
             npm publish
-            echo 'Generating documentation...'
-            npm run docs
-            mv docs "../.docs/${dir}"
         fi
+        # Always generate documentation because if only one
+        # package generates documentation, then it will
+        # overwrite the GH pages archive with that dir only
+        echo 'Generating documentation...'
+        npm run docs
+        mv docs "../_docs/${dir}"
     fi
     cd ..
 done

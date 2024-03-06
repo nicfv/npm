@@ -36,4 +36,20 @@ export class Color {
     public toString(): string {
         return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
     }
+    /**
+     * Create a new color given a hexadecimal string.
+     * Will throw an error if the string is invalid.
+     * - Expects 2 bits [0-F] for red, green, blue channels (6 chars total)
+     * - String can optionally start with the character '#'
+     * - Alpha channel can be included for an additional 2 bits (8 chars total)
+     * @param hex Hexadecimal string
+     * @returns A new color defined by the hexadecimal string
+     */
+    public static from(hex: string): Color {
+        const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
+        if (regex === null) {
+            throw new Error('Invalid hexadecimal string: ' + hex);
+        }
+        return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), parseInt(regex[4] ?? 'FF', 16));
+    }
 }

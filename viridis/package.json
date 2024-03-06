@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate color gradients based on the Viridis package for R",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -34,10 +34,10 @@
   "homepage": "https://npm.nicfv.com/viridis",
   "license": "MIT",
   "dependencies": {
-    "smath": "^1.1.1"
+    "smath": "1.1.1"
   },
   "devDependencies": {
-    "typedoc": "^0.25.10",
-    "typescript": "^5.3.3"
+    "typedoc": "0.25.11",
+    "typescript": "5.3.3"
   }
 }
