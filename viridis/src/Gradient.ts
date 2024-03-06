@@ -15,7 +15,7 @@ export class Gradient {
      * ]);
      * ```
      */
-    constructor(private readonly colors: Array<Color>) {
+    constructor(public readonly colors: Array<Color>) {
         if (colors.length < 1) {
             throw new Error('Must include at least 1 color to create a gradient.');
         }

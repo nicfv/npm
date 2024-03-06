@@ -1,5 +1,8 @@
 Generate color gradients for data visualization inspired by [MatPlotLib colormaps](https://bids.github.io/colormap/) and the [Viridis](https://cran.r-project.org/web/packages/viridis/index.html) package for R.
 
+![NPM Version](https://img.shields.io/npm/v/viridis)
+![NPM Downloads](https://img.shields.io/npm/dt/viridis)
+
 ## Installation
 
 `viridis` can be installed from the official [npm package repository](https://www.npmjs.com/package/viridis). It is highly recommended to install the latest version, which is installed by default with the following command.

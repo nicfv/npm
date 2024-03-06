@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate data visualization color gradients",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -16,7 +16,19 @@
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepublishOnly": "npm run build && npm run types"
   },
-  "keywords": [],
+  "keywords": [
+    "color",
+    "gradient",
+    "palette",
+    "viridis",
+    "spectral",
+    "parula",
+    "chroma",
+    "data",
+    "viz",
+    "visualization",
+    "style"
+  ],
   "author": {
     "name": "Nicolas Ventura",
     "email": "viridis@nicolasventura.com",
