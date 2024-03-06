@@ -1,11 +1,14 @@
 # Changelog
 
-## 0.0.5
+## 1.0.0
 
 - Add color palettes on readme
 - Remove packageDocumentation in Palette
 - Add credits in Palette documentation
 - Remove Palette type
+- Add examples in `Color` and `Gradient`
+- Add program examples in readme
+- First full release
 
 ## 0.0.4
 
