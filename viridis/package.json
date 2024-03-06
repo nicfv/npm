@@ -34,10 +34,10 @@
   "homepage": "https://npm.nicfv.com/viridis",
   "license": "MIT",
   "dependencies": {
-    "smath": "^1.1.1"
+    "smath": "1.1.1"
   },
   "devDependencies": {
     "typedoc": "0.25.11",
-    "typescript": "^5.3.3"
+    "typescript": "5.3.3"
   }
 }
