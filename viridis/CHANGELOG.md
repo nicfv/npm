@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.5
+
+- Add color palettes on readme
+- Remove packageDocumentation in Palette
+- Add credits in Palette documentation
+- Remove Palette type
+
 ## 0.0.4
 
 - Export palette
