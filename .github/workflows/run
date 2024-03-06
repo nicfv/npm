@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+npm -v || exit 1
+
 publish=false
 if [[ "${1}" == 'publish' ]] ; then
     publish=true
