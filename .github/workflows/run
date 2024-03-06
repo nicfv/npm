@@ -16,7 +16,7 @@ if "${publish}" ; then
         echo 'Missing environment variable NPM_TOKEN'
         exit 1
     else
-        mkdir _docs || exit 1
+        mkdir .docs || exit 1
         npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     fi
 fi
@@ -61,7 +61,7 @@ for dir in */ ; do
         # overwrite the GH pages archive with that dir only
         echo 'Generating documentation...'
         npm run docs
-        mv docs "../_docs/${dir}"
+        mv docs "../.docs/${dir}"
     fi
     cd ..
 done
