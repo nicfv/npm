@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Export palette name type
+
 ## 1.0.0
 
 - Add color palettes on readme
