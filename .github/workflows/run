@@ -38,7 +38,7 @@ for dir in */ ; do
     echo 'Installing dependencies...'
     npm i
     echo 'Running tests...'
-    npm test
+    npm test || exit 1
     if "${publish}" ; then
         # Determine latest published version on the registry
         npm_version="$(npm --silent v "${package_name}" version)"
