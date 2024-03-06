@@ -4,6 +4,7 @@
  * - mpl Colormaps: https://bids.github.io/colormap/
  * - Viridis Color Palette Generator: https://waldyrious.net/viridis-palette-generator/
  * - Loading Colors: https://loading.io/color/feature/
+ * - Carto Colors: https://carto.com/carto-colors/
  */
 
 import { Color } from './Color';
@@ -166,52 +167,11 @@ export const Palette: { [index: string]: Gradient } = {
         Color.from('#204651'),
         Color.from('#15212b'),
     ]),
-    CoolWarm: new Gradient([
-        Color.from('#b2182b'),
-        Color.from('#ef8a62'),
-        Color.from('#fddbc7'),
-        Color.from('#d1e5f0'),
-        Color.from('#67a9cf'),
-        Color.from('#2166ac'),
-    ]),
-    RedGreen: new Gradient([
-        Color.from('#d73027'),
-        Color.from('#fc8d59'),
-        Color.from('#fee08b'),
-        Color.from('#d9ef8b'),
-        Color.from('#91cf60'),
-        Color.from('#1a9850'),
-    ]),
-    PinkGreen: new Gradient([
-        Color.from('#c51b7d'),
-        Color.from('#e9a3c9'),
-        Color.from('#fde0ef'),
-        Color.from('#e6f5d0'),
-        Color.from('#a1d76a'),
-        Color.from('#4d9221'),
-    ]),
-    PurpleGreen: new Gradient([
-        Color.from('#762a83'),
-        Color.from('#af8dc3'),
-        Color.from('#e7d4e8'),
-        Color.from('#d9f0d3'),
-        Color.from('#7fbf7b'),
-        Color.from('#1b7837'),
-    ]),
-    Primary: new Gradient([
-        Color.from('#d73027'),
-        Color.from('#fc8d59'),
-        Color.from('#fee090'),
-        Color.from('#e0f3f8'),
-        Color.from('#91bfdb'),
-        Color.from('#4575b4'),
-    ]),
-    BrownGreen: new Gradient([
-        Color.from('#8c510a'),
-        Color.from('#d8b365'),
-        Color.from('#f6e8c3'),
-        Color.from('#c7eae5'),
-        Color.from('#5ab4ac'),
-        Color.from('#01665e'),
+    Bee: new Gradient([
+        Color.from('#f8f7de'),
+        Color.from('#f7ea87'),
+        Color.from('#d29d30'),
+        Color.from('#854d0d'),
+        Color.from('#3a200c'),
     ]),
 };
