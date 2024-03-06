@@ -16,7 +16,19 @@
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepublishOnly": "npm run build && npm run types"
   },
-  "keywords": [],
+  "keywords": [
+    "color",
+    "gradient",
+    "palette",
+    "viridis",
+    "spectral",
+    "parula",
+    "chroma",
+    "data",
+    "viz",
+    "visualization",
+    "style"
+  ],
   "author": {
     "name": "Nicolas Ventura",
     "email": "viridis@nicolasventura.com",
