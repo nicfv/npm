@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3
+
+- Add default color gradient palettes
+- Generate CSS from color gradient
+- Define colors from hexadecimal strings
+
 ## 0.0.2
 
 - Add and export class to compute linear, uniform gradients based on an array of colors
