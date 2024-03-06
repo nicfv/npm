@@ -2,6 +2,11 @@ import { Color } from './Color';
 import { Gradient } from './Gradient';
 
 /**
+ * Defines the list of valid builtin palette names.
+ */
+export type PaletteName = 'Viridis' | 'Inferno' | 'Magma' | 'Plasma' | 'Grayscale' | 'Parula' | 'Emerald' | 'Mint' | 'Sunset' | 'Dusk' | 'Chroma' | 'Spectral' | 'Cool' | 'Warm' | 'Turquoise' | 'Purplish' | 'Dirt' | 'Lime' | 'Teal' | 'Bee';
+
+/**
  * Contains builtin color palettes.
  * 
  * Credits:
@@ -9,7 +14,7 @@ import { Gradient } from './Gradient';
  * - Loading Colors: https://loading.io/color/feature/
  * - Carto Colors: https://carto.com/carto-colors/
  */
-export const Palette = {
+export const Palette: { [name in PaletteName]: Gradient } = {
     // https://waldyrious.net/viridis-palette-generator/
     Viridis: new Gradient([
         Color.from('#fde725'),
