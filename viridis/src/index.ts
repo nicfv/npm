@@ -6,5 +6,3 @@
  */
 export * from './Color';
 export * from './Gradient';
-
-const this_will_break: string = 1;
