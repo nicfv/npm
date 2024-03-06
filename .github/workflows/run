@@ -55,10 +55,10 @@ for dir in */ ; do
         else
             echo 'Publishing...'
             npm publish
-            echo 'Generating documentation...'
-            npm run docs
-            mv docs "../_docs/${dir}"
         fi
+        echo 'Generating documentation...'
+        npm run docs
+        mv docs "../_docs/${dir}"
     fi
     cd ..
 done
