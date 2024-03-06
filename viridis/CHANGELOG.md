@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+- Add package keywords
+- Add npm badges to readme
+- Make gradient colors public
+
 ## 1.0.1
 
 - Export palette name type
