@@ -8,7 +8,7 @@ export class Gradient {
      * Define a new linear color gradient using an array of color stops.
      * @param colors An array of colors to define this color gradient
      */
-    constructor(protected readonly colors: Array<Color>) {
+    constructor(private readonly colors: Array<Color>) {
         if (colors.length < 1) {
             throw new Error('Must include at least 1 color to create a gradient.');
         }
@@ -38,5 +38,13 @@ export class Gradient {
             SMath.translate(x, a, b, A.green, B.green),
             SMath.translate(x, a, b, A.blue, B.blue),
             SMath.translate(x, a, b, A.alpha, B.alpha));
+    }
+    /**
+     * Return a string representation of this gradient.
+     * @param deg The direction of this color gradient, in degrees
+     * @returns A valid CSS color gradient
+     */
+    public toString(deg: number = 90): string {
+        return 'linear-gradient(' + deg + 'deg,' + this.colors.map(color => color.toString()).join(',') + ')';
     }
 }
