@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.3
 
 - Update documentation for `new Gradient`
 - Add documentation under builtin palettes
