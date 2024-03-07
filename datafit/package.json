@@ -1,0 +1,40 @@
+{
+  "name": "datafit",
+  "version": "0.0.1",
+  "description": "Simple curve-fitting algorithm",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc --removeComments",
+    "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
+    "test": "tsc --noEmit",
+    "clean": "rm -rf node_modules package-lock.json dist types docs",
+    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
+    "prepublishOnly": "npm run build && npm run types"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "datafit@nicolasventura.com",
+    "url": "https://nicolasventura.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicfv/npm",
+    "directory": "datafit"
+  },
+  "homepage": "https://npm.nicfv.com/datafit",
+  "license": "MIT",
+  "devDependencies": {
+    "typedoc": "0.25.11",
+    "typescript": "5.3.3"
+  }
+}

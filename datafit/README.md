@@ -1,0 +1,1 @@
+Simple curve-fitting algorithm
