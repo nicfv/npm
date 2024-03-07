@@ -30,16 +30,16 @@ Use a simple color definition to set the background and foreground of an HTML el
 ```js
 import { Color } from 'viridis';
 
+// Set some styling parameters
+// to a basic <div> element
+const box = document.getElementById('box');
+box.style.width = '100px';
+box.style.height = '100px';
+
 // Use the color class to
 // dynamically define a color
 // using R, G, and B values
-const red = new Color(255, 0, 0),
-    box = document.getElementById('box');
-
-// Set some styling parameters
-// to an empty <div> element
-box.style.width = '100px';
-box.style.height = '100px';
+const red = new Color(255, 0, 0);
 
 // Use the color and
 // `Color.getContrastringColor()`
@@ -53,13 +53,13 @@ box.style.color = red.getContrastingColor().toString();
 
 ### Example 2
 
-Define your own color gradient.
+Define your own color gradient and display it on an HTML element.
 
 ```js
 import { Color, Gradient } from 'viridis';
 
 // Set some styling parameters
-// to an empty <div> element
+// to a basic <div> element
 const box = document.getElementById('box');
 box.style.width = '100px';
 box.style.height = '100px';
@@ -85,7 +85,7 @@ Use one of the [builtin palettes](#builtin-palettes).
 import { Palette } from 'viridis';
 
 // Set some styling parameters
-// to an empty <div> element
+// to a basic <div> element
 const box = document.getElementById('box');
 box.style.width = '100px';
 box.style.height = '100px';
@@ -100,32 +100,29 @@ box.style.background = Palette.Viridis.toString();
 
 ### Example 4
 
-Linearly interpolate within a color gradient to obtain a single color along that gradient. In this example, we display a panel showing the current temperature with a solid background color somewhere along the `coldHot` gradient we defined.
+Linearly interpolate within a color gradient to obtain a single color along that gradient. In this example, we display a panel showing the current temperature with a solid background color somewhere along the `coldHot` gradient we defined. Cold temperatures should color the panel blue and hot temperatures should color it red.
 
 ```js
 import { Color, Gradient } from 'viridis';
 
 // Set some styling parameters
-// to an empty <div> element
+// to a basic <div> element
 const box = document.getElementById('box');
 box.style.width = '100px';
 box.style.height = '100px';
 
 // Define a temperature range
-const temp_min = 0,
-    temp_max = 100;
+const temp_cold = 0,
+    temp_hot = 100;
 
 // Define the current temperature
 // and display it in the element
-const temp_current = 50;
-box.textContent = temp_current + '\u00B0F';
-
-// Linearly interpolate between the bounds of the range
-const interpolated = (temp_current - temp_min) / (temp_max - temp_min);
+const temp_current = 70;
+box.innerHTML = temp_current + '&deg;F';
 
 // Define color stops for a custom gradient
-const hot = new Color(255, 0, 0),
-    cold = new Color(25, 125, 255);
+const cold = new Color(25, 195, 255),
+    hot = new Color(255, 0, 0);
 
 // Define a color gradient where the
 // lowest value is the cold color,
@@ -134,7 +131,7 @@ const coldHot = new Gradient([cold, hot]);
 
 // Linearly interpolate between color
 // stops using the `.getColor()` function.
-const interpolatedColor = coldHot.getColor(interpolated);
+const interpolatedColor = coldHot.getColor(temp_current, temp_cold, temp_hot);
 
 // Set the element's background and foreground colors.
 box.style.background = interpolatedColor;

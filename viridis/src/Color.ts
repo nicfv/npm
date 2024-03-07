@@ -27,8 +27,8 @@ export class Color {
      * @returns Black or white
      * @example
      * ```js
-     * // Returns the color white (255, 255, 255)
      * const contrast = red.getContrastingColor();
+     * // Returns the color white (255, 255, 255)
      * ```
      */
     public getContrastingColor(): Color {
