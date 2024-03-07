@@ -140,6 +140,8 @@ box.style.color = interpolatedColor.getContrastingColor();
 
 ## Builtin Palettes
 
+This list is best viewed on the [official documentation](https://npm.nicfv.com/viridis/), and contains all the builtin color palettes obtained by `Palette.Name` or `Palette['Name']`.
+
 <style>
     div.viridis-palette {
         width: calc(100% - 1rem);

@@ -1,11 +1,16 @@
 # Changelog
 
-## 1.0.3
+## 1.0.4
 
 - Update documentation for `Color.getContrastingColor()`
 - Update examples on readme
 - Update how `Gradient.getColor()` works
     - Instead of requiring a normalized value, it can now accept a number and range, and will automatically normalize it
+
+## 1.0.3
+
+- Update documentation for `new Gradient`
+- Add documentation under builtin palettes
 
 ## 1.0.2
 
