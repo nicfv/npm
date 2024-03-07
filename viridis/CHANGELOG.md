@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3
+
+- Update documentation for `new Gradient`
+- Add documentation under builtin palettes
+
 ## 1.0.2
 
 - Add package keywords
