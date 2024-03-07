@@ -46,3 +46,4 @@
 ## 0.0.0
 
 - Initialize empty package
+- No longer available on npm
