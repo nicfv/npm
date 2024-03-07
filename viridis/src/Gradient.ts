@@ -22,7 +22,12 @@ export class Gradient {
     }
     /**
      * Linearly interpolate between color stops to get a color along this gradient.
-     * @param x A normalized value to use for selecting a color along this gradient
+     * @param x A value between `min, max` to use for selecting a color along this
+     * gradient. An `x` value of `min` will select the first color stop, and an `x`
+     * value of `max` will select the last color stop. If `min` and `max` are not
+     * present, `x` should be a normalized value.
+     * @param min The minimum range of the color scale
+     * @param max The maximum range of the color scale
      * @returns The interpolated color
      * @example
      * ```js
@@ -30,7 +35,8 @@ export class Gradient {
      * // Returns interpolated color (127.5, 0, 127.5)
      * ```
      */
-    public getColor(x: number): Color {
+    public getColor(x: number, min: number = 0, max: number = 1): Color {
+        x = SMath.normalize(x, min, max);
         if (this.colors.length === 1) {
             return this.colors[0];
         } else if (x <= 0) {
