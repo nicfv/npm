@@ -5,7 +5,9 @@ import { Color } from './Color';
  */
 export class Gradient {
     /**
-     * Define a new linear color gradient using an array of color stops.
+     * Define a new linear color gradient using an array of
+     * color stops. Gradients can include any number of color
+     * stops, which are all equally spaced from one another.
      * @param colors An array of colors to define this color gradient
      * @example
      * ```js
