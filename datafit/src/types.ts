@@ -1,9 +1,9 @@
 /**
- * Use this to define a single-variable curve and dataset
+ * Use this type to define a single-variable curve and dataset
  */
 export type SingleVariable = number;
 /**
- * Use this to define a multi-variable curve and dataset
+ * Use this type to define a multi-variable curve and dataset
  */
 export type MultiVariable = Array<number>;
 /**
@@ -27,6 +27,10 @@ export interface Point<T = X> {
      */
     readonly y: number;
 }
+/**
+ * Contains a set of data points.
+ */
+export type Dataset<T = X> = Array<Point<T>>;
 /**
  * Includes information about a best-fit for a curve.
  */
