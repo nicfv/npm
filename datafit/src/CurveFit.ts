@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { Fit, Point, fx, Range } from './types';
+import { Fit, Point, fx } from './types';
 
 export abstract class CurveFit {
     /**
@@ -20,9 +20,10 @@ export abstract class CurveFit {
      * a wider searching range, increase the starting distance, howevever,
      * this will increase the number of iterations to solution, which will
      * increase compute time and resources.
+     * @param iterations Define the number of iterations for this algorithm.
      * @returns The set of parameters for the best fit and sum of squared errors.
      */
-    public static fit(f: fx, data: Array<Point>, a_initial: Array<number> = [], distance: Range = { max: 10, min: 0.1 }): Fit {
+    public static fit(f: fx, data: Array<Point>, a_initial: Array<number> = [], searchDistance: number = 10, iterations: number = 1e3): Fit {
         const N_params: number = f.length - 1;
         if (a_initial.length === 0) {
             a_initial.length = N_params;
@@ -34,12 +35,12 @@ export abstract class CurveFit {
         if (N_params > this.MAX_PARAMS) {
             throw new Error('Your function includes too many unknown parameters.');
         }
-        if (distance.max < distance.min) {
-            throw new Error('Starting distance should be greater than ending distance.');
+        if (searchDistance < 0 || iterations < 0) {
+            throw new Error('Invalid search distance or iteration count.');
         }
-        let bestFit: Fit = this.fitStep(f, a_initial, data, distance.max);
-        for (let dist_curr = distance.max / 2; dist_curr > distance.min; dist_curr /= 2) {
-            bestFit = this.fitStep(f, bestFit.a, data, dist_curr);
+        let bestFit: Fit = this.fitStep(f, a_initial, data, searchDistance);
+        for (let i = 0; i < iterations; i++) {
+            bestFit = this.fitStep(f, bestFit.a, data, SMath.translate(i, 0, iterations, searchDistance, 0));
         }
         return bestFit;
     }

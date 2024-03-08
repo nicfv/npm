@@ -28,16 +28,3 @@ export interface Fit {
      */
     readonly err: number;
 }
-/**
- * Represents a number range.
- */
-export interface Range {
-    /**
-     * The minimum value of the range.
-     */
-    readonly min: number;
-    /**
-     * The maximum value of the range.
-     */
-    readonly max: number;
-}
