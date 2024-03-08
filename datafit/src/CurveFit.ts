@@ -3,20 +3,14 @@ import { Fit, Point, fx, Config } from './types';
 
 export abstract class CurveFit {
     /**
-     * 
+     * Minimize the sum of squared errors to fit a set of data
+     * points to a curve with a set of unknown parameters.
      * @param f The model function for curve fitting.
      * @param data The entire dataset, as an array of points.
      * @param a_initial The initial guess for function parameters,
-     * which defaults to an array filled of zeroes.
-     * @param distance The distance to vary when checking parameter sets.
-     * Each iteration will vary parameters by an offset of `distance` and
-     * will save the best fit for that search range, to use for the next
-     * iteration. `distance.max` is used for the first iteration, and the
-     * distance is halved in succession until `distance.min` is reached. For
-     * a wider searching range, increase the starting distance, howevever,
-     * this will increase the number of iterations to solution, which will
-     * increase compute time and resources.
-     * @returns The set of parameters for the best fit and sum of squared errors.
+     * which defaults to an array filled with zeroes.
+     * @param config Configuration options for curve fitting.
+     * @returns The set of parameters and error for the best fit.
      */
     public static fit(f: fx, data: Array<Point>, a_initial: Array<number> = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
         const N_params: number = f.length - 1;
