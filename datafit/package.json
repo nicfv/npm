@@ -33,6 +33,9 @@
   },
   "homepage": "https://npm.nicfv.com/datafit",
   "license": "MIT",
+  "dependencies": {
+    "smath": "1.1.1"
+  },
   "devDependencies": {
     "typedoc": "0.25.11",
     "typescript": "5.3.3"
