@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple curve-fitting algorithm",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -33,6 +33,9 @@
   },
   "homepage": "https://npm.nicfv.com/datafit",
   "license": "MIT",
+  "dependencies": {
+    "smath": "1.1.1"
+  },
   "devDependencies": {
     "typedoc": "0.25.11",
     "typescript": "5.3.3"
