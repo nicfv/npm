@@ -5,7 +5,7 @@ export abstract class CurveFit {
     /**
      * Anything beyond this takes several minutes of computation time.
      */
-    private static readonly MAX_PARAMS: number = 18;
+    private static readonly MAX_PARAMS: number = 8;
     /**
      * 
      * @param f The model function for curve fitting.
@@ -54,21 +54,21 @@ export abstract class CurveFit {
      * @returns The best fit for the model up to the distance specified.
      */
     private static fitStep(f: fx, a: Array<number>, data: Array<Point>, distance: number): Fit {
-        const d: number = 5,
-            n: number = a.length;
+        const searchCount: number = 9,
+            N_params: number = a.length;
         let err_min: number = this.sumSquares(f, a, data),
             a_min: Array<number> = a.slice();
-        for (let i: number = 0; i < d ** n; i++) {
+        for (let i: number = 0; i < searchCount ** N_params; i++) {
             // `str` contains a string of characters in [012]
             // and is guaranteed to include all combinations.
             // 0 = subtract distance from corresponding parameter
             // 1 = no change to corresponding parameter
             // 2 = add distance to corresponding parameter
-            const str: string = i.toString(d).padStart(n, '0'),
+            const str: string = i.toString(searchCount).padStart(N_params, '0'),
                 a_new: Array<number> = a.slice();
-            for (let i: number = 0; i < str.length; i++) {
+            for (let i: number = 0; i < N_params; i++) {
                 const val: number = Number.parseInt(str[i]);
-                a_new[i] += SMath.translate(val, 0, d - 1, -distance, distance);
+                a_new[i] += SMath.translate(val, 0, searchCount - 1, -distance, distance);
             }
             // Check the sum of squared errors. If the new
             // set of parameters yields a lower error, save
