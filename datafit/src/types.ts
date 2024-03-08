@@ -29,15 +29,27 @@ export interface Fit {
     readonly err: number;
 }
 /**
- * Represents a number range.
+ * Configuration options for `CurveFit`
  */
-export interface Range {
+export interface Config {
     /**
-     * The minimum value of the range.
+     * Determines the number of generations, or iterations.
      */
-    readonly min: number;
+    readonly generations: number;
     /**
-     * The maximum value of the range.
+     * Determines the number of parameters sets to generate.
      */
-    readonly max: number;
+    readonly population: number;
+    /**
+     * Determines how many survivors remain after every generation.
+     */
+    readonly survivors: number;
+    /**
+     * Determines how much a set of parameters can mutate on the first generation.
+     */
+    readonly initialDeviation: number;
+    /**
+     * Determines how much a set of parameters can mutate on the final generation.
+     */
+    readonly finalDeviation: number;
 }

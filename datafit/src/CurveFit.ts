@@ -1,11 +1,7 @@
 import { SMath } from 'smath';
-import { Fit, Point, fx, Range } from './types';
+import { Fit, Point, fx, Config } from './types';
 
 export abstract class CurveFit {
-    /**
-     * Anything beyond this takes several minutes of computation time.
-     */
-    private static readonly MAX_PARAMS: number = 8;
     /**
      * 
      * @param f The model function for curve fitting.
@@ -22,7 +18,7 @@ export abstract class CurveFit {
      * increase compute time and resources.
      * @returns The set of parameters for the best fit and sum of squared errors.
      */
-    public static fit(f: fx, data: Array<Point>, a_initial: Array<number> = [], distance: Range = { max: 10, min: 0.1 }): Fit {
+    public static fit(f: fx, data: Array<Point>, a_initial: Array<number> = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
         const N_params: number = f.length - 1;
         if (a_initial.length === 0) {
             a_initial.length = N_params;
@@ -31,58 +27,21 @@ export abstract class CurveFit {
         if (a_initial.length !== N_params) {
             throw new Error('The initial guess should contain ' + N_params + ' parameters.');
         }
-        if (N_params > this.MAX_PARAMS) {
-            throw new Error('Your function includes too many unknown parameters.');
-        }
-        if (distance.max < distance.min) {
-            throw new Error('Starting distance should be greater than ending distance.');
-        }
-        let bestFit: Fit = this.fitStep(f, a_initial, data, distance.max);
-        for (let dist_curr = distance.max / 2; dist_curr > distance.min; dist_curr /= 2) {
-            bestFit = this.fitStep(f, bestFit.a, data, dist_curr);
-        }
-        return bestFit;
-    }
-    /**
-     * Determine the set of parameters that make the best fit
-     * for the model function for all combinations of "adjacent"
-     * parameter sets. (One distance step in all directions.)
-     * @param f The model function for curve fitting.
-     * @param a The set of parameters to originate from.
-     * @param data The entire dataset, as an array of points.
-     * @param distance The distance from `a` to deviate.
-     * @returns The best fit for the model up to the distance specified.
-     */
-    private static fitStep(f: fx, a: Array<number>, data: Array<Point>, distance: number): Fit {
-        const searchCount: number = 9,
-            N_params: number = a.length;
-        let err_min: number = this.sumSquares(f, a, data),
-            a_min: Array<number> = a.slice();
-        for (let i: number = 0; i < searchCount ** N_params; i++) {
-            // `str` contains a string of characters in [012]
-            // and is guaranteed to include all combinations.
-            // 0 = subtract distance from corresponding parameter
-            // 1 = no change to corresponding parameter
-            // 2 = add distance to corresponding parameter
-            const str: string = i.toString(searchCount).padStart(N_params, '0'),
-                a_new: Array<number> = a.slice();
-            for (let i: number = 0; i < N_params; i++) {
-                const val: number = Number.parseInt(str[i]);
-                a_new[i] += SMath.translate(val, 0, searchCount - 1, -distance, distance);
+        const census: Array<Fit> = [];
+        for (let generation = 0; generation < config.generations; generation++) {
+            for (let i = 0; i < config.population; i++) {
+                // Mutate a random parent from the prior generation of survivors
+                const a: Array<number> = this.mutate(
+                    census[this.randInt(0, config.survivors)]?.a ?? a_initial,
+                    SMath.translate(generation, 0, config.generations, config.initialDeviation, config.finalDeviation)
+                );
+                census.push({ a: a, err: this.err(f, a, data) });
             }
-            // Check the sum of squared errors. If the new
-            // set of parameters yields a lower error, save
-            // those as the new minimum parameters and error.
-            const err_new: number = this.sumSquares(f, a_new, data);
-            if (err_new < err_min) {
-                err_min = err_new;
-                a_min = a_new;
-            }
+            // Sort by increasing error and only keep the survivors
+            census.sort((x, y) => x.err - y.err);
+            census.splice(config.survivors);
         }
-        return {
-            a: a_min,
-            err: err_min,
-        };
+        return census[0];
     }
     /**
      * Calculate the sum of squared errors for a set of function parameters.
@@ -91,9 +50,27 @@ export abstract class CurveFit {
      * @param data The entire dataset, as an array of points.
      * @returns The sum of squared errors.
      */
-    private static sumSquares(f: fx, a: Array<number>, data: Array<Point>): number {
+    private static err(f: fx, a: Array<number>, data: Array<Point>): number {
         let sum: number = 0;
         data.forEach(point => sum += (point.y - f(point.x, ...a)) ** 2);
         return sum;
+    }
+    /**
+     * Randomly mutate the set of function parameters by some maximum deviation.
+     * @param a The set of function parameters to mutate.
+     * @param deviation The maximum amount to deviate in any direction.
+     * @returns A mutated set of parameters.
+     */
+    private static mutate(a: Array<number>, deviation: number): Array<number> {
+        return a.map(c => c += (Math.random() - 0.5) * deviation);
+    }
+    /**
+     * Generate a random integer between `min, max`
+     * @param min Minimum value
+     * @param max Maximum value
+     * @returns A random integer
+     */
+    private static randInt(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min) + min);
     }
 }
