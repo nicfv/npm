@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { Fit, Point, fx, Config, X } from './types';
+import { Fit, fx, Config, X, Dataset } from './types';
 
 export abstract class CurveFit {
     /**
@@ -12,7 +12,7 @@ export abstract class CurveFit {
      * @param config Configuration options for curve fitting.
      * @returns The set of parameters and error for the best fit.
      */
-    public static fit<T = X>(f: fx<T>, data: Array<Point<T>>, a_initial: Array<number> = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
+    public static fit<T = X>(f: fx<T>, data: Dataset<T>, a_initial: Array<number> = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
         const N_params: number = f.length - 1;
         if (a_initial.length === 0) {
             a_initial.length = N_params;
@@ -44,7 +44,7 @@ export abstract class CurveFit {
      * @param data The entire dataset, as an array of points.
      * @returns The sum of squared errors.
      */
-    private static err<T = X>(f: fx<T>, a: Array<number>, data: Array<Point<T>>): number {
+    private static err<T = X>(f: fx<T>, a: Array<number>, data: Dataset<T>): number {
         let sum: number = 0;
         data.forEach(point => sum += (point.y - f(point.x, ...a)) ** 2);
         return sum;
