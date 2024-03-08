@@ -3,5 +3,8 @@
     "strict": true,
     "rootDir": "src",
     "outDir": "dist",
+    "lib": [
+      "ES2017"
+    ]
   }
 }
