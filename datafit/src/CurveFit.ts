@@ -23,14 +23,15 @@ export abstract class CurveFit {
      * @returns The set of parameters for the best fit and sum of squared errors.
      */
     public static fit(f: fx, data: Array<Point>, a_initial: Array<number> = [], distance: Range = { max: 10, min: 0.1 }): Fit {
+        const N_params: number = f.length - 1;
         if (a_initial.length === 0) {
-            a_initial.length = f.length - 1
+            a_initial.length = N_params;
             a_initial.fill(0);
         }
-        if (a_initial.length !== f.length - 1) {
-            throw new Error('The initial guess should contain ' + (f.length - 1) + ' parameters.');
+        if (a_initial.length !== N_params) {
+            throw new Error('The initial guess should contain ' + N_params + ' parameters.');
         }
-        if (f.length - 1 > this.MAX_PARAMS) {
+        if (N_params > this.MAX_PARAMS) {
             throw new Error('Your function includes too many unknown parameters.');
         }
         if (distance.max < distance.min) {
