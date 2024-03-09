@@ -16,7 +16,24 @@
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepublishOnly": "npm run build && npm run types"
   },
-  "keywords": [],
+  "keywords": [
+    "math",
+    "curve",
+    "fit",
+    "fitting",
+    "least",
+    "squares",
+    "regression",
+    "analysis",
+    "data",
+    "dataset",
+    "point",
+    "function",
+    "parameters",
+    "variable",
+    "multivariable",
+    "multivariate"
+  ],
   "author": {
     "name": "Nicolas Ventura",
     "email": "datafit@nicolasventura.com",
