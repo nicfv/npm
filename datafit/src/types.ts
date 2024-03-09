@@ -13,7 +13,7 @@ export type X = SingleVariable | MultiVariable;
 /**
  * Type of function constant parameters to fit the curve with.
  */
-export type Parameters = Array<number>;
+export type Params = Array<number>;
 /**
  * Represents a mathematical function y = f(x) with unknown constants `a`
  * @example
@@ -32,7 +32,7 @@ export type Parameters = Array<number>;
  * **Note:** `SingleVariable` can be replaced with `number` and
  * `MultiVariable` can be replaced with `Array<number>` or `number[]`.
  */
-export type fx<T = X> = (x: T, ...a: Parameters) => number;
+export type fx<T = X> = (x: T, ...a: Params) => number;
 /**
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
@@ -81,7 +81,7 @@ export interface Fit {
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
-    readonly a: Parameters;
+    readonly a: Params;
     /**
      * This is the residual sum of squared errors.
      */
