@@ -7,7 +7,7 @@ export type SingleVariable = number;
  */
 export type MultiVariable = Array<number>;
 /**
- * Defines whether this is a single- or multi-variable problem.
+ * Declares whether this is a single- or multi-variable problem.
  */
 export type VariableType = SingleVariable | MultiVariable;
 /**
