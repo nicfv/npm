@@ -11,11 +11,16 @@ export type MultiVariable = Array<number>;
  */
 export type X = SingleVariable | MultiVariable;
 /**
+ * Type of function constant parameters to fit the curve with.
+ */
+export type Parameters = Array<number>;
+/**
  * Represents a mathematical function y = f(x) with unknown constants `a`
  */
-export type fx<T = X> = (x: T, ...a: Array<number>) => number;
+export type fx<T = X> = (x: T, ...a: Parameters) => number;
 /**
- * Stores a cartesian (x,y) coordinate pair.
+ * Stores a data point. For multivariable points, the `x`
+ * coordinate contains an array of all the free variables.
  */
 export interface Point<T = X> {
     /**
@@ -28,7 +33,30 @@ export interface Point<T = X> {
     readonly y: number;
 }
 /**
- * Contains a set of data points.
+ * Contains a set of data points. Can be
+ * defined to be single or multi variable
+ * using the generic type qualifier. The
+ * following examples are provided in
+ * Typescript. Remove the type identifier
+ * and qualifier for JavaScript.
+ * @example
+ * Single variable dataset in Typescript:
+ * ```ts
+ * const data: Dataset<SingleVariable> = [
+ *     { x: 1, y: 1 },
+ *     { x: 2, y: 3 },
+ *     { x: 3, y: 4 },
+ * ];
+ * ```
+ * Multivariable dataset in Typescript:
+ * ```ts
+ * const data: Dataset<MultiVariable> = [
+ *     { x: [0, 0], y: 1 },
+ *     { x: [1, 0], y: 3 },
+ *     { x: [0, 1], y: 4 },
+ *     { x: [1, 1], y: 5 },
+ * ];
+ * ```
  */
 export type Dataset<T = X> = Array<Point<T>>;
 /**
@@ -38,7 +66,7 @@ export interface Fit {
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
-    readonly a: Array<number>;
+    readonly a: Parameters;
     /**
      * This is the residual sum of squared errors.
      */

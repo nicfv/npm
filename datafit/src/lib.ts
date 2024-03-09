@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { Fit, fx, Config, X, Dataset } from './types';
+import { Config, Dataset, Fit, Parameters, X, fx } from './types';
 
 /**
  * Minimize the sum of squared errors to fit a set of data
@@ -11,7 +11,7 @@ import { Fit, fx, Config, X, Dataset } from './types';
  * @param config Configuration options for curve fitting.
  * @returns The set of parameters and error for the best fit.
  */
-export function fit<T = X>(f: fx<T>, data: Dataset<T>, a_initial: Array<number> = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
+export function fit<T = X>(f: fx<T>, data: Dataset<T>, a_initial: Parameters = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
     const N_params: number = f.length - 1;
     if (a_initial.length === 0) {
         a_initial.length = N_params;
@@ -24,7 +24,7 @@ export function fit<T = X>(f: fx<T>, data: Dataset<T>, a_initial: Array<number> 
     for (let generation = 0; generation < config.generations; generation++) {
         for (let i = 0; i < config.population; i++) {
             // Mutate a random parent from the prior generation of survivors
-            const a: Array<number> = mutate(
+            const a: Parameters = mutate(
                 census[randInt(0, config.survivors)]?.a ?? a_initial,
                 SMath.translate(generation, 0, config.generations, config.initialDeviation, config.finalDeviation)
             );
@@ -43,7 +43,7 @@ export function fit<T = X>(f: fx<T>, data: Dataset<T>, a_initial: Array<number> 
  * @param data The entire dataset, as an array of points.
  * @returns The sum of squared errors.
  */
-function err<T = X>(f: fx<T>, a: Array<number>, data: Dataset<T>): number {
+function err<T = X>(f: fx<T>, a: Parameters, data: Dataset<T>): number {
     let sum: number = 0;
     data.forEach(point => sum += (point.y - f(point.x, ...a)) ** 2);
     return sum;
@@ -54,7 +54,7 @@ function err<T = X>(f: fx<T>, a: Array<number>, data: Dataset<T>): number {
  * @param deviation The maximum amount to deviate in any direction.
  * @returns A mutated set of parameters.
  */
-function mutate(a: Array<number>, deviation: number): Array<number> {
+function mutate(a: Parameters, deviation: number): Parameters {
     return a.map(c => c += (Math.random() - 0.5) * deviation);
 }
 /**
