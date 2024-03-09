@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- Rename `CurveFit.ts` to `lib.ts`
+- Remove class, export functions directly
+- Add `Parameters` helper type
+- Change `Point` to `Datum`
+- Add plenty of examples
+- Use `SMath` in more places to clean up code
+
 ## 0.1.0
 
 - Update code base to use a genetic-style algorithm that randomly mutates the set of function parameters
