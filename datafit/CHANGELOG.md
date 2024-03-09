@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+- Do not require all configuration options for `fit()`
+- Add full program examples on readme
+- Finish building out readme homepage
+
 ## 0.3.0
 
 - Update variable and type names to be more descriptive
