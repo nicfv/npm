@@ -9,13 +9,13 @@ export type MultiVariable = Array<number>;
 /**
  * Defines whether this is a single- or multi-variable problem.
  */
-export type X = SingleVariable | MultiVariable;
+export type VariableType = SingleVariable | MultiVariable;
 /**
  * Type of function constant parameters to fit the curve with.
  */
 export type Params = Array<number>;
 /**
- * Represents a mathematical function y = f(x) with unknown constants `a`
+ * Represents a mathematical function y = f(x) with unknown parameters.
  * @example
  * Single variable function in Typescript, 2nd degree polynomial:
  * ```ts
@@ -32,18 +32,18 @@ export type Params = Array<number>;
  * **Note:** `SingleVariable` can be replaced with `number` and
  * `MultiVariable` can be replaced with `Array<number>` or `number[]`.
  */
-export type fx<T = X> = (x: T, ...a: Params) => number;
+export type fx<T = VariableType> = (x: T, ...params: Params) => number;
 /**
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
  */
-export interface Datum<T = X> {
+export interface Datum<T = VariableType> {
     /**
-     * Input: X variable(s)
+     * **Input:** X variable(s)
      */
     readonly x: T;
     /**
-     * Output: Y variable
+     * **Output:** Y variable
      */
     readonly y: number;
 }
@@ -73,7 +73,7 @@ export interface Datum<T = X> {
  * ];
  * ```
  */
-export type Dataset<T = X> = Array<Datum<T>>;
+export type Dataset<T = VariableType> = Array<Datum<T>>;
 /**
  * Includes information about a best-fit for a curve.
  */
@@ -81,7 +81,7 @@ export interface Fit {
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
-    readonly a: Params;
+    readonly params: Params;
     /**
      * This is the residual sum of squared errors.
      */
