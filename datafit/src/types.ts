@@ -37,13 +37,13 @@ export type fx<T = X> = (x: T, ...a: Parameters) => number;
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
  */
-export interface Point<T = X> {
+export interface Datum<T = X> {
     /**
-     * X variable(s)
+     * Input: X variable(s)
      */
     readonly x: T;
     /**
-     * Y variable
+     * Output: Y variable
      */
     readonly y: number;
 }
@@ -73,7 +73,7 @@ export interface Point<T = X> {
  * ];
  * ```
  */
-export type Dataset<T = X> = Array<Point<T>>;
+export type Dataset<T = X> = Array<Datum<T>>;
 /**
  * Includes information about a best-fit for a curve.
  */
