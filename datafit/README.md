@@ -75,13 +75,15 @@ const a = bestFit.params,
 
 My results were about `a2 = -1, a1 = 5.3, a0 = -3.5`, which means my best-fit function is `y = -x^2 + 5.3x - 3.5`. Try it for yourself and see if you obtain similar results!
 
-In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate, but less and less so, if we extrapolate very far beyond either end of this range.
+In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
+
+> Mind the order of your function parameters! `fit()` will output a parameter array that follows the same order as the function parameters, even if it is non-intuitive! For example, if my function signature looks like `f(x, a2, a1, a0)`, then `bestFit.params` would return an array `[a2, a1, a0]`. You would access `a2` with `a[0]`!
 
 ### Multivariate
 
 In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that `x` is now an array, in both `f(x)` and the dataset, but everything else is functionally the same!
 
-Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to all the *outputs*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions `x` and `y`, obtained by `x[0]` and `y[0]` respectively, however, in mathematics, this is simply referred to as the `X` vector. In this example, the `y` property in our dataset could actually be our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *outputs* of the function, not necessarily the x- and y-axes.
+Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively, however, in mathematics, this is simply referred to as the `X` vector. In this example, the `y` property in our dataset could actually be our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
 
 ```js
 import { fit } from 'datafit';
