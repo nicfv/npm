@@ -2,6 +2,17 @@ import { SMath } from 'smath';
 import { Config, Dataset, Fit, Params, VariableType, fx } from './types';
 
 /**
+ * Defines the default configuration options for `fit`
+ */
+const defaultConfig: Config = {
+    generations: 100,
+    population: 100,
+    survivors: 10,
+    initialDeviation: 10,
+    finalDeviation: 1,
+};
+
+/**
  * Minimize the sum of squared errors to fit a set of data
  * points to a curve with a set of unknown parameters.
  * @param f The model function for curve fitting.
@@ -17,7 +28,7 @@ import { Config, Dataset, Fit, Params, VariableType, fx } from './types';
  *     err: number = bestFit.err;
  * ```
  */
-export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial: Params = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
+export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial: Params = [], config: Config = defaultConfig): Fit {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -27,18 +38,18 @@ export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial
         throw new Error('The initial guess should contain ' + N_params + ' parameters.');
     }
     const census: Array<Fit> = [];
-    for (let generation = 0; generation < config.generations; generation++) {
-        for (let i = 0; i < config.population; i++) {
+    for (let generation = 0; generation < config.generations ?? defaultConfig.generations; generation++) {
+        for (let i = 0; i < config.population ?? defaultConfig.population; i++) {
             // Mutate a random parent from the prior generation of survivors
             const params: Params = mutate(
-                census[randInt(0, config.survivors)]?.params ?? params_initial,
-                SMath.translate(generation, 0, config.generations, config.initialDeviation, config.finalDeviation)
+                census[randInt(0, config.survivors ?? defaultConfig.survivors)]?.params ?? params_initial,
+                SMath.translate(generation, 0, config.generations ?? defaultConfig.generations, config.initialDeviation ?? defaultConfig.initialDeviation, config.finalDeviation ?? defaultConfig.finalDeviation)
             );
             census.push({ params: params, err: err(f, params, data) });
         }
         // Sort by increasing error and only keep the survivors
         census.sort((x, y) => x.err - y.err);
-        census.splice(config.survivors);
+        census.splice(config.survivors ?? defaultConfig.survivors);
     }
     return census[0];
 }
