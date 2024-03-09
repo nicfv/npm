@@ -24,11 +24,11 @@ export type fx<T = X> = (x: T, ...a: Parameters) => number;
  */
 export interface Point<T = X> {
     /**
-     * X-coordinate
+     * X variable(s)
      */
     readonly x: T;
     /**
-     * Y-coordinate
+     * Y variable
      */
     readonly y: number;
 }
