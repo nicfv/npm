@@ -13,13 +13,17 @@ npm i datafit
 
 ## Getting Started
 
-`datafit` exports only 1 function, [`fit`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package.
+`datafit` exports only 1 function, [`fit`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
+
+> Because of these random mutations, running the same code multiple times may yield slightly different results. See [best practices](#best-practices) for mitigation tactics.
 
 ## Example
 
 ### Single Variable
 
-In this example written in JavaScript, we will fit a 2nd degree polynomial to a set of (x,y) points.
+In this example written in JavaScript, we will fit a 2nd degree polynomial to a set of (x,y) points. We'll start out with a rough curve fit with the starting guess of `a2 = a1 = a0 = 0`. Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function `f(x)` and interpolate or extrapolate for any `x` value.
+
+> In this example, the x values for our data points are given as 1, 2, 3, and 4. If we extrapolate very far beyond either end of this range, our curve fit will be less accurate.
 
 ```js
 import { fit } from 'datafit';
@@ -70,3 +74,22 @@ const a = bestFit.params,
     x = 5,
     y = f(x, a[0], a[1], a[2]);
 ```
+
+## Complexity
+
+The folling factors affect computation time and resources:
+
+- Number of generations
+- Population per generation
+- Number of free function parameters
+- Number of data points
+
+Each one alone has a linear effect on performance, but combined has an incremental effect.
+
+```js
+time = generations * population * ( parameters + dataset )
+```
+
+## Best Practices
+
+It's a good idea to start with rough curve fits and use the outputs from that in subsequent `fit` calls to finer-tune the results such as the one in the [single variable example](#single-variable), which will yield more consistent results, despite different paths taken to achieve the result. If possible, it's best to use `fit` during the testing phase, and store your parameters as constants to use in production software. This will ensure consistent results 100% of the time.
