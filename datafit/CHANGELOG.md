@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+- Update variable and type names to be more descriptive
+- Minor tsdoc updates
+- Start working on main readme
+
 ## 0.2.0
 
 - Rename `CurveFit.ts` to `lib.ts`
