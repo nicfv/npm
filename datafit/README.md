@@ -22,5 +22,45 @@ npm i datafit
 In this example written in JavaScript, we will fit a 2nd degree polynomial to a set of (x,y) points.
 
 ```js
-// TODO
+import { fit } from 'datafit';
+
+// Define the model function to fit to
+// This is a second degree polynomial
+// with all constants unknown.
+function f(x, a0, a1, a2) {
+    return a2 * x ** 2 + a1 * x + a0;
+}
+
+// Define the single-variable dataset
+// as an array of (x,y) points
+const dataset = [
+    { x: 1, y: 1 },
+    { x: 2, y: 3 },
+    { x: 3, y: 4 },
+    { x: 4, y: 2 },
+];
+
+// Let's start with a rough fit
+// leaving the initial guess and
+// configuration options to their
+// default settings. The initial
+// guess will automatically be
+// set to an array of zeroes.
+const roughFit = fit(f, dataset);
+
+// Let's now use the parameters
+// from the rough fit as our
+// initial guess for our best fit.
+// Let's also fine tune some of
+// the configuration options.
+const bestFit = fit(f, dataset,
+    roughFit.params,
+    {
+        generations: 50,
+        population: 50,
+        survivors: 5,
+        initialDeviation: 1,
+        finalDeviation: 0.01,
+    }
+);
 ```
