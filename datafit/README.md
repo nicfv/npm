@@ -63,4 +63,10 @@ const bestFit = fit(f, dataset,
         finalDeviation: 0.01,
     }
 );
+
+// Try extrapolating using the array
+// of parameters from the best fit. 
+const a = bestFit.params,
+    x = 5,
+    y = f(x, a[0], a[1], a[2]);
 ```
