@@ -55,7 +55,7 @@ function err<T = X>(f: fx<T>, a: Parameters, data: Dataset<T>): number {
  * @returns A mutated set of parameters.
  */
 function mutate(a: Parameters, deviation: number): Parameters {
-    return a.map(c => c += (Math.random() - 0.5) * deviation);
+    return a.map(c => c += SMath.expand(Math.random(), -deviation, deviation));
 }
 /**
  * Generate a random integer between `min, max`
@@ -64,5 +64,5 @@ function mutate(a: Parameters, deviation: number): Parameters {
  * @returns A random integer
  */
 function randInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.floor(SMath.expand(Math.random(), min, max));
 }
