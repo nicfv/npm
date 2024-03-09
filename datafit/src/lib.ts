@@ -10,6 +10,12 @@ import { Config, Dataset, Fit, Params, X, fx } from './types';
  * which defaults to an array filled with zeroes.
  * @param config Configuration options for curve fitting.
  * @returns The set of parameters and error for the best fit.
+ * @example
+ * ```ts
+ * const bestFit: Fit = fit(f, dataset),
+ *     a: Params = bestFit.a,
+ *     err: number = bestFit.err;
+ * ```
  */
 export function fit<T = X>(f: fx<T>, data: Dataset<T>, a_initial: Params = [], config: Config = { generations: 100, population: 100, survivors: 10, initialDeviation: 10, finalDeviation: 1 }): Fit {
     const N_params: number = f.length - 1;
