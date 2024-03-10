@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { Config, Dataset, Fit, Params, VariableType, fx } from './types';
+import { Config, Datum, Fit, VariableType, fx } from './types';
 
 /**
  * Defines the default configuration options for `fit`
@@ -39,7 +39,7 @@ const defaultConfig: Config = {
  * };
  * ```
  */
-export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial: Params = [], config: Config = defaultConfig): Fit {
+export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], config: Config = defaultConfig): Fit {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -60,7 +60,7 @@ export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial
     for (let generation = 0; generation < conf.generations; generation++) {
         for (let i = 0; i < conf.population; i++) {
             // Mutate a random parent from the prior generation of survivors
-            const params: Params = mutate(
+            const params: Array<number> = mutate(
                 census[randInt(0, conf.survivors)]?.params ?? params_initial,
                 SMath.translate(generation, 0, conf.generations, conf.initialDeviation, conf.finalDeviation)
             );
@@ -79,7 +79,7 @@ export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial
  * @param data The entire dataset, as an array of points.
  * @returns The sum of squared errors.
  */
-function err<T = VariableType>(f: fx<T>, params: Params, data: Dataset<T>): number {
+function err<T extends VariableType>(f: fx<T>, params: Array<number>, data: Array<Datum<T>>): number {
     let sum: number = 0;
     data.forEach(point => sum += (point.y - f(point.x, ...params)) ** 2);
     return sum;
@@ -90,7 +90,7 @@ function err<T = VariableType>(f: fx<T>, params: Params, data: Dataset<T>): numb
  * @param deviation The maximum amount to deviate in any direction.
  * @returns A mutated set of parameters.
  */
-function mutate(params: Params, deviation: number): Params {
+function mutate(params: Array<number>, deviation: number): Array<number> {
     return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation));
 }
 /**

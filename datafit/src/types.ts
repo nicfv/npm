@@ -1,19 +1,7 @@
 /**
- * Use this type to define a single-variable curve and dataset
- */
-export type SingleVariable = number;
-/**
- * Use this type to define a multi-variable curve and dataset
- */
-export type MultiVariable = Array<number>;
-/**
  * Declares whether this is a single- or multi-variable problem.
  */
-export type VariableType = SingleVariable | MultiVariable;
-/**
- * Type of function constant parameters to fit the curve with.
- */
-export type Params = Array<number>;
+export type VariableType = number | Array<number>;
 /**
  * Represents a mathematical function y = f(x) with unknown parameters.
  * @example
@@ -32,12 +20,12 @@ export type Params = Array<number>;
  * **Note:** `SingleVariable` can be replaced with `number` and
  * `MultiVariable` can be replaced with `Array<number>` or `number[]`.
  */
-export type fx<T = VariableType> = (x: T, ...params: Params) => number;
+export type fx<T extends VariableType> = (x: T, ...params: Array<number>) => number;
 /**
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
  */
-export interface Datum<T = VariableType> {
+export interface Datum<T extends VariableType> {
     /**
      * **Input:** X variable(s)
      */
@@ -48,40 +36,13 @@ export interface Datum<T = VariableType> {
     readonly y: number;
 }
 /**
- * Contains a set of data points. Can be
- * defined to be single or multi variable
- * using the generic type qualifier. The
- * following examples are provided in
- * Typescript. Remove the type identifier
- * and qualifier for JavaScript.
- * @example
- * Single variable dataset in Typescript:
- * ```ts
- * const data: Dataset<SingleVariable> = [
- *     { x: 1, y: 1 },
- *     { x: 2, y: 3 },
- *     { x: 3, y: 4 },
- * ];
- * ```
- * Multivariable dataset in Typescript:
- * ```ts
- * const data: Dataset<MultiVariable> = [
- *     { x: [0, 0], y: 1 },
- *     { x: [1, 0], y: 3 },
- *     { x: [0, 1], y: 4 },
- *     { x: [1, 1], y: 5 },
- * ];
- * ```
- */
-export type Dataset<T = VariableType> = Array<Datum<T>>;
-/**
  * Includes information about a best-fit for a curve.
  */
 export interface Fit {
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
-    readonly params: Params;
+    readonly params: Array<number>;
     /**
      * This is the residual sum of squared errors.
      */
