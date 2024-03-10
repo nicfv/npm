@@ -10,7 +10,6 @@
     "types"
   ],
   "scripts": {
-    "dev": "rm -rf dist && tsc --watch",
     "build": "rm -rf dist && tsc --removeComments",
     "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
     "test": "tsc --noEmit",
