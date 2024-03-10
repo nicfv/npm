@@ -4,6 +4,9 @@
 node -v || exit 1
 npm -v || exit 1
 
+# Capture today's date
+today="$(date +%Y-%m-%d)"
+
 # Check for publish flag
 publish=false
 if [[ "${1}" == 'publish' ]] ; then
