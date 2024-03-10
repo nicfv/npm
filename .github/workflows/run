@@ -36,6 +36,8 @@ for dir in */ ; do
     # Extract package name, changelog version, and package version
     package_name="$(npm --silent v . name)"
     echo "Package Name   = ${package_name}"
+    package_desc="$(npm --silent v . description)"
+    echo "Package Name   = ${package_desc}"
     local_version="$(npm --silent v . version)"
     echo "Local Version  = ${local_version}"
     log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
@@ -60,17 +62,15 @@ for dir in */ ; do
             echo 'Publishing...'
             npm publish
         fi
-        # Store super global variables, copy over the template
-        # readme file and replace super globals
-        desc="$(npm --silent v . description)"
-        readme="$(cat README.md)"
-        cp '../.github/workflows/template.md' README.md
-        sed -i "s@@%NAME%@@${package_name}@@g" README.md
-        sed -i "s@@%DESC%@@${desc}@@g" README.md
-        sed -i "s@@%DIR%@@${dir}@@g" README.md
-        sed -i "s@@%VER%@@${local_version}@@g" README.md
-        sed -i "s@@%DATE%@@${today}@@g" README.md
-        sed -i "s@@%README%@@${readme}@@g" README.md
+        # Copy over the template readme file
+        # and replace template variables
+        cp '../.github/workflows/template.md' .
+        awk "{gsub(/%NAME%/,\"${package_name/\"/\\\"}\");print}" template.md > tmp && mv tmp template.md
+        awk "{gsub(/%DESC%/,\"${package_desc/\"/\\\"}\");print}" template.md > tmp && mv tmp template.md
+        awk "{gsub(/%DIR%/,\"${dir/\"/\\\"}\");print}" template.md > tmp && mv tmp template.md
+        awk "{gsub(/%VER%/,\"${local_version/\"/\\\"}\");print}" template.md > tmp && mv tmp template.md
+        awk "{gsub(/%DATE%/,\"${today/\"/\\\"}\");print}" template.md > tmp && mv tmp template.md
+        cat README.md >> template.md && mv template.md README.md
         # Always generate documentation because if only one
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
