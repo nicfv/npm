@@ -60,6 +60,9 @@ for dir in */ ; do
         else
             echo 'Publishing...'
             npm publish
+            # When publishing, we need to overwrite the
+            # package date with the current timestamp
+            package_date=$(date +%s)
         fi
         # Store current readme content, copy over the
         # template readme file, and replace variables
