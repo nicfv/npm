@@ -1,16 +1,3 @@
-Simple curve-fitting algorithm using a genetic-style algorithm for single-variable or multivariate problems.
-
-![NPM Version](https://img.shields.io/npm/v/datafit)
-![NPM Downloads](https://img.shields.io/npm/dt/datafit)
-
-## Installation
-
-`datafit` can be installed from the official [npm package repository](https://www.npmjs.com/package/datafit). It is highly recommended to install the latest version, which is installed by default with the following command.
-
-```shell
-npm i datafit
-```
-
 ## Getting Started
 
 `datafit` exports only 1 function, [`fit`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
@@ -138,7 +125,3 @@ The dimension, or number of free `x` variables per data point, should not have a
 ## Best Practices
 
 It's a good idea to start with rough curve fits and use the outputs from that in subsequent `fit` calls to finer-tune the results such as the one in the [single variable example](#single-variable), which will yield more consistent results, despite different paths taken to achieve the result. If possible, it's best to use `fit` during the testing phase, and store your parameters as constants to use in production software. This will ensure consistent results 100% of the time.
-
-## Contribute
-
-`datafit` is an open source software package hosted on a [GitHub repository](https://github.com/nicfv/npm) and is distributed under the [MIT License](https://raw.githubusercontent.com/nicfv/npm/main/LICENSE). Bug reports and feature requests can be submitted in [issues](https://github.com/nicfv/npm/issues). Contributions are also accepted by submitting a [pull request](https://github.com/nicfv/npm/pulls). Please follow the code styling if submitting a pull request. Thank you for your consideration!
