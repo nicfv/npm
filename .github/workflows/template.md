@@ -1,11 +1,13 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<!-- Variables: %NAME%, %DESC%, %DIR%, %VER%, %DATE%, -->
+<!-- Variables: %NAME%, %DESC%, %DIR%, %VER%, %TIME% -->
 
 %DESC%
 
-[Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | Version %VER% published %DATE%
+[Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%)
 
+![Relative date](https://img.shields.io/date/%TIME%)
+![NPM Version](https://img.shields.io/npm/v/%NAME%)
 ![NPM Downloads](https://img.shields.io/npm/dt/%NAME%)
 ![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)
 ![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)
