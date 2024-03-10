@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.5
+
+- Remove bug tracker (automatically populated by repository field)
+- Bump up `smath` dependency to 1.1.2
+
 ## 1.0.4
 
 - Clean up `package.json`
