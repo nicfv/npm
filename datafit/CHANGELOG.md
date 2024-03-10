@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Change compiler library to `es2015`
+
 ## 1.0.1
 
 - Minor readme fixes
