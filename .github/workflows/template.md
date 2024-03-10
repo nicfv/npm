@@ -1,6 +1,6 @@
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<!-- Variables: %NAME%, %DESC%, %DIR%, %VER%, %DATE%, %README% -->
+<!-- Variables: %NAME%, %DESC%, %DIR%, %VER%, %DATE%, -->
 
 %DESC%
 
@@ -18,8 +18,6 @@
 ```shell
 npm i %NAME%@latest
 ```
-
-%README%
 
 ## Bugs, Issues, and Requests
 
