@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.5
+
+- Clean up `package.json`
+- Add bug tracker
+- Update contact information
+
 ## 1.0.4
 
 - Update documentation for `Color.getContrastingColor()`

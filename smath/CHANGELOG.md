@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2
+
+- Clean up `package.json`
+- Add bug tracker
+- Update contact information
+- Remove `dev` script
+
 ## 1.1.1
 
 - Update example in README
