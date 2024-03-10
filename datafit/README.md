@@ -1,6 +1,6 @@
 ## Getting Started
 
-`datafit` exports only 1 function, [`fit`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
+`datafit` exports only 1 function, [`fit()`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
 
 > Because of these random mutations, running the same code multiple times may yield slightly different results. See [best practices](#best-practices) for mitigation tactics.
 
@@ -10,7 +10,7 @@
 
 In this example written in JavaScript, we will fit the 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll start out with a rough curve fit with the starting guess of \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function \\\(f(x,\bar{a})\\\) and interpolate or extrapolate for any \\\(x\\\) value.
 
-$$f(x) = a_{2}x^{2} + a_{1}x + a_{0}$$
+$$f(x, \bar{a}) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
 ```js
 import { fit } from 'datafit';
@@ -62,7 +62,7 @@ const a = bestFit.params,
     y = f(x, a[0], a[1], a[2]);
 ```
 
-My results were about \\\(a2 = -1, a1 = 5.3, a0 = -3.5\\\), which means my best-fit function is \\\(y = -x^2 + 5.3x - 3.5\\\). Try it for yourself and see if you obtain similar results!
+My results were about \\\(a_{2} = -1, a_{1} = 5.3, a_{0} = -3.5\\\), which means my best-fit function is \\\(y = -x^2 + 5.3x - 3.5\\\). Try it for yourself and see if you obtain similar results!
 
 In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
 
@@ -72,13 +72,11 @@ In this example, the x values for our data points are given as 1, 2, 3, and 4. I
 
 In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that \\\(\bar{x}\\\) is now an array, in both \\\(f(\bar{x})\\\) and the dataset, but everything else is functionally the same!
 
-$$
-ax + by + cz = d\\
-ax + by - d = -cz\\
-z = -\frac{a}{c}x - \frac{b}{c}y + \frac{d}{c}
-$$
+$$ax + by + cz = d$$
 
-We'll call \\\(c_{x} = -\frac{a}{c}\\\), \\\(c_{y} = -\frac{b}{c}\\\), and \\\(c_{z} = \frac{d}{c}\\\) which are all arbirary constants. Let's call the vector \\\(\bar{x} = [x, y]\\\) our input vector.
+This general plane formula can be rewritten to solve for \\\(z\\\). \\\(c_{x}\\\), \\\(c_{y}\\\), and \\\(c_{z}\\\) are all arbirary constants that we will adjust to fit the plane to the dataset.
+
+$$f(\bar{x}, \bar{c}) = c_{x}x + c_{y}y + c_{z}$$
 
 Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
 
