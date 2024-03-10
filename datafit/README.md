@@ -8,7 +8,9 @@
 
 ### Single Variable
 
-In this example written in JavaScript, we will fit a 2nd degree polynomial to a set of (x,y) points. We'll start out with a rough curve fit with the starting guess of `a2 = a1 = a0 = 0`. Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function `f(x)` and interpolate or extrapolate for any `x` value.
+In this example written in JavaScript, we will fit the 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll start out with a rough curve fit with the starting guess of \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function \\\(f(x,\bar{a})\\\) and interpolate or extrapolate for any \\\(x\\\) value.
+
+$$f(x) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
 ```js
 import { fit } from 'datafit';
@@ -60,7 +62,7 @@ const a = bestFit.params,
     y = f(x, a[0], a[1], a[2]);
 ```
 
-My results were about `a2 = -1, a1 = 5.3, a0 = -3.5`, which means my best-fit function is `y = -x^2 + 5.3x - 3.5`. Try it for yourself and see if you obtain similar results!
+My results were about \\\(a2 = -1, a1 = 5.3, a0 = -3.5\\\), which means my best-fit function is \\\(y = -x^2 + 5.3x - 3.5\\\). Try it for yourself and see if you obtain similar results!
 
 In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
 
@@ -68,9 +70,17 @@ In this example, the x values for our data points are given as 1, 2, 3, and 4. I
 
 ### Multivariate
 
-In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that `x` is now an array, in both `f(x)` and the dataset, but everything else is functionally the same!
+In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that \\\(\bar{x}\\\) is now an array, in both \\\(f(\bar{x})\\\) and the dataset, but everything else is functionally the same!
 
-Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively, however, in mathematics, this is simply referred to as the `X` vector. In this example, the `y` property in our dataset could actually be our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
+$$
+ax + by + cz = d\\
+ax + by - d = -cz\\
+z = -\frac{a}{c}x - \frac{b}{c}y + \frac{d}{c}
+$$
+
+We'll call \\\(c_{x} = -\frac{a}{c}\\\), \\\(c_{y} = -\frac{b}{c}\\\), and \\\(c_{z} = \frac{d}{c}\\\) which are all arbirary constants. Let's call the vector \\\(\bar{x} = [x, y]\\\) our input vector.
+
+Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
 
 ```js
 import { fit } from 'datafit';
@@ -78,8 +88,8 @@ import { fit } from 'datafit';
 // Define a 2D planar function for
 // curve fitting with unknowns `c`
 // Note that `x` is now an array.
-function f(x, cx, cy, c) {
-    return cx * x[0] + cy * x[1] + c;
+function f(x, cx, cy, cz) {
+    return cx * x[0] + cy * x[1] + cz;
 }
 
 // Define the multi-variable dataset
@@ -103,7 +113,7 @@ const x = 0.75,
     z = f([x, y], c[0], c[1], c[2]);
 ```
 
-My results were about `cx = 1.5, cy = 2.5, c = 1.2` meaning that my equation is `z = 1.5x + 2.5y + 1.2`. Try it for yourself and see if you obtain similar results!
+My results were about \\\(c_{x} = 1.5, c_{y} = 2.5, c_{z} = 1.2\\\) meaning that my equation is \\\(z = 1.5x + 2.5y + 1.2\\\). Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
 
 ## Complexity
 
@@ -116,9 +126,7 @@ The folling factors affect computation time and resources:
 
 Each one alone has a linear effect on performance, but combined has an incremental effect.
 
-```js
-time = generations * population * ( parameters + dataset )
-```
+$$time = generations \times population \times ( parameters + dataset )$$
 
 The dimension, or number of free `x` variables per data point, should not have an impact on computation time.
 
