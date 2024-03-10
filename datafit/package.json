@@ -2,6 +2,7 @@
   "name": "datafit",
   "version": "1.0.3",
   "description": "Simple curve-fitting algorithm",
+  "homepage": "https://npm.nicfv.com/datafit",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -48,7 +49,6 @@
     "email": "npm@nicolasventura.com"
   },
   "repository": "github:nicfv/npm",
-  "homepage": "https://npm.nicfv.com/datafit",
   "license": "MIT",
   "dependencies": {
     "smath": "1.1.1"

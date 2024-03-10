@@ -2,6 +2,7 @@
   "name": "viridis",
   "version": "1.0.4",
   "description": "Generate data visualization color gradients",
+  "homepage": "https://npm.nicfv.com/viridis",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -43,7 +44,6 @@
     "email": "npm@nicolasventura.com"
   },
   "repository": "github:nicfv/npm",
-  "homepage": "https://npm.nicfv.com/viridis",
   "license": "MIT",
   "dependencies": {
     "smath": "1.1.1"
