@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.6
+
+- Remove bug tracker (automatically populated by repository field)
+
 ## 1.0.5
 
 - Clean up `package.json`
