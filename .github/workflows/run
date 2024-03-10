@@ -28,20 +28,25 @@ for dir in */ ; do
         echo "${dir} is not an NPM project"
         continue
     }
+    # Set working directory to package directory
+    cd "${dir}" || exit 1
     # Extract package name, changelog version, and package version
-    package_name="$(npm --silent v "${dir}" name)"
+    package_name="$(npm --silent v ./ name)"
     echo "Package Name   = ${package_name}"
-    local_version="$(npm --silent v "${dir}" version)"
+    package_desc="$(npm --silent v ./ description)"
+    echo "Description    = ${package_desc}"
+    package_date="$(date --date="$(npm --silent v "${package_name}" time.modified)" +%s)"
+    echo "Publish Date   = ${package_date}"
+    local_version="$(npm --silent v ./ version)"
     echo "Local Version  = ${local_version}"
-    log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' "${dir}CHANGELOG.md" | head -n1)"
+    log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
     echo "Log Version    = ${log_version}"
     # Make sure package.json and changelog versions match
     if [[ "${local_version}" != "${log_version}" ]] ; then
         echo 'Package and changelog versions do not match!'
         exit 1
     fi
-    # Run test script
-    cd "${dir}" || exit 1
+    # Install dependencies and run test script
     echo 'Installing dependencies...'
     npm i
     echo 'Running tests...'
@@ -56,12 +61,24 @@ for dir in */ ; do
             echo 'Publishing...'
             npm publish
         fi
+        # Store current readme content, copy over the
+        # template readme file, and replace variables
+        readme="$(cat README.md)"
+        cp '../.github/workflows/template.md' README.md
+        sed -i "s:%NAME%:${package_name//':'/';'}:g" README.md
+        sed -i "s:%DESC%:${package_desc//':'/';'}:g" README.md
+        sed -i "s:%DIR%:${dir//':'/';'}:g" README.md
+        sed -i "s:%VER%:${local_version//':'/';'}:g" README.md
+        sed -i "s:%TIME%:${package_date//':'/';'}:g" README.md
+        echo "${readme}" >> README.md
         # Always generate documentation because if only one
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
         echo 'Generating documentation...'
         npm run docs
         mv docs "../.docs/${dir}"
+        # Reset the readme file to the default
+        echo "${readme}" > README.md
     fi
     cd ..
 done

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6
+
+- Use readme template (adds new badges, guidelines, and more)
+- Add LaTeX (MathJax) equations in readme file
+
 ## 1.0.5
 
 - Remove bug tracker (automatically populated by repository field)
