@@ -31,13 +31,13 @@ for dir in */ ; do
     # Set working directory to package directory
     cd "${dir}" || exit 1
     # Extract package name, changelog version, and package version
-    package_name="$(npm --silent v . name)"
+    package_name="$(npm --silent v ./ name)"
     echo "Package Name   = ${package_name}"
-    package_desc="$(npm --silent v . description)"
+    package_desc="$(npm --silent v ./ description)"
     echo "Description    = ${package_desc}"
     package_date="$(date --date="$(npm --silent v "${package_name}" time.modified)" +%s)"
     echo "Publish Date   = ${package_date}"
-    local_version="$(npm --silent v . version)"
+    local_version="$(npm --silent v ./ version)"
     echo "Local Version  = ${local_version}"
     log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
     echo "Log Version    = ${log_version}"
