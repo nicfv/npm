@@ -5,7 +5,7 @@ node -v || exit 1
 npm -v || exit 1
 
 # Capture today's date
-today="$(date +%Y-%m-%d)"
+today="$(date '+%B %-d, %Y')"
 
 # Check for publish flag
 publish=false
