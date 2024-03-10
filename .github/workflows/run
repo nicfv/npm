@@ -65,11 +65,11 @@ for dir in */ ; do
         # template readme file, and replace variables
         readme="$(cat README.md)"
         cp '../.github/workflows/template.md' README.md
-        sed -i "s:%NAME%:${package_name/\"/\\\"}:g" README.md
-        sed -i "s:%DESC%:${package_desc/\"/\\\"}:g" README.md
-        sed -i "s:%DIR%:${dir/\"/\\\"}:g" README.md
-        sed -i "s:%VER%:${local_version/\"/\\\"}:g" README.md
-        sed -i "s:%TIME%:${package_date/\"/\\\"}:g" README.md
+        sed -i "s:%NAME%:${package_name//':'/';'}:g" README.md
+        sed -i "s:%DESC%:${package_desc//':'/';'}:g" README.md
+        sed -i "s:%DIR%:${dir//':'/';'}:g" README.md
+        sed -i "s:%VER%:${local_version//':'/';'}:g" README.md
+        sed -i "s:%TIME%:${package_date//':'/';'}:g" README.md
         echo "${readme}" >> README.md
         # Always generate documentation because if only one
         # package generates documentation, then it will
