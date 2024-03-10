@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4
+
+- Clean up `package.json`
+- Add bug tracker
+- Update contact information
+
 ## 1.0.3
 
 - `T extends VariableType` (without this, we can assign any type to `T`)
