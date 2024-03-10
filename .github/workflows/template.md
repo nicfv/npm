@@ -4,8 +4,12 @@
 
 %DESC%
 
-![NPM Version](https://img.shields.io/npm/v/%NAME%)
+[Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | Last published %DATE% | Version %VER%
+
 ![NPM Downloads](https://img.shields.io/npm/dt/%NAME%)
+![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)
+![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)
+![GitHub Repo stars](https://img.shields.io/github/stars/nicfv/npm)
 
 ## Installation
 
