@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+
+- Use readme template (adds new badges, guidelines, and more)
+
 ## 1.1.3
 
 - Remove bug tracker (automatically populated by repository field)
