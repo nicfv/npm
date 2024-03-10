@@ -1,7 +1,8 @@
 {
   "name": "smath",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Small math function library",
+  "homepage": "https://npm.nicfv.com/smath",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -9,7 +10,6 @@
     "types"
   ],
   "scripts": {
-    "dev": "rm -rf dist && tsc --watch",
     "build": "rm -rf dist && tsc --removeComments",
     "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
     "test": "tsc --noEmit",
@@ -31,19 +31,18 @@
   ],
   "author": {
     "name": "Nicolas Ventura",
-    "email": "smath@nicolasventura.com",
+    "email": "npm@nicolasventura.com",
     "url": "https://nicolasventura.com/"
   },
   "funding": {
     "type": "paypal",
     "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nicfv/npm",
-    "directory": "smath"
+  "bugs": {
+    "url": "https://github.com/nicfv/npm/issues",
+    "email": "npm@nicolasventura.com"
   },
-  "homepage": "https://npm.nicfv.com/smath",
+  "repository": "github:nicfv/npm",
   "license": "MIT",
   "devDependencies": {
     "typedoc": "0.25.11",
