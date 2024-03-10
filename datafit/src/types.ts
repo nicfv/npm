@@ -32,12 +32,12 @@ export type Params = Array<number>;
  * **Note:** `SingleVariable` can be replaced with `number` and
  * `MultiVariable` can be replaced with `Array<number>` or `number[]`.
  */
-export type fx<T = VariableType> = (x: T, ...params: Params) => number;
+export type fx<T extends VariableType> = (x: T, ...params: Params) => number;
 /**
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
  */
-export interface Datum<T = VariableType> {
+export interface Datum<T extends VariableType> {
     /**
      * **Input:** X variable(s)
      */
@@ -73,7 +73,7 @@ export interface Datum<T = VariableType> {
  * ];
  * ```
  */
-export type Dataset<T = VariableType> = Array<Datum<T>>;
+export type Dataset<T extends VariableType> = Array<Datum<T>>;
 /**
  * Includes information about a best-fit for a curve.
  */

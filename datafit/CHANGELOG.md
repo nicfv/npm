@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- `T extends VariableType` (without this, we can assign any type to `T`)
+
 ## 1.0.2
 
 - Change compiler library to `es2015`
