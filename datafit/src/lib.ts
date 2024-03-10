@@ -39,7 +39,7 @@ const defaultConfig: Config = {
  * };
  * ```
  */
-export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial: Params = [], config: Config = defaultConfig): Fit {
+export function fit<T extends VariableType>(f: fx<T>, data: Dataset<T>, params_initial: Params = [], config: Config = defaultConfig): Fit {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -79,7 +79,7 @@ export function fit<T = VariableType>(f: fx<T>, data: Dataset<T>, params_initial
  * @param data The entire dataset, as an array of points.
  * @returns The sum of squared errors.
  */
-function err<T = VariableType>(f: fx<T>, params: Params, data: Dataset<T>): number {
+function err<T extends VariableType>(f: fx<T>, params: Params, data: Dataset<T>): number {
     let sum: number = 0;
     data.forEach(point => sum += (point.y - f(point.x, ...params)) ** 2);
     return sum;
