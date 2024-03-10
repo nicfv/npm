@@ -2,9 +2,7 @@
 
 <!-- Variables: %NAME%, %DESC%, %DIR%, %VER%, %TIME% -->
 
-%DESC%
-
-[Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%)
+[Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | %DESC%
 
 ![Relative date](https://img.shields.io/date/%TIME%)
 ![NPM Version](https://img.shields.io/npm/v/%NAME%)
@@ -18,7 +16,7 @@
 %NAME% can be installed from the official [npm package repository](https://www.npmjs.com/package/%NAME%). It is highly recommended to install the latest version, which is installed by default with the following command.
 
 ```shell
-npm i %NAME%@latest
+npm i %NAME%@%VER%
 ```
 
 ## Bugs, Issues, and Requests
