@@ -39,10 +39,6 @@
     "type": "paypal",
     "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
   },
-  "bugs": {
-    "url": "https://github.com/nicfv/npm/issues",
-    "email": "npm@nicolasventura.com"
-  },
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
