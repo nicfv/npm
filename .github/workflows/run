@@ -71,6 +71,9 @@ for dir in */ ; do
         else
             echo 'Publishing...'
             npm publish
+            # When publishing, we need to overwrite the
+            # package date with the current timestamp
+            package_date=$(date +%s)
         fi
         # Always generate documentation because if only one
         # package generates documentation, then it will
