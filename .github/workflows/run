@@ -78,7 +78,7 @@ for dir in */ ; do
         echo 'Generating documentation...'
         npm run docs || exit 1
         mv docs "../.docs/${dir}"
-        # Reset the readme file to the default
+        # Reset the readme file to its original state
         echo "${readme}" > README.md
     fi
     cd ..
