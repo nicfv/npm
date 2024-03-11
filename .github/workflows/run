@@ -52,15 +52,6 @@ for dir in */ ; do
     echo 'Running tests...'
     npm test || exit 1
     if "${publish}" ; then
-        # Determine latest published version on the registry
-        npm_version="$(npm --silent v "${package_name}" version)"
-        echo "Version on NPM = ${npm_version}"
-        if [[ "${local_version}" == "${npm_version}" ]] ; then
-            echo 'Skipping publish step'
-        else
-            echo 'Publishing...'
-            npm publish
-        fi
         # Store current readme content, copy over the
         # template readme file, and replace variables
         readme="$(cat README.md)"
@@ -71,6 +62,15 @@ for dir in */ ; do
         sed -i "s:%VER%:${local_version//':'/';'}:g" README.md
         sed -i "s:%TIME%:${package_date//':'/';'}:g" README.md
         echo "${readme}" >> README.md
+        # Determine latest published version on the registry
+        npm_version="$(npm --silent v "${package_name}" version)"
+        echo "Version on NPM = ${npm_version}"
+        if [[ "${local_version}" == "${npm_version}" ]] ; then
+            echo 'Skipping publish step'
+        else
+            echo 'Publishing...'
+            npm publish
+        fi
         # Always generate documentation because if only one
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
