@@ -54,6 +54,7 @@ for dir in */ ; do
     if "${publish}" ; then
         # Store current readme content, copy over the
         # template readme file, and replace variables
+        echo 'Generating readme...'
         readme="$(cat README.md)"
         cp '../.github/workflows/template.md' README.md
         sed -i "s:%NAME%:${package_name//':'/';'}:g" README.md
@@ -75,7 +76,7 @@ for dir in */ ; do
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
         echo 'Generating documentation...'
-        npm run docs
+        npm run docs || exit 1
         mv docs "../.docs/${dir}"
         # Reset the readme file to the default
         echo "${readme}" > README.md
