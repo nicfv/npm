@@ -1,6 +1,10 @@
 ## Getting Started
 
-**Example:** A temperature conversion tool using [`SMath.translate`](https://npm.nicfv.com/smath/classes/SMath.html#translate) to convert units and [`SMath.approx`](https://npm.nicfv.com/smath/classes/SMath.html#approx) to validate the result. The translation uses freezing and boiling points for 2 unit systems to linearly interpolate between them.
+Similar to JavaScript's builtin [`Math`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) object, `SMath` exports one global object with several math-related helper functions. There is no need to instantiate the class, just call functions directly. See the examples below to get started using SMath!
+
+## Example
+
+A temperature conversion tool using [`SMath.translate`](https://npm.nicfv.com/smath/classes/SMath.html#translate) to convert units and [`SMath.approx`](https://npm.nicfv.com/smath/classes/SMath.html#approx) to validate the result. The translation uses freezing and boiling points for 2 unit systems to linearly interpolate between them.
 
 ```js
 import { SMath } from 'smath';

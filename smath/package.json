@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
   "main": "dist/index.js",
@@ -27,7 +27,9 @@
     "interpolate",
     "interpolation",
     "extrapolate",
-    "extrapolation"
+    "extrapolation",
+    "linspace",
+    "logspace"
   ],
   "author": {
     "name": "Nicolas Ventura",
