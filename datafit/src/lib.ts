@@ -87,11 +87,11 @@ function err<T extends VariableType>(f: fx<T>, params: Array<number>, data: Arra
 /**
  * Randomly mutate the set of function parameters by some maximum deviation.
  * @param params The set of function parameters to mutate.
- * @param deviation The maximum amount to deviate in any direction.
+ * @param deviation The maximum relative amount to deviate in any direction.
  * @returns A mutated set of parameters.
  */
 function mutate(params: Array<number>, deviation: number): Array<number> {
-    return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation));
+    return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation) * Math.max(1, c) / 100);
 }
 /**
  * Generate a random integer between `min, max`
