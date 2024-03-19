@@ -7,18 +7,16 @@ export type VariableType = number | Array<number>;
  * @example
  * Single variable function in Typescript, 2nd degree polynomial:
  * ```ts
- * function f(x: SingleVariable, a2: number, a1: number, a0: number): number {
+ * function f(x: number, a2: number, a1: number, a0: number): number {
  *     return a2 * x ** 2 + a1 * x + a0;
  * }
  * ```
  * Multivariable function Typescript, general plane equation:
  * ```ts
- * function f(x: MultiVariable, cx: number, cy: number, c: number): number {
- *     return cx * x[0] + cy * x[1] + c;
+ * function f(x: number[], cx: number, cy: number, cz: number): number {
+ *     return cx * x[0] + cy * x[1] + cz;
  * }
  * ```
- * **Note:** `SingleVariable` can be replaced with `number` and
- * `MultiVariable` can be replaced with `Array<number>` or `number[]`.
  */
 export type fx<T extends VariableType> = (x: T, ...params: Array<number>) => number;
 /**
