@@ -77,9 +77,17 @@ f(3) 2.5 2.505063155016327
 Error: 0.20%
 ```
 
-The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. That means that the results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 1, a_{2} \approx -0.2\\\) which is very close to our [original function](#function-used-to-generate-the-dataset)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.51\\\), again very close to the true result! Try it for yourself and see if you obtain similar results!
+#### Explanation
 
-In this example, the x values for our data points are given as `[-2, -1, 0, 1, 2]`. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
+The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 0.99, a_{2} \approx -0.196\\\) which is very close to our [original function](#function-used-to-generate-the-dataset)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.505\\\), again very close to the true result! Try it for yourself and see if you obtain similar results!
+
+The other lines in the summary tell us other information from the computation.
+
+- `error` is the **total** residual squared error (for all data points.) This is the value that the algorithm is minimizing.
+- `Ndata` is the number of data points given to the algorithm. Typically, more data points (with fewer outliers) will produce a better model for curve fitting.
+- `avgAbsErr` is the average absolute error we would get from the model function with `params` compared to the actual dataset values. Lower numbers are better here. This only compares the best-fit with values from the dataset. By extrapolating beyond our dataset, our average error may increase. See below for an explanation.
+
+In this example, the x values for our data points are given as `[-2, -1, 0, 1, 2]`. If we interpolate within this range, the model will be about as accurate as what is shown in the summary. Extrapolating very far beyond either end of this range (e.g. \\\(f(100)\\\)) will probably not be very accurate!
 
 > Mind the order of your parameters! `fit()` will output a parameter array that follows the same order as the model function parameters, even if it is non-intuitive! For example, if my function signature looks like `f(x, a2, a1, a0)`, then `summary.params` would return an array `[a2, a1, a0]`. You would access `a2` with `a[0]`!
 
