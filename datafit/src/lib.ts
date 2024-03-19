@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { Datum, Fit, VariableType, fx } from './types';
+import { Datum, F, Summary, VariableType } from './types';
 
 /**
  * Minimize the sum of squared errors to fit a set of data
@@ -28,7 +28,7 @@ import { Datum, Fit, VariableType, fx } from './types';
  * };
  * ```
  */
-export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Fit {
+export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Summary {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -40,15 +40,22 @@ export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, par
     if (maxDeviation <= 0) {
         throw new Error('Maximum deviation should be a positive value.');
     }
-    let best: Fit = { params: params_initial, err: err(f, params_initial, data) };
+    let params: Array<number> = params_initial,
+        error: number = err(f, params, data);
     for (let i = 0; i < iterations; i++) {
-        const params: Array<number> = mutate(best.params, SMath.translate(i, 0, iterations, maxDeviation, 0)),
-            error: number = err(f, params, data);
-        if (error < best.err) {
-            best = { params: params, err: error };
+        const params_i: Array<number> = mutate(params, SMath.translate(i, 0, iterations, maxDeviation, 0)),
+            error_i: number = err(f, params, data);
+        if (error_i < error) {
+            params = params_i;
+            error = error_i;
         }
     }
-    return best;
+    return {
+        params: params,
+        error: error,
+        Ndata: data.length,
+        avgAbsErr: Math.sqrt(error / data.length),
+    };
 }
 /**
  * Calculate the sum of squared errors for a set of function parameters.
@@ -57,7 +64,7 @@ export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, par
  * @param data The entire dataset, as an array of points.
  * @returns The sum of squared errors.
  */
-function err<T extends VariableType>(f: fx<T>, params: Array<number>, data: Array<Datum<T>>): number {
+function err<T extends VariableType>(f: F<T>, params: Array<number>, data: Array<Datum<T>>): number {
     let sum: number = 0;
     data.forEach(point => sum += (point.y - f(point.x, ...params)) ** 2);
     return sum;

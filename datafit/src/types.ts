@@ -18,7 +18,7 @@ export type VariableType = number | Array<number>;
  * }
  * ```
  */
-export type fx<T extends VariableType> = (x: T, ...params: Array<number>) => number;
+export type F<T extends VariableType> = (x: T, ...params: Array<number>) => number;
 /**
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
@@ -36,7 +36,7 @@ export interface Datum<T extends VariableType> {
 /**
  * Includes information about a best-fit for a curve.
  */
-export interface Fit {
+export interface Summary {
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
@@ -44,5 +44,14 @@ export interface Fit {
     /**
      * This is the residual sum of squared errors.
      */
-    readonly err: number;
+    readonly error: number;
+    /**
+     * The number of data points given to the model.
+     */
+    readonly Ndata: number;
+    /**
+     * The average absolute error per data point, comparing the given
+     * dataset to the model output with the set of best-fit parameters.
+     */
+    readonly avgAbsErr: number;
 }
