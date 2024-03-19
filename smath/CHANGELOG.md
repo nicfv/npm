@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.7
+
+- Update typedoc (0.25.12) and typescript (5.4.2) dev dependency versions
+
 ## 1.1.6
 
 - Add `avg` function
