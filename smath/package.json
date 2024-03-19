@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
   "main": "dist/index.js",
@@ -24,6 +24,9 @@
     "library",
     "simple",
     "number",
+    "avg",
+    "average",
+    "mean",
     "interpolate",
     "interpolation",
     "extrapolate",
