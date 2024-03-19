@@ -6,6 +6,37 @@
 
 ## Example
 
+### Simple
+
+This example demonstrates a simple usage of `fit()` to fit 3 data points to the line \\\(y=mx+b\\\). This is all you need to get started!
+
+$$dataset=(1,-1), (2,1), (3,2)$$
+
+```ts
+import { Datum, Summary, fit } from 'datafit';
+
+// Define our model function: y=mx+b
+function f(x: number, m: number, b: number): number {
+    return m * x + b;
+}
+
+// Define our dataset
+const data: Datum<number>[] = [
+    { x: 1, y: -1 },
+    { x: 2, y: 1 },
+    { x: 3, y: 2 },
+];
+
+// Compute the best fit parameters to
+// get `m` and `b`, and print result.
+const summary: Summary = fit(f, data);
+const m_fit: number = summary.params[0];
+const b_fit: number = summary.params[1];
+console.log('The best-fit line is y = ' + m_fit.toFixed(2) + 'x + ' + b_fit.toFixed(2));
+```
+
+Running this program gives me an output of \\\(y=1.5x-2.33\\). Try plotting that in an online graphing calculator!
+
 ### Single Variable
 
 In this example written in TypeScript, we will fit a generic 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll create this dataset based on a known formula for a 2nd degree polynomial. The initial guess for our constants will all be zero, given by \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll determine the true value and best-fit value of \\\(f(3)\\\) using the parameters found by the `fit()` function. We're able to feed this set of best-fit parameters into our model function to extrapolate for any \\\(x\\\) value.
