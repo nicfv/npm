@@ -6,26 +6,24 @@ import { Datum, F, Summary, VariableType } from './types';
  * points to a curve with a set of unknown parameters.
  * @param f The model function for curve fitting.
  * @param data The entire dataset, as an array of points.
- * @param params_initial The initial guess for function parameters,
- * which defaults to an array filled with zeroes.
- * @param config Configuration options for curve fitting.
+ * @param params_initial The initial guess for function
+ * parameters, which defaults to an array filled with zeroes.
+ * @param iterations The number of parameter sets to generate.
+ * @param maxDeviation The relative maximum parameter deviation.
+ * This is a number [0-100%] and affects the maximum deviation
+ * on the first iteration. Every subsequent iteration has a
+ * decayed maximum deviation until the final iteration.
  * @returns The set of parameters and error for the best fit.
  * @example
  * ```ts
- * const bestFit: Fit = fit(f, dataset),
- *     params: Params = bestFit.params,
- *     err: number = bestFit.err;
- * ```
- * @default
- * Configuration settings
- * ```js
- * const defaultConfig: Config = {
- *     generations: 100,
- *     population: 100,
- *     survivors: 10,
- *     initialDeviation: 10,
- *     finalDeviation: 1,
- * };
+ * // Define model function
+ * function f(x: number, a2: number = -0.5, a1: number = 3.9, a0: number = -1.2): number {
+ *     return a2 * x ** 2 + a1 * x + a0;
+ * }
+ * // Construct a data set
+ * const data: Datum<number>[] = [-4, -2, 0, 2, 4].map(x => { return { x: x, y: f(x) } });
+ * // Compute best fit parameters
+ * const summary: Summary = fit(f, data);
  * ```
  */
 export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Summary {
