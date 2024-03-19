@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.6
+
+- Use readme template (adds new badges, guidelines, and more)
+- Add LaTeX (MathJax) equations in readme file
+
+## 1.0.5
+
+- Remove bug tracker (automatically populated by repository field)
+- Bump up `smath` dependency to 1.1.2
+
+## 1.0.4
+
+- Clean up `package.json`
+- Add bug tracker
+- Update contact information
+
 ## 1.0.3
 
 - `T extends VariableType` (without this, we can assign any type to `T`)

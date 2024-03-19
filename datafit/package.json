@@ -1,7 +1,8 @@
 {
   "name": "datafit",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "Simple curve-fitting algorithm",
+  "homepage": "https://npm.nicfv.com/datafit",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -36,22 +37,17 @@
   ],
   "author": {
     "name": "Nicolas Ventura",
-    "email": "datafit@nicolasventura.com",
+    "email": "npm@nicolasventura.com",
     "url": "https://nicolasventura.com/"
   },
   "funding": {
     "type": "paypal",
     "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nicfv/npm",
-    "directory": "datafit"
-  },
-  "homepage": "https://npm.nicfv.com/datafit",
+  "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.1.1"
+    "smath": "1.1.2"
   },
   "devDependencies": {
     "typedoc": "0.25.11",

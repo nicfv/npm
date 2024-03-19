@@ -1,7 +1,8 @@
 {
   "name": "viridis",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "Generate data visualization color gradients",
+  "homepage": "https://npm.nicfv.com/viridis",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -31,22 +32,17 @@
   ],
   "author": {
     "name": "Nicolas Ventura",
-    "email": "viridis@nicolasventura.com",
+    "email": "npm@nicolasventura.com",
     "url": "https://nicolasventura.com/"
   },
   "funding": {
     "type": "paypal",
     "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/nicfv/npm",
-    "directory": "viridis"
-  },
-  "homepage": "https://npm.nicfv.com/viridis",
+  "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.1.1"
+    "smath": "1.1.2"
   },
   "devDependencies": {
     "typedoc": "0.25.11",

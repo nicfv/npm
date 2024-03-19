@@ -1,19 +1,6 @@
-Simple curve-fitting algorithm using a genetic-style algorithm for single-variable or multivariate problems.
-
-![NPM Version](https://img.shields.io/npm/v/datafit)
-![NPM Downloads](https://img.shields.io/npm/dt/datafit)
-
-## Installation
-
-`datafit` can be installed from the official [npm package repository](https://www.npmjs.com/package/datafit). It is highly recommended to install the latest version, which is installed by default with the following command.
-
-```shell
-npm i datafit
-```
-
 ## Getting Started
 
-`datafit` exports only 1 function, [`fit`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
+`datafit` exports only 1 function, [`fit()`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
 
 > Because of these random mutations, running the same code multiple times may yield slightly different results. See [best practices](#best-practices) for mitigation tactics.
 
@@ -21,7 +8,9 @@ npm i datafit
 
 ### Single Variable
 
-In this example written in JavaScript, we will fit a 2nd degree polynomial to a set of (x,y) points. We'll start out with a rough curve fit with the starting guess of `a2 = a1 = a0 = 0`. Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function `f(x)` and interpolate or extrapolate for any `x` value.
+In this example written in JavaScript, we will fit the 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll start out with a rough curve fit with the starting guess of \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function \\\(f(x,\bar{a})\\\) and interpolate or extrapolate for any \\\(x\\\) value.
+
+$$f(x, \bar{a}) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
 ```js
 import { fit } from 'datafit';
@@ -73,7 +62,7 @@ const a = bestFit.params,
     y = f(x, a[0], a[1], a[2]);
 ```
 
-My results were about `a2 = -1, a1 = 5.3, a0 = -3.5`, which means my best-fit function is `y = -x^2 + 5.3x - 3.5`. Try it for yourself and see if you obtain similar results!
+My results were about \\\(a_{2} = -1, a_{1} = 5.3, a_{0} = -3.5\\\), which means my best-fit function is \\\(y = -x^2 + 5.3x - 3.5\\\). Try it for yourself and see if you obtain similar results!
 
 In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
 
@@ -81,9 +70,15 @@ In this example, the x values for our data points are given as 1, 2, 3, and 4. I
 
 ### Multivariate
 
-In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that `x` is now an array, in both `f(x)` and the dataset, but everything else is functionally the same!
+In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that \\\(\bar{x}\\\) is now an array, in both \\\(f(\bar{x})\\\) and the dataset, but everything else is functionally the same!
 
-Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively, however, in mathematics, this is simply referred to as the `X` vector. In this example, the `y` property in our dataset could actually be our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
+$$ax + by + cz = d$$
+
+This general plane formula can be rewritten to solve for \\\(z\\\). \\\(c_{x}\\\), \\\(c_{y}\\\), and \\\(c_{z}\\\) are all arbirary constants that we will adjust to fit the plane to the dataset.
+
+$$f(\bar{x}, \bar{c}) = c_{x}x + c_{y}y + c_{z}$$
+
+Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
 
 ```js
 import { fit } from 'datafit';
@@ -91,8 +86,8 @@ import { fit } from 'datafit';
 // Define a 2D planar function for
 // curve fitting with unknowns `c`
 // Note that `x` is now an array.
-function f(x, cx, cy, c) {
-    return cx * x[0] + cy * x[1] + c;
+function f(x, cx, cy, cz) {
+    return cx * x[0] + cy * x[1] + cz;
 }
 
 // Define the multi-variable dataset
@@ -116,7 +111,7 @@ const x = 0.75,
     z = f([x, y], c[0], c[1], c[2]);
 ```
 
-My results were about `cx = 1.5, cy = 2.5, c = 1.2` meaning that my equation is `z = 1.5x + 2.5y + 1.2`. Try it for yourself and see if you obtain similar results!
+My results were about \\\(c_{x} = 1.5, c_{y} = 2.5, c_{z} = 1.2\\\) meaning that my equation is \\\(z = 1.5x + 2.5y + 1.2\\\). Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
 
 ## Complexity
 
@@ -129,16 +124,10 @@ The folling factors affect computation time and resources:
 
 Each one alone has a linear effect on performance, but combined has an incremental effect.
 
-```js
-time = generations * population * ( parameters + dataset )
-```
+$$time = generations \times population \times ( parameters + dataset )$$
 
 The dimension, or number of free `x` variables per data point, should not have an impact on computation time.
 
 ## Best Practices
 
 It's a good idea to start with rough curve fits and use the outputs from that in subsequent `fit` calls to finer-tune the results such as the one in the [single variable example](#single-variable), which will yield more consistent results, despite different paths taken to achieve the result. If possible, it's best to use `fit` during the testing phase, and store your parameters as constants to use in production software. This will ensure consistent results 100% of the time.
-
-## Contribute
-
-`datafit` is an open source software package hosted on a [GitHub repository](https://github.com/nicfv/npm) and is distributed under the [MIT License](https://raw.githubusercontent.com/nicfv/npm/main/LICENSE). Bug reports and feature requests can be submitted in [issues](https://github.com/nicfv/npm/issues). Contributions are also accepted by submitting a [pull request](https://github.com/nicfv/npm/pulls). Please follow the code styling if submitting a pull request. Thank you for your consideration!

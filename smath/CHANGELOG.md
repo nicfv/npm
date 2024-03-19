@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.4
+
+- Use readme template (adds new badges, guidelines, and more)
+
+## 1.1.3
+
+- Remove bug tracker (automatically populated by repository field)
+
+## 1.1.2
+
+- Clean up `package.json`
+- Add bug tracker
+- Update contact information
+- Remove `dev` script
+
 ## 1.1.1
 
 - Update example in README
