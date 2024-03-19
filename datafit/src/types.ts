@@ -65,11 +65,11 @@ export interface Config {
      */
     readonly survivors: number;
     /**
-     * Determines how much a set of parameters can mutate on the first generation.
+     * Determines the percentage of how much a set of parameters can mutate on the first generation.
      */
     readonly initialDeviation: number;
     /**
-     * Determines how much a set of parameters can mutate on the final generation.
+     * Determines the percentage of how much a set of parameters can mutate on the final generation.
      */
     readonly finalDeviation: number;
 }
