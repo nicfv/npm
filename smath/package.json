@@ -27,7 +27,9 @@
     "interpolate",
     "interpolation",
     "extrapolate",
-    "extrapolation"
+    "extrapolation",
+    "linspace",
+    "logspace"
   ],
   "author": {
     "name": "Nicolas Ventura",
