@@ -132,40 +132,52 @@ This general plane formula can be rewritten to solve for \\\(z\\\). \\\(c_{x}\\\
 
 $$f(\bar{x}, \bar{c}) = c_{x}x + c_{y}y + c_{z}$$
 
-Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
+In the dataset in our [code](#typescript-code-1), the `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
 
-```js
-import { fit } from 'datafit';
+3 points is all that is required to define the equation for a plane. In this example, our data fits to the plane defined by \\\(z = 2x - y + 1\\\).
 
-// Define a 2D planar function for
-// curve fitting with unknowns `c`
-// Note that `x` is now an array.
-function f(x, cx, cy, cz) {
+Let's see if the algorithm can find this out just based on the dataset!
+
+#### TypeScript Code
+
+```ts
+import { Datum, fit } from 'datafit';
+
+// Define a general 3D plane function
+// x[0] represents the x-axis
+// x[1] represents the y-axis
+// The z-axis is represented by f([x, y], ...)
+function f(x: number[], cx: number, cy: number, cz: number): number {
     return cx * x[0] + cy * x[1] + cz;
 }
 
-// Define the multi-variable dataset
-// where `x` is the array of "inputs"
-// We can say `x[0]` = dimension-x
-// and `x[1]` = dimension-y in 2D space.
-const dataset = [
+// These 3 points make up the plane
+// z = 2x - y + 1
+const data: Datum<number[]>[] = [
     { x: [0, 0], y: 1 },
     { x: [1, 0], y: 3 },
-    { x: [0, 1], y: 4 },
-    { x: [1, 1], y: 5 },
+    { x: [0, 1], y: 0 },
 ];
 
-// Shorthand for immediately capturing the
-// parameter array into a constant array `c`
-const c = fit(f, dataset).params;
-
-// Interpolate using the best-fit parameters.
-const x = 0.75,
-    y = 0.25,
-    z = f([x, y], c[0], c[1], c[2]);
+// Run the curve fitting algorithm
+const summary = fit(f, data);
+console.log(summary);
 ```
 
-My results were about \\\(c_{x} = 1.5, c_{y} = 2.5, c_{z} = 1.2\\\) meaning that my equation is \\\(z = 1.5x + 2.5y + 1.2\\\). Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
+#### Program Output
+
+```txt
+{
+  params: [ 2.010807805144429, -0.9965373369374049, 0.9949551401129608 ],
+  error: 0.00006116549611081122,
+  Ndata: 3,
+  avgAbsErr: 0.004515362521836285
+}
+```
+
+#### Explanation
+
+My results were about \\\(c_{x} = 2.01, c_{y} = -0.997, c_{z} = 0.995\\\) meaning that my equation is \\\(z = 2.01x - 0.997y + 0.995\\\), which is pretty darn close to our actual plane equation! Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
 
 ## Complexity
 
