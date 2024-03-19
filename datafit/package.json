@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/datafit",
   "main": "dist/index.js",
