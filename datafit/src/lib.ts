@@ -44,7 +44,7 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
         error: number = err(f, params, data);
     for (let i = 0; i < iterations; i++) {
         const params_i: Array<number> = mutate(params, SMath.translate(i, 0, iterations, maxDeviation, 0)),
-            error_i: number = err(f, params, data);
+            error_i: number = err(f, params_i, data);
         if (error_i < error) {
             params = params_i;
             error = error_i;
