@@ -55,17 +55,14 @@ for dir in */ ; do
         # Determine latest published version on the registry
         npm_version="$(npm --silent v "${package_name}" version)"
         echo "Version on NPM = ${npm_version}"
-        if [[ "${local_version}" == "${npm_version}" ]] ; then
-            echo 'Skipping publish step'
-        else
-            echo 'Publishing...'
-            npm publish
+        if [[ "${local_version}" != "${npm_version}" ]] ; then
             # When publishing, we need to overwrite the
             # package date with the current timestamp
             package_date=$(date +%s)
         fi
         # Store current readme content, copy over the
         # template readme file, and replace variables
+        echo 'Generating readme...'
         readme="$(cat README.md)"
         cp '../.github/workflows/template.md' README.md
         sed -i "s:%NAME%:${package_name//':'/';'}:g" README.md
@@ -74,13 +71,19 @@ for dir in */ ; do
         sed -i "s:%VER%:${local_version//':'/';'}:g" README.md
         sed -i "s:%TIME%:${package_date//':'/';'}:g" README.md
         echo "${readme}" >> README.md
+        if [[ "${local_version}" == "${npm_version}" ]] ; then
+            echo 'Skipping publish step'
+        else
+            echo 'Publishing...'
+            npm publish
+        fi
         # Always generate documentation because if only one
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
         echo 'Generating documentation...'
-        npm run docs
+        npm run docs || exit 1
         mv docs "../.docs/${dir}"
-        # Reset the readme file to the default
+        # Reset the readme file to its original state
         echo "${readme}" > README.md
     fi
     cd ..
