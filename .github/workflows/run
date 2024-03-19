@@ -52,6 +52,14 @@ for dir in */ ; do
     echo 'Running tests...'
     npm test || exit 1
     if "${publish}" ; then
+        # Determine latest published version on the registry
+        npm_version="$(npm --silent v "${package_name}" version)"
+        echo "Version on NPM = ${npm_version}"
+        if [[ "${local_version}" != "${npm_version}" ]] ; then
+            # When publishing, we need to overwrite the
+            # package date with the current timestamp
+            package_date=$(date +%s)
+        fi
         # Store current readme content, copy over the
         # template readme file, and replace variables
         echo 'Generating readme...'
@@ -63,17 +71,11 @@ for dir in */ ; do
         sed -i "s:%VER%:${local_version//':'/';'}:g" README.md
         sed -i "s:%TIME%:${package_date//':'/';'}:g" README.md
         echo "${readme}" >> README.md
-        # Determine latest published version on the registry
-        npm_version="$(npm --silent v "${package_name}" version)"
-        echo "Version on NPM = ${npm_version}"
         if [[ "${local_version}" == "${npm_version}" ]] ; then
             echo 'Skipping publish step'
         else
             echo 'Publishing...'
             npm publish
-            # When publishing, we need to overwrite the
-            # package date with the current timestamp
-            package_date=$(date +%s)
         fi
         # Always generate documentation because if only one
         # package generates documentation, then it will
