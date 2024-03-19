@@ -1,14 +1,5 @@
 import { SMath } from 'smath';
-import { Config, Datum, Fit, VariableType, fx } from './types';
-
-/**
- * Defines the default configuration options for `fit`
- */
-const defaultConfig: Config = {
-    generations: 1000,
-    initialDeviation: 100,
-    finalDeviation: 1,
-};
+import { Datum, Fit, VariableType, fx } from './types';
 
 /**
  * Minimize the sum of squared errors to fit a set of data
@@ -37,7 +28,7 @@ const defaultConfig: Config = {
  * };
  * ```
  */
-export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], config: Config = defaultConfig): Fit {
+export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Fit {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -46,16 +37,12 @@ export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, par
     if (params_initial.length !== N_params) {
         throw new Error('The initial guess should contain ' + N_params + ' parameters.');
     }
-    // Clean up a potentially incomplete config object by filling it in with default options
-    const conf: Config = {
-        generations: config.generations ?? defaultConfig.generations,
-        initialDeviation: config.initialDeviation ?? defaultConfig.initialDeviation,
-        finalDeviation: config.finalDeviation ?? defaultConfig.finalDeviation,
-    };
+    if (maxDeviation <= 0) {
+        throw new Error('Maximum deviation should be a positive value.');
+    }
     let best: Fit = { params: params_initial, err: err(f, params_initial, data) };
-    for (let generation = 0; generation < conf.generations; generation++) {
-        // Mutate a random parent from the prior generation of survivors
-        const params: Array<number> = mutate(best.params, SMath.translate(generation, 0, conf.generations, conf.initialDeviation, conf.finalDeviation)),
+    for (let i = 0; i < iterations; i++) {
+        const params: Array<number> = mutate(best.params, SMath.translate(i, 0, iterations, maxDeviation, 0)),
             error: number = err(f, params, data);
         if (error < best.err) {
             best = { params: params, err: error };
@@ -83,13 +70,4 @@ function err<T extends VariableType>(f: fx<T>, params: Array<number>, data: Arra
  */
 function mutate(params: Array<number>, deviation: number): Array<number> {
     return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation) * Math.max(1, c) / 100);
-}
-/**
- * Generate a random integer between `min, max`
- * @param min Minimum value
- * @param max Maximum value
- * @returns A random integer
- */
-function randInt(min: number, max: number): number {
-    return Math.floor(SMath.expand(Math.random(), min, max));
 }

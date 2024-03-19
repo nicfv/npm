@@ -46,20 +46,3 @@ export interface Fit {
      */
     readonly err: number;
 }
-/**
- * Configuration options for curve fitting.
- */
-export interface Config {
-    /**
-     * Determines the number of generations, or iterations.
-     */
-    readonly generations: number;
-    /**
-     * Determines the percentage of how much a set of parameters can mutate on the first generation.
-     */
-    readonly initialDeviation: number;
-    /**
-     * Determines the percentage of how much a set of parameters can mutate on the final generation.
-     */
-    readonly finalDeviation: number;
-}
