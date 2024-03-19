@@ -55,14 +55,6 @@ export interface Config {
      */
     readonly generations: number;
     /**
-     * Determines the number of parameters sets to generate.
-     */
-    readonly population: number;
-    /**
-     * Determines how many survivors remain after every generation.
-     */
-    readonly survivors: number;
-    /**
      * Determines the percentage of how much a set of parameters can mutate on the first generation.
      */
     readonly initialDeviation: number;

@@ -5,10 +5,8 @@ import { Config, Datum, Fit, VariableType, fx } from './types';
  * Defines the default configuration options for `fit`
  */
 const defaultConfig: Config = {
-    generations: 100,
-    population: 100,
-    survivors: 10,
-    initialDeviation: 10,
+    generations: 1000,
+    initialDeviation: 100,
     finalDeviation: 1,
 };
 
@@ -51,26 +49,19 @@ export function fit<T extends VariableType>(f: fx<T>, data: Array<Datum<T>>, par
     // Clean up a potentially incomplete config object by filling it in with default options
     const conf: Config = {
         generations: config.generations ?? defaultConfig.generations,
-        population: config.population ?? defaultConfig.population,
-        survivors: config.survivors ?? defaultConfig.survivors,
         initialDeviation: config.initialDeviation ?? defaultConfig.initialDeviation,
         finalDeviation: config.finalDeviation ?? defaultConfig.finalDeviation,
     };
-    const census: Array<Fit> = [];
+    let best: Fit = { params: params_initial, err: err(f, params_initial, data) };
     for (let generation = 0; generation < conf.generations; generation++) {
-        for (let i = 0; i < conf.population; i++) {
-            // Mutate a random parent from the prior generation of survivors
-            const params: Array<number> = mutate(
-                census[randInt(0, conf.survivors)]?.params ?? params_initial,
-                SMath.translate(generation, 0, conf.generations, conf.initialDeviation, conf.finalDeviation)
-            );
-            census.push({ params: params, err: err(f, params, data) });
+        // Mutate a random parent from the prior generation of survivors
+        const params: Array<number> = mutate(best.params, SMath.translate(generation, 0, conf.generations, conf.initialDeviation, conf.finalDeviation)),
+            error: number = err(f, params, data);
+        if (error < best.err) {
+            best = { params: params, err: error };
         }
-        // Sort by increasing error and only keep the survivors
-        census.sort((x, y) => x.err - y.err);
-        census.splice(conf.survivors);
     }
-    return census[0];
+    return best;
 }
 /**
  * Calculate the sum of squared errors for a set of function parameters.
