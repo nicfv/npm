@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Add `linspace` and `logspace` functions
+- Update documentation on getting started
+- Add template readme in npm package
+- Add changelog to the end of the readme
+
 ## 1.1.4
 
 - Use readme template (adds new badges, guidelines, and more)
