@@ -1,11 +1,11 @@
 # Changelog
 
-## Unreleased
+## 1.1.5
 
 - Add `linspace` and `logspace` functions
 - Update documentation on getting started
 - Add template readme in npm package
-- Add changelog to the end of the readme
+- Add link to changelog at the top of the readme
 
 ## 1.1.4
 
