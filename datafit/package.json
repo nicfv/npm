@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/datafit",
   "main": "dist/index.js",
@@ -50,7 +50,7 @@
     "smath": "1.1.2"
   },
   "devDependencies": {
-    "typedoc": "0.25.11",
-    "typescript": "5.3.3"
+    "typedoc": "0.25.12",
+    "typescript": "5.4.2"
   }
 }

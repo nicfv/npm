@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.8
+
+- Readme fixes (move builtin palettes to the top)
+- Update `smath` dependency to 1.1.6
+- Update typedoc (0.25.12) and typescript (5.4.2) dev dependency versions
+
 ## 1.0.7
 
 - Use readme template (adds new badges, guidelines, and more)
