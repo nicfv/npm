@@ -93,4 +93,38 @@ export abstract class SMath {
     public static translate(n: number, min1: number, max1: number, min2: number, max2: number): number {
         return this.expand(this.normalize(n, min1, max1), min2, max2);
     }
+    /**
+     * Generate an array of linearly spaced numbers.
+     * @param min The initial value of the linear space
+     * @param max The final value of the linear space
+     * @param count The number of values in the space
+     * @returns The linear space as an array of numbers
+     * @example
+     * ```js
+     * const space = SMath.linspace(1, 5, 6);
+     * // [ 1, 1.8, 2.6, 3.4, 4.2, 5 ]
+     * ```
+     */
+    public static linspace(min: number, max: number, count: number): Array<number> {
+        const space: Array<number> = [];
+        for (let i = 0; i < count; i++) {
+            space[i] = this.translate(i, 0, count - 1, min, max);
+        }
+        return space;
+    }
+    /**
+     * Generate an array of logarithmically spaced numbers.
+     * @param min The initial magnitude of the space
+     * @param max The final magnitude of the space
+     * @param count The number of values in the space
+     * @returns The logarithmic space as an array of numbers
+     * @example
+     * ```js
+     * const space = SMath.logspace(0, 2, 5);
+     * // [ 1, 3.2, 10, 31.6, 100 ]
+     * ```
+     */
+    public static logspace(min: number, max: number, count: number): Array<number> {
+        return this.linspace(min, max, count).map(n => 10 ** n);
+    }
 }
