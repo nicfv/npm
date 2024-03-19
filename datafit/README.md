@@ -8,65 +8,68 @@
 
 ### Single Variable
 
-In this example written in JavaScript, we will fit the 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll start out with a rough curve fit with the starting guess of \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function \\\(f(x,\bar{a})\\\) and interpolate or extrapolate for any \\\(x\\\) value.
+In this example written in TypeScript, we will fit a generic 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll create this dataset based on a known formula for a 2nd degree polynomial. The initial guess for our constants will all be zero, given by \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll determine the true value and best-fit value of \\\(f(3)\\\) using the parameters found by the `fit()` function. We're able to feed this set of best-fit parameters into our model function to extrapolate for any \\\(x\\\) value.
+
+#### Function used to generate the dataset
+
+$$f(x) = -0.2x^{2} + x + 1.3$$
+
+#### Model function for curve fitting
 
 $$f(x, \bar{a}) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
-```js
-import { fit } from 'datafit';
+#### TypeScript Code
 
-// Define the model function to fit to
-// This is a second degree polynomial
+```ts
+import { Datum, Summary, fit } from 'datafit';
+
+// Define a model function for curve fitting.
+// Let's use a generic 2nd degree polynomial
 // with all constants unknown.
-function f(x, a0, a1, a2) {
+function f(x: number, a0: number = 1.3, a1: number = 1, a2: number = -0.2): number {
     return a2 * x ** 2 + a1 * x + a0;
 }
 
-// Define the single-variable dataset
-// as an array of (x,y) points
-const dataset = [
-    { x: 1, y: 1 },
-    { x: 2, y: 3 },
-    { x: 3, y: 4 },
-    { x: 4, y: 2 },
-];
+// Define the dataset as an array of (x,y) points
+const data: Datum<number>[] = [-2, -1, 0, 1, 2].map(x => ({ x: x, y: f(x) }));
+console.log(data);
 
-// Let's start with a rough fit
-// leaving the initial guess and
-// configuration options to their
-// default settings. The initial
-// guess will automatically be
-// set to an array of zeroes.
-const roughFit = fit(f, dataset);
+// Compute the best-fit set of
+// parameters using default settings
+const summary: Summary = fit(f, data);
+console.log(summary);
 
-// Let's now use the parameters
-// from the rough fit as our
-// initial guess for our best fit.
-// Let's also fine tune some of
-// the configuration options.
-const bestFit = fit(f, dataset,
-    roughFit.params,
-    {
-        generations: 50,
-        population: 50,
-        survivors: 5,
-        initialDeviation: 1,
-        finalDeviation: 0.01,
-    }
-);
-
-// Try extrapolating using the array
-// of parameters from the best fit. 
-const a = bestFit.params,
-    x = 5,
-    y = f(x, a[0], a[1], a[2]);
+// Compute the actual value and
+// best-fit value of f(3) to compare
+const f3_act: number = f(3);
+const f3_fit: number = f(3, ...summary.params);
+console.log(f3_act, f3_fit);
 ```
 
-My results were about \\\(a_{2} = -1, a_{1} = 5.3, a_{0} = -3.5\\\), which means my best-fit function is \\\(y = -x^2 + 5.3x - 3.5\\\). Try it for yourself and see if you obtain similar results!
+#### Program Output
 
-In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
+```txt
+[
+  { x: -2, y: -1.5 },
+  { x: -1, y: 0.1 },
+  { x: 0, y: 1.3 },
+  { x: 1, y: 2.1 },
+  { x: 2, y: 2.5 }
+]
+{
+  params: [ 1.288889734581419, 1.0005106600153448, -0.1976386657710847 ],
+  error: 0.00028467730194672636,
+  Ndata: 5,
+  avgAbsErr: 0.00754555898455146
+}
+2.5 2.511673722687691
+```
 
-> Mind the order of your function parameters! `fit()` will output a parameter array that follows the same order as the function parameters, even if it is non-intuitive! For example, if my function signature looks like `f(x, a2, a1, a0)`, then `bestFit.params` would return an array `[a2, a1, a0]`. You would access `a2` with `a[0]`!
+The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. That means that the results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 1, a_{2} \approx -0.2\\\) which is very close to our [original function](#function-used-to-generate-the-dataset)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.51\\\), again very close to the true result! Try it for yourself and see if you obtain similar results!
+
+In this example, the x values for our data points are given as `[-2, -1, 0, 1, 2]`. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
+
+> Mind the order of your parameters! `fit()` will output a parameter array that follows the same order as the model function parameters, even if it is non-intuitive! For example, if my function signature looks like `f(x, a2, a1, a0)`, then `summary.params` would return an array `[a2, a1, a0]`. You would access `a2` with `a[0]`!
 
 ### Multivariate
 
