@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.6
+
+- Add `avg` function
+
 ## 1.1.5
 
 - Add `linspace` and `logspace` functions
