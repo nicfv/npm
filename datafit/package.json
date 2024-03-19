@@ -47,7 +47,7 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.1.6"
+    "smath": "1.1.7"
   },
   "devDependencies": {
     "typedoc": "0.25.12",
