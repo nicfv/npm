@@ -10,6 +10,18 @@
  */
 export abstract class SMath {
     /**
+     * Compute the average, or mean, of a set of numbers.
+     * @param n Any amount of numeric inputs
+     * @returns The average, or mean
+     * @example
+     * ```js
+     * const mean = SMath.avg(1, 2, 3, 4); // 2.5
+     * ```
+     */
+    public static avg(...n: Array<number>): number {
+        return n.reduce((prev, curr) => prev + curr) / n.length;
+    }
+    /**
      * Clamp a number within a range.
      * @param n The number to clamp
      * @param min The minimum value of the range
