@@ -30,39 +30,51 @@ function f(x: number, a0: number = 1.3, a1: number = 1, a2: number = -0.2): numb
     return a2 * x ** 2 + a1 * x + a0;
 }
 
-// Define the dataset as an array of (x,y) points
-const data: Datum<number>[] = [-2, -1, 0, 1, 2].map(x => ({ x: x, y: f(x) }));
-console.log(data);
+// Define a function to add noise to the dataset
+function noise(A: number): number {
+    return A * (2 * Math.random() - 1)
+}
 
-// Compute the best-fit set of
-// parameters using default settings
-const summary: Summary = fit(f, data);
-console.log(summary);
+// Define the dataset from our noisy signal
+const data: Datum<number>[] = [-2, -1, 0, 1, 2].map(x => ({ x: x, y: f(x) + noise(0.1) }));
+console.log('Dataset', data);
+
+// Compute the best-fit set of parameters
+// starting with an initial guess of [x^2 + x + 1]
+// with 10,000 iterations, and each parameter
+// can vary up to 50% on the first iteration
+const summary: Summary = fit(f, data, [1, 1, 1], 10000, 50);
+console.log('Summary', summary);
 
 // Compute the actual value and
 // best-fit value of f(3) to compare
 const f3_act: number = f(3);
 const f3_fit: number = f(3, ...summary.params);
-console.log(f3_act, f3_fit);
+console.log('f(3)', f3_act, f3_fit);
+
+// Compute the relative error
+const rel_error: number = (f3_fit - f3_act) / f3_act * 100;
+console.log('Error: ' + rel_error.toFixed(2) + '%');
 ```
 
 #### Program Output
 
 ```txt
-[
-  { x: -2, y: -1.5 },
-  { x: -1, y: 0.1 },
-  { x: 0, y: 1.3 },
-  { x: 1, y: 2.1 },
-  { x: 2, y: 2.5 }
+Dataset [
+  { x: -2, y: -1.4852644866602869 },
+  { x: -1, y: 0.1447823296293199 },
+  { x: 0, y: 1.2620050285779445 },
+  { x: 1, y: 2.091786897503802 },
+  { x: 2, y: 2.4954386055499445 }
 ]
-{
-  params: [ 1.288889734581419, 1.0005106600153448, -0.1976386657710847 ],
-  error: 0.00028467730194672636,
+Summary {
+  params: [ 1.2927502895155665, 0.990899897637257, -0.19559853637900115 ],
+  error: 0.002645611963567026,
   Ndata: 5,
-  avgAbsErr: 0.00754555898455146
+  avgAbsErr: 0.023002660557279134
 }
-2.5 2.511673722687691
+f(3) 2.5 2.505063155016327
+Error: 0.20%
 ```
 
 The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. That means that the results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 1, a_{2} \approx -0.2\\\) which is very close to our [original function](#function-used-to-generate-the-dataset)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.51\\\), again very close to the true result! Try it for yourself and see if you obtain similar results!
