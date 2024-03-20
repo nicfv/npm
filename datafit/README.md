@@ -94,25 +94,25 @@ console.log('Error: ' + rel_error.toFixed(2) + '%');
 
 ```text
 Dataset [
-  { x: -2, y: -1.5757168031670554 },
-  { x: -1, y: 0.057317676122652594 },
-  { x: 0, y: 1.2793342638545004 },
-  { x: 1, y: 2.1470780268846426 },
-  { x: 2, y: 2.5204246107409163 }
+  { x: -2, y: -1.5217745220886323 },
+  { x: -1, y: 0.02149217952074793 },
+  { x: 0, y: 1.3535516197944484 },
+  { x: 1, y: 2.157348992524641 },
+  { x: 2, y: 2.495242558796155 }
 ]
 Summary {
   f: [Function: f],
-  params: [ 1.2955481156533157, 1.0280906686324571, -0.2050794104718129 ],
-  error: 0.0012499237685357101,
-  avgAbsErr: 0.015810906163377925
+  params: [ 1.3204161715801077, 1.0168945897115753, -0.20980691134944596 ],
+  error: 0.00854450505153204,
+  errorAvgAbs: 0.041338855938528436
 }
-f(3) 2.5 2.534105427304371
-Error: 1.36%
+f(3) 2.5 2.48283773856982
+Error: -0.69%
 ```
 
 #### Explanation
 
-The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 1.03, a_{2} \approx -0.205\\\) which is very close to our [original function](#single-variable)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.534\\\), again very close to the true result. Try it for yourself and see if you obtain similar results!
+The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.32, a_{1} \approx 1.02, a_{2} \approx -0.21\\\) which is very close to our [original function](#single-variable)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.483\\\), again very close to the true result. Try it for yourself and see if you obtain similar results!
 
 The other lines in the summary tell us other information from the computation. See [summary](https://npm.nicfv.com/datafit/interfaces/Summary.html) for more details.
 
@@ -172,15 +172,15 @@ console.log(summary);
 ```text
 {
   f: [Function: f],
-  params: [ 1.9975331466284076, -0.9932440536602926, 0.9994997610198332 ],
-  error: 0.000048187750629356176,
-  avgAbsErr: 0.00400781530800993
+  params: [ 2.01147301274068, -0.9904950166328927, 0.9923045322671415 ],
+  error: 0.00007676441674417328,
+  errorAvgAbs: 0.005058471994063467
 }
 ```
 
 #### Explanation
 
-My results were about \\\(c_{x} \approx 1.998, c_{y} \approx -0.993, c_{z} \approx 0.999\\\) meaning that my equation is \\\(z \approx 1.998x - 0.993y + 0.999\\\), which is pretty close to our actual plane equation! If we plot `summary.f([x, y])` where `x` and `y` are a set of inputs from our data set, we should expect the average absolute error to be about 0.004 units from the true plane equation. Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
+My results were about \\\(c_{x} \approx 2.01, c_{y} \approx -0.99, c_{z} \approx 0.99\\\) meaning that my equation is \\\(z \approx 2.01x - 0.99y + 0.99\\\), which is pretty close to our actual plane equation! If we plot `summary.f([x, y])` where `x` and `y` are a set of inputs from our data set, we should expect the average absolute error to be about 0.005 units from the true plane equation. Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
 
 ## Complexity
 
