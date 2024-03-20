@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+
+- Update `Summary` definition
+- Add more keywords to `package.json`
+- Update examples for new `Summary` schema
+- Bump `smath` dependency to 1.1.8
+
 ## 1.1.1
 
 - Fix `postpack` script
