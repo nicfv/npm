@@ -76,7 +76,7 @@ console.log('Dataset', data);
 // starting with an initial guess of [x^2 + x + 1]
 // with 10,000 iterations, and each parameter
 // can vary up to 50% on the first iteration
-const summary: Summary<number> = fit(f, data, [1, 1, 1], 10000, 50);
+const summary: Summary<number> = fit(f, data, [1, 1, 1], 10000, 0.5);
 console.log('Summary', summary);
 
 // Compute the actual value and
