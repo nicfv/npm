@@ -77,6 +77,9 @@ for dir in */ ; do
             echo 'Publishing...'
             npm publish
         fi
+        # Only add the MathJax script for documentation
+        # because in npm, it will show up as plain text
+        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>' >> README.md
         # Always generate documentation because if only one
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only

@@ -1,72 +1,128 @@
 ## Getting Started
 
-`datafit` exports only 1 function, [`fit()`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and selects a few with the smallest error to move onto the next iteration. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
+`datafit` exports only 1 function, [`fit()`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and keeps ones with smaller error than the previous iteration. Parameter sets with larger errors are discarded. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
 
 > Because of these random mutations, running the same code multiple times may yield slightly different results. See [best practices](#best-practices) for mitigation tactics.
 
 ## Example
 
+Here are some usage examples of `datafit`. It's very easy to get started!
+
+### Simple
+
+This example demonstrates a simple usage of `fit()` to fit 3 data points to the line \\\(y=mx+b\\\). This is all you need to get started!
+
+$$dataset=(1,-1), (2,1), (3,2)$$
+
+```ts
+import { Datum, Summary, fit } from 'datafit';
+
+// Define our model function: y=mx+b
+function f(x: number, m: number, b: number): number {
+    return m * x + b;
+}
+
+// Define our dataset
+const data: Datum<number>[] = [
+    { x: 1, y: -1 },
+    { x: 2, y: 1 },
+    { x: 3, y: 2 },
+];
+
+// Compute the best fit parameters to
+// get `m` and `b`, and print result.
+const summary: Summary = fit(f, data);
+const m_fit: number = summary.params[0];
+const b_fit: number = summary.params[1];
+console.log('The best-fit line is y = ' + m_fit.toFixed(2) + 'x + ' + b_fit.toFixed(2));
+```
+
+Running this program gives me an output of \\\(y=1.5x-2.33\\). Try plotting that in an online graphing calculator!
+
 ### Single Variable
 
-In this example written in JavaScript, we will fit the 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll start out with a rough curve fit with the starting guess of \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll use the parameters given found by the rough fit as the initial guess for our best fit. Finally, we'll feed the output from the best fit back into our function \\\(f(x,\bar{a})\\\) and interpolate or extrapolate for any \\\(x\\\) value.
+In this example written in TypeScript, we will fit a generic 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll create this dataset based on a known formula for a 2nd degree polynomial. The initial guess for our constants will all be zero, given by \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll determine the true value and best-fit value of \\\(f(3)\\\) using the parameters found by the `fit()` function. We're able to feed this set of best-fit parameters into our model function to extrapolate for any \\\(x\\\) value.
+
+#### Function used to generate the dataset
+
+$$f(x) = -0.2x^{2} + x + 1.3$$
+
+#### Model function for curve fitting
 
 $$f(x, \bar{a}) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
-```js
-import { fit } from 'datafit';
+#### TypeScript Code
 
-// Define the model function to fit to
-// This is a second degree polynomial
+```ts
+import { Datum, Summary, fit } from 'datafit';
+
+// Define a model function for curve fitting.
+// Let's use a generic 2nd degree polynomial
 // with all constants unknown.
-function f(x, a0, a1, a2) {
+function f(x: number, a0: number = 1.3, a1: number = 1, a2: number = -0.2): number {
     return a2 * x ** 2 + a1 * x + a0;
 }
 
-// Define the single-variable dataset
-// as an array of (x,y) points
-const dataset = [
-    { x: 1, y: 1 },
-    { x: 2, y: 3 },
-    { x: 3, y: 4 },
-    { x: 4, y: 2 },
-];
+// Define a function to add noise to the dataset
+function noise(A: number): number {
+    return A * (2 * Math.random() - 1)
+}
 
-// Let's start with a rough fit
-// leaving the initial guess and
-// configuration options to their
-// default settings. The initial
-// guess will automatically be
-// set to an array of zeroes.
-const roughFit = fit(f, dataset);
+// Define the dataset from our noisy signal
+const data: Datum<number>[] = [-2, -1, 0, 1, 2].map(x => ({ x: x, y: f(x) + noise(0.1) }));
+console.log('Dataset', data);
 
-// Let's now use the parameters
-// from the rough fit as our
-// initial guess for our best fit.
-// Let's also fine tune some of
-// the configuration options.
-const bestFit = fit(f, dataset,
-    roughFit.params,
-    {
-        generations: 50,
-        population: 50,
-        survivors: 5,
-        initialDeviation: 1,
-        finalDeviation: 0.01,
-    }
-);
+// Compute the best-fit set of parameters
+// starting with an initial guess of [x^2 + x + 1]
+// with 10,000 iterations, and each parameter
+// can vary up to 50% on the first iteration
+const summary: Summary = fit(f, data, [1, 1, 1], 10000, 50);
+console.log('Summary', summary);
 
-// Try extrapolating using the array
-// of parameters from the best fit. 
-const a = bestFit.params,
-    x = 5,
-    y = f(x, a[0], a[1], a[2]);
+// Compute the actual value and
+// best-fit value of f(3) to compare
+const f3_act: number = f(3);
+const f3_fit: number = f(3, ...summary.params);
+console.log('f(3)', f3_act, f3_fit);
+
+// Compute the relative error
+const rel_error: number = (f3_fit - f3_act) / f3_act * 100;
+console.log('Error: ' + rel_error.toFixed(2) + '%');
 ```
 
-My results were about \\\(a_{2} = -1, a_{1} = 5.3, a_{0} = -3.5\\\), which means my best-fit function is \\\(y = -x^2 + 5.3x - 3.5\\\). Try it for yourself and see if you obtain similar results!
+#### Program Output
 
-In this example, the x values for our data points are given as 1, 2, 3, and 4. If we interpolate within this range, the model will be very accurate. Extrapolating very far beyond either end of this range will probably not be very accurate!
+```txt
+Dataset [
+  { x: -2, y: -1.4852644866602869 },
+  { x: -1, y: 0.1447823296293199 },
+  { x: 0, y: 1.2620050285779445 },
+  { x: 1, y: 2.091786897503802 },
+  { x: 2, y: 2.4954386055499445 }
+]
+Summary {
+  params: [ 1.2927502895155665, 0.990899897637257, -0.19559853637900115 ],
+  error: 0.002645611963567026,
+  Ndata: 5,
+  avgAbsErr: 0.023002660557279134
+}
+f(3) 2.5 2.505063155016327
+Error: 0.20%
+```
 
-> Mind the order of your function parameters! `fit()` will output a parameter array that follows the same order as the function parameters, even if it is non-intuitive! For example, if my function signature looks like `f(x, a2, a1, a0)`, then `bestFit.params` would return an array `[a2, a1, a0]`. You would access `a2` with `a[0]`!
+#### Explanation
+
+The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 0.99, a_{2} \approx -0.196\\\) which is very close to our [original function](#function-used-to-generate-the-dataset)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.505\\\), again very close to the true result! Try it for yourself and see if you obtain similar results!
+
+The other lines in the summary tell us other information from the computation.
+
+- `error` is the **total** residual squared error (for all data points.) This is the value that the algorithm is minimizing.
+- `Ndata` is the number of data points given to the algorithm. Typically, more data points (with fewer outliers) will produce a better model for curve fitting.
+- `avgAbsErr` is the average absolute error we would get from the model function with `params` compared to the actual dataset values. Lower numbers are better here. This only compares the best-fit with values from the dataset. By extrapolating beyond our dataset, our average error may increase. See below for an explanation.
+
+In this example, the x values for our data points are given as `[-2, -1, 0, 1, 2]`. If we interpolate within this range, the model will be about as accurate as what is shown in the summary. Extrapolating very far beyond either end of this range (e.g. \\\(f(100)\\\)) will probably not be very accurate!
+
+> Mind the order of your parameters! `fit()` will output a parameter array that follows the same order as the model function parameters, even if it is non-intuitive! For example, if my function signature looks like `f(x, a2, a1, a0)`, then `summary.params` would return an array `[a2, a1, a0]`. You would access `a2` with `a[0]`!
 
 ### Multivariate
 
@@ -78,56 +134,89 @@ This general plane formula can be rewritten to solve for \\\(z\\\). \\\(c_{x}\\\
 
 $$f(\bar{x}, \bar{c}) = c_{x}x + c_{y}y + c_{z}$$
 
-Don't get tricked here with the dataset. The `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
+In the dataset in our [code](#typescript-code-1), the `x` property refers to all the *inputs* to the function, and the `y` property refers to the *output*. In this example, `x` is an array of length 2, representing our 2 independent dimensions. We can call those dimensions the x-axis and y-axis, obtained by `x[0]` and `x[1]` respectively. In mathematics, this is simply referred to as the input vector we defined as \\\(\bar{x}\\\). In this example, the `y` property in our dataset is actually our z-axis. It's important to remember that the `x` and `y` properties in the dataset simply refer to the *inputs* and *output* of the function, not necessarily the x-axis and y-axis.
 
-```js
-import { fit } from 'datafit';
+3 points is all that is required to define the equation for a plane. In this example, our data fits to the plane defined by \\\(z = 2x - y + 1\\\).
 
-// Define a 2D planar function for
-// curve fitting with unknowns `c`
-// Note that `x` is now an array.
-function f(x, cx, cy, cz) {
+Let's see if the algorithm can find this out just based on the dataset!
+
+#### TypeScript Code
+
+```ts
+import { Datum, fit } from 'datafit';
+
+// Define a general 3D plane function
+// x[0] represents the x-axis
+// x[1] represents the y-axis
+// The z-axis is represented by f([x, y], ...)
+function f(x: number[], cx: number, cy: number, cz: number): number {
     return cx * x[0] + cy * x[1] + cz;
 }
 
-// Define the multi-variable dataset
-// where `x` is the array of "inputs"
-// We can say `x[0]` = dimension-x
-// and `x[1]` = dimension-y in 2D space.
-const dataset = [
+// These 3 points make up the plane
+// z = 2x - y + 1
+const data: Datum<number[]>[] = [
     { x: [0, 0], y: 1 },
     { x: [1, 0], y: 3 },
-    { x: [0, 1], y: 4 },
-    { x: [1, 1], y: 5 },
+    { x: [0, 1], y: 0 },
 ];
 
-// Shorthand for immediately capturing the
-// parameter array into a constant array `c`
-const c = fit(f, dataset).params;
-
-// Interpolate using the best-fit parameters.
-const x = 0.75,
-    y = 0.25,
-    z = f([x, y], c[0], c[1], c[2]);
+// Run the curve fitting algorithm
+const summary = fit(f, data);
+console.log(summary);
 ```
 
-My results were about \\\(c_{x} = 1.5, c_{y} = 2.5, c_{z} = 1.2\\\) meaning that my equation is \\\(z = 1.5x + 2.5y + 1.2\\\). Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
+#### Program Output
+
+```txt
+{
+  params: [ 2.010807805144429, -0.9965373369374049, 0.9949551401129608 ],
+  error: 0.00006116549611081122,
+  Ndata: 3,
+  avgAbsErr: 0.004515362521836285
+}
+```
+
+#### Explanation
+
+My results were about \\\(c_{x} = 2.01, c_{y} = -0.997, c_{z} = 0.995\\\) meaning that my equation is \\\(z = 2.01x - 0.997y + 0.995\\\), which is pretty darn close to our actual plane equation! Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
 
 ## Complexity
 
 The folling factors affect computation time and resources:
 
-- Number of generations
-- Population per generation
-- Number of free function parameters
+- Number of iterations
+- Number of independent/unknown function parameters
 - Number of data points
 
 Each one alone has a linear effect on performance, but combined has an incremental effect.
 
-$$time = generations \times population \times ( parameters + dataset )$$
+$$time = iterations \times ( parameters + dataset )$$
 
-The dimension, or number of free `x` variables per data point, should not have an impact on computation time.
+The dimensionality, or number of free `x` variables per data point, should not have an impact on computation time.
 
 ## Best Practices
 
-It's a good idea to start with rough curve fits and use the outputs from that in subsequent `fit` calls to finer-tune the results such as the one in the [single variable example](#single-variable), which will yield more consistent results, despite different paths taken to achieve the result. If possible, it's best to use `fit` during the testing phase, and store your parameters as constants to use in production software. This will ensure consistent results 100% of the time.
+For production software that relies on a best curve fit for data, it's best to avoid critical operations using `fit()` for a few reasons.
+
+1. `fit()` uses an algorithm that generates random mutations in a set of parameters, which could yield slightly different results, even if run on the same dataset.
+1. If the number of iterations is very high (in the millions or higher), it could have a significant effect on software performance.
+
+To circumvent some of these issues, the following is recommended.
+
+1. Use `datafit` during the testing phase of application development, and use the best-fit parameters as constants in the final application.
+1. If that is not possible, `datafit` may be helpful for determining an initial guess of curve fit constants, which can be input to `fit()` during production. The number of iterations could be reduced if the initial guess is reasonably close to the desired result.
+1. Using `datafit` primarily for data visualization or rough estimation.
+1. For operations that *need* `datafit`, a suggestion would be to run multiple iterations of `fit()` itself, and using each output as the subsequent call's input. This will converge to a result more effectively but could take longer.
+
+And here are some general good practices.
+
+1. Avoid overfitting your data. That means, you should never have more function unknowns than the number of data points. `fit()` allows this for the rare chance that it is needed.
+1. Reject outliers. `fit()` does not do this. Any outliers existing in the dataset will be treated like normal data points and could negatively impact the best fit.
+
+There are also some great arguments and use cases for this function, namely...
+
+1. Data analysis and visualization.
+1. Quickly iterating on different model functions for determining which best fits the data.
+1. Curve fitting for multivariate or nonlinear models.
+1. The ease of use of it all! It's just one function call with as little as 2 inputs!

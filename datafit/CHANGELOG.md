@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0
+
+- Remove several interface types
+- Deviation/mutation is now relative
+- Remove MathJax HTML tag from npm readme
+- Major updates to readme
+- Remove config, replace with `fit()` parameters
+- Include examples from readme in repo
+
 ## 1.0.7
 
 - Update typedoc (0.25.12) and typescript (5.4.2) dev dependency versions

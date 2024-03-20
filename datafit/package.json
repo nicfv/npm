@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/datafit",
   "main": "dist/index.js",
@@ -15,7 +15,8 @@
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
-    "prepublishOnly": "npm run build && npm run types"
+    "prepack": "npm run build && npm run types",
+    "postpack": "npm run clean"
   },
   "keywords": [
     "math",
@@ -47,7 +48,7 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.1.2"
+    "smath": "1.1.7"
   },
   "devDependencies": {
     "typedoc": "0.25.12",

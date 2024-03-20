@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "s": "node simple.js",
+    "sv": "node singlevariable.js",
+    "mv": "node multivariate.js",
+    "build": "rm -vf *.js && tsc *.ts",
+    "clean": "rm -rf node_modules package-lock.json *.js"
+  },
+  "dependencies": {
+    "datafit": "file:datafit-1.0.7.tgz"
+  },
+  "devDependencies": {
+    "typescript": "5.4.2"
+  }
+}
