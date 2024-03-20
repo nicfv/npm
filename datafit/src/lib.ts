@@ -21,9 +21,9 @@ import { Datum, F, Summary, VariableType } from './types';
  *     return a2 * x ** 2 + a1 * x + a0;
  * }
  * // Construct a data set
- * const data: Datum<number>[] = [-4, -2, 0, 2, 4].map(x => { return { x: x, y: f(x) } });
- * // Compute best fit parameters
- * const summary: Summary = fit(f, data);
+ * const data: Datum<number>[] = [0, 2, 4].map(x => ({ x: x, y: f(x) }));
+ * // Compute best-fit summary
+ * const summary = fit(f, data);
  * ```
  */
 export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Summary<T> {
