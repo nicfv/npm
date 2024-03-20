@@ -15,7 +15,7 @@ This example demonstrates a simple usage of `fit()` to fit 3 data points to the 
 $$dataset=(1,-1), (2,1), (3,2)$$
 
 ```ts
-import { Datum, Summary, fit } from 'datafit';
+import { Datum, fit } from 'datafit';
 
 // Define our model function: y=mx+b
 function f(x: number, m: number, b: number): number {
@@ -31,7 +31,7 @@ const data: Datum<number>[] = [
 
 // Compute the best fit parameters to
 // get `m` and `b`, and print result.
-const summary: Summary = fit(f, data);
+const summary = fit(f, data);
 const m_fit: number = summary.params[0];
 const b_fit: number = summary.params[1];
 console.log('The best-fit line is y = ' + m_fit.toFixed(2) + 'x + ' + b_fit.toFixed(2));
@@ -41,13 +41,13 @@ Running this program gives me an output of \\\(y=1.5x-2.33\\). Try plotting that
 
 ### Single Variable
 
-In this example written in TypeScript, we will fit a generic 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll create this dataset based on a known formula for a 2nd degree polynomial. The initial guess for our constants will all be zero, given by \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll determine the true value and best-fit value of \\\(f(3)\\\) using the parameters found by the `fit()` function. We're able to feed this set of best-fit parameters into our model function to extrapolate for any \\\(x\\\) value.
+In this example written in TypeScript, we will fit a generic 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll create this dataset based on a known formula for a 2nd degree polynomial, and add some random high-frequency noise. The initial guess for our constants will all be zero, given by \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll determine the true value and best-fit value of \\\(f(3)\\\) using the parameter set found by the `fit()` function. We're able to use the best-fit curve given by our summary to extrapolate for any \\\(x\\\) value.
 
-#### Function used to generate the dataset
+Here is the function used to generate the dataset.
 
 $$f(x) = -0.2x^{2} + x + 1.3$$
 
-#### Model function for curve fitting
+Here is the model function used for curve fitting.
 
 $$f(x, \bar{a}) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
@@ -76,13 +76,13 @@ console.log('Dataset', data);
 // starting with an initial guess of [x^2 + x + 1]
 // with 10,000 iterations, and each parameter
 // can vary up to 50% on the first iteration
-const summary: Summary = fit(f, data, [1, 1, 1], 10000, 50);
+const summary: Summary<number> = fit(f, data, [1, 1, 1], 10000, 50);
 console.log('Summary', summary);
 
 // Compute the actual value and
 // best-fit value of f(3) to compare
 const f3_act: number = f(3);
-const f3_fit: number = f(3, ...summary.params);
+const f3_fit: number = summary.f(3);
 console.log('f(3)', f3_act, f3_fit);
 
 // Compute the relative error
@@ -94,30 +94,31 @@ console.log('Error: ' + rel_error.toFixed(2) + '%');
 
 ```text
 Dataset [
-  { x: -2, y: -1.4852644866602869 },
-  { x: -1, y: 0.1447823296293199 },
-  { x: 0, y: 1.2620050285779445 },
-  { x: 1, y: 2.091786897503802 },
-  { x: 2, y: 2.4954386055499445 }
+  { x: -2, y: -1.5757168031670554 },
+  { x: -1, y: 0.057317676122652594 },
+  { x: 0, y: 1.2793342638545004 },
+  { x: 1, y: 2.1470780268846426 },
+  { x: 2, y: 2.5204246107409163 }
 ]
 Summary {
-  params: [ 1.2927502895155665, 0.990899897637257, -0.19559853637900115 ],
-  error: 0.002645611963567026,
-  Ndata: 5,
-  avgAbsErr: 0.023002660557279134
+  f: [Function: f],
+  params: [ 1.2955481156533157, 1.0280906686324571, -0.2050794104718129 ],
+  error: 0.0012499237685357101,
+  avgAbsErr: 0.015810906163377925
 }
-f(3) 2.5 2.505063155016327
-Error: 0.20%
+f(3) 2.5 2.534105427304371
+Error: 1.36%
 ```
 
 #### Explanation
 
-The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 0.99, a_{2} \approx -0.196\\\) which is very close to our [original function](#function-used-to-generate-the-dataset)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.505\\\), again very close to the true result! Try it for yourself and see if you obtain similar results!
+The line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.29, a_{1} \approx 1.03, a_{2} \approx -0.205\\\) which is very close to our [original function](#single-variable)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.534\\\), again very close to the true result. Try it for yourself and see if you obtain similar results!
 
-The other lines in the summary tell us other information from the computation.
+The other lines in the summary tell us other information from the computation. See [summary](https://npm.nicfv.com/datafit/interfaces/Summary.html) for more details.
 
+- `f` is the best-fit function we used to extrapolating from our dataset.
+- `params` contains the set of best-fit parameters.
 - `error` is the **total** residual squared error (for all data points.) This is the value that the algorithm is minimizing.
-- `Ndata` is the number of data points given to the algorithm. Typically, more data points (with fewer outliers) will produce a better model for curve fitting.
 - `avgAbsErr` is the average absolute error we would get from the model function with `params` compared to the actual dataset values. Lower numbers are better here. This only compares the best-fit with values from the dataset. By extrapolating beyond our dataset, our average error may increase. See below for an explanation.
 
 In this example, the x values for our data points are given as `[-2, -1, 0, 1, 2]`. If we interpolate within this range, the model will be about as accurate as what is shown in the summary. Extrapolating very far beyond either end of this range (e.g. \\\(f(100)\\\)) will probably not be very accurate!
@@ -170,16 +171,16 @@ console.log(summary);
 
 ```text
 {
-  params: [ 2.010807805144429, -0.9965373369374049, 0.9949551401129608 ],
-  error: 0.00006116549611081122,
-  Ndata: 3,
-  avgAbsErr: 0.004515362521836285
+  f: [Function: f],
+  params: [ 1.9975331466284076, -0.9932440536602926, 0.9994997610198332 ],
+  error: 0.000048187750629356176,
+  avgAbsErr: 0.00400781530800993
 }
 ```
 
 #### Explanation
 
-My results were about \\\(c_{x} = 2.01, c_{y} = -0.997, c_{z} = 0.995\\\) meaning that my equation is \\\(z = 2.01x - 0.997y + 0.995\\\), which is pretty darn close to our actual plane equation! Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
+My results were about \\\(c_{x} \approx 1.998, c_{y} \approx -0.993, c_{z} \approx 0.999\\\) meaning that my equation is \\\(z \approx 1.998x - 0.993y + 0.999\\\), which is pretty close to our actual plane equation! If we plot `summary.f([x, y])` where `x` and `y` are a set of inputs from our data set, we should expect the average absolute error to be about 0.004 units from the true plane equation. Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
 
 ## Complexity
 
@@ -211,7 +212,7 @@ To circumvent some of these issues, the following is recommended.
 
 And here are some general good practices.
 
-1. Avoid overfitting your data. That means, you should never have more function unknowns than the number of data points. `fit()` allows this for the rare chance that it is needed.
+1. Avoid overfitting your data. That means, you should never have more function unknowns than the number of data points. `fit()` allows this for the rare chance that it is needed. Typically, having more, accurate data, is better for curve fitting.
 1. Reject outliers. `fit()` does not do this. Any outliers existing in the dataset will be treated like normal data points and could negatively impact the best fit.
 
 There are also some great arguments and use cases for this function, namely...

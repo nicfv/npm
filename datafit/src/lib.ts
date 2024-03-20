@@ -26,7 +26,7 @@ import { Datum, F, Summary, VariableType } from './types';
  * const summary: Summary = fit(f, data);
  * ```
  */
-export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Summary {
+export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Summary<T> {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -49,9 +49,9 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
         }
     }
     return {
+        f: (x: T) => f(x, ...params),
         params: params,
         error: error,
-        Ndata: data.length,
         avgAbsErr: Math.sqrt(error / data.length),
     };
 }

@@ -1,4 +1,4 @@
-import { Datum, Summary, fit } from 'datafit';
+import { Datum, fit } from 'datafit';
 
 // Define our model function: y=mx+b
 function f(x: number, m: number, b: number): number {
@@ -14,7 +14,7 @@ const data: Datum<number>[] = [
 
 // Compute the best fit parameters to
 // get `m` and `b`, and print result.
-const summary: Summary = fit(f, data);
+const summary = fit(f, data);
 const m_fit: number = summary.params[0];
 const b_fit: number = summary.params[1];
 console.log('The best-fit line is y = ' + m_fit.toFixed(2) + 'x + ' + b_fit.toFixed(2));

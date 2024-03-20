@@ -36,7 +36,11 @@ export interface Datum<T extends VariableType> {
 /**
  * Includes information about a best-fit for a curve.
  */
-export interface Summary {
+export interface Summary<T extends VariableType> {
+    /**
+     * The model with best-fit parameters applied.
+     */
+    readonly f: F<T>;
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
@@ -45,10 +49,6 @@ export interface Summary {
      * This is the residual sum of squared errors.
      */
     readonly error: number;
-    /**
-     * The number of data points given to the model.
-     */
-    readonly Ndata: number;
     /**
      * The average absolute error per data point, comparing the given
      * dataset to the model output with the set of best-fit parameters.
