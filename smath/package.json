@@ -15,7 +15,8 @@
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
-    "prepublishOnly": "npm run build && npm run types"
+    "prepack": "npm run build && npm run types",
+    "postpack": "rm -rf dist types"
   },
   "keywords": [
     "small",
