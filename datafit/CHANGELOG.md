@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+- Fix broken link in readme
+
 ## 1.3.0
 
 - `maxDeviation` is now a normalized input
