@@ -52,7 +52,7 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
         f: (x: T) => f(x, ...params),
         params: params,
         error: error,
-        avgAbsErr: Math.sqrt(error / data.length),
+        errorAvgAbs: Math.sqrt(error / data.length),
     };
 }
 /**
