@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.9
+
+- Update internal packing scripts
+- Update `smath` dependency to 1.1.7
+
 ## 1.0.8
 
 - Readme fixes (move builtin palettes to the top)
