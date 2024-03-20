@@ -20,13 +20,13 @@ console.log('Dataset', data);
 // starting with an initial guess of [x^2 + x + 1]
 // with 10,000 iterations, and each parameter
 // can vary up to 50% on the first iteration
-const summary: Summary = fit(f, data, [1, 1, 1], 10000, 50);
+const summary: Summary<number> = fit(f, data, [1, 1, 1], 10000, 50);
 console.log('Summary', summary);
 
 // Compute the actual value and
 // best-fit value of f(3) to compare
 const f3_act: number = f(3);
-const f3_fit: number = f(3, ...summary.params);
+const f3_fit: number = summary.f(3);
 console.log('f(3)', f3_act, f3_fit);
 
 // Compute the relative error
