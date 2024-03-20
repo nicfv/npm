@@ -17,12 +17,13 @@ if "${publish}" ; then
         exit 1
     else
         mkdir .docs || exit 1
+        cp .github/workflows/home/* .docs
         npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     fi
 fi
 
 for dir in */ ; do
-    npx -y wag "Checking directory '${dir}'"
+    echo -e "\n=== Checking directory '${dir}' ===\n"
     # Skip directories that are not an npm project
     npm --silent v "${dir}" || {
         echo "${dir} is not an NPM project"
@@ -60,6 +61,14 @@ for dir in */ ; do
             # package date with the current timestamp
             package_date=$(date +%s)
         fi
+        # Add package details to homepage script
+        {
+            echo "packages['${package_name//"'"/"\\'"}'] = {};"
+            echo "packages['${package_name//"'"/"\\'"}'].desc = '${package_desc//"'"/"\\'"}';"
+            echo "packages['${package_name//"'"/"\\'"}'].time = '${package_date//"'"/"\\'"}';"
+            echo "packages['${package_name//"'"/"\\'"}'].ver = '${local_version//"'"/"\\'"}';"
+            echo "packages['${package_name//"'"/"\\'"}'].dir = '${dir//"'"/"\\'"}';"
+        } >> '../.docs/index.js'
         # Store current readme content, copy over the
         # template readme file, and replace variables
         echo 'Generating readme...'
