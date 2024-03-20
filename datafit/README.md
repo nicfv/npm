@@ -119,7 +119,7 @@ The other lines in the summary tell us other information from the computation. S
 - `f` is the best-fit function we used to extrapolating from our dataset.
 - `params` contains the set of best-fit parameters.
 - `error` is the **total** residual squared error (for all data points.) This is the value that the algorithm is minimizing.
-- `avgAbsErr` is the average absolute error we would get from the model function with `params` compared to the actual dataset values. Lower numbers are better here. This only compares the best-fit with values from the dataset. By extrapolating beyond our dataset, our average error may increase. See below for an explanation.
+- `errorAvgAbs` is the average absolute error we would get from the model function with `params` compared to the actual dataset values. Lower numbers are better here. This only compares the best-fit with values from the dataset. By extrapolating beyond our dataset, our average error may increase. See below for an explanation.
 
 In this example, the x values for our data points are given as `[-2, -1, 0, 1, 2]`. If we interpolate within this range, the model will be about as accurate as what is shown in the summary. Extrapolating very far beyond either end of this range (e.g. \\\(f(100)\\\)) will probably not be very accurate!
 
