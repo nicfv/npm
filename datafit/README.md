@@ -92,7 +92,7 @@ console.log('Error: ' + rel_error.toFixed(2) + '%');
 
 #### Program Output
 
-```txt
+```text
 Dataset [
   { x: -2, y: -1.4852644866602869 },
   { x: -1, y: 0.1447823296293199 },
@@ -168,7 +168,7 @@ console.log(summary);
 
 #### Program Output
 
-```txt
+```text
 {
   params: [ 2.010807805144429, -0.9965373369374049, 0.9949551401129608 ],
   error: 0.00006116549611081122,
