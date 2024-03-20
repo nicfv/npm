@@ -1,6 +1,6 @@
 {
   "name": "qnt",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Quantity conversions and dimensional analysis",
   "homepage": "https://npm.nicfv.com/qnt",
   "main": "dist/index.js",
