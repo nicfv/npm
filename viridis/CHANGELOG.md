@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.9
+
+- Update internal packing scripts
+
 ## 1.0.8
 
 - Readme fixes (move builtin palettes to the top)
