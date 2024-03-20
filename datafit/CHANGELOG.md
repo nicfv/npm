@@ -6,6 +6,7 @@
 - Add more keywords to `package.json`
 - Update examples for new `Summary` schema
 - Bump `smath` dependency to 1.1.8
+- Add link to YouTube in readme
 
 ## 1.1.1
 
