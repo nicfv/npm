@@ -22,7 +22,7 @@ if "${publish}" ; then
 fi
 
 for dir in */ ; do
-    npx -y wag "Checking directory '${dir}'"
+    echo -e "\n=== Checking directory '${dir}' ===\n"
     # Skip directories that are not an npm project
     npm --silent v "${dir}" || {
         echo "${dir} is not an NPM project"
