@@ -183,17 +183,38 @@ My results were about \\\(c_{x} = 2.01, c_{y} = -0.997, c_{z} = 0.995\\\) meanin
 
 The folling factors affect computation time and resources:
 
-- Number of generations
-- Population per generation
-- Number of free function parameters
+- Number of iterations
+- Number of independent/unknown function parameters
 - Number of data points
 
 Each one alone has a linear effect on performance, but combined has an incremental effect.
 
-$$time = generations \times population \times ( parameters + dataset )$$
+$$time = iterations \times ( parameters + dataset )$$
 
-The dimension, or number of free `x` variables per data point, should not have an impact on computation time.
+The dimensionality, or number of free `x` variables per data point, should not have an impact on computation time.
 
 ## Best Practices
 
-It's a good idea to start with rough curve fits and use the outputs from that in subsequent `fit` calls to finer-tune the results such as the one in the [single variable example](#single-variable), which will yield more consistent results, despite different paths taken to achieve the result. If possible, it's best to use `fit` during the testing phase, and store your parameters as constants to use in production software. This will ensure consistent results 100% of the time.
+For production software that relies on a best curve fit for data, it's best to avoid critical operations using `fit()` for a few reasons.
+
+1. `fit()` uses an algorithm that generates random mutations in a set of parameters, which could yield slightly different results, even if run on the same dataset.
+1. If the number of iterations is very high (in the millions or higher), it could have a significant effect on software performance.
+
+To circumvent some of these issues, the following is recommended.
+
+1. Use `datafit` during the testing phase of application development, and use the best-fit parameters as constants in the final application.
+1. If that is not possible, `datafit` may be helpful for determining an initial guess of curve fit constants, which can be input to `fit()` during production. The number of iterations could be reduced if the initial guess is reasonably close to the desired result.
+1. Using `datafit` primarily for data visualization or rough estimation.
+1. For operations that *need* `datafit`, a suggestion would be to run multiple iterations of `fit()` itself, and using each output as the subsequent call's input. This will converge to a result more effectively but could take longer.
+
+And here are some general good practices.
+
+1. Avoid overfitting your data. That means, you should never have more function unknowns than the number of data points. `fit()` allows this for the rare chance that it is needed.
+1. Reject outliers. `fit()` does not do this. Any outliers existing in the dataset will be treated like normal data points and could negatively impact the best fit.
+
+There are also some great arguments and use cases for this function, namely...
+
+1. Data analysis and visualization.
+1. Quickly iterating on different model functions for determining which best fits the data.
+1. Curve fitting for multivariate or nonlinear models.
+1. The ease of use of it all! It's just one function call with as little as 2 inputs!
