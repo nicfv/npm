@@ -1,6 +1,6 @@
 ## Getting Started
 
-`datafit` exports only 1 function, [`fit()`](https://npm.nicfv.com/datafit/functions/fit-1.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and keeps ones with smaller error than the previous iteration. Parameter sets with larger errors are discarded. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
+`datafit` exports only 1 function, [`fit()`](https://npm.nicfv.com/datafit/functions/fit.html) which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and keeps ones with smaller error than the previous iteration. Parameter sets with larger errors are discarded. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
 
 > Because of these random mutations, running the same code multiple times may yield slightly different results. See [best practices](#best-practices) for mitigation tactics.
 
