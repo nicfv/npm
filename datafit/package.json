@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/datafit",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepack": "npm run build && npm run types",
-    "postpack": "npm run clean"
+    "postpack": "rm -rf dist types"
   },
   "keywords": [
     "math",

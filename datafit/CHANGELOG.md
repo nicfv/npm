@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- Fix `postpack` script
+- Fix unknown highlighting for typedoc
+
 ## 1.1.0
 
 - Remove several interface types
