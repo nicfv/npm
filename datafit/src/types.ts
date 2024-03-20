@@ -53,5 +53,5 @@ export interface Summary<T extends VariableType> {
      * The average absolute error per data point, comparing the given
      * dataset to the model output with the set of best-fit parameters.
      */
-    readonly avgAbsErr: number;
+    readonly errorAvgAbs: number;
 }

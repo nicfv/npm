@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.1
+
+- Fix broken link in readme
+
+## 1.3.0
+
+- `maxDeviation` is now a normalized input
+- Update single variable example to reflect this
+- Update summary variable name for average absolute error
+
 ## 1.2.0
 
 - Update `Summary` definition

@@ -7,7 +7,7 @@
     "clean": "rm -rf node_modules package-lock.json *.js"
   },
   "dependencies": {
-    "datafit": "file:datafit-1.1.1.tgz"
+    "datafit": "file:datafit-1.2.0.tgz"
   },
   "devDependencies": {
     "typescript": "5.4.2"

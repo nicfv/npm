@@ -10,7 +10,7 @@ import { Datum, F, Summary, VariableType } from './types';
  * parameters, which defaults to an array filled with zeroes.
  * @param iterations The number of parameter sets to generate.
  * @param maxDeviation The relative maximum parameter deviation.
- * This is a number [0-100%] and affects the maximum deviation
+ * This is a number [0.0-1.0] and affects the maximum deviation
  * on the first iteration. Every subsequent iteration has a
  * decayed maximum deviation until the final iteration.
  * @returns The set of parameters and error for the best fit.
@@ -21,12 +21,12 @@ import { Datum, F, Summary, VariableType } from './types';
  *     return a2 * x ** 2 + a1 * x + a0;
  * }
  * // Construct a data set
- * const data: Datum<number>[] = [-4, -2, 0, 2, 4].map(x => { return { x: x, y: f(x) } });
- * // Compute best fit parameters
- * const summary: Summary = fit(f, data);
+ * const data: Datum<number>[] = [0, 2, 4].map(x => ({ x: x, y: f(x) }));
+ * // Compute best-fit summary
+ * const summary = fit(f, data);
  * ```
  */
-export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 100): Summary<T> {
+export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 1): Summary<T> {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -52,7 +52,7 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
         f: (x: T) => f(x, ...params),
         params: params,
         error: error,
-        avgAbsErr: Math.sqrt(error / data.length),
+        errorAvgAbs: Math.sqrt(error / data.length),
     };
 }
 /**
@@ -74,5 +74,5 @@ function err<T extends VariableType>(f: F<T>, params: Array<number>, data: Array
  * @returns A mutated set of parameters.
  */
 function mutate(params: Array<number>, deviation: number): Array<number> {
-    return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation) * Math.max(1, c) / 100);
+    return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation) * Math.max(1, c));
 }
