@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -vf *.js && tsc *.ts",
+    "clean": "rm -rf node_modules package-lock.json *.js"
   }
 }
