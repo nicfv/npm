@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "rm -vf *.out && find *.js -exec bash -c \"node {} > {}.out\" \\;",
+    "start": "rm -f *.out && touch success && find *.js -exec bash -c \"node {} > {}.out || rm success\" \\; && rm success",
     "clean": "rm -rf node_modules package-lock.json *.out"
   },
   "dependencies": {
