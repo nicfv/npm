@@ -4,4 +4,4 @@ dist
 types
 docs
 *.tgz
-*/examples/*.js
+*.out

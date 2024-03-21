@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+- Add `npx` scripts. Run `npx smath` to learn more!
+- Add more package examples in readme
+- Add package example sources in repository
+
 ## 1.1.8
 
 - Update internal packing scripts

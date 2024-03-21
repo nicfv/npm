@@ -1,8 +1,9 @@
 {
   "name": "smath",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
+  "bin": "dist/bin.js",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -47,6 +48,7 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "20.11.30",
     "typedoc": "0.25.12",
     "typescript": "5.4.2"
   }
