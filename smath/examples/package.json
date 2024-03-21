@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "c": "node comparison.js",
     "tc": "node temperature-convert.js",
     "build": "rm -vf *.js && tsc *.ts",
     "clean": "rm -rf node_modules package-lock.json *.js"
