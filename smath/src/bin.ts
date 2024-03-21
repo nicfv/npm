@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { argv } from 'process';
 import { SMath } from '.';
 
 const args: Array<string> = process.argv.slice(2);
@@ -47,14 +46,7 @@ if (args.length < 1 || args[0].includes('help')) {
 
 switch (args[0]) {
     case ('approx'): {
-        if (args.length === 3) {
-            console.log(SMath.approx(N(1), N(2)));
-        } else if (args.length === 4) {
-            console.log(SMath.approx(N(1), N(2), N(3)));
-        } else {
-            console.error((args.length - 1) + ' arguments found.');
-            process.exit(1);
-        }
+        console.log(SMath.approx(N(1), N(2), N(3, 1e-6)));
         break;
     }
     case ('avg'): {
@@ -67,6 +59,10 @@ switch (args[0]) {
             operands.push(N(i));
         }
         console.log(SMath.avg(...operands));
+        break;
+    }
+    case ('clamp'): {
+        console.log(SMath.clamp(N(1), N(2), N(3)));
         break;
     }
     default: {
