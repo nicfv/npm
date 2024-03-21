@@ -3,6 +3,9 @@
     "build": "rm -vf *.js && tsc *.ts",
     "clean": "rm -rf node_modules package-lock.json *.js"
   },
+  "dependencies": {
+    "smath": "file:smath-1.1.8.tgz"
+  },
   "devDependencies": {
     "typescript": "5.4.3"
   }
