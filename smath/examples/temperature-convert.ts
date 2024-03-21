@@ -16,10 +16,10 @@ const C_Freeze = 0,
 // values from 0 to 20.
 const C = SMath.linspace(0, 20, 5);
 
-// Use the `SMath` class to
-// translate the temperature in the
+// Use the `SMath` class to linearly
+// interpolate the temperature in the
 // C number range to a temperature
-// in the F number range
+// in the F number range.
 const F = C.map(c => SMath.translate(c, C_Freeze, C_Boil, F_Freeze, F_Boil));
 
 // Print out each temperature
