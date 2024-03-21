@@ -1,14 +1,10 @@
 {
+  "type": "module",
   "scripts": {
-    "c": "node comparison.js",
-    "tc": "node temperature-convert.js",
-    "build": "rm -vf *.js && tsc *.ts",
-    "clean": "rm -rf node_modules package-lock.json *.js"
+    "start": "find *.js -exec bash -c \"node {} > {}.out\" \\;",
+    "clean": "rm -rf node_modules package-lock.json"
   },
   "dependencies": {
     "smath": "file:smath-1.1.8.tgz"
-  },
-  "devDependencies": {
-    "typescript": "5.4.3"
   }
 }
