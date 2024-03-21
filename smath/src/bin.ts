@@ -65,11 +65,28 @@ switch (args[0]) {
         console.log(SMath.clamp(N(1), N(2), N(3)));
         break;
     }
+    case ('expand'): {
+        console.log(SMath.expand(N(1), N(2), N(3)));
+        break;
+    }
+    case ('linspace'): {
+        console.log(SMath.linspace(N(1), N(2), N(3)));
+        break;
+    }
+    case ('logspace'): {
+        console.log(SMath.logspace(N(1), N(2), N(3)));
+        break;
+    }
+    case ('normalize'): {
+        console.log(SMath.normalize(N(1), N(2), N(3)));
+        break;
+    }
+    case ('translate'): {
+        console.log(SMath.translate(N(1), N(2), N(3), N(4), N(5)));
+        break;
+    }
     default: {
         console.error('Unknown argument "' + args[0] + '". Use with "help" for a list of commands.');
         process.exit(1);
     }
 }
-
-console.log('Inputs:', process.argv);
-console.log(SMath.avg(1, 2, 3));
