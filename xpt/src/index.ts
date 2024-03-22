@@ -5,7 +5,7 @@
  * Exports the public-facing API for `xpt`
  */
 /**
- * Exception-throwing framework.
+ * Framework to find exceptions.
  */
 export abstract class xpt {
     /**
