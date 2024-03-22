@@ -1,6 +1,6 @@
 {
   "name": "xpt",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Finds exceptions in your code",
   "homepage": "https://npm.nicfv.com/xpt",
   "main": "dist/index.js",
@@ -18,7 +18,17 @@
     "prepack": "npm run build && npm run types",
     "postpack": "rm -rf dist types"
   },
-  "keywords": [],
+  "keywords": [
+    "except",
+    "exception",
+    "test",
+    "testing",
+    "framework",
+    "assert",
+    "assertion",
+    "pass",
+    "fail"
+  ],
   "author": {
     "name": "Nicolas Ventura",
     "email": "npm@nicolasventura.com",
