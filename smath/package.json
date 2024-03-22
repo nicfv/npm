@@ -5,10 +5,10 @@
   "homepage": "https://npm.nicfv.com/smath",
   "bin": "dist/src/bin.js",
   "main": "dist/src/index.js",
-  "types": "types/index.d.ts",
+  "types": "types/src/index.d.ts",
   "files": [
     "dist/src",
-    "types"
+    "types/src"
   ],
   "scripts": {
     "build": "rm -rf dist && tsc",
