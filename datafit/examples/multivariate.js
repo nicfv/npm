@@ -1,16 +1,16 @@
-import { Datum, fit } from 'datafit';
+import { fit } from 'datafit';
 
 // Define a general 3D plane function
 // x[0] represents the x-axis
 // x[1] represents the y-axis
 // The z-axis is represented by f([x, y], ...)
-function f(x: number[], cx: number, cy: number, cz: number): number {
+function f(x, cx, cy, cz) {
     return cx * x[0] + cy * x[1] + cz;
 }
 
 // These 3 points make up the plane
 // z = 2x - y + 1
-const data: Datum<number[]>[] = [
+const data = [
     { x: [0, 0], y: 1 },
     { x: [1, 0], y: 3 },
     { x: [0, 1], y: 0 },
