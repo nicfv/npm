@@ -2,7 +2,10 @@ import { fit } from 'datafit';
 
 // Define a model function for curve fitting.
 // Let's use a generic 2nd degree polynomial
-// with all constants unknown.
+// with all constants unknown. Unfortunately,
+// in JavaScript we cannot define default
+// parameter values in the signature, so we
+// must use the `??` operator within the function.
 function f(x, a0, a1, a2) {
     a0 = a0 ?? 1.3;
     a1 = a1 ?? 1.0;
