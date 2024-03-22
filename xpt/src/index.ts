@@ -86,8 +86,41 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static gt(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are equal.'): void {
+    public static gt(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not greater than ' + num2 + '.'): void {
         this.true(num1 > num2, message);
+    }
+    /**
+     * Expect the first number to be strictly **less than** the second number.
+     * @param num1 Numeric input 1
+     * @param num2 Numeric input 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static lt(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not less than ' + num2 + '.'): void {
+        this.true(num1 < num2, message);
+    }
+    /**
+     * Expect the first number to be **greater than or equal to** the second number.
+     * @param num1 Numeric input 1
+     * @param num2 Numeric input 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static ge(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not greater than or equal to ' + num2 + '.'): void {
+        this.true(num1 >= num2, message);
+    }
+    /**
+     * Expect the first number to be **less than or equal to** the second number.
+     * @param num1 Numeric input 1
+     * @param num2 Numeric input 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static le(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not less than or equal to ' + num2 + '.'): void {
+        this.true(num1 <= num2, message);
     }
 }
 /**
