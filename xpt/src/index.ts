@@ -13,7 +13,7 @@
  */
 export abstract class xpt {
     /**
-     * Expect a test to return true.
+     * Expect a test to return **true**.
      * @param test A test that returns a boolean result
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
@@ -25,7 +25,7 @@ export abstract class xpt {
         }
     }
     /**
-     * Expect a test to return false.
+     * Expect a test to return **false**.
      * @param test A test that returns a boolean result
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
@@ -35,7 +35,7 @@ export abstract class xpt {
         this.true(!test, message);
     }
     /**
-     * Expect two strings to be identical.
+     * Expect two strings to be **identical**.
      * @param str1 String value 1
      * @param str2 String value 2
      * @param message The exception message to show if
@@ -46,7 +46,7 @@ export abstract class xpt {
         this.true(str1 === str2, message);
     }
     /**
-     * Expect two strings to be different.
+     * Expect two strings to be **different**.
      * @param str1 String value 1
      * @param str2 String value 2
      * @param message The exception message to show if
@@ -57,7 +57,7 @@ export abstract class xpt {
         this.true(str1 !== str2, message);
     }
     /**
-     * Expect two numbers to be of equal value.
+     * Expect two numbers to be of **equal** value.
      * @param num1 Numeric input 1
      * @param num2 Numeric input 2
      * @param message The exception message to show if
@@ -68,7 +68,7 @@ export abstract class xpt {
         this.true(num1 === num2, message);
     }
     /**
-     * Expect two numbers to not be of equal value.
+     * Expect two numbers to **not be of equal** value.
      * @param num1 Numeric input 1
      * @param num2 Numeric input 2
      * @param message The exception message to show if
@@ -77,6 +77,17 @@ export abstract class xpt {
      */
     public static ne(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are equal.'): void {
         this.true(num1 !== num2, message);
+    }
+    /**
+     * Expect the first number to be strictly **greater than** the second number.
+     * @param num1 Numeric input 1
+     * @param num2 Numeric input 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static gt(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are equal.'): void {
+        this.true(num1 > num2, message);
     }
 }
 /**
