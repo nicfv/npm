@@ -33,6 +33,7 @@ export abstract class xpt {
      * @param arg2 Argument 2, any value is accepted
      */
     public static is(arg1: any, arg2: any): void {
+        this.true((typeof arg1) === (typeof arg2));
         this.true(JSON.stringify(arg1) === JSON.stringify(arg2));
     }
     /**
