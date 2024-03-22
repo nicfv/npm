@@ -7,6 +7,10 @@ xpt.true(SMath.approx(1 + 1e-7, 1));
 xpt.true(SMath.approx(1 - 1e-7, 1));
 xpt.false(SMath.approx(1 + 1e-5, 1));
 xpt.false(SMath.approx(1 - 1e-5, 1));
+xpt.false(SMath.approx(1 + 1e-7, 1, 1e-8));
+xpt.false(SMath.approx(1 - 1e-7, 1, 1e-8));
+xpt.true(SMath.approx(1 + 1e-5, 1, 1e-4));
+xpt.true(SMath.approx(1 - 1e-5, 1, 1e-4));
 
 xpt.eq(SMath.avg(1), 1);
 xpt.eq(SMath.avg(1, 3), 2);
