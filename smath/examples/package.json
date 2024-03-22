@@ -1,8 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "rm -f *.out && touch success && find *.js -exec bash -c \"node {} > {}.out || rm success\" \\; && rm success",
-    "clean": "rm -rf node_modules package-lock.json *.out"
+    "clean": "rm -rf node_modules package-lock.json"
   },
   "dependencies": {
     "smath": "file:smath-1.3.1.tgz"
