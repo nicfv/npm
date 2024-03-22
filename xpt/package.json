@@ -1,7 +1,7 @@
 {
   "name": "xpt",
   "version": "0.0.0",
-  "description": "Throws exceptions if assertions fail",
+  "description": "Finds exceptions in your code",
   "homepage": "https://npm.nicfv.com/xpt",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
