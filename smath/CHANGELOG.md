@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+- Fix internal file structure when published to npm (remove extra `src/`)
+
 ## 1.3.0
 
 - Update typescript dependency to 5.4.3
@@ -111,3 +115,4 @@
 ## 0.0.0
 
 - Initialize empty package
+- No longer available on npm
