@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+- Update typescript dependency to 5.4.3
+- Install `xpt` exception testing framework 0.2.0
+- Consolidate `build` and `types` into one script
+- Simplify `build` command, arguments in `tsconfig.json`
+- Update paths for `bin`, `main`, and `files`
+- Add `test/` directory with all tests using `xpt` framework
+- Update test script to automatically build and run all tests
+
 ## 1.2.0
 
 - Add `npx` scripts. Run `npx smath` to learn more!
