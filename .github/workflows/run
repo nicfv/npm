@@ -56,7 +56,7 @@ for dir in */ ; do
     npm test || exit 1
     # Generate package and run all examples
     echo 'Generating tarball...'
-    npm pack --pack-destination examples || echo 'Did not pack' # TODO: Fail exit
+    npm pack --pack-destination examples || exit 1
     cd examples && {
         example_file='examples-tmp.md'
         {
@@ -88,7 +88,7 @@ for dir in */ ; do
         rm "${example_file}"
         npm run clean
         cd ..
-    } || echo 'Skipping examples' # TODO: Fail exit
+    } || exit 1
     if "${publish}" ; then
         # Determine latest published version on the registry
         npm_version="$(npm --silent v "${package_name}" version)"
