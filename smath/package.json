@@ -11,7 +11,7 @@
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "build": "rm -rf dist && tsc",
     "test": "tsc -p tsconfig.test.json && node tmp/test/index.js && rm -rf tmp",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
