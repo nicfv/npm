@@ -35,92 +35,92 @@ export abstract class xpt {
         this.true(!test, message);
     }
     /**
-     * Expect the test string to be **identical** to the reference string.
+     * Expect the test string to be **identical** to the expected string.
      * @param test A test that returns a string result
-     * @param ref A string to use as reference for comparison
+     * @param expected The expected string to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static is(test: string, ref: string, message: string = 'Test "' + test + '" did not match the reference "' + ref + '".'): void {
-        this.true(test === ref, message);
+    public static is(test: string, expected: string, message: string = 'Test "' + test + '" did not match the expected "' + expected + '".'): void {
+        this.true(test === expected, message);
     }
     /**
-     * Expect the test string to be **different** than the reference string.
+     * Expect the test string to be **different** than the expected string.
      * @param test A test that returns a string result
-     * @param ref A string to use as reference for comparison
+     * @param expected The expected string to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static isNot(test: string, ref: string, message: string = 'Test "' + test + '" matched the reference "' + ref + '".'): void {
-        this.true(test !== ref, message);
+    public static not(test: string, expected: string, message: string = 'Test "' + test + '" matched the expected "' + expected + '".'): void {
+        this.true(test !== expected, message);
     }
     /**
-     * Expect the test to **be equal** to the reference value.
+     * Expect the test to **be equal** to the expected value.
      * @param test A test that returns a numeric result
-     * @param ref A number to use as reference for comparison
+     * @param expected The expected number to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static eq(test: number, ref: number, message: string = 'Test value ' + test + ' was not equal to reference value ' + ref + '.'): void {
-        this.true(test === ref, message);
+    public static eq(test: number, expected: number, message: string = 'Test value ' + test + ' was not equal to expected value ' + expected + '.'): void {
+        this.true(test === expected, message);
     }
     /**
-     * Expect the test to **not be equal** to the reference value.
+     * Expect the test to **not be equal** to the expected value.
      * @param test A test that returns a numeric result
-     * @param ref A number to use as reference for comparison
+     * @param expected The expected number to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ne(test: number, ref: number, message: string = 'Test value ' + test + ' was equal to reference value ' + ref + '.'): void {
-        this.true(test !== ref, message);
+    public static ne(test: number, expected: number, message: string = 'Test value ' + test + ' was equal to expected value ' + expected + '.'): void {
+        this.true(test !== expected, message);
     }
     /**
-     * Expect the test to be strictly **greater than** the reference value.
+     * Expect the test to be strictly **greater than** the expected value.
      * @param test A test that returns a numeric result
-     * @param ref A number to use as reference for comparison
+     * @param expected The expected number to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static gt(test: number, ref: number, message: string = 'Test value ' + test + ' was not greater than reference value ' + ref + '.'): void {
-        this.true(test > ref, message);
+    public static gt(test: number, expected: number, message: string = 'Test value ' + test + ' was not greater than expected value ' + expected + '.'): void {
+        this.true(test > expected, message);
     }
     /**
-     * Expect the test to be strictly **less than** the reference value.
+     * Expect the test to be strictly **less than** the expected value.
      * @param test A test that returns a numeric result
-     * @param ref A number to use as reference for comparison
+     * @param expected The expected number to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static lt(test: number, ref: number, message: string = 'Test value ' + test + ' was not less than reference value ' + ref + '.'): void {
-        this.true(test < ref, message);
+    public static lt(test: number, expected: number, message: string = 'Test value ' + test + ' was not less than expected value ' + expected + '.'): void {
+        this.true(test < expected, message);
     }
     /**
-     * Expect the test to be **greater than or equal to** the reference value.
+     * Expect the test to be **greater than or equal to** the expected value.
      * @param test A test that returns a numeric result
-     * @param ref A number to use as reference for comparison
+     * @param expected The expected number to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ge(test: number, ref: number, message: string = 'Test value ' + test + ' was not greater than nor equal to reference value ' + ref + '.'): void {
-        this.true(test >= ref, message);
+    public static ge(test: number, expected: number, message: string = 'Test value ' + test + ' was not greater than nor equal to expected value ' + expected + '.'): void {
+        this.true(test >= expected, message);
     }
     /**
-     * Expect the test to be **less than or equal to** the reference value.
+     * Expect the test to be **less than or equal to** the expected value.
      * @param test A test that returns a numeric result
-     * @param ref A number to use as reference for comparison
+     * @param expected The expected number to use for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static le(test: number, ref: number, message: string = 'Test value ' + test + ' was not less than nor equal to reference value ' + ref + '.'): void {
-        this.true(test <= ref, message);
+    public static le(test: number, expected: number, message: string = 'Test value ' + test + ' was not less than nor equal to expected value ' + expected + '.'): void {
+        this.true(test <= expected, message);
     }
 }
 /**
