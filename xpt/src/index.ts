@@ -21,12 +21,12 @@ export abstract class xpt {
         }
     }
     /**
-     * Test that `a` is `b` or throw an exception.
-     * @param a Any value
-     * @param b Any value
+     * Expect two arguments of any type to contain the same value(s).
+     * @param arg1 Argument 1, any value is accepted
+     * @param arg2 Argument 2, any value is accepted
      */
-    public static is(a: any, b: any) {
-        this.true(JSON.stringify(a) === JSON.stringify(b));
+    public static is(arg1: any, arg2: any) {
+        this.true(JSON.stringify(arg1) === JSON.stringify(arg2));
     }
 }
 /**
