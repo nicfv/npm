@@ -45,6 +45,17 @@ export abstract class xpt {
     public static eq(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are not equal.'): void {
         this.true(num1 === num2, message);
     }
+    /**
+     * Expect two numbers to be of different values.
+     * @param num1 Numeric input 1
+     * @param num2 Numeric input 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static ne(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are equal.'): void {
+        this.true(num1 !== num2, message);
+    }
 }
 /**
  * Exceptions extend the base `Error` class.
