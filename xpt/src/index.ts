@@ -35,6 +35,28 @@ export abstract class xpt {
         this.true(!test, message);
     }
     /**
+     * Expect two strings to be identical.
+     * @param str1 String value 1
+     * @param str2 String value 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static is(str1: string, str2: string, message: string = 'Strings "' + str1 + '" and "' + str2 + '" are not the same.'): void {
+        this.true(str1 === str2, message);
+    }
+    /**
+     * Expect two strings to be different.
+     * @param str1 String value 1
+     * @param str2 String value 2
+     * @param message The exception message to show if
+     * an unexpected result was found. If not set, will
+     * display a default message for this type of test.
+     */
+    public static isNot(str1: string, str2: string, message: string = 'Strings "' + str1 + '" and "' + str2 + '" are the same.'): void {
+        this.true(str1 !== str2, message);
+    }
+    /**
      * Expect two numbers to be of equal value.
      * @param num1 Numeric input 1
      * @param num2 Numeric input 2
@@ -46,7 +68,7 @@ export abstract class xpt {
         this.true(num1 === num2, message);
     }
     /**
-     * Expect two numbers to be of different values.
+     * Expect two numbers to not be of equal value.
      * @param num1 Numeric input 1
      * @param num2 Numeric input 2
      * @param message The exception message to show if
