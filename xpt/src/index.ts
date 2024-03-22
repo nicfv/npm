@@ -19,7 +19,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static true(test: boolean, message: string = 'Test was not true.'): void {
+    public static true(test: boolean, message: string = 'The test returned ' + test + '.'): void {
         if (!test) {
             throw new Exception(message);
         }
@@ -31,7 +31,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static false(test: boolean, message: string = 'Test was not false.'): void {
+    public static false(test: boolean, message: string = 'The test returned ' + test + '.'): void {
         this.true(!test, message);
     }
     /**
@@ -42,7 +42,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static is(test: string, expected: string, message: string = 'Test "' + test + '" did not match the expected "' + expected + '".'): void {
+    public static is(test: string, expected: string, message: string = 'The test string "' + test + '" did not match the expected string "' + expected + '".'): void {
         this.true(test === expected, message);
     }
     /**
@@ -53,7 +53,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static not(test: string, expected: string, message: string = 'Test "' + test + '" matched the expected "' + expected + '".'): void {
+    public static not(test: string, expected: string, message: string = 'The test string "' + test + '" matched the expected string "' + expected + '".'): void {
         this.true(test !== expected, message);
     }
     /**
@@ -64,7 +64,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static eq(test: number, expected: number, message: string = 'Test value ' + test + ' was not equal to expected value ' + expected + '.'): void {
+    public static eq(test: number, expected: number, message: string = 'The test value ' + test + ' was not equal to the expected value ' + expected + '.'): void {
         this.true(test === expected, message);
     }
     /**
@@ -75,7 +75,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ne(test: number, expected: number, message: string = 'Test value ' + test + ' was equal to expected value ' + expected + '.'): void {
+    public static ne(test: number, expected: number, message: string = 'The test value ' + test + ' was equal to the expected value ' + expected + '.'): void {
         this.true(test !== expected, message);
     }
     /**
@@ -86,7 +86,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static gt(test: number, expected: number, message: string = 'Test value ' + test + ' was not greater than expected value ' + expected + '.'): void {
+    public static gt(test: number, expected: number, message: string = 'The test value ' + test + ' was not greater than the expected value ' + expected + '.'): void {
         this.true(test > expected, message);
     }
     /**
@@ -97,7 +97,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static lt(test: number, expected: number, message: string = 'Test value ' + test + ' was not less than expected value ' + expected + '.'): void {
+    public static lt(test: number, expected: number, message: string = 'The test value ' + test + ' was not less than the expected value ' + expected + '.'): void {
         this.true(test < expected, message);
     }
     /**
@@ -108,7 +108,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ge(test: number, expected: number, message: string = 'Test value ' + test + ' was not greater than nor equal to expected value ' + expected + '.'): void {
+    public static ge(test: number, expected: number, message: string = 'The test value ' + test + ' was not greater than nor equal to the expected value ' + expected + '.'): void {
         this.true(test >= expected, message);
     }
     /**
@@ -119,7 +119,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static le(test: number, expected: number, message: string = 'Test value ' + test + ' was not less than nor equal to expected value ' + expected + '.'): void {
+    public static le(test: number, expected: number, message: string = 'The test value ' + test + ' was not less than nor equal to the expected value ' + expected + '.'): void {
         this.true(test <= expected, message);
     }
 }
