@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0
+
+- Add string comparisons `is()` and `not()`
+- Add numeric comparisons `gt()`, `lt()`, `ge()`, and `le()`
+- Inputs are now called `test` and `expect`
+- Major documentation updates
+- Default message improvements
+- Add examples in readme
+
 ## 0.1.0
 
 - Update project tagline
