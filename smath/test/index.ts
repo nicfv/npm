@@ -36,3 +36,13 @@ xpt.eq(SMath.translate(20, 0, 100, 32, 212), 68);
 xpt.eq(SMath.translate(-40, 0, 100, 32, 212), -40);
 xpt.eq(SMath.translate(68, 32, 212, 0, 100), 20);
 xpt.eq(SMath.translate(-40, 32, 212, 0, 100), -40);
+
+xpt.is(SMath.linspace(1, 5, 6).join(), '1,1.8,2.6,3.4,4.2,5');
+xpt.is(SMath.linspace(10, 20, 3).join(), '10,15,20');
+xpt.is(SMath.linspace(3, -3, 5).join(), '3,1.5,0,-1.5,-3');
+xpt.is(SMath.linspace(0, 0, -1).join(), '');
+
+xpt.gt(SMath.logspace(0, 2, 5)[3], 31.622); // Approx 31.6227766...
+xpt.lt(SMath.logspace(0, 2, 5)[3], 31.623);
+xpt.is(SMath.logspace(2, -2, 5).join(), '100,10,1,0.1,0.01');
+xpt.is(SMath.logspace(0, 0, -1).join(), '');
