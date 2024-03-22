@@ -1,20 +1,22 @@
 /**
  * @packageDocumentation
- * Finds exceptions in your code
+ * Expect or except!
  * 
  * Exports the public-facing API for `xpt`
  */
 /**
  * Framework to find exceptions.
+ * If any test fails, will throw
+ * an exception and halt execution.
  */
 export abstract class xpt {
     /**
-     * Detect an exception for a failed test.
-     * @param pass Whether the assertion will pass or find an exception.
-     * @param message The exception message, if found.
+     * Expect a test to return true.
+     * @param test A boolean test
+     * @param message The exception message, if found
      */
-    private static assert(pass: boolean, message: string = 'Exception found!'): void {
-        if (!pass) {
+    public static true(test: boolean, message: string = 'Exception found! Value was ' + test + '.'): void {
+        if (!test) {
             throw new Exception(message);
         }
     }
@@ -24,7 +26,7 @@ export abstract class xpt {
      * @param b Any value
      */
     public static is(a: any, b: any) {
-        this.assert(JSON.stringify(a) === JSON.stringify(b));
+        this.true(JSON.stringify(a) === JSON.stringify(b));
     }
 }
 /**
