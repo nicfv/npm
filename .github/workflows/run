@@ -51,7 +51,7 @@ for dir in */ ; do
     readme="$(cat README.md)"
     # Install dependencies and run test script
     echo 'Installing dependencies...'
-    npm i
+    npm i || exit 1
     echo 'Running tests...'
     npm test || exit 1
     # Generate package and run all examples
@@ -63,7 +63,7 @@ for dir in */ ; do
             echo '## Examples'
             echo "Here are a few quickstart examples written in JavaScript that showcase some out-of-box features of the \`${package_name}\` package."
         } >> "${example_file}"
-        npm i
+        npm i || exit 1
         shopt -s nullglob
         for example in *.js ; do
             # Save example output to a markdown file
@@ -86,7 +86,7 @@ for dir in */ ; do
         # Then clean the project and reset the working directory
         examples="$(cat "${example_file}")"
         rm "${example_file}"
-        npm run clean
+        npm run clean || exit 1
         cd ..
     } || exit 1
     if "${publish}" ; then
@@ -123,7 +123,7 @@ for dir in */ ; do
             echo 'Skipping publish step'
         else
             echo 'Publishing...'
-            npm publish
+            npm publish || exit 1
         fi
         # Only add the MathJax script for documentation
         # because in npm, it will show up as plain text
@@ -138,6 +138,6 @@ for dir in */ ; do
         echo "${readme}" > README.md
     fi
     # Run cleanup tasks and reset working directory
-    npm run clean
+    npm run clean || exit 1
     cd ..
 done
