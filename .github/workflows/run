@@ -59,7 +59,10 @@ for dir in */ ; do
     npm pack --pack-destination examples || echo 'Did not pack' # TODO: Fail exit
     cd examples && {
         example_file='examples-tmp.md'
-        echo '## Examples' >> "${example_file}"
+        {
+            echo '## Examples'
+            echo "Here are a few quickstart examples written in JavaScript that showcase some out-of-box features of the \`${package_name}\` package."
+        } >> "${example_file}"
         npm i
         shopt -s nullglob
         for example in *.js ; do
