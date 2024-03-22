@@ -19,7 +19,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static true(test: boolean, message: string = 'Test failed. Value was ' + test + '.'): void {
+    public static true(test: boolean, message: string = 'Test was not true.'): void {
         if (!test) {
             throw new Exception(message);
         }
@@ -31,7 +31,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static false(test: boolean, message: string = 'Test failed. Value was ' + test + '.'): void {
+    public static false(test: boolean, message: string = 'Test was not false.'): void {
         this.true(!test, message);
     }
     /**
@@ -42,7 +42,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static is(test: string, ref: string, message: string = 'Strings "' + test + '" and "' + ref + '" are not the same.'): void {
+    public static is(test: string, ref: string, message: string = 'Test "' + test + '" did not match the reference "' + ref + '".'): void {
         this.true(test === ref, message);
     }
     /**
@@ -53,7 +53,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static isNot(test: string, ref: string, message: string = 'Strings "' + test + '" and "' + ref + '" are the same.'): void {
+    public static isNot(test: string, ref: string, message: string = 'Test "' + test + '" matched the reference "' + ref + '".'): void {
         this.true(test !== ref, message);
     }
     /**
@@ -64,7 +64,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static eq(test: number, ref: number, message: string = 'Numbers ' + test + ' and ' + ref + ' are not equal.'): void {
+    public static eq(test: number, ref: number, message: string = 'Test value ' + test + ' was not equal to reference value ' + ref + '.'): void {
         this.true(test === ref, message);
     }
     /**
@@ -75,7 +75,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ne(test: number, ref: number, message: string = 'Numbers ' + test + ' and ' + ref + ' are equal.'): void {
+    public static ne(test: number, ref: number, message: string = 'Test value ' + test + ' was equal to reference value ' + ref + '.'): void {
         this.true(test !== ref, message);
     }
     /**
@@ -86,7 +86,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static gt(test: number, ref: number, message: string = 'Number ' + test + ' is not greater than ' + ref + '.'): void {
+    public static gt(test: number, ref: number, message: string = 'Test value ' + test + ' was not greater than reference value ' + ref + '.'): void {
         this.true(test > ref, message);
     }
     /**
@@ -97,7 +97,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static lt(test: number, ref: number, message: string = 'Number ' + test + ' is not less than ' + ref + '.'): void {
+    public static lt(test: number, ref: number, message: string = 'Test value ' + test + ' was not less than reference value ' + ref + '.'): void {
         this.true(test < ref, message);
     }
     /**
@@ -108,7 +108,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ge(test: number, ref: number, message: string = 'Number ' + test + ' is not greater than or equal to ' + ref + '.'): void {
+    public static ge(test: number, ref: number, message: string = 'Test value ' + test + ' was not greater than nor equal to reference value ' + ref + '.'): void {
         this.true(test >= ref, message);
     }
     /**
@@ -119,7 +119,7 @@ export abstract class xpt {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static le(test: number, ref: number, message: string = 'Number ' + test + ' is not less than or equal to ' + ref + '.'): void {
+    public static le(test: number, ref: number, message: string = 'Test value ' + test + ' was not less than nor equal to reference value ' + ref + '.'): void {
         this.true(test <= ref, message);
     }
 }
