@@ -5,6 +5,6 @@
     "clean": "rm -rf node_modules package-lock.json *.out"
   },
   "dependencies": {
-    "smath": "file:smath-1.1.8.tgz"
+    "smath": "file:smath-1.2.0.tgz"
   }
 }
