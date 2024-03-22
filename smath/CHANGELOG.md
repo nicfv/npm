@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.0
 
 - Update typescript dependency to 5.4.3
 - Install `xpt` exception testing framework 0.2.0
