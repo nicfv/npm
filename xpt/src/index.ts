@@ -36,91 +36,91 @@ export abstract class xpt {
     }
     /**
      * Expect two strings to be **identical**.
-     * @param str1 String value 1
-     * @param str2 String value 2
+     * @param test A test that returns a string result
+     * @param ref A string to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static is(str1: string, str2: string, message: string = 'Strings "' + str1 + '" and "' + str2 + '" are not the same.'): void {
-        this.true(str1 === str2, message);
+    public static is(test: string, ref: string, message: string = 'Strings "' + test + '" and "' + ref + '" are not the same.'): void {
+        this.true(test === ref, message);
     }
     /**
      * Expect two strings to be **different**.
-     * @param str1 String value 1
-     * @param str2 String value 2
+     * @param test A test that returns a string result
+     * @param ref A string to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static isNot(str1: string, str2: string, message: string = 'Strings "' + str1 + '" and "' + str2 + '" are the same.'): void {
-        this.true(str1 !== str2, message);
+    public static isNot(test: string, ref: string, message: string = 'Strings "' + test + '" and "' + ref + '" are the same.'): void {
+        this.true(test !== ref, message);
     }
     /**
      * Expect two numbers to be of **equal** value.
-     * @param num1 Numeric input 1
-     * @param num2 Numeric input 2
+     * @param test A test that returns a numeric result
+     * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static eq(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are not equal.'): void {
-        this.true(num1 === num2, message);
+    public static eq(test: number, ref: number, message: string = 'Numbers ' + test + ' and ' + ref + ' are not equal.'): void {
+        this.true(test === ref, message);
     }
     /**
-     * Expect two numbers to **not be of equal** value.
-     * @param num1 Numeric input 1
-     * @param num2 Numeric input 2
+     * Expect the test to **not be equal** to the reference value.
+     * @param test A test that returns a numeric result
+     * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ne(num1: number, num2: number, message: string = 'Numbers ' + num1 + ' and ' + num2 + ' are equal.'): void {
-        this.true(num1 !== num2, message);
+    public static ne(test: number, ref: number, message: string = 'Numbers ' + test + ' and ' + ref + ' are equal.'): void {
+        this.true(test !== ref, message);
     }
     /**
-     * Expect the first number to be strictly **greater than** the second number.
-     * @param num1 Numeric input 1
-     * @param num2 Numeric input 2
+     * Expect the test to be strictly **greater than** the reference value.
+     * @param test A test that returns a numeric result
+     * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static gt(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not greater than ' + num2 + '.'): void {
-        this.true(num1 > num2, message);
+    public static gt(test: number, ref: number, message: string = 'Number ' + test + ' is not greater than ' + ref + '.'): void {
+        this.true(test > ref, message);
     }
     /**
-     * Expect the first number to be strictly **less than** the second number.
-     * @param num1 Numeric input 1
-     * @param num2 Numeric input 2
+     * Expect the test to be strictly **less than** the reference value.
+     * @param test A test that returns a numeric result
+     * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static lt(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not less than ' + num2 + '.'): void {
-        this.true(num1 < num2, message);
+    public static lt(test: number, ref: number, message: string = 'Number ' + test + ' is not less than ' + ref + '.'): void {
+        this.true(test < ref, message);
     }
     /**
-     * Expect the first number to be **greater than or equal to** the second number.
-     * @param num1 Numeric input 1
-     * @param num2 Numeric input 2
+     * Expect the test to be **greater than or equal to** the reference value.
+     * @param test A test that returns a numeric result
+     * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ge(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not greater than or equal to ' + num2 + '.'): void {
-        this.true(num1 >= num2, message);
+    public static ge(test: number, ref: number, message: string = 'Number ' + test + ' is not greater than or equal to ' + ref + '.'): void {
+        this.true(test >= ref, message);
     }
     /**
-     * Expect the first number to be **less than or equal to** the second number.
-     * @param num1 Numeric input 1
-     * @param num2 Numeric input 2
+     * Expect the test to be **less than or equal to** the reference value.
+     * @param test A test that returns a numeric result
+     * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static le(num1: number, num2: number, message: string = 'Number ' + num1 + ' is not less than or equal to ' + num2 + '.'): void {
-        this.true(num1 <= num2, message);
+    public static le(test: number, ref: number, message: string = 'Number ' + test + ' is not less than or equal to ' + ref + '.'): void {
+        this.true(test <= ref, message);
     }
 }
 /**
