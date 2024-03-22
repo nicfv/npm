@@ -3,20 +3,19 @@
   "version": "1.2.0",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
-  "bin": "dist/bin.js",
-  "main": "dist/index.js",
+  "bin": "dist/src/bin.js",
+  "main": "dist/src/index.js",
   "types": "types/index.d.ts",
   "files": [
-    "dist",
+    "dist/src",
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc --removeComments",
-    "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
+    "build": "rm -rf dist && tsc",
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
-    "prepack": "npm run build && npm run types",
+    "prepack": "npm run build",
     "postpack": "rm -rf dist types"
   },
   "keywords": [
@@ -50,6 +49,7 @@
   "devDependencies": {
     "@types/node": "20.11.30",
     "typedoc": "0.25.12",
-    "typescript": "5.4.2"
+    "typescript": "5.4.2",
+    "xpt": "0.0.1"
   }
 }

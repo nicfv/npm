@@ -2,8 +2,11 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "types",
   },
   "include": [
     "src",
+    "test",
   ],
 }
