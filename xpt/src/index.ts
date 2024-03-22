@@ -35,7 +35,7 @@ export abstract class xpt {
         this.true(!test, message);
     }
     /**
-     * Expect two strings to be **identical**.
+     * Expect the test string to be **identical** to the reference string.
      * @param test A test that returns a string result
      * @param ref A string to use as reference for comparison
      * @param message The exception message to show if
@@ -46,7 +46,7 @@ export abstract class xpt {
         this.true(test === ref, message);
     }
     /**
-     * Expect two strings to be **different**.
+     * Expect the test string to be **different** than the reference string.
      * @param test A test that returns a string result
      * @param ref A string to use as reference for comparison
      * @param message The exception message to show if
@@ -57,7 +57,7 @@ export abstract class xpt {
         this.true(test !== ref, message);
     }
     /**
-     * Expect two numbers to be of **equal** value.
+     * Expect the test to **be equal** to the reference value.
      * @param test A test that returns a numeric result
      * @param ref A number to use as reference for comparison
      * @param message The exception message to show if
