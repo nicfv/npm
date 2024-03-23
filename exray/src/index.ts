@@ -137,6 +137,6 @@ class Exception extends Error {
      * @param message The exception message
      */
     constructor(id: number, message: string) {
-        super('[' + id + '] Exception found! ' + message);
+        super('Exception found in test #' + id + '! ' + message);
     }
 }
