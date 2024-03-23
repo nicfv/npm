@@ -8,7 +8,7 @@ Here is the model function used for curve fitting.
 
 $$f(x, \bar{a}) = a_{2}x^{2} + a_{1}x + a_{0}$$
 
-In the output, the line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.32, a_{1} \approx 1.02, a_{2} \approx -0.21\\\) which is very close to our [original function](#single-variable)! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.483\\\), again very close to the true result. Try it for yourself and see if you obtain similar results!
+In the **output**, the line with `params:` contains the set of best-fit parameters **in the order** of the model function parameters. The results I got are about \\\(a_{0} \approx 1.32, a_{1} \approx 1.02, a_{2} \approx -0.21\\\) which is very close to our original function! Also, \\\(f(3) = 2.5\\\) where my model got me \\\(f(3) \approx 2.483\\\), again very close to the true result. Try it for yourself and see if you obtain similar results!
 
 The other lines in the summary tell us other information from the computation. See [summary](https://npm.nicfv.com/datafit/interfaces/Summary.html) for more details.
 
