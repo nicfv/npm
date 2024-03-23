@@ -3,6 +3,7 @@
 ## 0.0.2
 
 - Relative "Home" link does not work well. Changing to absolute link.
+- Update contact details.
 
 ## 0.0.1
 

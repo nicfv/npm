@@ -3,6 +3,7 @@
 ## 1.0.11
 
 - Relative "Home" link does not work well. Changing to absolute link.
+- Update contact details.
 
 ## 1.0.10
 
