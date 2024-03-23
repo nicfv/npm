@@ -66,13 +66,21 @@ for dir in */ ; do
         npm i || exit 1
         shopt -s nullglob
         for example in *.js ; do
-            if [[ "${example}" =~ ^([0-9]+-(.+))\.([mc]?js)$ ]] ; then
+            if [[ "${example}" =~ ^([0-9]+-([a-zA-Z0-9_-]+))\.([mc]?js)$ ]] ; then
                 # Save example output to a markdown file
                 echo "Running example ${example}..."
                 {
                     echo "### ${BASH_REMATCH[2]//-/ }"
                     cat "${BASH_REMATCH[1]}.md" || exit 1
                     echo
+                    echo '#### Instructions'
+                    echo '1. Copy the source code'
+                    echo '1. Paste into a new file'
+                    echo "1. Save as \`${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\`"
+                    echo '1. Run this command in your terminal'
+                    echo '    ```shell'
+                    echo "    node ${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+                    echo '    ```'
                     echo '#### Source'
                     echo '```js'
                     cat "${example}"
