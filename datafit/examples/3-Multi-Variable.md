@@ -1,5 +1,3 @@
-### Multivariate
-
 In this slightly more complicated example, we'll define a 2D planar function to fit 3-dimensional data. The main difference here is that \\\(\bar{x}\\\) is now an array, in both \\\(f(\bar{x})\\\) and the dataset, but everything else is functionally the same!
 
 $$ax + by + cz = d$$
