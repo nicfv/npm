@@ -13,6 +13,3 @@ function alwaysReturnsFalse() {
 }
 // This test should pass
 X.false(alwaysReturnsFalse());
-
-// This test should fail
-X.true(alwaysReturnsFalse());
