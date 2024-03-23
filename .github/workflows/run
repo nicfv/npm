@@ -64,7 +64,7 @@ for dir in */ ; do
             echo "Here are a few quickstart examples written in JavaScript that showcase some out-of-box features of the \`${package_name}\` package."
         } >> "${example_file}"
         npm i || exit 1
-        for example in *.js ; do
+        for example in * ; do
             if [[ "${example}" =~ ^([0-9]+-([a-zA-Z0-9_-]+))\.([mc]?js)$ ]] ; then
                 # Save example output to a markdown file
                 echo "Running example ${example}..."
