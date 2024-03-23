@@ -10,6 +10,4 @@ In the dataset defined in our source code, the `x` property refers to all the *i
 
 3 points is all that is required to define the equation for a plane. In this example, our data fits to the plane defined by \\\(z = 2x - y + 1\\\).
 
-Let's see if the algorithm can find this out just based on the dataset!
-
-My results were about \\\(c_{x} \approx 2.01, c_{y} \approx -0.99, c_{z} \approx 0.99\\\) meaning that my equation is \\\(z \approx 2.01x - 0.99y + 0.99\\\), which is pretty close to our actual plane equation! If we plot `summary.f([x, y])` where `x` and `y` are a set of inputs from our data set, we should expect the average absolute error to be about 0.005 units from the true plane equation. Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
+Let's see if the algorithm can find this out just based on the dataset! Try it for yourself and see if you obtain similar results, and try plotting it in an online 3D calculator!
