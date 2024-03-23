@@ -1,6 +1,6 @@
 {
   "name": "exray",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Lightweight assertion testing framework",
   "homepage": "https://npm.nicfv.com/exray",
   "bin": "",
@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "test": "tsc --noEmit",
+    "test": "tsc --outDir tmp --rootDir . test/index.ts && { node tmp/test/index.js ; rm -r tmp ; }",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepack": "npm run build",

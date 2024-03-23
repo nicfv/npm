@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+- Show which test failed, as a unique number
+- Improve on some of the default exception messages
+
 ## 0.0.3
 
 - Fix bug where type declarations were not generated or packaged with the npm package

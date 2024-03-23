@@ -13,6 +13,10 @@
  */
 export abstract class X {
     /**
+     * Increments for every test run.
+     */
+    private static i: number = 0;
+    /**
      * Expect a test to return **true**.
      * @param test A test that returns a boolean result
      * @param message The exception message to show if
@@ -20,8 +24,9 @@ export abstract class X {
      * display a default message for this type of test.
      */
     public static true(test: boolean, message: string = 'The test returned ' + test + '.'): void {
+        this.i++;
         if (!test) {
-            throw new Exception(message);
+            throw new Exception(this.i, message);
         }
     }
     /**
@@ -64,7 +69,7 @@ export abstract class X {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static eq(test: number, expect: number, message: string = 'The test value ' + test + ' was not equal to the expected value ' + expect + '.'): void {
+    public static eq(test: number, expect: number, message: string = 'The test value of ' + test + ' was not equal to the expected value of ' + expect + '.'): void {
         this.true(test === expect, message);
     }
     /**
@@ -75,7 +80,7 @@ export abstract class X {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ne(test: number, expect: number, message: string = 'The test value ' + test + ' was equal to the expected value ' + expect + '.'): void {
+    public static ne(test: number, expect: number, message: string = 'The test value of ' + test + ' was equal to the expected value of ' + expect + '.'): void {
         this.true(test !== expect, message);
     }
     /**
@@ -86,7 +91,7 @@ export abstract class X {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static gt(test: number, expect: number, message: string = 'The test value ' + test + ' was not greater than the expected value ' + expect + '.'): void {
+    public static gt(test: number, expect: number, message: string = 'The test value of ' + test + ' was not greater than the expected value of ' + expect + '.'): void {
         this.true(test > expect, message);
     }
     /**
@@ -97,7 +102,7 @@ export abstract class X {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static lt(test: number, expect: number, message: string = 'The test value ' + test + ' was not less than the expected value ' + expect + '.'): void {
+    public static lt(test: number, expect: number, message: string = 'The test value of ' + test + ' was not less than the expected value of ' + expect + '.'): void {
         this.true(test < expect, message);
     }
     /**
@@ -108,7 +113,7 @@ export abstract class X {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static ge(test: number, expect: number, message: string = 'The test value ' + test + ' was not greater than nor equal to the expected value ' + expect + '.'): void {
+    public static ge(test: number, expect: number, message: string = 'The test value of ' + test + ' was not greater than nor equal to the expected value of ' + expect + '.'): void {
         this.true(test >= expect, message);
     }
     /**
@@ -119,7 +124,7 @@ export abstract class X {
      * an unexpected result was found. If not set, will
      * display a default message for this type of test.
      */
-    public static le(test: number, expect: number, message: string = 'The test value ' + test + ' was not less than nor equal to the expected value ' + expect + '.'): void {
+    public static le(test: number, expect: number, message: string = 'The test value of ' + test + ' was not less than nor equal to the expected value of ' + expect + '.'): void {
         this.true(test <= expect, message);
     }
 }
@@ -131,7 +136,7 @@ class Exception extends Error {
      * Create a new exception to throw.
      * @param message The exception message
      */
-    constructor(message: string) {
-        super('Exception found! ' + message);
+    constructor(id: number, message: string) {
+        super('Exception found in test #' + id + '! ' + message);
     }
 }
