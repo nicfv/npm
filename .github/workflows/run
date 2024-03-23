@@ -78,7 +78,7 @@ for dir in */ ; do
                 echo '```'
                 echo '#### Output'
                 echo '```text'
-                node "${example}"
+                node "${example}" || exit 1
                 echo '```'
             } >> "${example_file}"
         done
