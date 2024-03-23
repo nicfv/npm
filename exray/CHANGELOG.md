@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.2
+
+- Relative "Home" link does not work well. Changing to absolute link.
+
 ## 0.0.1
 
 - Automate how examples are written into main readme file

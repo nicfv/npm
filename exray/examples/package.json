@@ -3,6 +3,6 @@
     "clean": "rm -rf node_modules package-lock.json"
   },
   "dependencies": {
-    "exray": "file:exray-0.0.1.tgz"
+    "exray": "file:exray-0.0.2.tgz"
   }
 }
