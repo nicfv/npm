@@ -3,6 +3,7 @@
   "version": "1.0.9",
   "description": "Generate data visualization color gradients",
   "homepage": "https://npm.nicfv.com/viridis",
+  "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -10,12 +11,11 @@
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc --removeComments",
-    "types": "rm -rf types && tsc --declaration --declarationDir types --emitDeclarationOnly",
+    "build": "rm -rf dist && tsc",
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
-    "prepack": "npm run build && npm run types",
+    "prepack": "npm run build",
     "postpack": "rm -rf dist types"
   },
   "keywords": [
