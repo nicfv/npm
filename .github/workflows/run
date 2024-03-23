@@ -66,21 +66,26 @@ for dir in */ ; do
         npm i || exit 1
         shopt -s nullglob
         for example in *.js ; do
-            # Save example output to a markdown file
-            echo "Running example ${example}..."
-            {
-                cat "${example}.md" || exit 1
-                echo
-                echo '#### Source'
-                echo '```js'
-                cat "${example}"
-                echo
-                echo '```'
-                echo '#### Output'
-                echo '```text'
-                node "${example}" || exit 1
-                echo '```'
-            } >> "${example_file}"
+            if [[ "${example}" =~ ^([0-9]+-(.+))\.([mc]?js)$ ]] ; then
+                # Save example output to a markdown file
+                echo "Running example ${example}..."
+                {
+                    echo "### ${BASH_REMATCH[2]//-/ }"
+                    cat "${BASH_REMATCH[1]}.md" || exit 1
+                    echo
+                    echo '#### Source'
+                    echo '```js'
+                    cat "${example}"
+                    echo
+                    echo '```'
+                    echo '#### Output'
+                    echo '```text'
+                    node "${example}" || exit 1
+                    echo '```'
+                } >> "${example_file}"
+            else
+                echo "Skipping file ${example}"
+            fi
         done
         # Store the output from the examples and remove the file
         # Then clean the project and reset the working directory
