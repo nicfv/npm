@@ -1,4 +1,4 @@
-# npm
+# npm [![Publish](https://github.com/nicfv/npm/actions/workflows/publish.yml/badge.svg)](https://github.com/nicfv/npm/actions/workflows/publish.yml)
 nicfv's public NPM packages in one repository
 
 ## Developer Notes
