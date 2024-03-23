@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.3
+
+- Fix bug where type declarations were not generated or packaged with the npm package
+
 ## 0.0.2
 
 - Relative "Home" link does not work well. Changing to absolute link.
