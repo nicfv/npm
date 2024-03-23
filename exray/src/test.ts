@@ -1,4 +1,4 @@
-import { X } from '../src/index';
+import { X } from './index';
 
 X.true(true);
 X.eq(1, 1);

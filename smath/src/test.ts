@@ -1,4 +1,4 @@
-import { SMath } from '../src/index';
+import { SMath } from './index';
 import { X } from 'exray';
 
 X.true(SMath.approx(0.1 + 0.2, 0.3));
