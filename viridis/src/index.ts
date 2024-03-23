@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Generate data visualization color gradients
+ * Color gradients for data visualization
  * 
  * Exports the public-facing API for `viridis`
  */
