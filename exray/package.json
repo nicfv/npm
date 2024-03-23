@@ -1,8 +1,8 @@
 {
-  "name": "xpt",
-  "version": "0.1.0",
-  "description": "Expect or except!",
-  "homepage": "https://npm.nicfv.com/xpt",
+  "name": "exray",
+  "version": "0.0.0",
+  "description": "Lightweight assertion testing framework",
+  "homepage": "https://npm.nicfv.com/exray",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
