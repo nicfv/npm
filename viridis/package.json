@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Generate data visualization color gradients",
   "homepage": "https://npm.nicfv.com/viridis",
   "bin": "",
