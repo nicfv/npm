@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.12
+
+- Fix bug where type declarations were not generated or packaged with the npm package
+- Update `smath` dependency
+
 ## 1.0.11
 
 - Relative "Home" link does not work well. Changing to absolute link.
