@@ -17,7 +17,7 @@ npm i %NAME%@%VER%
 
 ## Bugs and Requests
 
-Is there a way we can make %NAME% better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues, please send an email to <%NAME%@nicolasventura.com>.
+Is there a way we can make %NAME% better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues, please send an email to <%NAME%@nicfv.com>.
 
 ## Contribute
 
