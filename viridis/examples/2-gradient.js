@@ -15,6 +15,8 @@ console.log('CSS code [45deg]: ' + RGB_Gradient.toString(45));
 console.log('Color Stops', RGB_Gradient.colors);
 
 // Generate a short list of intermediate color values
+// Gradient will automatically interpolate if given
+// a minimum and maximum bound. (1, N)
 const N = 5;
 for (let i = 1; i <= N; i++) {
     console.log(i + ' = ' + RGB_Gradient.getColor(i, 1, N));
