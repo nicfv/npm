@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Restructure test files and scripts
+- Run unit tests before every compilation
+
 ## 1.0.0
 
 - Show which test failed, as a unique number

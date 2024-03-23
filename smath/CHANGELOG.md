@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.5
+
+- Restructure test files and scripts
+- Run unit tests before every compilation
+
 ## 1.3.4
 
 - Run tests using the `exray` testing framework
