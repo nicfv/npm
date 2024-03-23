@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.13
+
+- Update tagline
+- Add `exray` as a development dependency
+- Write unit tests using `exray` framework
+- Run unit tests on build step
+
 ## 1.0.12
 
 - Fix bug where type declarations were not generated or packaged with the npm package
