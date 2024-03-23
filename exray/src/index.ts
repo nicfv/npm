@@ -11,7 +11,7 @@
  * Exceptions can be caught with
  * standard `try ... catch` blocks.
  */
-export abstract class xpt {
+export abstract class X {
     /**
      * Expect a test to return **true**.
      * @param test A test that returns a boolean result
