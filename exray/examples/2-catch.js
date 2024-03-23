@@ -10,5 +10,7 @@ try {
     // This test will fail
     X.eq(returns8(), 8);
 } catch (e) {
-    console.log(e);
+    console.log(e.message);
 }
+
+console.log('...Still processing...');

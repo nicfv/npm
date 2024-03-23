@@ -15,6 +15,7 @@ function getPrice() {
 // we will catch the exception.
 try {
     X.le(getPrice(), 40);
+    console.log('Processing item.');
 } catch (e) {
     console.log(e.message);
 }
@@ -23,6 +24,7 @@ try {
 // a custom exception message.
 try {
     X.le(getPrice(), 40, 'Price exceeded $40 limit.');
+    console.log('Processing item.');
 } catch (e) {
     console.log(e.message);
 }
