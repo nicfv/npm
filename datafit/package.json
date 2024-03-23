@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/datafit",
   "bin": "",
