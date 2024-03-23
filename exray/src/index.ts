@@ -1,8 +1,8 @@
 /**
  * @packageDocumentation
- * Expect or except!
+ * Lightweight assertion testing framework
  * 
- * Exports the public-facing API for `xpt`
+ * Exports the public-facing API for `exray`
  */
 /**
  * Lightweight framework to expect
