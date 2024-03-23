@@ -8,3 +8,9 @@ try {
 } catch (e) {
     X.is(e.message, 'Exception found in test #3! The test returned false.');
 }
+
+try {
+    X.ne(1, 1, 'Custom');
+} catch (e) {
+    X.is(e.message, 'Exception found in test #5! Custom');
+}
