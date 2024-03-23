@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.4
+
+- Run tests using the `exray` testing framework
+
 ## 1.3.3
 
 - Relative "Home" link does not work well. Changing to absolute link.
