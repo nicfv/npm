@@ -1,6 +1,6 @@
 {
   "name": "exray",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Lightweight assertion testing framework",
   "homepage": "https://npm.nicfv.com/exray",
   "bin": "",
@@ -31,8 +31,8 @@
   ],
   "author": {
     "name": "Nicolas Ventura",
-    "email": "npm@nicolasventura.com",
-    "url": "https://nicolasventura.com/"
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
   },
   "funding": {
     "type": "paypal",

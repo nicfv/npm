@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
   "bin": "dist/bin.js",
@@ -37,8 +37,8 @@
   ],
   "author": {
     "name": "Nicolas Ventura",
-    "email": "npm@nicolasventura.com",
-    "url": "https://nicolasventura.com/"
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
   },
   "funding": {
     "type": "paypal",

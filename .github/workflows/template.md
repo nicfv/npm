@@ -1,4 +1,4 @@
-[Home](../) | [Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | [Changelog](https://github.com/nicfv/npm/blob/main/%DIR%/CHANGELOG.md) | [YouTube](https://www.youtube.com/@nciv) | %DESC%
+[Home](https://npm.nicfv.com/) | [Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | [Changelog](https://github.com/nicfv/npm/blob/main/%DIR%/CHANGELOG.md) | [YouTube](https://www.youtube.com/@nciv) | %DESC%
 
 ![NPM Downloads](https://img.shields.io/npm/dt/%NAME%)
 ![NPM Version](https://img.shields.io/npm/v/%NAME%)
@@ -17,7 +17,7 @@ npm i %NAME%@%VER%
 
 ## Bugs and Requests
 
-Is there a way we can make %NAME% better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues, please send an email to <%NAME%@nicolasventura.com>.
+Is there a way we can make %NAME% better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues, please send an email to <%NAME%@nicfv.com>.
 
 ## Contribute
 

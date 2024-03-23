@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Generate data visualization color gradients",
   "homepage": "https://npm.nicfv.com/viridis",
   "bin": "",
@@ -33,8 +33,8 @@
   ],
   "author": {
     "name": "Nicolas Ventura",
-    "email": "npm@nicolasventura.com",
-    "url": "https://nicolasventura.com/"
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
   },
   "funding": {
     "type": "paypal",

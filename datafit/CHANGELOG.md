@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.3
+
+- Relative "Home" link does not work well. Changing to absolute link.
+- Update contact details.
+
 ## 1.3.2
 
 - Automate how examples are written into main readme file
