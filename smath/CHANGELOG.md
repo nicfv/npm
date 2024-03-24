@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+
+- Add `error()` function
+- Update `exray` dependency version
+
 ## 1.3.5
 
 - Restructure test files and scripts

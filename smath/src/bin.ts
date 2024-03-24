@@ -41,6 +41,7 @@ if (args.length < 1 || args[0].includes('help')) {
     console.log('                           : Normalize `n` between `min` and `max`');
     console.log('  translate <n> <min1> <max1> <min2> <max2>');
     console.log('                           : Linearly interpolate `n` from `min1`, `max1` to `min2`, `max2`');
+    console.log('  error <exp> <act>        : Calculate the normaized percent error between `exp` and `act`');
     process.exit(1);
 }
 
@@ -83,6 +84,10 @@ switch (args[0]) {
     }
     case ('translate'): {
         console.log(SMath.translate(N(1), N(2), N(3), N(4), N(5)));
+        break;
+    }
+    case ('error'): {
+        console.log(SMath.error(N(1), N(2)));
         break;
     }
     default: {

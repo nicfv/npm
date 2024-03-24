@@ -139,4 +139,13 @@ export abstract class SMath {
     public static logspace(min: number, max: number, count: number): Array<number> {
         return this.linspace(min, max, count).map(n => 10 ** n);
     }
+    /**
+     * Calculate the relative percentage error.
+     * @param experimental The value observed or produced by a test
+     * @param actual The accepted or theoretical value
+     * @returns The percent error [0-100]
+     */
+    public static error(experimental: number, actual: number): number {
+        return 100 * (experimental - actual) / actual;
+    }
 }
