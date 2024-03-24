@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+- Truncate decimal places off RGBA channels
+
 ## 1.0.13
 
 - Update tagline
