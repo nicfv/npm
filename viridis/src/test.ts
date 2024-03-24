@@ -36,8 +36,8 @@ X.is(gradient.toString(), 'linear-gradient(90deg,rgba(255,0,0,100%),rgba(0,255,0
 X.is(gradient.toString(45), 'linear-gradient(45deg,rgba(255,0,0,100%),rgba(0,255,0,100%),rgba(0,0,255,100%))');
 X.is(gradient.getColor(-1).toString(), red_RGB.toString());
 X.is(gradient.getColor(0, 10, 20).toString(), red_RGB.toString());
-X.is(gradient.getColor(0.25).toString(), 'rgba(127.5,127.5,0,100%)');
-X.is(gradient.getColor(12.5, 10, 20).toString(), 'rgba(127.5,127.5,0,100%)');
+X.is(gradient.getColor(0.25).toString(), 'rgba(127,127,0,100%)');
+X.is(gradient.getColor(12.5, 10, 20).toString(), 'rgba(127,127,0,100%)');
 X.is(gradient.getColor(0.5).toString(), 'rgba(0,255,0,100%)');
 X.is(gradient.getColor(15, 10, 20).toString(), 'rgba(0,255,0,100%)');
 X.is(gradient.getColor(2).toString(), 'rgba(0,0,255,100%)');

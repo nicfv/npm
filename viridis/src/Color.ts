@@ -16,10 +16,10 @@ export class Color {
      * ```
      */
     constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha: number = 100) {
-        this.red = SMath.clamp(red, 0, 255);
-        this.green = SMath.clamp(green, 0, 255);
-        this.blue = SMath.clamp(blue, 0, 255);
-        this.alpha = SMath.clamp(alpha, 0, 100);
+        this.red = SMath.clamp(red, 0, 255) | 0;
+        this.green = SMath.clamp(green, 0, 255) | 0;
+        this.blue = SMath.clamp(blue, 0, 255) | 0;
+        this.alpha = SMath.clamp(alpha, 0, 100) | 0;
     }
     /**
      * Return the most contrasting color for
