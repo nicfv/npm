@@ -4,6 +4,7 @@
 
 - Add `error()` function
 - Update `exray` dependency version
+- Add documentation on `npx smath` executables
 
 ## 1.3.5
 
