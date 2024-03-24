@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.0
+
+- Update `smath` dependency
+- Install `exray` dependency
+- Write unit tests using `exray` framework
+- Update build script to run unit tests automatically
+- Update `Summary.f` type to only accept 1 parameter
+
 ## 1.3.4
 
 - Fix bug where type declarations were not generated or packaged with the npm package
