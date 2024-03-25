@@ -140,12 +140,21 @@ export abstract class SMath {
         return this.linspace(min, max, count).map(n => 10 ** n);
     }
     /**
-     * Calculate the relative percentage error.
+     * Calculate the relative normalized error or deviation from any
+     * value to an accepted value. An error of 0 indicates that the
+     * two values are identical. An error of -0.1 indicates that the
+     * experimental value is 10% smaller than (90% of) the accepted
+     * value. An error of 1.0 indicates that the experimental value
+     * is 100% greater (or twice the size) of the accepted value.
      * @param experimental The value observed or produced by a test
      * @param actual The accepted or theoretical value
-     * @returns The percent error [0-100]
+     * @returns The relative (normalized) error
+     * @example
+     * ```js
+     * const error = SMath.error(22.5, 25); // -0.1
+     * ```
      */
     public static error(experimental: number, actual: number): number {
-        return 100 * (experimental - actual) / actual;
+        return (experimental - actual) / actual;
     }
 }

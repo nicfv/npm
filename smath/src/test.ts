@@ -47,7 +47,7 @@ X.lt(SMath.logspace(0, 2, 5)[3], 31.623);
 X.is(SMath.logspace(2, -2, 5).join(), '100,10,1,0.1,0.01');
 X.is(SMath.logspace(0, 0, -1).join(), '');
 
-X.eq(SMath.error(9, 10), -10);
-X.eq(SMath.error(11, 10), 10);
-X.eq(SMath.error(-1, 2), -150);
-X.eq(SMath.error(2.5, 2), 25);
+X.eq(SMath.error(9, 10), -0.1);
+X.eq(SMath.error(11, 10), 0.1);
+X.eq(SMath.error(-1, 2), -1.5);
+X.eq(SMath.error(2.5, 2), 0.25);
