@@ -1,9 +1,15 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
+X.eq(SMath.sum(1), 1);
+X.eq(SMath.sum(1, 2), 3);
+X.eq(SMath.sum(1, 2, 3), 6);
+X.eq(SMath.sum(1, 2, 3, 4), 10);
+
 X.eq(SMath.avg(1), 1);
-X.eq(SMath.avg(1, 3), 2);
+X.eq(SMath.avg(1, 2), 1.5);
 X.eq(SMath.avg(1, 2, 3), 2);
+X.eq(SMath.avg(1, 2, 3, 4), 2.5);
 
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));
