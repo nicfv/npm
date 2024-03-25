@@ -10,6 +10,30 @@
  */
 export abstract class SMath {
     /**
+     * Add up all the inputs.
+     * @param n Any amount of numeric inputs
+     * @returns The sum total
+     * @example
+     * ```js
+     * const sum = SMath.sum(1, 2, 3); // 6
+     * ```
+     */
+    public static sum(...n: Array<number>): number {
+        return n.reduce((a, b) => a + b);
+    }
+    /**
+     * Multiply all the inputs.
+     * @param n Any amount of numeric inputs
+     * @returns The product
+     * @example
+     * ```js
+     * const prod = SMath.prod(2, 2, 3, 5); // 60
+     * ```
+     */
+    public static prod(...n: Array<number>): number {
+        return n.reduce((a, b) => a * b);
+    }
+    /**
      * Compute the average, or mean, of a set of numbers.
      * @param n Any amount of numeric inputs
      * @returns The average, or mean
@@ -19,7 +43,7 @@ export abstract class SMath {
      * ```
      */
     public static avg(...n: Array<number>): number {
-        return n.reduce((prev, curr) => prev + curr) / n.length;
+        return this.sum(...n) / n.length;
     }
     /**
      * Compute the variance of a **complete population**.
