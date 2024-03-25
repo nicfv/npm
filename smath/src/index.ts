@@ -57,8 +57,9 @@ export abstract class SMath {
      * ```
      */
     public static pvar(...n: Array<number>): number {
-        const mean: number = this.avg(...n);
-        return n.reduce((prev, curr) => prev + (curr - mean) ** 2) / n.length;
+        const mean: number = this.avg(...n),
+            squares: Array<number> = n.map(x => (x - mean) ** 2);
+        return this.sum(...squares) / n.length;
     }
     /**
      * Compute the variance of a **sample**.
@@ -70,8 +71,9 @@ export abstract class SMath {
      * ```
      */
     public static svar(...n: Array<number>): number {
-        const mean: number = this.avg(...n);
-        return n.reduce((prev, curr) => prev + (curr - mean) ** 2) / (n.length - 1);
+        const mean: number = this.avg(...n),
+            squares: Array<number> = n.map(x => (x - mean) ** 2);
+        return this.sum(...squares) / (n.length - 1);
     }
     /**
      * Clamp a number within a range.

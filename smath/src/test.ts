@@ -18,6 +18,10 @@ X.eq(SMath.avg(1, 2), 1.5);
 X.eq(SMath.avg(1, 2, 3), 2);
 X.eq(SMath.avg(1, 2, 3, 4), 2.5);
 
+X.gt(SMath.svar(1, 2, 3, 4), 1.66); // 1.666...
+X.lt(SMath.svar(1, 2, 3, 4), 1.67);
+X.eq(SMath.pvar(1, 2, 3, 4), 1.25);
+
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));
 X.true(SMath.approx(1 + 1e-7, 1));
