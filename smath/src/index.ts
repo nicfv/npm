@@ -184,8 +184,3 @@ export abstract class SMath {
         return (experimental - actual) / actual;
     }
 }
-
-const pvar = SMath.pvar(1, 2, 3, 4);
-console.log(pvar);
-const svar = SMath.svar(1, 2, 3, 4);
-console.log(svar);
