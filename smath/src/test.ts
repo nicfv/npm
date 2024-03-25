@@ -1,6 +1,10 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
+X.eq(SMath.avg(1), 1);
+X.eq(SMath.avg(1, 3), 2);
+X.eq(SMath.avg(1, 2, 3), 2);
+
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));
 X.true(SMath.approx(1 + 1e-7, 1));
@@ -11,10 +15,6 @@ X.false(SMath.approx(1 + 1e-7, 1, 1e-8));
 X.false(SMath.approx(1 - 1e-7, 1, 1e-8));
 X.true(SMath.approx(1 + 1e-5, 1, 1e-4));
 X.true(SMath.approx(1 - 1e-5, 1, 1e-4));
-
-X.eq(SMath.avg(1), 1);
-X.eq(SMath.avg(1, 3), 2);
-X.eq(SMath.avg(1, 2, 3), 2);
 
 X.eq(SMath.clamp(4, 2, 6), 4);
 X.eq(SMath.clamp(1, 2, 6), 2);
