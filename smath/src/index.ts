@@ -22,6 +22,32 @@ export abstract class SMath {
         return n.reduce((prev, curr) => prev + curr) / n.length;
     }
     /**
+     * Compute the variance of a **complete population**.
+     * @param n Any amount of numeric inputs
+     * @returns The population variance
+     * @example
+     * ```js
+     * const pvar = SMath.pvar(1, 2, 3, 4); // 0.9375
+     * ```
+     */
+    public static pvar(...n: Array<number>): number {
+        const mean: number = this.avg(...n);
+        return n.reduce((prev, curr) => prev + (curr - mean) ** 2) / n.length;
+    }
+    /**
+     * Compute the variance of a **sample**.
+     * @param n Any amount of numeric inputs
+     * @returns The sample variance
+     * @example
+     * ```js
+     * const svar = SMath.svar(1, 2, 3, 4); // 1.25
+     * ```
+     */
+    public static svar(...n: Array<number>): number {
+        const mean: number = this.avg(...n);
+        return n.reduce((prev, curr) => prev + (curr - mean) ** 2) / (n.length - 1);
+    }
+    /**
      * Clamp a number within a range.
      * @param n The number to clamp
      * @param min The minimum value of the range
@@ -158,3 +184,8 @@ export abstract class SMath {
         return (experimental - actual) / actual;
     }
 }
+
+const pvar = SMath.pvar(1, 2, 3, 4);
+console.log(pvar);
+const svar = SMath.svar(1, 2, 3, 4);
+console.log(svar);
