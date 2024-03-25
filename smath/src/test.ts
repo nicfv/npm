@@ -1,10 +1,17 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
+X.eq(SMath.sum(), 0);
 X.eq(SMath.sum(1), 1);
 X.eq(SMath.sum(1, 2), 3);
 X.eq(SMath.sum(1, 2, 3), 6);
 X.eq(SMath.sum(1, 2, 3, 4), 10);
+
+X.eq(SMath.prod(), 1);
+X.eq(SMath.prod(1), 1);
+X.eq(SMath.prod(1, 2), 2);
+X.eq(SMath.prod(1, 2, 3), 6);
+X.eq(SMath.prod(1, 2, 3, 4), 24);
 
 X.eq(SMath.avg(1), 1);
 X.eq(SMath.avg(1, 2), 1.5);
