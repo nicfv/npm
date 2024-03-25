@@ -192,6 +192,26 @@ export abstract class SMath {
         return this.linspace(min, max, count).map(n => 10 ** n);
     }
     /**
+     * Compute the factorial of `n`.
+     * @param n Any positive integer
+     * @returns `n!`
+     * @example
+     * ```js
+     * const factorial = SMath.factorial(5); // 120
+     * ```
+     */
+    public static factorial(n: number): number {
+        if (n < 0 || (n | 0) !== n) {
+            throw new Error('Input must be a positive integer.');
+        } else if (n === 0) {
+            return 0;
+        } else if (n <= 2) {
+            return n;
+        } else {
+            return n * this.factorial(n - 1);
+        }
+    }
+    /**
      * Calculate the relative normalized error or deviation from any
      * value to an accepted value. An error of 0 indicates that the
      * two values are identical. An error of -0.1 indicates that the
