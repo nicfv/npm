@@ -11,6 +11,7 @@
 export abstract class SMath {
     /**
      * Add up all the inputs.
+     * If none are present, returns 0.
      * @param n Any amount of numeric inputs
      * @returns The sum total
      * @example
@@ -19,10 +20,11 @@ export abstract class SMath {
      * ```
      */
     public static sum(...n: Array<number>): number {
-        return n.reduce((a, b) => a + b);
+        return n.reduce((a, b) => a + b, 0);
     }
     /**
      * Multiply all the inputs.
+     * If none are present, returns 1.
      * @param n Any amount of numeric inputs
      * @returns The product
      * @example
@@ -31,7 +33,7 @@ export abstract class SMath {
      * ```
      */
     public static prod(...n: Array<number>): number {
-        return n.reduce((a, b) => a * b);
+        return n.reduce((a, b) => a * b, 1);
     }
     /**
      * Compute the average, or mean, of a set of numbers.
