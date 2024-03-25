@@ -51,7 +51,7 @@ export abstract class SMath {
      * @returns The population variance
      * @example
      * ```js
-     * const pvar = SMath.pvar(1, 2, 3, 4); // 0.9375
+     * const pvar = SMath.pvar(1, 2, 3, 4); // TODO: UPDATE AND WRITE TESTS
      * ```
      */
     public static pvar(...n: Array<number>): number {
@@ -64,7 +64,7 @@ export abstract class SMath {
      * @returns The sample variance
      * @example
      * ```js
-     * const svar = SMath.svar(1, 2, 3, 4); // 1.25
+     * const svar = SMath.svar(1, 2, 3, 4); // TODO
      * ```
      */
     public static svar(...n: Array<number>): number {
