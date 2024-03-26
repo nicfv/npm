@@ -103,12 +103,11 @@ switch (func) {
         break;
     }
     case (''): {
-        console.log('Missing argument.');
-        break;
+        console.error('Missing argument. Use with "help" for a list of commands.');
+        process.exit(1);
     }
     default: {
-        console.error('Unknown argument "' + func + '".');
-        break;
+        console.error('Unknown argument "' + func + '". Use with "help" for a list of commands.');
+        process.exit(1);
     }
 }
-console.log('Use with "help" for a list of commands.');
