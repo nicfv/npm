@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Make note of using `devDependency`
+
 ## 1.0.1
 
 - Restructure test files and scripts

@@ -40,7 +40,7 @@ export interface Summary<T extends VariableType> {
     /**
      * The model with best-fit parameters applied.
      */
-    readonly f: F<T>;
+    readonly f: (x: T) => number;
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */

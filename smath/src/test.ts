@@ -1,6 +1,27 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
+X.eq(SMath.sum(), 0);
+X.eq(SMath.sum(1), 1);
+X.eq(SMath.sum(1, 2), 3);
+X.eq(SMath.sum(1, 2, 3), 6);
+X.eq(SMath.sum(1, 2, 3, 4), 10);
+
+X.eq(SMath.prod(), 1);
+X.eq(SMath.prod(1), 1);
+X.eq(SMath.prod(1, 2), 2);
+X.eq(SMath.prod(1, 2, 3), 6);
+X.eq(SMath.prod(1, 2, 3, 4), 24);
+
+X.eq(SMath.avg(1), 1);
+X.eq(SMath.avg(1, 2), 1.5);
+X.eq(SMath.avg(1, 2, 3), 2);
+X.eq(SMath.avg(1, 2, 3, 4), 2.5);
+
+X.gt(SMath.svar(1, 2, 3, 4), 1.66); // 1.666...
+X.lt(SMath.svar(1, 2, 3, 4), 1.67);
+X.eq(SMath.pvar(1, 2, 3, 4), 1.25);
+
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));
 X.true(SMath.approx(1 + 1e-7, 1));
@@ -11,10 +32,6 @@ X.false(SMath.approx(1 + 1e-7, 1, 1e-8));
 X.false(SMath.approx(1 - 1e-7, 1, 1e-8));
 X.true(SMath.approx(1 + 1e-5, 1, 1e-4));
 X.true(SMath.approx(1 - 1e-5, 1, 1e-4));
-
-X.eq(SMath.avg(1), 1);
-X.eq(SMath.avg(1, 3), 2);
-X.eq(SMath.avg(1, 2, 3), 2);
 
 X.eq(SMath.clamp(4, 2, 6), 4);
 X.eq(SMath.clamp(1, 2, 6), 2);
@@ -46,3 +63,8 @@ X.gt(SMath.logspace(0, 2, 5)[3], 31.622); // Approx 31.6227766...
 X.lt(SMath.logspace(0, 2, 5)[3], 31.623);
 X.is(SMath.logspace(2, -2, 5).join(), '100,10,1,0.1,0.01');
 X.is(SMath.logspace(0, 0, -1).join(), '');
+
+X.eq(SMath.error(9, 10), -0.1);
+X.eq(SMath.error(11, 10), 0.1);
+X.eq(SMath.error(-1, 2), -1.5);
+X.eq(SMath.error(2.5, 2), 0.25);

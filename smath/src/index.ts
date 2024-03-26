@@ -10,6 +10,32 @@
  */
 export abstract class SMath {
     /**
+     * Add up all the inputs.
+     * If none are present, returns 0.
+     * @param n Any amount of numeric inputs
+     * @returns The sum total
+     * @example
+     * ```js
+     * const sum = SMath.sum(1, 2, 3); // 6
+     * ```
+     */
+    public static sum(...n: Array<number>): number {
+        return n.reduce((a, b) => a + b, 0);
+    }
+    /**
+     * Multiply all the inputs.
+     * If none are present, returns 1.
+     * @param n Any amount of numeric inputs
+     * @returns The product
+     * @example
+     * ```js
+     * const prod = SMath.prod(2, 2, 3, 5); // 60
+     * ```
+     */
+    public static prod(...n: Array<number>): number {
+        return n.reduce((a, b) => a * b, 1);
+    }
+    /**
      * Compute the average, or mean, of a set of numbers.
      * @param n Any amount of numeric inputs
      * @returns The average, or mean
@@ -19,7 +45,35 @@ export abstract class SMath {
      * ```
      */
     public static avg(...n: Array<number>): number {
-        return n.reduce((prev, curr) => prev + curr) / n.length;
+        return this.sum(...n) / n.length;
+    }
+    /**
+     * Compute the variance of a **complete population**.
+     * @param n Any amount of numeric inputs
+     * @returns The population variance
+     * @example
+     * ```js
+     * const pvar = SMath.pvar(1, 2, 3, 4); // 1.25
+     * ```
+     */
+    public static pvar(...n: Array<number>): number {
+        const mean: number = this.avg(...n),
+            squares: Array<number> = n.map(x => (x - mean) ** 2);
+        return this.sum(...squares) / n.length;
+    }
+    /**
+     * Compute the variance of a **sample**.
+     * @param n Any amount of numeric inputs
+     * @returns The sample variance
+     * @example
+     * ```js
+     * const svar = SMath.svar(1, 2, 3, 4); // 1.666...
+     * ```
+     */
+    public static svar(...n: Array<number>): number {
+        const mean: number = this.avg(...n),
+            squares: Array<number> = n.map(x => (x - mean) ** 2);
+        return this.sum(...squares) / (n.length - 1);
     }
     /**
      * Clamp a number within a range.
@@ -138,5 +192,43 @@ export abstract class SMath {
      */
     public static logspace(min: number, max: number, count: number): Array<number> {
         return this.linspace(min, max, count).map(n => 10 ** n);
+    }
+    /**
+     * Compute the factorial of `n`.
+     * @param n Any positive integer
+     * @returns `n!`
+     * @example
+     * ```js
+     * const factorial = SMath.factorial(5); // 120
+     * ```
+     */
+    public static factorial(n: number): number {
+        if (n < 0 || (n | 0) !== n) {
+            throw new Error('Input must be a positive integer.');
+        } else if (n === 0) {
+            return 0;
+        } else if (n <= 2) {
+            return n;
+        } else {
+            return n * this.factorial(n - 1);
+        }
+    }
+    /**
+     * Calculate the relative normalized error or deviation from any
+     * value to an accepted value. An error of 0 indicates that the
+     * two values are identical. An error of -0.1 indicates that the
+     * experimental value is 10% smaller than (90% of) the accepted
+     * value. An error of 1.0 indicates that the experimental value
+     * is 100% greater (or twice the size) of the accepted value.
+     * @param experimental The value observed or produced by a test
+     * @param actual The accepted or theoretical value
+     * @returns The relative (normalized) error
+     * @example
+     * ```js
+     * const error = SMath.error(22.5, 25); // -0.1
+     * ```
+     */
+    public static error(experimental: number, actual: number): number {
+        return (experimental - actual) / actual;
     }
 }
