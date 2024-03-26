@@ -22,14 +22,14 @@ X.eq(SMath.avg([1, 2, 3, 4]), 2.5);
 const ds1: Array<number> = [1, 2, 3, 4],
     ds2: Array<number> = [-3, 0, 1, 1, 2];
 
-X.eq(SMath.pvar(ds1), 1.25);
-X.gt(SMath.pvar(ds2), 2.95); // 2.96
-X.lt(SMath.pvar(ds2), 2.97);
+X.eq(SMath.varp(ds1), 1.25);
+X.gt(SMath.varp(ds2), 2.95); // 2.96
+X.lt(SMath.varp(ds2), 2.97);
 
-X.gt(SMath.svar(ds1), 1.66); // 1.666...
-X.lt(SMath.svar(ds1), 1.67);
-X.gt(SMath.svar(ds2), 3.69); // 3.7
-X.lt(SMath.svar(ds2), 3.71);
+X.gt(SMath.vars(ds1), 1.66); // 1.666...
+X.lt(SMath.vars(ds1), 1.67);
+X.gt(SMath.vars(ds2), 3.69); // 3.7
+X.lt(SMath.vars(ds2), 3.71);
 
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));

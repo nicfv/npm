@@ -56,7 +56,7 @@ export abstract class SMath {
      * const pvar = SMath.pvar(1, 2, 3, 4); // 1.25
      * ```
      */
-    public static pvar(n: Array<number>): number {
+    public static varp(n: Array<number>): number {
         const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
         return this.sum(squares) / n.length;
@@ -70,7 +70,7 @@ export abstract class SMath {
      * const svar = SMath.svar(1, 2, 3, 4); // 1.666...
      * ```
      */
-    public static svar(n: Array<number>): number {
+    public static vars(n: Array<number>): number {
         const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
         return this.sum(squares) / (n.length - 1);
