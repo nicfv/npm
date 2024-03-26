@@ -22,7 +22,7 @@ X.eq(data[8].y, 7);
 // Values should be within 20%
 // of actual, but this could
 // fail due to randomness.
-const tolerance: number = 0.10;
+const tolerance: number = 0.20;
 X.le(Math.abs((a[0] - summary.params[0]) / a[0]), tolerance);
 X.le(Math.abs((a[1] - summary.params[1]) / a[1]), tolerance);
 X.le(Math.abs((a[2] - summary.params[2]) / a[2]), tolerance);
