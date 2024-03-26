@@ -24,7 +24,6 @@ if (func.includes('help')) {
     console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
     console.log('  stdevp <c0> [c1] ... [cn]: Compute the population standard deviation of `n` numbers');
     console.log('  stdevs <c0> [c1] ... [cn]: Compute the sample standard deviation of `n` numbers');
-    console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
     console.log('  approx <a> <b> [eps]     : Check if `a` and `b` are approximately equal');
     console.log('  clamp <n> <min> <max>    : Clamp `n` between `min` and `max`');
     console.log('  expand <n> <min> <max>   : Expand normalized `n` between `min` and `max`');
