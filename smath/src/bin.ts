@@ -59,7 +59,7 @@ switch (args[0]) {
         for (let i = 1; i < args.length; i++) {
             operands.push(N(i));
         }
-        console.log(SMath.avg(...operands));
+        console.log(SMath.avg(operands));
         break;
     }
     case ('clamp'): {

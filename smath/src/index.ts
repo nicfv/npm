@@ -19,7 +19,7 @@ export abstract class SMath {
      * const sum = SMath.sum(1, 2, 3); // 6
      * ```
      */
-    public static sum(...n: Array<number>): number {
+    public static sum(n: Array<number>): number {
         return n.reduce((a, b) => a + b, 0);
     }
     /**
@@ -32,7 +32,7 @@ export abstract class SMath {
      * const prod = SMath.prod(2, 2, 3, 5); // 60
      * ```
      */
-    public static prod(...n: Array<number>): number {
+    public static prod(n: Array<number>): number {
         return n.reduce((a, b) => a * b, 1);
     }
     /**
@@ -44,8 +44,8 @@ export abstract class SMath {
      * const mean = SMath.avg(1, 2, 3, 4); // 2.5
      * ```
      */
-    public static avg(...n: Array<number>): number {
-        return this.sum(...n) / n.length;
+    public static avg(n: Array<number>): number {
+        return this.sum(n) / n.length;
     }
     /**
      * Compute the variance of a **complete population**.
@@ -56,10 +56,10 @@ export abstract class SMath {
      * const pvar = SMath.pvar(1, 2, 3, 4); // 1.25
      * ```
      */
-    public static pvar(...n: Array<number>): number {
-        const mean: number = this.avg(...n),
+    public static pvar(n: Array<number>): number {
+        const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(...squares) / n.length;
+        return this.sum(squares) / n.length;
     }
     /**
      * Compute the variance of a **sample**.
@@ -70,10 +70,10 @@ export abstract class SMath {
      * const svar = SMath.svar(1, 2, 3, 4); // 1.666...
      * ```
      */
-    public static svar(...n: Array<number>): number {
-        const mean: number = this.avg(...n),
+    public static svar(n: Array<number>): number {
+        const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(...squares) / (n.length - 1);
+        return this.sum(squares) / (n.length - 1);
     }
     /**
      * Clamp a number within a range.
@@ -206,7 +206,7 @@ export abstract class SMath {
         if (n < 0 || (n | 0) !== n) {
             throw new Error('Input must be a positive integer.');
         } else if (n === 0) {
-            return 0;
+            return 1;
         } else if (n <= 2) {
             return n;
         } else {
