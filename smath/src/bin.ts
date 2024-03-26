@@ -22,13 +22,15 @@ if (func.includes('help')) {
     console.log('  avg <c0> [c1] ... [cn]   : Take an average of `n` numbers');
     console.log('  varp <c0> [c1] ... [cn]  : Compute the population variance of `n` numbers');
     console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
+    console.log('  stdevp <c0> [c1] ... [cn]: Compute the population standard deviation of `n` numbers');
+    console.log('  stdevs <c0> [c1] ... [cn]: Compute the sample standard deviation of `n` numbers');
+    console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
     console.log('  approx <a> <b> [eps]     : Check if `a` and `b` are approximately equal');
     console.log('  clamp <n> <min> <max>    : Clamp `n` between `min` and `max`');
     console.log('  expand <n> <min> <max>   : Expand normalized `n` between `min` and `max`');
     console.log('  linspace <min> <max> <n> : Generate `n` linearly spaced numbers between `min` and `max`');
     console.log('  logspace <min> <max> <n> : Generate `n` logarithmically spaced numbers between `min` and `max`');
-    console.log('  normalize <n> <min> <max>');
-    console.log('                           : Normalize `n` between `min` and `max`');
+    console.log('  normalize <n> <min> <max>: Normalize `n` between `min` and `max`');
     console.log('  translate <n> <min1> <max1> <min2> <max2>');
     console.log('                           : Linearly interpolate `n` from `min1`, `max1` to `min2`, `max2`');
     console.log('  factorial <n>            : Compute `n!` (factorial)');
@@ -55,6 +57,14 @@ switch (func) {
     }
     case ('vars'): {
         console.log(SMath.vars(nums));
+        break;
+    }
+    case ('stdevp'): {
+        console.log(SMath.stdevp(nums));
+        break;
+    }
+    case ('stdevs'): {
+        console.log(SMath.stdevs(nums));
         break;
     }
     case ('approx'): {
