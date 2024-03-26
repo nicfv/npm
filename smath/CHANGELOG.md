@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.0
+
+- Change spread syntax parameters to a single array parameter
+- Update `exray` dependency version
+- Update tsdoc examples
+- Fix bug in `factorial()`
+- Write tests for new functions
+- Add all missing functions to `npx`
+
 ## 1.4.0
 
 - Add `error()` function
