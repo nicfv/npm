@@ -2,7 +2,7 @@
 
 import { SMath } from '.';
 
-const func: string = process.argv[2].toLowerCase(),
+const func: string = (process.argv[2] ?? '').toLowerCase(),
     nums: Array<number> = process.argv.slice(3).map((arg, i) => {
         const num: number = Number.parseFloat(arg);
         if (Number.isFinite(num)) {
@@ -102,8 +102,13 @@ switch (func) {
         console.log(SMath.error(nums[0], nums[1]));
         break;
     }
+    case (''): {
+        console.log('Missing argument.');
+        break;
+    }
     default: {
-        console.error('Unknown argument "' + func + '". Use with "help" for a list of commands.');
-        process.exit(1);
+        console.error('Unknown argument "' + func + '".');
+        break;
     }
 }
+console.log('Use with "help" for a list of commands.');
