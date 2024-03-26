@@ -4,6 +4,8 @@
 
 - Add `stdevp()` and `stdevs()`
 - Minor fixes in tsdoc
+- Fix bug in `npx` where it would crash with 0 arguments
+- Warn for missing arguments in `npx`
 
 ## 1.5.0
 
