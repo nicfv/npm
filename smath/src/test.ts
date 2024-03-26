@@ -1,26 +1,35 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
-X.eq(SMath.sum(), 0);
-X.eq(SMath.sum(1), 1);
-X.eq(SMath.sum(1, 2), 3);
-X.eq(SMath.sum(1, 2, 3), 6);
-X.eq(SMath.sum(1, 2, 3, 4), 10);
+X.eq(SMath.sum([]), 0);
+X.eq(SMath.sum([1]), 1);
+X.eq(SMath.sum([1, 2]), 3);
+X.eq(SMath.sum([1, 2, 3]), 6);
+X.eq(SMath.sum([1, 2, 3, 4]), 10);
 
-X.eq(SMath.prod(), 1);
-X.eq(SMath.prod(1), 1);
-X.eq(SMath.prod(1, 2), 2);
-X.eq(SMath.prod(1, 2, 3), 6);
-X.eq(SMath.prod(1, 2, 3, 4), 24);
+X.eq(SMath.prod([]), 1);
+X.eq(SMath.prod([1]), 1);
+X.eq(SMath.prod([1, 2]), 2);
+X.eq(SMath.prod([1, 2, 3]), 6);
+X.eq(SMath.prod([1, 2, 3, 4]), 24);
 
-X.eq(SMath.avg(1), 1);
-X.eq(SMath.avg(1, 2), 1.5);
-X.eq(SMath.avg(1, 2, 3), 2);
-X.eq(SMath.avg(1, 2, 3, 4), 2.5);
+X.is(SMath.avg([]).toString(), 'NaN');
+X.eq(SMath.avg([1]), 1);
+X.eq(SMath.avg([1, 2]), 1.5);
+X.eq(SMath.avg([1, 2, 3]), 2);
+X.eq(SMath.avg([1, 2, 3, 4]), 2.5);
 
-X.gt(SMath.svar(1, 2, 3, 4), 1.66); // 1.666...
-X.lt(SMath.svar(1, 2, 3, 4), 1.67);
-X.eq(SMath.pvar(1, 2, 3, 4), 1.25);
+const ds1: Array<number> = [1, 2, 3, 4],
+    ds2: Array<number> = [-3, 0, 1, 1, 2];
+
+X.eq(SMath.varp(ds1), 1.25);
+X.gt(SMath.varp(ds2), 2.95); // 2.96
+X.lt(SMath.varp(ds2), 2.97);
+
+X.gt(SMath.vars(ds1), 1.66); // 1.666...
+X.lt(SMath.vars(ds1), 1.67);
+X.gt(SMath.vars(ds2), 3.69); // 3.7
+X.lt(SMath.vars(ds2), 3.71);
 
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));
@@ -63,6 +72,13 @@ X.gt(SMath.logspace(0, 2, 5)[3], 31.622); // Approx 31.6227766...
 X.lt(SMath.logspace(0, 2, 5)[3], 31.623);
 X.is(SMath.logspace(2, -2, 5).join(), '100,10,1,0.1,0.01');
 X.is(SMath.logspace(0, 0, -1).join(), '');
+
+X.eq(SMath.factorial(0), 1);
+X.eq(SMath.factorial(1), 1);
+X.eq(SMath.factorial(2), 2);
+X.eq(SMath.factorial(3), 6);
+X.eq(SMath.factorial(4), 24);
+X.eq(SMath.factorial(5), 120);
 
 X.eq(SMath.error(9, 10), -0.1);
 X.eq(SMath.error(11, 10), 0.1);

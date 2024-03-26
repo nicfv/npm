@@ -16,10 +16,10 @@ export abstract class SMath {
      * @returns The sum total
      * @example
      * ```js
-     * const sum = SMath.sum(1, 2, 3); // 6
+     * const y = SMath.sum([1, 2, 3]); // 6
      * ```
      */
-    public static sum(...n: Array<number>): number {
+    public static sum(n: Array<number>): number {
         return n.reduce((a, b) => a + b, 0);
     }
     /**
@@ -29,10 +29,10 @@ export abstract class SMath {
      * @returns The product
      * @example
      * ```js
-     * const prod = SMath.prod(2, 2, 3, 5); // 60
+     * const y = SMath.prod([2, 2, 3, 5]); // 60
      * ```
      */
-    public static prod(...n: Array<number>): number {
+    public static prod(n: Array<number>): number {
         return n.reduce((a, b) => a * b, 1);
     }
     /**
@@ -41,11 +41,11 @@ export abstract class SMath {
      * @returns The average, or mean
      * @example
      * ```js
-     * const mean = SMath.avg(1, 2, 3, 4); // 2.5
+     * const y = SMath.avg([1, 2, 4, 4]); // 2.75
      * ```
      */
-    public static avg(...n: Array<number>): number {
-        return this.sum(...n) / n.length;
+    public static avg(n: Array<number>): number {
+        return this.sum(n) / n.length;
     }
     /**
      * Compute the variance of a **complete population**.
@@ -53,13 +53,13 @@ export abstract class SMath {
      * @returns The population variance
      * @example
      * ```js
-     * const pvar = SMath.pvar(1, 2, 3, 4); // 1.25
+     * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
      * ```
      */
-    public static pvar(...n: Array<number>): number {
-        const mean: number = this.avg(...n),
+    public static varp(n: Array<number>): number {
+        const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(...squares) / n.length;
+        return this.sum(squares) / n.length;
     }
     /**
      * Compute the variance of a **sample**.
@@ -67,13 +67,28 @@ export abstract class SMath {
      * @returns The sample variance
      * @example
      * ```js
-     * const svar = SMath.svar(1, 2, 3, 4); // 1.666...
+     * const y = SMath.vars([1, 2, 4, 4]); // 2.25
      * ```
      */
-    public static svar(...n: Array<number>): number {
-        const mean: number = this.avg(...n),
+    public static vars(n: Array<number>): number {
+        const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(...squares) / (n.length - 1);
+        return this.sum(squares) / (n.length - 1);
+    }
+    /**
+     * Check if two numbers are approximately equal with a maximum abolute error.
+     * @param a Any number
+     * @param b Any number
+     * @param epsilon Maximum absolute error
+     * @returns True if `a` is approximately `b`
+     * @example
+     * ```js
+     * const b1 = SMath.approx(1 / 3, 0.33, 1e-6), // false
+     *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
+     * ```
+     */
+    public static approx(a: number, b: number, epsilon: number = 1e-6): boolean {
+        return a - b < epsilon && b - a < epsilon;
     }
     /**
      * Clamp a number within a range.
@@ -95,21 +110,6 @@ export abstract class SMath {
             return max;
         }
         return n;
-    }
-    /**
-     * Check if two numbers are approximately equal with a maximum abolute error.
-     * @param a Any number
-     * @param b Any number
-     * @param epsilon Maximum absolute error
-     * @returns True if `a` is approximately `b`
-     * @example
-     * ```js
-     * const b1 = SMath.approx(1 / 3, 0.33, 1e-6), // false
-     *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
-     * ```
-     */
-    public static approx(a: number, b: number, epsilon: number = 1e-6): boolean {
-        return a - b < epsilon && b - a < epsilon;
     }
     /**
      * Normalize the number `n` from the range `min, max` to the range `0, 1`
@@ -199,14 +199,14 @@ export abstract class SMath {
      * @returns `n!`
      * @example
      * ```js
-     * const factorial = SMath.factorial(5); // 120
+     * const y = SMath.factorial(5); // 120
      * ```
      */
     public static factorial(n: number): number {
         if (n < 0 || (n | 0) !== n) {
             throw new Error('Input must be a positive integer.');
         } else if (n === 0) {
-            return 0;
+            return 1;
         } else if (n <= 2) {
             return n;
         } else {
@@ -225,7 +225,7 @@ export abstract class SMath {
      * @returns The relative (normalized) error
      * @example
      * ```js
-     * const error = SMath.error(22.5, 25); // -0.1
+     * const e = SMath.error(22.5, 25); // -0.1
      * ```
      */
     public static error(experimental: number, actual: number): number {
