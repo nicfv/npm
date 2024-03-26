@@ -48,7 +48,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "20.11.30",
-    "exray": "1.0.1",
+    "exray": "1.0.2",
     "typedoc": "0.25.12",
     "typescript": "5.4.3"
   }
