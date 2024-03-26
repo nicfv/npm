@@ -76,6 +76,21 @@ export abstract class SMath {
         return this.sum(squares) / (n.length - 1);
     }
     /**
+     * Check if two numbers are approximately equal with a maximum abolute error.
+     * @param a Any number
+     * @param b Any number
+     * @param epsilon Maximum absolute error
+     * @returns True if `a` is approximately `b`
+     * @example
+     * ```js
+     * const b1 = SMath.approx(1 / 3, 0.33, 1e-6), // false
+     *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
+     * ```
+     */
+    public static approx(a: number, b: number, epsilon: number = 1e-6): boolean {
+        return a - b < epsilon && b - a < epsilon;
+    }
+    /**
      * Clamp a number within a range.
      * @param n The number to clamp
      * @param min The minimum value of the range
@@ -95,21 +110,6 @@ export abstract class SMath {
             return max;
         }
         return n;
-    }
-    /**
-     * Check if two numbers are approximately equal with a maximum abolute error.
-     * @param a Any number
-     * @param b Any number
-     * @param epsilon Maximum absolute error
-     * @returns True if `a` is approximately `b`
-     * @example
-     * ```js
-     * const b1 = SMath.approx(1 / 3, 0.33, 1e-6), // false
-     *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
-     * ```
-     */
-    public static approx(a: number, b: number, epsilon: number = 1e-6): boolean {
-        return a - b < epsilon && b - a < epsilon;
     }
     /**
      * Normalize the number `n` from the range `min, max` to the range `0, 1`
