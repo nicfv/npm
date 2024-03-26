@@ -12,7 +12,7 @@ export abstract class SMath {
     /**
      * Add up all the inputs.
      * If none are present, returns 0.
-     * @param n Any amount of numeric inputs
+     * @param n An array of numeric inputs
      * @returns The sum total
      * @example
      * ```js
@@ -25,7 +25,7 @@ export abstract class SMath {
     /**
      * Multiply all the inputs.
      * If none are present, returns 1.
-     * @param n Any amount of numeric inputs
+     * @param n An array of numeric inputs
      * @returns The product
      * @example
      * ```js
@@ -37,7 +37,7 @@ export abstract class SMath {
     }
     /**
      * Compute the average, or mean, of a set of numbers.
-     * @param n Any amount of numeric inputs
+     * @param n An array of numeric inputs
      * @returns The average, or mean
      * @example
      * ```js
@@ -49,7 +49,7 @@ export abstract class SMath {
     }
     /**
      * Compute the variance of a **complete population**.
-     * @param n Any amount of numeric inputs
+     * @param n An array of numeric inputs
      * @returns The population variance
      * @example
      * ```js
@@ -63,7 +63,7 @@ export abstract class SMath {
     }
     /**
      * Compute the variance of a **sample**.
-     * @param n Any amount of numeric inputs
+     * @param n An array of numeric inputs
      * @returns The sample variance
      * @example
      * ```js
@@ -74,6 +74,22 @@ export abstract class SMath {
         const mean: number = this.avg(n),
             squares: Array<number> = n.map(x => (x - mean) ** 2);
         return this.sum(squares) / (n.length - 1);
+    }
+    /**
+     * Compute the standard deviation of a **complete population**.
+     * @param n An array of numeric inputs
+     * @returns The population standard deviation
+     */
+    public static stdevp(n: Array<number>): number {
+        return Math.sqrt(this.varp(n));
+    }
+    /**
+     * Compute the standard deviation of a **sample**.
+     * @param n An array of numeric inputs
+     * @returns The sample standard deviation
+     */
+    public static stdevs(n: Array<number>): number {
+        return Math.sqrt(this.vars(n));
     }
     /**
      * Check if two numbers are approximately equal with a maximum abolute error.
