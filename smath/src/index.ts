@@ -16,7 +16,7 @@ export abstract class SMath {
      * @returns The sum total
      * @example
      * ```js
-     * const sum = SMath.sum(1, 2, 3); // 6
+     * const y = SMath.sum([1, 2, 3]); // 6
      * ```
      */
     public static sum(n: Array<number>): number {
@@ -29,7 +29,7 @@ export abstract class SMath {
      * @returns The product
      * @example
      * ```js
-     * const prod = SMath.prod(2, 2, 3, 5); // 60
+     * const y = SMath.prod([2, 2, 3, 5]); // 60
      * ```
      */
     public static prod(n: Array<number>): number {
@@ -41,7 +41,7 @@ export abstract class SMath {
      * @returns The average, or mean
      * @example
      * ```js
-     * const mean = SMath.avg(1, 2, 3, 4); // 2.5
+     * const y = SMath.avg([1, 2, 4, 4]); // 2.75
      * ```
      */
     public static avg(n: Array<number>): number {
@@ -53,7 +53,7 @@ export abstract class SMath {
      * @returns The population variance
      * @example
      * ```js
-     * const pvar = SMath.pvar(1, 2, 3, 4); // 1.25
+     * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
      * ```
      */
     public static varp(n: Array<number>): number {
@@ -67,7 +67,7 @@ export abstract class SMath {
      * @returns The sample variance
      * @example
      * ```js
-     * const svar = SMath.svar(1, 2, 3, 4); // 1.666...
+     * const y = SMath.vars([1, 2, 4, 4]); // 2.25
      * ```
      */
     public static vars(n: Array<number>): number {
@@ -199,7 +199,7 @@ export abstract class SMath {
      * @returns `n!`
      * @example
      * ```js
-     * const factorial = SMath.factorial(5); // 120
+     * const y = SMath.factorial(5); // 120
      * ```
      */
     public static factorial(n: number): number {
@@ -225,7 +225,7 @@ export abstract class SMath {
      * @returns The relative (normalized) error
      * @example
      * ```js
-     * const error = SMath.error(22.5, 25); // -0.1
+     * const e = SMath.error(22.5, 25); // -0.1
      * ```
      */
     public static error(experimental: number, actual: number): number {
