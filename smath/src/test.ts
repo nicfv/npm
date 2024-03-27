@@ -50,6 +50,19 @@ X.eq(SMath.factorial(3), 6);
 X.eq(SMath.factorial(4), 24);
 X.eq(SMath.factorial(5), 120);
 
+X.is(SMath.factors(1).join(), '1');
+X.is(SMath.factors(2).join(), '2');
+X.is(SMath.factors(3).join(), '3');
+X.is(SMath.factors(4).join(), '2,2');
+X.is(SMath.factors(5).join(), '5');
+X.is(SMath.factors(6).join(), '2,3');
+X.is(SMath.factors(7).join(), '7');
+X.is(SMath.factors(8).join(), '2,2,2');
+X.is(SMath.factors(24).join(), '2,2,2,3');
+for (let i = 1; i <= 100; i++) {
+    X.eq(SMath.prod(SMath.factors(i)), i);
+}
+
 X.eq(SMath.error(9, 10), -0.1);
 X.eq(SMath.error(11, 10), 0.1);
 X.eq(SMath.error(-1, 2), -1.5);
