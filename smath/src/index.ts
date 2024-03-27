@@ -247,4 +247,33 @@ export abstract class SMath {
     public static stdevs(data: Array<number>): number {
         return Math.sqrt(this.vars(data));
     }
+    /**
+     * Take the derivative of a function.
+     * @param f Function `f(x)`
+     * @param x The x-value where to evaluate the derivative
+     * @param h Small step value
+     * @returns `f'(x)`
+     * @example
+     * ```js
+     * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
+     * ```
+     */
+    public static differentiate(f: (x: number) => number, x: number, h: number = 1e-3): number {
+        return (f(x + h) - f(x - h)) / (2 * h);
+    }
+    /**
+     * Compute the definite integral of a function.
+     * @param f Function `f(x)`
+     * @param a The miminum integral bound
+     * @param b The maximum integral bound
+     * @param Ndx The number of rectangles to compute
+     * @returns `F(b)-F(a)`
+     * @example
+     * ```js
+     * const y = SMath.integrate(x => 3 * x ** 2, 1, 2); // 7
+     * ```
+     */
+    public static integrate(f: (x: number) => number, a: number, b: number, Ndx: number = 1e3): number {
+        return ((b - a) / Ndx) * this.sum(this.linspace(a, b, Ndx).map(x => f(x)));
+    }
 }
