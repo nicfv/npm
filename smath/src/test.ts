@@ -103,6 +103,21 @@ function f2(x: number): number {
     return 1 / x;
 }
 
+X.eq(SMath.lim(f1, -1), 3);
+X.is(SMath.lim(f2, 0).toString(), 'NaN');
+X.eq(SMath.lim(Math.log, 0), -Infinity);
+X.is(SMath.lim(Math.log, -1).toString(), 'NaN');
+X.eq(SMath.lim(x => x ** -2, 0), Infinity);
+X.is(SMath.lim(x => x > 0 ? 1 : (x < 0 ? -1 : NaN), 0).toString(), 'NaN');
+X.eq(SMath.lim(x => 0, 0), 0);
+X.eq(SMath.lim(x => Infinity, 0), Infinity);
+X.eq(SMath.lim(x => -Infinity, 0), -Infinity);
+X.is(SMath.lim(x => NaN, 0).toString(), 'NaN');
+X.gt(SMath.lim(x => Math.sin(x) / x, 0), 0.99); // 1
+X.le(SMath.lim(x => Math.sin(x) / x, 0), 1);
+X.is(SMath.lim(x => Math.cos(x) / x, 0).toString(), 'NaN');
+X.eq(SMath.lim(x => x * x / x, 5), 5);
+
 X.gt(SMath.differentiate(f1, 2), 11.99); // 12
 X.lt(SMath.differentiate(f1, 2), 12.01);
 X.gt(SMath.differentiate(f2, -2), -0.26); // -0.25

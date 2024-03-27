@@ -248,6 +248,67 @@ export abstract class SMath {
         return Math.sqrt(this.vars(data));
     }
     /**
+     * Take the limit of a function. A return value of `NaN` indicates
+     * that no limit exists either due to a discontinuity or imaginary value.
+     * @param f Function `f(x)`
+     * @param x The x-value where to take the limit
+     * @param h The approach distance
+     * @param discontinuity_cutoff The discontinuity cutoff
+     * @returns `lim(f(x->x))`
+     */
+    public static lim(f: (x: number) => number, x: number, h: number = 1e-3, discontinuity_cutoff: number = 1): number {
+        const center: number = f(x),
+            left1: number = f(x - h),
+            left2: number = f(x - h / 2),
+            right1: number = f(x + h),
+            right2: number = f(x + h / 2);
+        let left: number,
+            right: number;
+        if (Number.isFinite(center)) {
+            return center;
+        }
+        // Check the limit approaching from the left
+        if (Number.isFinite(left1) && Number.isFinite(left2)) {
+            if (left2 > left1 + 2 * h) {
+                left = Infinity;
+            } else if (left2 < left1 - 2 * h) {
+                left = -Infinity;
+            } else {
+                left = this.avg([left1, left2]);
+            }
+        } else if (left1 === left2) { // Handles +/-Infinity case
+            left = left1;
+        } else {
+            left = NaN;
+        }
+        // Check the limit approaching from the right
+        if (Number.isFinite(right1) && Number.isFinite(right2)) {
+            if (right2 > right1 + 2 * h) {
+                right = Infinity;
+            } else if (right2 < right1 - 2 * h) {
+                right = -Infinity;
+            } else {
+                right = this.avg([right1, right2]);
+            }
+        } else if (right1 === right2) { // Handles +/-Infinity case
+            right = right1;
+        } else {
+            right = NaN;
+        }
+        // Check if limits match or are close
+        if (left === right) { // Handles +/-Infinity case
+            return left;
+        } else if (SMath.approx(left, right, discontinuity_cutoff)) {
+            return this.avg([left, right]);
+        } else if (!Number.isNaN(left) && Number.isNaN(right)) {
+            return left;
+        } else if (Number.isNaN(left) && !Number.isNaN(right)) {
+            return right;
+        } else {
+            return NaN;
+        }
+    }
+    /**
      * Take the derivative of a function.
      * @param f Function `f(x)`
      * @param x The x-value where to evaluate the derivative
