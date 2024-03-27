@@ -73,6 +73,12 @@ X.eq(SMath.avg([1, 2]), 1.5);
 X.eq(SMath.avg([1, 2, 3]), 2);
 X.eq(SMath.avg([1, 2, 3, 4]), 2.5);
 
+X.is(SMath.median([]).toString(), 'NaN');
+X.eq(SMath.median([1]), 1);
+X.eq(SMath.median([1, 3]), 2);
+X.eq(SMath.median([1, 3, 2]), 2);
+X.eq(SMath.median([5, 1, 2, 3]), 2.5);
+
 const ds1: Array<number> = [1, 2, 3, 4],
     ds2: Array<number> = [-3, 0, 1, 1, 2];
 
