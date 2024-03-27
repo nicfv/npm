@@ -17,13 +17,6 @@ if (func.includes('help')) {
     console.log('Key: <required> [optional]');
     console.log('Arguments:');
     console.log('  help                     : Show this page');
-    console.log('  sum <c0> [c1] ... [cn]   : Compute a total of `n` numbers');
-    console.log('  prod <c0> [c1] ... [cn]  : Compute a product of `n` numbers');
-    console.log('  avg <c0> [c1] ... [cn]   : Take an average of `n` numbers');
-    console.log('  varp <c0> [c1] ... [cn]  : Compute the population variance of `n` numbers');
-    console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
-    console.log('  stdevp <c0> [c1] ... [cn]: Compute the population standard deviation of `n` numbers');
-    console.log('  stdevs <c0> [c1] ... [cn]: Compute the sample standard deviation of `n` numbers');
     console.log('  approx <a> <b> [eps]     : Check if `a` and `b` are approximately equal');
     console.log('  clamp <n> <min> <max>    : Clamp `n` between `min` and `max`');
     console.log('  expand <n> <min> <max>   : Expand normalized `n` between `min` and `max`');
@@ -34,38 +27,18 @@ if (func.includes('help')) {
     console.log('                           : Linearly interpolate `n` from `min1`, `max1` to `min2`, `max2`');
     console.log('  factorial <n>            : Compute `n!` (factorial)');
     console.log('  error <exp> <act>        : Calculate the normaized percent error between `exp` and `act`');
+    console.log('  sum <c0> [c1] ... [cn]   : Compute a total of `n` numbers');
+    console.log('  prod <c0> [c1] ... [cn]  : Compute a product of `n` numbers');
+    console.log('  avg <c0> [c1] ... [cn]   : Take an average of `n` numbers');
+    console.log('  median <c0> [c1] ... [cn]: Take the median of `n` numbers');
+    console.log('  varp <c0> [c1] ... [cn]  : Compute the population variance of `n` numbers');
+    console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
+    console.log('  stdevp <c0> [c1] ... [cn]: Compute the population standard deviation of `n` numbers');
+    console.log('  stdevs <c0> [c1] ... [cn]: Compute the sample standard deviation of `n` numbers');
     process.exit(1);
 }
 
 switch (func) {
-    case ('sum'): {
-        console.log(SMath.sum(nums));
-        break;
-    }
-    case ('prod'): {
-        console.log(SMath.prod(nums));
-        break;
-    }
-    case ('avg'): {
-        console.log(SMath.avg(nums));
-        break;
-    }
-    case ('varp'): {
-        console.log(SMath.varp(nums));
-        break;
-    }
-    case ('vars'): {
-        console.log(SMath.vars(nums));
-        break;
-    }
-    case ('stdevp'): {
-        console.log(SMath.stdevp(nums));
-        break;
-    }
-    case ('stdevs'): {
-        console.log(SMath.stdevs(nums));
-        break;
-    }
     case ('approx'): {
         console.log(SMath.approx(nums[0], nums[1], nums[2] ?? 1e-6));
         break;
@@ -100,6 +73,38 @@ switch (func) {
     }
     case ('error'): {
         console.log(SMath.error(nums[0], nums[1]));
+        break;
+    }
+    case ('sum'): {
+        console.log(SMath.sum(nums));
+        break;
+    }
+    case ('prod'): {
+        console.log(SMath.prod(nums));
+        break;
+    }
+    case ('avg'): {
+        console.log(SMath.avg(nums));
+        break;
+    }
+    case ('median'): {
+        console.log(SMath.median(nums));
+        break;
+    }
+    case ('varp'): {
+        console.log(SMath.varp(nums));
+        break;
+    }
+    case ('vars'): {
+        console.log(SMath.vars(nums));
+        break;
+    }
+    case ('stdevp'): {
+        console.log(SMath.stdevp(nums));
+        break;
+    }
+    case ('stdevs'): {
+        console.log(SMath.stdevs(nums));
         break;
     }
     case (''): {

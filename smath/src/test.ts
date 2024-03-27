@@ -1,36 +1,6 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
-X.eq(SMath.sum([]), 0);
-X.eq(SMath.sum([1]), 1);
-X.eq(SMath.sum([1, 2]), 3);
-X.eq(SMath.sum([1, 2, 3]), 6);
-X.eq(SMath.sum([1, 2, 3, 4]), 10);
-
-X.eq(SMath.prod([]), 1);
-X.eq(SMath.prod([1]), 1);
-X.eq(SMath.prod([1, 2]), 2);
-X.eq(SMath.prod([1, 2, 3]), 6);
-X.eq(SMath.prod([1, 2, 3, 4]), 24);
-
-X.is(SMath.avg([]).toString(), 'NaN');
-X.eq(SMath.avg([1]), 1);
-X.eq(SMath.avg([1, 2]), 1.5);
-X.eq(SMath.avg([1, 2, 3]), 2);
-X.eq(SMath.avg([1, 2, 3, 4]), 2.5);
-
-const ds1: Array<number> = [1, 2, 3, 4],
-    ds2: Array<number> = [-3, 0, 1, 1, 2];
-
-X.eq(SMath.varp(ds1), 1.25);
-X.gt(SMath.varp(ds2), 2.95); // 2.96
-X.lt(SMath.varp(ds2), 2.97);
-
-X.gt(SMath.vars(ds1), 1.66); // 1.666...
-X.lt(SMath.vars(ds1), 1.67);
-X.gt(SMath.vars(ds2), 3.69); // 3.7
-X.lt(SMath.vars(ds2), 3.71);
-
 X.true(SMath.approx(0.1 + 0.2, 0.3));
 X.true(SMath.approx(0.3 - 0.1, 0.2));
 X.true(SMath.approx(1 + 1e-7, 1));
@@ -84,3 +54,84 @@ X.eq(SMath.error(9, 10), -0.1);
 X.eq(SMath.error(11, 10), 0.1);
 X.eq(SMath.error(-1, 2), -1.5);
 X.eq(SMath.error(2.5, 2), 0.25);
+
+X.eq(SMath.sum([]), 0);
+X.eq(SMath.sum([1]), 1);
+X.eq(SMath.sum([1, 2]), 3);
+X.eq(SMath.sum([1, 2, 3]), 6);
+X.eq(SMath.sum([1, 2, 3, 4]), 10);
+
+X.eq(SMath.prod([]), 1);
+X.eq(SMath.prod([1]), 1);
+X.eq(SMath.prod([1, 2]), 2);
+X.eq(SMath.prod([1, 2, 3]), 6);
+X.eq(SMath.prod([1, 2, 3, 4]), 24);
+
+X.is(SMath.avg([]).toString(), 'NaN');
+X.eq(SMath.avg([1]), 1);
+X.eq(SMath.avg([1, 2]), 1.5);
+X.eq(SMath.avg([1, 2, 3]), 2);
+X.eq(SMath.avg([1, 2, 3, 4]), 2.5);
+
+X.is(SMath.median([]).toString(), 'NaN');
+X.eq(SMath.median([1]), 1);
+X.eq(SMath.median([1, 3]), 2);
+X.eq(SMath.median([1, 3, 2]), 2);
+X.eq(SMath.median([5, 1, 2, 3]), 2.5);
+
+const ds1: Array<number> = [1, 2, 3, 4],
+    ds2: Array<number> = [-3, 0, 1, 1, 2];
+
+X.eq(SMath.varp(ds1), 1.25);
+X.gt(SMath.varp(ds2), 2.95); // 2.96
+X.lt(SMath.varp(ds2), 2.97);
+
+X.gt(SMath.vars(ds1), 1.66); // 1.666...
+X.lt(SMath.vars(ds1), 1.67);
+X.gt(SMath.vars(ds2), 3.69); // 3.7
+X.lt(SMath.vars(ds2), 3.71);
+
+X.gt(SMath.stdevp(ds1), 1.11); // 1.118...
+X.lt(SMath.stdevp(ds1), 1.12);
+X.gt(SMath.stdevp(ds2), 1.72); // 1.720...
+X.lt(SMath.stdevp(ds2), 1.73);
+
+X.gt(SMath.stdevs(ds1), 1.29); // 1.291...
+X.lt(SMath.stdevs(ds1), 1.30);
+X.gt(SMath.stdevs(ds2), 1.92); // 1.923...
+X.lt(SMath.stdevs(ds2), 1.93);
+
+function f1(x: number): number {
+    return 3 * x ** 2;
+}
+
+function f2(x: number): number {
+    return 1 / x;
+}
+
+X.eq(SMath.lim(f1, -1), 3);
+X.is(SMath.lim(f2, 0).toString(), 'NaN');
+X.eq(SMath.lim(Math.log, 0), -Infinity);
+X.is(SMath.lim(Math.log, -1).toString(), 'NaN');
+X.eq(SMath.lim(x => x ** -2, 0), Infinity);
+X.is(SMath.lim(x => x > 0 ? 1 : (x < 0 ? -1 : NaN), 0).toString(), 'NaN');
+X.eq(SMath.lim(x => 0, 0), 0);
+X.eq(SMath.lim(x => Infinity, 0), Infinity);
+X.eq(SMath.lim(x => -Infinity, 0), -Infinity);
+X.is(SMath.lim(x => NaN, 0).toString(), 'NaN');
+X.gt(SMath.lim(x => Math.sin(x) / x, 0), 0.99); // 1
+X.le(SMath.lim(x => Math.sin(x) / x, 0), 1);
+X.is(SMath.lim(x => Math.cos(x) / x, 0).toString(), 'NaN');
+X.eq(SMath.lim(x => x * x / x, 5), 5);
+
+X.gt(SMath.differentiate(f1, 2), 11.99); // 12
+X.lt(SMath.differentiate(f1, 2), 12.01);
+X.gt(SMath.differentiate(f2, -2), -0.26); // -0.25
+X.lt(SMath.differentiate(f2, -2), -0.24);
+X.true(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
+
+X.gt(SMath.integrate(f1, 1, 3), 25.99); // 26
+X.lt(SMath.integrate(f1, 1, 3), 26.01);
+X.gt(SMath.integrate(f2, 2, 4), 0.69); // 0.693...
+X.lt(SMath.integrate(f2, 2, 4), 0.70);
+X.true(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));

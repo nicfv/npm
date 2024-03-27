@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+- Add `lim()`, `differentiate()`, and `integrate()`
+- Write tests for standard deviation code
+- Rename `n` to `data` for statistics functions
+- Add `median()` function to API and `npx` command
+
 ## 1.5.1
 
 - Add `stdevp()` and `stdevs()`

@@ -10,88 +10,6 @@
  */
 export abstract class SMath {
     /**
-     * Add up all the inputs.
-     * If none are present, returns 0.
-     * @param n An array of numeric inputs
-     * @returns The sum total
-     * @example
-     * ```js
-     * const y = SMath.sum([1, 2, 3]); // 6
-     * ```
-     */
-    public static sum(n: Array<number>): number {
-        return n.reduce((a, b) => a + b, 0);
-    }
-    /**
-     * Multiply all the inputs.
-     * If none are present, returns 1.
-     * @param n An array of numeric inputs
-     * @returns The product
-     * @example
-     * ```js
-     * const y = SMath.prod([2, 2, 3, 5]); // 60
-     * ```
-     */
-    public static prod(n: Array<number>): number {
-        return n.reduce((a, b) => a * b, 1);
-    }
-    /**
-     * Compute the average, or mean, of a set of numbers.
-     * @param n An array of numeric inputs
-     * @returns The average, or mean
-     * @example
-     * ```js
-     * const y = SMath.avg([1, 2, 4, 4]); // 2.75
-     * ```
-     */
-    public static avg(n: Array<number>): number {
-        return this.sum(n) / n.length;
-    }
-    /**
-     * Compute the variance of a **complete population**.
-     * @param n An array of numeric inputs
-     * @returns The population variance
-     * @example
-     * ```js
-     * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
-     * ```
-     */
-    public static varp(n: Array<number>): number {
-        const mean: number = this.avg(n),
-            squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(squares) / n.length;
-    }
-    /**
-     * Compute the variance of a **sample**.
-     * @param n An array of numeric inputs
-     * @returns The sample variance
-     * @example
-     * ```js
-     * const y = SMath.vars([1, 2, 4, 4]); // 2.25
-     * ```
-     */
-    public static vars(n: Array<number>): number {
-        const mean: number = this.avg(n),
-            squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(squares) / (n.length - 1);
-    }
-    /**
-     * Compute the standard deviation of a **complete population**.
-     * @param n An array of numeric inputs
-     * @returns The population standard deviation
-     */
-    public static stdevp(n: Array<number>): number {
-        return Math.sqrt(this.varp(n));
-    }
-    /**
-     * Compute the standard deviation of a **sample**.
-     * @param n An array of numeric inputs
-     * @returns The sample standard deviation
-     */
-    public static stdevs(n: Array<number>): number {
-        return Math.sqrt(this.vars(n));
-    }
-    /**
      * Check if two numbers are approximately equal with a maximum abolute error.
      * @param a Any number
      * @param b Any number
@@ -246,5 +164,205 @@ export abstract class SMath {
      */
     public static error(experimental: number, actual: number): number {
         return (experimental - actual) / actual;
+    }
+    /**
+     * Add up all the inputs.
+     * If none are present, returns 0.
+     * @param data An array of numeric inputs
+     * @returns The sum total
+     * @example
+     * ```js
+     * const y = SMath.sum([1, 2, 3]); // 6
+     * ```
+     */
+    public static sum(data: Array<number>): number {
+        return data.reduce((a, b) => a + b, 0);
+    }
+    /**
+     * Multiply all the inputs.
+     * If none are present, returns 1.
+     * @param data An array of numeric inputs
+     * @returns The product
+     * @example
+     * ```js
+     * const y = SMath.prod([2, 2, 3, 5]); // 60
+     * ```
+     */
+    public static prod(data: Array<number>): number {
+        return data.reduce((a, b) => a * b, 1);
+    }
+    /**
+     * Compute the average, or mean, of a set of numbers.
+     * @param data An array of numeric inputs
+     * @returns The average, or mean
+     * @example
+     * ```js
+     * const y = SMath.avg([1, 2, 4, 4]); // 2.75
+     * ```
+     */
+    public static avg(data: Array<number>): number {
+        return this.sum(data) / data.length;
+    }
+    /**
+     * Compute the median of a set of numbers.
+     * @param data An array of numeric inputs
+     * @returns The median of the dataset
+     * @example
+     * ```js
+     * const y = SMath.median([2, 5, 3, 1]); // 2.5
+     * ```
+     */
+    public static median(data: Array<number>): number {
+        data.sort();
+        if (data.length % 2) {
+            return data[(data.length - 1) / 2];
+        }
+        return this.avg([data[data.length / 2 - 1], data[data.length / 2]]);
+    }
+    /**
+     * Compute the variance of a **complete population**.
+     * @param data An array of numeric inputs
+     * @returns The population variance
+     * @example
+     * ```js
+     * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
+     * ```
+     */
+    public static varp(data: Array<number>): number {
+        const mean: number = this.avg(data),
+            squares: Array<number> = data.map(x => (x - mean) ** 2);
+        return this.sum(squares) / data.length;
+    }
+    /**
+     * Compute the variance of a **sample**.
+     * @param data An array of numeric inputs
+     * @returns The sample variance
+     * @example
+     * ```js
+     * const y = SMath.vars([1, 2, 4, 4]); // 2.25
+     * ```
+     */
+    public static vars(data: Array<number>): number {
+        const mean: number = this.avg(data),
+            squares: Array<number> = data.map(x => (x - mean) ** 2);
+        return this.sum(squares) / (data.length - 1);
+    }
+    /**
+     * Compute the standard deviation of a **complete population**.
+     * @param data An array of numeric inputs
+     * @returns The population standard deviation
+     * @example
+     * ```js
+     * const y = SMath.stdevp([1, 2, 3, 4]); // 1.118...
+     * ```
+     */
+    public static stdevp(data: Array<number>): number {
+        return Math.sqrt(this.varp(data));
+    }
+    /**
+     * Compute the standard deviation of a **sample**.
+     * @param data An array of numeric inputs
+     * @returns The sample standard deviation
+     * @example
+     * ```js
+     * const y = SMath.stdevs([1, 2, 3, 4]); // 1.29...
+     * ```
+     */
+    public static stdevs(data: Array<number>): number {
+        return Math.sqrt(this.vars(data));
+    }
+    /**
+     * Take the limit of a function. A return value of `NaN` indicates
+     * that no limit exists either due to a discontinuity or imaginary value.
+     * @param f Function `f(x)`
+     * @param x The x-value where to take the limit
+     * @param h The approach distance
+     * @param discontinuity_cutoff The discontinuity cutoff
+     * @returns `lim(f(x->x))`
+     * @example
+     * ```js
+     * const y = SMath.lim(Math.log, 0); // -Infinity
+     * ```
+     */
+    public static lim(f: (x: number) => number, x: number, h: number = 1e-3, discontinuity_cutoff: number = 1): number {
+        const center: number = f(x),
+            left1: number = f(x - h),
+            left2: number = f(x - h / 2),
+            right1: number = f(x + h),
+            right2: number = f(x + h / 2);
+        let left: number,
+            right: number;
+        if (Number.isFinite(center)) {
+            return center;
+        }
+        // Check the limit approaching from the left
+        if (Number.isFinite(left1) && Number.isFinite(left2)) {
+            if (left2 > left1 + 2 * h) {
+                left = Infinity;
+            } else if (left2 < left1 - 2 * h) {
+                left = -Infinity;
+            } else {
+                left = this.avg([left1, left2]);
+            }
+        } else if (left1 === left2) { // Handles +/-Infinity case
+            left = left1;
+        } else {
+            left = NaN;
+        }
+        // Check the limit approaching from the right
+        if (Number.isFinite(right1) && Number.isFinite(right2)) {
+            if (right2 > right1 + 2 * h) {
+                right = Infinity;
+            } else if (right2 < right1 - 2 * h) {
+                right = -Infinity;
+            } else {
+                right = this.avg([right1, right2]);
+            }
+        } else if (right1 === right2) { // Handles +/-Infinity case
+            right = right1;
+        } else {
+            right = NaN;
+        }
+        // Check if limits match or are close
+        if (left === right) { // Handles +/-Infinity case
+            return left;
+        } else if (SMath.approx(left, right, discontinuity_cutoff)) {
+            return this.avg([left, right]);
+        } else if (!Number.isNaN(left) && Number.isNaN(right)) {
+            return left;
+        } else if (Number.isNaN(left) && !Number.isNaN(right)) {
+            return right;
+        } else {
+            return NaN;
+        }
+    }
+    /**
+     * Take the derivative of a function.
+     * @param f Function `f(x)`
+     * @param x The x-value where to evaluate the derivative
+     * @param h Small step value
+     * @returns `f'(x)`
+     * @example
+     * ```js
+     * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
+     * ```
+     */
+    public static differentiate(f: (x: number) => number, x: number, h: number = 1e-3): number {
+        return (f(x + h) - f(x - h)) / (2 * h);
+    }
+    /**
+     * Compute the definite integral of a function.
+     * @param f Function `f(x)`
+     * @param a The miminum integral bound
+     * @param b The maximum integral bound
+     * @param Ndx The number of rectangles to compute
+     * @returns `F(b)-F(a)`
+     * @example
+     * ```js
+     * const y = SMath.integrate(x => 3 * x ** 2, 1, 2); // 7
+     * ```
+     */
+    public static integrate(f: (x: number) => number, a: number, b: number, Ndx: number = 1e3): number {
+        return ((b - a) / Ndx) * this.sum(this.linspace(a, b, Ndx).map(x => f(x)));
     }
 }
