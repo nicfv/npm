@@ -30,6 +30,7 @@ if (func.includes('help')) {
     console.log('  sum <c0> [c1] ... [cn]   : Compute a total of `n` numbers');
     console.log('  prod <c0> [c1] ... [cn]  : Compute a product of `n` numbers');
     console.log('  avg <c0> [c1] ... [cn]   : Take an average of `n` numbers');
+    console.log('  median <c0> [c1] ... [cn]: Take the median of `n` numbers');
     console.log('  varp <c0> [c1] ... [cn]  : Compute the population variance of `n` numbers');
     console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
     console.log('  stdevp <c0> [c1] ... [cn]: Compute the population standard deviation of `n` numbers');
@@ -84,6 +85,10 @@ switch (func) {
     }
     case ('avg'): {
         console.log(SMath.avg(nums));
+        break;
+    }
+    case ('median'): {
+        console.log(SMath.median(nums));
         break;
     }
     case ('varp'): {
