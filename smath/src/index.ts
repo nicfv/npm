@@ -204,6 +204,22 @@ export abstract class SMath {
         return this.sum(data) / data.length;
     }
     /**
+     * Compute the median of a set of numbers.
+     * @param data An array of numeric inputs
+     * @returns The median of the dataset
+     * @example
+     * ```js
+     * const y = SMath.median([2, 5, 3, 1]); // 2.5
+     * ```
+     */
+    public static median(data: Array<number>): number {
+        data.sort();
+        if (data.length % 2) {
+            return data[(data.length - 1) / 2];
+        }
+        return this.avg([data[data.length / 2 - 1], data[data.length / 2]]);
+    }
+    /**
      * Compute the variance of a **complete population**.
      * @param data An array of numeric inputs
      * @returns The population variance
@@ -235,6 +251,10 @@ export abstract class SMath {
      * Compute the standard deviation of a **complete population**.
      * @param data An array of numeric inputs
      * @returns The population standard deviation
+     * @example
+     * ```js
+     * const y = SMath.stdevp([1, 2, 3, 4]); // 1.118...
+     * ```
      */
     public static stdevp(data: Array<number>): number {
         return Math.sqrt(this.varp(data));
@@ -243,6 +263,10 @@ export abstract class SMath {
      * Compute the standard deviation of a **sample**.
      * @param data An array of numeric inputs
      * @returns The sample standard deviation
+     * @example
+     * ```js
+     * const y = SMath.stdevs([1, 2, 3, 4]); // 1.29...
+     * ```
      */
     public static stdevs(data: Array<number>): number {
         return Math.sqrt(this.vars(data));
@@ -255,6 +279,10 @@ export abstract class SMath {
      * @param h The approach distance
      * @param discontinuity_cutoff The discontinuity cutoff
      * @returns `lim(f(x->x))`
+     * @example
+     * ```js
+     * const y = SMath.lim(Math.log, 0); // -Infinity
+     * ```
      */
     public static lim(f: (x: number) => number, x: number, h: number = 1e-3, discontinuity_cutoff: number = 1): number {
         const center: number = f(x),
