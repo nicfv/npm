@@ -10,88 +10,6 @@
  */
 export abstract class SMath {
     /**
-     * Add up all the inputs.
-     * If none are present, returns 0.
-     * @param n An array of numeric inputs
-     * @returns The sum total
-     * @example
-     * ```js
-     * const y = SMath.sum([1, 2, 3]); // 6
-     * ```
-     */
-    public static sum(n: Array<number>): number {
-        return n.reduce((a, b) => a + b, 0);
-    }
-    /**
-     * Multiply all the inputs.
-     * If none are present, returns 1.
-     * @param n An array of numeric inputs
-     * @returns The product
-     * @example
-     * ```js
-     * const y = SMath.prod([2, 2, 3, 5]); // 60
-     * ```
-     */
-    public static prod(n: Array<number>): number {
-        return n.reduce((a, b) => a * b, 1);
-    }
-    /**
-     * Compute the average, or mean, of a set of numbers.
-     * @param n An array of numeric inputs
-     * @returns The average, or mean
-     * @example
-     * ```js
-     * const y = SMath.avg([1, 2, 4, 4]); // 2.75
-     * ```
-     */
-    public static avg(n: Array<number>): number {
-        return this.sum(n) / n.length;
-    }
-    /**
-     * Compute the variance of a **complete population**.
-     * @param n An array of numeric inputs
-     * @returns The population variance
-     * @example
-     * ```js
-     * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
-     * ```
-     */
-    public static varp(n: Array<number>): number {
-        const mean: number = this.avg(n),
-            squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(squares) / n.length;
-    }
-    /**
-     * Compute the variance of a **sample**.
-     * @param n An array of numeric inputs
-     * @returns The sample variance
-     * @example
-     * ```js
-     * const y = SMath.vars([1, 2, 4, 4]); // 2.25
-     * ```
-     */
-    public static vars(n: Array<number>): number {
-        const mean: number = this.avg(n),
-            squares: Array<number> = n.map(x => (x - mean) ** 2);
-        return this.sum(squares) / (n.length - 1);
-    }
-    /**
-     * Compute the standard deviation of a **complete population**.
-     * @param n An array of numeric inputs
-     * @returns The population standard deviation
-     */
-    public static stdevp(n: Array<number>): number {
-        return Math.sqrt(this.varp(n));
-    }
-    /**
-     * Compute the standard deviation of a **sample**.
-     * @param n An array of numeric inputs
-     * @returns The sample standard deviation
-     */
-    public static stdevs(n: Array<number>): number {
-        return Math.sqrt(this.vars(n));
-    }
-    /**
      * Check if two numbers are approximately equal with a maximum abolute error.
      * @param a Any number
      * @param b Any number
@@ -246,5 +164,87 @@ export abstract class SMath {
      */
     public static error(experimental: number, actual: number): number {
         return (experimental - actual) / actual;
+    }
+    /**
+     * Add up all the inputs.
+     * If none are present, returns 0.
+     * @param n An array of numeric inputs
+     * @returns The sum total
+     * @example
+     * ```js
+     * const y = SMath.sum([1, 2, 3]); // 6
+     * ```
+     */
+    public static sum(n: Array<number>): number {
+        return n.reduce((a, b) => a + b, 0);
+    }
+    /**
+     * Multiply all the inputs.
+     * If none are present, returns 1.
+     * @param n An array of numeric inputs
+     * @returns The product
+     * @example
+     * ```js
+     * const y = SMath.prod([2, 2, 3, 5]); // 60
+     * ```
+     */
+    public static prod(n: Array<number>): number {
+        return n.reduce((a, b) => a * b, 1);
+    }
+    /**
+     * Compute the average, or mean, of a set of numbers.
+     * @param n An array of numeric inputs
+     * @returns The average, or mean
+     * @example
+     * ```js
+     * const y = SMath.avg([1, 2, 4, 4]); // 2.75
+     * ```
+     */
+    public static avg(n: Array<number>): number {
+        return this.sum(n) / n.length;
+    }
+    /**
+     * Compute the variance of a **complete population**.
+     * @param n An array of numeric inputs
+     * @returns The population variance
+     * @example
+     * ```js
+     * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
+     * ```
+     */
+    public static varp(n: Array<number>): number {
+        const mean: number = this.avg(n),
+            squares: Array<number> = n.map(x => (x - mean) ** 2);
+        return this.sum(squares) / n.length;
+    }
+    /**
+     * Compute the variance of a **sample**.
+     * @param n An array of numeric inputs
+     * @returns The sample variance
+     * @example
+     * ```js
+     * const y = SMath.vars([1, 2, 4, 4]); // 2.25
+     * ```
+     */
+    public static vars(n: Array<number>): number {
+        const mean: number = this.avg(n),
+            squares: Array<number> = n.map(x => (x - mean) ** 2);
+        return this.sum(squares) / (n.length - 1);
+    }
+    /**
+     * Compute the standard deviation of a **complete population**.
+     * @param n An array of numeric inputs
+     * @returns The population standard deviation
+     */
+    public static stdevp(n: Array<number>): number {
+        return Math.sqrt(this.varp(n));
+    }
+    /**
+     * Compute the standard deviation of a **sample**.
+     * @param n An array of numeric inputs
+     * @returns The sample standard deviation
+     */
+    public static stdevs(n: Array<number>): number {
+        return Math.sqrt(this.vars(n));
     }
 }
