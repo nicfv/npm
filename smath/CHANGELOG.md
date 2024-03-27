@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1
+
+- Add `factors()` function to compute a list of prime factors of any number
+
 ## 1.6.0
 
 - Add `lim()`, `differentiate()`, and `integrate()`

@@ -148,6 +148,34 @@ export abstract class SMath {
         }
     }
     /**
+     * Factorize `n` into its prime factors.
+     * @param n Any positive integer
+     * @returns The array of prime factors
+     * @example
+     * ```js
+     * const y = SMath.factors(12); // [ 2, 2, 3 ]
+     * ```
+     */
+    public static factors(n: number): Array<number> {
+        if (n < 0 || (n | 0) !== n) {
+            throw new Error('Input must be a positive integer!');
+        }
+        if (n <= 3) {
+            return [n];
+        }
+        const f: Array<number> = [];
+        let i: number = 2;
+        while (n > 1 && i <= n) {
+            if ((n / i) === ((n / i) | 0)) {
+                n /= i;
+                f.push(i);
+            } else {
+                i++;
+            }
+        }
+        return f;
+    }
+    /**
      * Calculate the relative normalized error or deviation from any
      * value to an accepted value. An error of 0 indicates that the
      * two values are identical. An error of -0.1 indicates that the

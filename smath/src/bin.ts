@@ -26,6 +26,7 @@ if (func.includes('help')) {
     console.log('  translate <n> <min1> <max1> <min2> <max2>');
     console.log('                           : Linearly interpolate `n` from `min1`, `max1` to `min2`, `max2`');
     console.log('  factorial <n>            : Compute `n!` (factorial)');
+    console.log('  factors <n>              : List the prime factors of `n`');
     console.log('  error <exp> <act>        : Calculate the normaized percent error between `exp` and `act`');
     console.log('  sum <c0> [c1] ... [cn]   : Compute a total of `n` numbers');
     console.log('  prod <c0> [c1] ... [cn]  : Compute a product of `n` numbers');
@@ -69,6 +70,10 @@ switch (func) {
     }
     case ('factorial'): {
         console.log(SMath.factorial(nums[0]));
+        break;
+    }
+    case ('factors'): {
+        console.log(SMath.factors(nums[0]));
         break;
     }
     case ('error'): {
