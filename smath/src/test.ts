@@ -94,3 +94,23 @@ X.gt(SMath.stdevs(ds1), 1.29); // 1.291...
 X.lt(SMath.stdevs(ds1), 1.30);
 X.gt(SMath.stdevs(ds2), 1.92); // 1.923...
 X.lt(SMath.stdevs(ds2), 1.93);
+
+function f1(x: number): number {
+    return 3 * x ** 2;
+}
+
+function f2(x: number): number {
+    return 1 / x;
+}
+
+X.gt(SMath.differentiate(f1, 2), 11.99); // 12
+X.lt(SMath.differentiate(f1, 2), 12.01);
+X.gt(SMath.differentiate(f2, -2), -0.26); // -0.25
+X.lt(SMath.differentiate(f2, -2), -0.24);
+X.true(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
+
+X.gt(SMath.integrate(f1, 1, 3), 25.99); // 26
+X.lt(SMath.integrate(f1, 1, 3), 26.01);
+X.gt(SMath.integrate(f2, 2, 4), 0.69); // 0.693...
+X.lt(SMath.integrate(f2, 2, 4), 0.70);
+X.true(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
