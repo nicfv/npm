@@ -4,6 +4,7 @@
 
 - Update dependency versions
 - Add additional keywords
+- Fix major bug in `median()`
 
 ## 1.6.1
 
