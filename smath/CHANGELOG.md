@@ -3,6 +3,7 @@
 ## 1.7.0
 
 - Update `exray` version to 1.0.3
+- Add additional keywords
 
 ## 1.6.2
 
