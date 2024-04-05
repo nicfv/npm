@@ -299,6 +299,17 @@ export abstract class SMath {
     public static stdevs(data: Array<number>): number {
         return Math.sqrt(this.vars(data));
     }
+    public static randFloat(min: number, max: number): number {
+        return this.expand(Math.random(), min, max);
+    }
+    public static randInt(min: number, max: number): number {
+        if (min < 0) { min--; }
+        if (max < 0) { max--; }
+        return this.randFloat(min, max + 1) | 0; // `| 0` pulls toward 0
+    }
+    public static randNorm(mean: number = 0, stdev: number = 1): number {
+        return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+    }
     /**
      * Take the limit of a function. A return value of `NaN` indicates
      * that no limit exists either due to a discontinuity or imaginary value.
