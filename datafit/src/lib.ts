@@ -9,10 +9,10 @@ import { Datum, F, Summary, VariableType } from './types';
  * @param params_initial The initial guess for function
  * parameters, which defaults to an array filled with zeroes.
  * @param iterations The number of parameter sets to generate.
- * @param maxDeviation The relative maximum parameter deviation.
- * This is a number [0.0-1.0] and affects the maximum deviation
+ * @param maxDeviation The relative standard parameter deviation.
+ * This is a number [0.0-1.0] and affects the standard deviation
  * on the first iteration. Every subsequent iteration has a
- * decayed maximum deviation until the final iteration.
+ * decayed standard deviation until the final iteration.
  * @returns The set of parameters and error for the best fit.
  * @example
  * ```ts
@@ -36,7 +36,7 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
         throw new Error('The initial guess should contain ' + N_params + ' parameters.');
     }
     if (maxDeviation <= 0) {
-        throw new Error('Maximum deviation should be a positive value.');
+        throw new Error('Standard deviation should be a positive value.');
     }
     let params: Array<number> = params_initial,
         error: number = err(f, params, data);
@@ -68,11 +68,11 @@ function err<T extends VariableType>(f: F<T>, params: Array<number>, data: Array
     return sum;
 }
 /**
- * Randomly mutate the set of function parameters by some maximum deviation.
+ * Randomly mutate the set of function parameters by some standard deviation.
  * @param params The set of function parameters to mutate.
- * @param deviation The maximum relative amount to deviate in any direction.
+ * @param deviation The standard relative amount to deviate in any direction.
  * @returns A mutated set of parameters.
  */
 function mutate(params: Array<number>, deviation: number): Array<number> {
-    return params.map(c => c += SMath.expand(Math.random(), -deviation, deviation) * Math.max(1, c));
+    return params.map(c => SMath.rnorm(c, deviation * Math.max(1, Math.abs(c))));
 }

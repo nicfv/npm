@@ -13,8 +13,8 @@ export type VariableType = number | Array<number>;
  * ```
  * Multivariable function Typescript, general plane equation:
  * ```ts
- * function f(x: number[], cx: number, cy: number, cz: number): number {
- *     return cx * x[0] + cy * x[1] + cz;
+ * function f([x, y]: number[], cx: number, cy: number, cz: number): number {
+ *     return cx * x + cy * y + cz;
  * }
  * ```
  */

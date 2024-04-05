@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2
+
+- Update dependency versions
+- Minor documentation update for `F`
+- Use normal distribution for parameter mutation instead of uniform distribution
+- Add additional test cases
+
 ## 1.4.1
 
 - Update dependency versions
