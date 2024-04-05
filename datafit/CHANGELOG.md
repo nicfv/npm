@@ -3,6 +3,7 @@
 ## 1.4.2
 
 - Update dependency versions
+- Minor documentation update for `F`
 
 ## 1.4.1
 
