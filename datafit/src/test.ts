@@ -23,17 +23,17 @@ X.eq(data[8].y, 7);
 // of actual, but this could
 // fail due to randomness.
 const tolerance: number = 0.20;
-X.le(Math.abs((a[0] - summary.params[0]) / a[0]), tolerance);
-X.le(Math.abs((a[1] - summary.params[1]) / a[1]), tolerance);
-X.le(Math.abs((a[2] - summary.params[2]) / a[2]), tolerance);
-X.le(Math.abs((f(-5) - summary.f(-5)) / f(-5)), tolerance);
-X.le(Math.abs((f(0) - summary.f(0)) / f(0)), tolerance);
-X.le(Math.abs((f(5) - summary.f(5)) / f(5)), tolerance);
+X.le(Math.abs(SMath.error(summary.params[0], a[0])), tolerance);
+X.le(Math.abs(SMath.error(summary.params[1], a[1])), tolerance);
+X.le(Math.abs(SMath.error(summary.params[2], a[2])), tolerance);
+X.le(Math.abs(SMath.error(summary.f(-5), f(-5))), tolerance);
+X.le(Math.abs(SMath.error(summary.f(0), f(0))), tolerance);
+X.le(Math.abs(SMath.error(summary.f(5), f(5))), tolerance);
 
 // Define 2D function g(x,y)
 const b = [0.5, -2, 1];
-function g(x: number[], bx: number = b[0], by: number = b[1], bz: number = b[2]): number {
-    return bx * x[0] + by * x[1] + bz;
+function g([x, y]: Array<number>, bx: number = b[0], by: number = b[1], bz: number = b[2]): number {
+    return bx * x + by * y + bz;
 }
 // Generate dataset and fit curve
 const data2: Datum<number[]>[] = [];
@@ -48,7 +48,7 @@ X.eq(data2[0].x[0], -5);
 X.eq(data2[0].x[1], -5);
 X.eq(data2[0].y, 8.5);
 // Validate accuracy of fitted data
-X.le(Math.abs((b[0] - summary2.params[0]) / b[0]), tolerance);
-X.le(Math.abs((b[1] - summary2.params[1]) / b[1]), tolerance);
-X.le(Math.abs((b[2] - summary2.params[2]) / b[2]), tolerance);
-X.le(Math.abs((g([-5, -5]) - summary2.f([-5, -5])) / g([-5, -5])), tolerance);
+X.le(Math.abs(SMath.error(summary2.params[0], b[0])), tolerance);
+X.le(Math.abs(SMath.error(summary2.params[1], b[1])), tolerance);
+X.le(Math.abs(SMath.error(summary2.params[2], b[2])), tolerance);
+X.le(Math.abs(SMath.error(summary2.f([-5, -5]), g([-5, -5]))), tolerance);

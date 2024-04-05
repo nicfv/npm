@@ -3,6 +3,7 @@
 ## 1.4.1
 
 - Update dependency versions
+- Update unit test script
 
 ## 1.4.0
 
