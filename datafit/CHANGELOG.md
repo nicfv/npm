@@ -4,6 +4,7 @@
 
 - Update dependency versions
 - Update unit test script
+- Update multivariant example
 
 ## 1.4.0
 

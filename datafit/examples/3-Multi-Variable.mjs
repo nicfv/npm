@@ -1,11 +1,8 @@
 import { fit } from 'datafit';
 
-// Define a general 3D plane function
-// x[0] represents the x-axis
-// x[1] represents the y-axis
-// The z-axis is represented by f([x, y], ...)
-function f(x, cx, cy, cz) {
-    return cx * x[0] + cy * x[1] + cz;
+// Define a general 3D plane function where z = f(x, y)
+function f([x, y], cx, cy, cz) {
+    return cx * x + cy * y + cz;
 }
 
 // These 3 points make up the plane
