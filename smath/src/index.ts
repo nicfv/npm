@@ -299,14 +299,46 @@ export abstract class SMath {
     public static stdevs(data: Array<number>): number {
         return Math.sqrt(this.vars(data));
     }
+    /**
+     * Generate a uniformly-distributed floating-point number within the range.
+     * @param min The minimum bound
+     * @param max The maximum bound
+     * @returns A random float within the range
+     * @example
+     * ```js
+     * const y = SMath.randFloat(-2, 2); // 0.376...
+     * ```
+     */
     public static randFloat(min: number, max: number): number {
         return this.expand(Math.random(), min, max);
     }
+    /**
+     * Generate a uniformly-distributed integer within the range.
+     * @param min The minimum bound (inclusive)
+     * @param max The maximum bound (inclusive)
+     * @returns A random integer within the range
+     * @example
+     * ```js
+     * const y = SMath.randInt(-4, 3); // -4
+     * ```
+     */
     public static randInt(min: number, max: number): number {
+        min |= 0;
+        max |= 0;
         if (min < 0) { min--; }
         if (max < 0) { max--; }
         return this.randFloat(min, max + 1) | 0; // `| 0` pulls toward 0
     }
+    /**
+     * Generate a normally-distributed floating-point number.
+     * @param mean The mean of the population distribution
+     * @param stdev The standard deviation of the population
+     * @returns A random float
+     * @example
+     * ```js
+     * const y = SMath.randNorm(2, 3); // 1.627...
+     * ```
+     */
     public static randNorm(mean: number = 0, stdev: number = 1): number {
         return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
     }
