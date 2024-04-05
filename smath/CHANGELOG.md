@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.2
+
+- Update dependency versions
+- Add additional keywords
+
 ## 1.6.1
 
 - Add `factors()` function to compute a list of prime factors of any number
