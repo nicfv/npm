@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Update dependency versions
+
 ## 1.1.0
 
 - Truncate decimal places off RGBA channels
