@@ -4,6 +4,7 @@
 
 - Update dependency versions
 - Minor documentation update for `F`
+- Use normal distribution for parameter mutation instead of uniform distribution
 
 ## 1.4.1
 
