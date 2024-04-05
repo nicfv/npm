@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0
+
+- Update `exray` version to 1.0.3
+- Add additional keywords
+- Add random number generation functions: `runif()`, `rint()`, `rnorm()`, and `rdist()`
+
 ## 1.6.2
 
 - Update dependency versions

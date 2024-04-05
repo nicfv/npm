@@ -36,6 +36,10 @@ if (func.includes('help')) {
     console.log('  vars <c0> [c1] ... [cn]  : Compute the sample variance of `n` numbers');
     console.log('  stdevp <c0> [c1] ... [cn]: Compute the population standard deviation of `n` numbers');
     console.log('  stdevs <c0> [c1] ... [cn]: Compute the sample standard deviation of `n` numbers');
+    console.log('  runif <min> <max>        : Generate a uniformly-distributed random float');
+    console.log('  rint <min> <max>         : Generate a uniformly-distributed random integer, range inclusive');
+    console.log('  rnorm [mean] [stdev]     : Generate a normally-distributed random float');
+    console.log('  rdist <n> [mean] [stdev] : Generate `n` normally-distributed random floats');
     process.exit(1);
 }
 
@@ -110,6 +114,22 @@ switch (func) {
     }
     case ('stdevs'): {
         console.log(SMath.stdevs(nums));
+        break;
+    }
+    case ('runif'): {
+        console.log(SMath.runif(nums[0], nums[1]));
+        break;
+    }
+    case ('rint'): {
+        console.log(SMath.rint(nums[0], nums[1]));
+        break;
+    }
+    case ('rnorm'): {
+        console.log(SMath.rnorm(nums[0], nums[1]));
+        break;
+    }
+    case ('rdist'): {
+        console.log(SMath.rdist(nums[0], nums[1], nums[2]));
         break;
     }
     case (''): {

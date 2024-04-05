@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
   "bin": "dist/bin.js",
@@ -33,6 +33,11 @@
     "numeric",
     "numerical",
     "analysis",
+    "random",
+    "distribution",
+    "population",
+    "normal",
+    "normalize",
     "interpolate",
     "interpolation",
     "extrapolate",
@@ -53,7 +58,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "20.12.4",
-    "exray": "1.0.2",
+    "exray": "1.0.3",
     "typedoc": "0.25.12",
     "typescript": "5.4.4"
   }

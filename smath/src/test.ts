@@ -50,6 +50,7 @@ X.eq(SMath.factorial(3), 6);
 X.eq(SMath.factorial(4), 24);
 X.eq(SMath.factorial(5), 120);
 
+X.is(SMath.factors(0).join(), '0');
 X.is(SMath.factors(1).join(), '1');
 X.is(SMath.factors(2).join(), '2');
 X.is(SMath.factors(3).join(), '3');
@@ -59,7 +60,7 @@ X.is(SMath.factors(6).join(), '2,3');
 X.is(SMath.factors(7).join(), '7');
 X.is(SMath.factors(8).join(), '2,2,2');
 X.is(SMath.factors(24).join(), '2,2,2,3');
-for (let i = 1; i <= 100; i++) {
+for (let i = 0; i <= 100; i++) {
     X.eq(SMath.prod(SMath.factors(i)), i);
 }
 
@@ -115,6 +116,33 @@ X.gt(SMath.stdevs(ds1), 1.29); // 1.291...
 X.lt(SMath.stdevs(ds1), 1.30);
 X.gt(SMath.stdevs(ds2), 1.92); // 1.923...
 X.lt(SMath.stdevs(ds2), 1.93);
+
+for (let i = 0; i < 100; i++) {
+    const randMin: number = i - 75,
+        randMax: number = i - 25,
+        rf: number = SMath.runif(randMin, randMax),
+        ri: number = SMath.rint(randMin, randMax);
+    X.ge(rf, randMin);
+    X.le(rf, randMax);
+    X.ge(ri, randMin);
+    X.le(ri, randMax);
+}
+
+{
+    const tolerance: number = 0.5,
+        normMean: number = -1,
+        normStdev: number = 3,
+        normDist1: Array<number> = SMath.linspace(0, 0, 1000).map(() => SMath.rnorm(normMean, normStdev)),
+        normDist2: Array<number> = SMath.rdist(1000, normMean, normStdev),
+        normMeanCalc1: number = SMath.avg(normDist1),
+        normStdevCalc1: number = SMath.stdevp(normDist1),
+        normMeanCalc2: number = SMath.avg(normDist2),
+        normStdevCalc2: number = SMath.stdevp(normDist2);
+    X.true(SMath.approx(normMeanCalc1, normMean, tolerance));
+    X.true(SMath.approx(normStdevCalc1, normStdev, tolerance));
+    X.true(SMath.approx(normMeanCalc2, normMean, tolerance));
+    X.true(SMath.approx(normStdevCalc2, normStdev, tolerance));
+}
 
 function f1(x: number): number {
     return 3 * x ** 2;
