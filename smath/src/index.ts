@@ -342,6 +342,17 @@ export abstract class SMath {
     public static rnorm(mean: number = 0, stdev: number = 1): number {
         return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
     }
+    /**
+     * Generate a population of normally-distributed floating-point numbers.
+     * @param count The number of values to generate
+     * @param mean The mean of the population distribution
+     * @param stdev The standard deviation of the population
+     * @returns A population of random floats
+     * @example
+     * ```js
+     * const dataset = SMath.rdist(3); // [ 1.051..., -0.779..., -2.254... ]
+     * ```
+     */
     public static rdist(count: number, mean: number = 0, stdev: number = 1): Array<number> {
         const distribution: Array<number> = [];
         for (let i = 0; i < count; i++) {
