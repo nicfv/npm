@@ -1,6 +1,6 @@
 {
   "name": "exray",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight assertion testing framework",
   "homepage": "https://npm.nicfv.com/exray",
   "bin": "",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "devDependencies": {
     "typedoc": "0.25.12",
-    "typescript": "5.4.3"
+    "typescript": "5.4.4"
   }
 }
