@@ -306,10 +306,10 @@ export abstract class SMath {
      * @returns A random float within the range
      * @example
      * ```js
-     * const y = SMath.randFloat(-2, 2); // 0.376...
+     * const y = SMath.runif(-2, 2); // 0.376...
      * ```
      */
-    public static randFloat(min: number, max: number): number {
+    public static runif(min: number, max: number): number {
         return this.expand(Math.random(), min, max);
     }
     /**
@@ -319,15 +319,15 @@ export abstract class SMath {
      * @returns A random integer within the range
      * @example
      * ```js
-     * const y = SMath.randInt(-4, 3); // -4
+     * const y = SMath.rint(-4, 3); // -4
      * ```
      */
-    public static randInt(min: number, max: number): number {
+    public static rint(min: number, max: number): number {
         min |= 0;
         max |= 0;
         if (min < 0) { min--; }
         if (max < 0) { max--; }
-        return this.randFloat(min, max + 1) | 0; // `| 0` pulls toward 0
+        return this.runif(min, max + 1) | 0; // `| 0` pulls toward 0
     }
     /**
      * Generate a normally-distributed floating-point number.
@@ -336,11 +336,18 @@ export abstract class SMath {
      * @returns A random float
      * @example
      * ```js
-     * const y = SMath.randNorm(2, 3); // 1.627...
+     * const y = SMath.rnorm(2, 3); // 1.627...
      * ```
      */
-    public static randNorm(mean: number = 0, stdev: number = 1): number {
+    public static rnorm(mean: number = 0, stdev: number = 1): number {
         return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+    }
+    public static rdist(count: number, mean: number = 0, stdev: number = 1): Array<number> {
+        const distribution: Array<number> = [];
+        for (let i = 0; i < count; i++) {
+            distribution[i] = this.rnorm(mean, stdev);
+        }
+        return distribution;
     }
     /**
      * Take the limit of a function. A return value of `NaN` indicates

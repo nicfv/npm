@@ -120,8 +120,8 @@ X.lt(SMath.stdevs(ds2), 1.93);
 for (let i = 0; i < 100; i++) {
     const randMin: number = i - 75,
         randMax: number = i - 25,
-        rf: number = SMath.randFloat(randMin, randMax),
-        ri: number = SMath.randInt(randMin, randMax);
+        rf: number = SMath.runif(randMin, randMax),
+        ri: number = SMath.rint(randMin, randMax);
     X.ge(rf, randMin);
     X.le(rf, randMax);
     X.ge(ri, randMin);
@@ -132,11 +132,16 @@ for (let i = 0; i < 100; i++) {
     const tolerance: number = 0.5,
         normMean: number = -1,
         normStdev: number = 3,
-        normDist: Array<number> = SMath.linspace(0, 0, 1000).map(() => SMath.randNorm(normMean, normStdev)),
-        normMeanCalc: number = SMath.avg(normDist),
-        normStdevCalc: number = SMath.stdevp(normDist);
-    X.true(SMath.approx(normMeanCalc, normMean, tolerance));
-    X.true(SMath.approx(normStdevCalc, normStdev, tolerance));
+        normDist1: Array<number> = SMath.linspace(0, 0, 1000).map(() => SMath.rnorm(normMean, normStdev)),
+        normDist2: Array<number> = SMath.rdist(1000, normMean, normStdev),
+        normMeanCalc1: number = SMath.avg(normDist1),
+        normStdevCalc1: number = SMath.stdevp(normDist1),
+        normMeanCalc2: number = SMath.avg(normDist2),
+        normStdevCalc2: number = SMath.stdevp(normDist2);
+    X.true(SMath.approx(normMeanCalc1, normMean, tolerance));
+    X.true(SMath.approx(normStdevCalc1, normStdev, tolerance));
+    X.true(SMath.approx(normMeanCalc2, normMean, tolerance));
+    X.true(SMath.approx(normStdevCalc2, normStdev, tolerance));
 }
 
 function f1(x: number): number {
