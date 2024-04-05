@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2
+
+- Update dependency versions
+
 ## 1.4.1
 
 - Update dependency versions
