@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2
+
+- Update dependency versions
+- Add additional keywords
+- Fix major bug in `median()`
+
 ## 1.6.1
 
 - Add `factors()` function to compute a list of prime factors of any number

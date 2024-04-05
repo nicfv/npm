@@ -241,7 +241,7 @@ export abstract class SMath {
      * ```
      */
     public static median(data: Array<number>): number {
-        data.sort();
+        data.sort((a, b) => a - b);
         if (data.length % 2) {
             return data[(data.length - 1) / 2];
         }

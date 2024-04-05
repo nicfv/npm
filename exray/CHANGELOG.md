@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- Update typescript dependency version to 5.4.4
+
 ## 1.0.2
 
 - Make note of using `devDependency`
