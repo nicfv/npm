@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.0
+
+- Update `exray` version to 1.0.3
+
 ## 1.6.2
 
 - Update dependency versions
