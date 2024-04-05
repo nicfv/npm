@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1
+
+- Update dependency versions
+- Update unit test script
+- Update multivariant example
+
 ## 1.4.0
 
 - Update `smath` dependency

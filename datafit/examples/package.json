@@ -3,6 +3,6 @@
     "clean": "rm -rf node_modules package-lock.json"
   },
   "dependencies": {
-    "datafit": "file:datafit-1.4.0.tgz"
+    "datafit": "file:datafit-1.4.1.tgz"
   }
 }
