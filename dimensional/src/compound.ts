@@ -14,15 +14,31 @@ export class Compound<T extends string> {
             }
         }
     }
-    public mult(other: Compound<T>): Compound<T> {
+    private combine(other: Compound<T>, factor: 1 | -1): Compound<T> {
         const exponents_combined: NumberDictionary<T> = {};
         for (const t in this.exponents) {
             exponents_combined[t] = (this.exponents[t] ?? 0);
         }
         for (const t in other.exponents) {
-            exponents_combined[t] = (exponents_combined[t] ?? 0) + (other.exponents[t] ?? 0);
+            exponents_combined[t] = (exponents_combined[t] ?? 0) + factor * (other.exponents[t] ?? 0);
         }
         return new Compound<T>(exponents_combined, this.dictionary);
+    }
+    public mult(other: Compound<T>): Compound<T> {
+        return this.combine(other, 1);
+    }
+    public div(other: Compound<T>): Compound<T> {
+        return this.combine(other, -1);
+    }
+    public is(other: Compound<T>): boolean {
+        const dividend: Compound<T> = this.div(other);
+        for (let t in dividend.exponents) {
+            const exponent: number = dividend.exponents[t] ?? 0;
+            if (exponent) {
+                return false;
+            }
+        }
+        return true;
     }
     private prettyPrint(dict: NumberDictionary<T>): string {
         let str: string = '';
