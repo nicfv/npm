@@ -78,6 +78,19 @@ export class Compound<T extends string> {
         return this.exponents[exponent] ?? 0;
     }
     /**
+     * Generate an array of nonzero exponent units or dimensions.
+     * @returns An array of nonzero exponent units or dimensions
+     */
+    public getNonzeroExponents(): Array<T> {
+        const nonzeroExponents: Array<T> = [];
+        for (const t in this.exponents) {
+            if (this.getExponent(t)) {
+                nonzeroExponents.push(t);
+            }
+        }
+        return nonzeroExponents;
+    }
+    /**
      * Generate LaTeX code for a number dictionary.
      * @param dict Any number dictionary
      * @returns Partial LaTeX code
