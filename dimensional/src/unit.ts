@@ -1,5 +1,6 @@
 import { Compound } from './compound';
 import { ConversionTable } from './conversion';
+import { Dimension } from './dimension';
 import { NumberDictionary } from './lib';
 
 /**
@@ -14,7 +15,12 @@ export type Units = TimeUnits | 'none';
  * Defines the class for units for physical quantities.
  */
 export class Unit extends Compound<Units> {
+    public readonly dimension: Dimension;
     constructor(exponents: NumberDictionary<Units>) {
         super(exponents, t => ConversionTable[t].latex);
+        this.dimension = new Dimension({});
+        for (const unit of this.getNonzeroExponents()) {
+            this.dimension = this.dimension.combine(ConversionTable[unit].dim, this.getExponent(unit));
+        }
     }
 }
