@@ -1,6 +1,9 @@
 import { Dimension } from './dimension';
 import { Units } from './unit';
 
+/**
+ * Represents the full conversion table for all units.
+ */
 export const ConversionTable: { [index in Units]: { base: { min: number, max: number }, this: { min: number, max: number }, latex: string, dim: Dimension } } = {
     'days': {
         latex: 'd',
