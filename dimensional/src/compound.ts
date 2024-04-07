@@ -14,7 +14,7 @@ export class Compound<T extends string> {
      */
     constructor(private readonly exponents: NumberDictionary<T>, private readonly toLaTeX: (exponent: T) => string) {
         for (const t in exponents) {
-            const exponent: number = exponents[t] ?? 0;
+            const exponent: number = this.getExponent(t);
             if (exponent > 0) {
                 this.num[t] = exponent;
             } else if (exponent < 0) {
@@ -31,10 +31,10 @@ export class Compound<T extends string> {
     private combine(other: Compound<T>, factor: 1 | -1): Compound<T> {
         const exponents_combined: NumberDictionary<T> = {};
         for (const t in this.exponents) {
-            exponents_combined[t] = (this.exponents[t] ?? 0);
+            exponents_combined[t] = this.getExponent(t);
         }
         for (const t in other.exponents) {
-            exponents_combined[t] = (exponents_combined[t] ?? 0) + factor * (other.exponents[t] ?? 0);
+            exponents_combined[t] = this.getExponent(t) + factor * other.getExponent(t);
         }
         return new Compound<T>(exponents_combined, this.toLaTeX);
     }
@@ -62,12 +62,20 @@ export class Compound<T extends string> {
     public is(other: Compound<T>): boolean {
         const dividend: Compound<T> = this.div(other);
         for (let t in dividend.exponents) {
-            const exponent: number = dividend.exponents[t] ?? 0;
+            const exponent: number = dividend.getExponent(t);
             if (exponent) {
                 return false;
             }
         }
         return true;
+    }
+    /**
+     * Determine the exponent on the specified unit or dimension.
+     * @param exponent The unit or dimension to retrieve the exponent from
+     * @returns The exponent
+     */
+    public getExponent(exponent: T): number {
+        return this.exponents[exponent] ?? 0;
     }
     /**
      * Generate LaTeX code for a number dictionary.
