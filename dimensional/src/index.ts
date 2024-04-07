@@ -4,3 +4,4 @@
  * 
  * Exports the public-facing API for `dimensional`
  */
+export * from './dimension';
