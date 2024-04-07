@@ -9,13 +9,13 @@ export type Dimensions = 'time' | 'length' | 'mass' | 'current' | 'temperature' 
  * Contains all physical base dimensions and their corresponding abbreviations.
  */
 const DimensionTable: Dictionary<Dimensions> = {
-    'amount': 'N',
-    'current': 'I',
-    'intensity': 'J',
-    'length': 'L',
-    'mass': 'M',
-    'temperature': '\\Theta',
-    'time': 'T',
+    'amount': '\\textbf{N}',
+    'current': '\\textbf{I}',
+    'intensity': '\\textbf{J}',
+    'length': '\\textbf{L}',
+    'mass': '\\textbf{M}',
+    'temperature': '\\boldsymbol{\\Theta}',
+    'time': '\\textbf{T}',
 };
 /**
  * Defines the class for physical base dimensions.
