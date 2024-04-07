@@ -1,4 +1,5 @@
 import { Dimension } from './dimension';
+import { Quantity } from './quantity';
 import { Unit } from './unit';
 
 const V = new Dimension({});
@@ -23,3 +24,7 @@ class Child extends Parent {
 
 const c = new Child();
 c.func();
+
+const q1 = new Quantity(12, new Unit({ 'months': 1 }));
+console.log(q1.toString());
+console.log(q1.as(new Unit({ 'days': 1 })).toString());
