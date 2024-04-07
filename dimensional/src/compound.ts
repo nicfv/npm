@@ -1,15 +1,58 @@
-import { NumberDictionary } from './lib';
+import { SMath } from 'smath';
+import { Dictionary, NumberDictionary } from './lib';
 
-export class Compound<Names extends string, Abbreviations extends string> {
-    constructor(private readonly exponents: NumberDictionary<Names>) { }
-    public mult(other: Compound<Names, Abbreviations>): Compound<Names, Abbreviations> {
-        const exponents_combined: NumberDictionary<Names> = {};
-        for (const name in this.exponents) {
-            exponents_combined[name] = (this.exponents[name] ?? 0);
+export class Compound<T extends string> {
+    private readonly num: NumberDictionary<T> = {};
+    private readonly den: NumberDictionary<T> = {};
+    constructor(private readonly exponents: NumberDictionary<T>, private readonly dictionary: Dictionary<T>) {
+        for (const t in exponents) {
+            const exponent: number = exponents[t] ?? 0;
+            if (exponent > 0) {
+                this.num[t] = exponent;
+            } else if (exponent < 0) {
+                this.den[t] = -exponent;
+            }
         }
-        for (const name in other.exponents) {
-            exponents_combined[name] = (exponents_combined[name] ?? 0) + (other.exponents[name] ?? 0);
+    }
+    public mult(other: Compound<T>): Compound<T> {
+        const exponents_combined: NumberDictionary<T> = {};
+        for (const t in this.exponents) {
+            exponents_combined[t] = (this.exponents[t] ?? 0);
         }
-        return new Compound<Names, Abbreviations>(exponents_combined);
+        for (const t in other.exponents) {
+            exponents_combined[t] = (exponents_combined[t] ?? 0) + (other.exponents[t] ?? 0);
+        }
+        return new Compound<T>(exponents_combined, this.dictionary);
+    }
+    private prettyPrint(dict: NumberDictionary<T>): string {
+        let str: string = '';
+        for (const t in dict) {
+            const exponent: number = dict[t] ?? 0;
+            if (SMath.approx(exponent, 1)) {
+                str += this.dictionary[t];
+            } else if (SMath.approx(exponent, 0.5)) {
+                str += '\\sqrt{' + this.dictionary[t] + '}';
+            } else {
+                str += this.dictionary[t] + '^{' + exponent.toString() + '}';
+            }
+        }
+        return str;
+    }
+    public toString(): string {
+        let str: string = '';
+        const hasNum: boolean = Object.keys(this.num).length > 0,
+            hasDen: boolean = Object.keys(this.den).length > 0;
+        if (hasDen) {
+            str += '\\frac{';
+        }
+        if (hasNum) {
+            str += this.prettyPrint(this.num);
+        } else {
+            str += '1';
+        }
+        if (hasDen) {
+            str += '}{' + this.prettyPrint(this.den) + '}';
+        }
+        return str;
     }
 }
