@@ -1,0 +1,37 @@
+{
+  "name": "dimensional",
+  "version": "0.0.0",
+  "description": "Dimensional analysis and unit conversions",
+  "homepage": "https://npm.nicfv.com/dimensional",
+  "bin": "",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "rm -rf dist types && tsc && node dist/test.js && rm dist/test.js",
+    "test": "tsc --noEmit",
+    "clean": "rm -rf node_modules package-lock.json dist types docs",
+    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
+    "prepack": "npm run build",
+    "postpack": "rm -rf dist types"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
+  },
+  "repository": "github:nicfv/npm",
+  "license": "MIT",
+  "devDependencies": {
+    "typedoc": "0.25.12",
+    "typescript": "5.4.4"
+  }
+}
