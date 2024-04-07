@@ -8,7 +8,7 @@ export type Dimensions = 'time' | 'length' | 'mass' | 'current' | 'temperature' 
 /**
  * Contains all physical base dimensions and their corresponding abbreviations.
  */
-const dimensionTable: Dictionary<Dimensions> = {
+const DimensionTable: Dictionary<Dimensions> = {
     'amount': 'N',
     'current': 'I',
     'intensity': 'J',
@@ -22,6 +22,6 @@ const dimensionTable: Dictionary<Dimensions> = {
  */
 export class Dimension extends Compound<Dimensions> {
     constructor(exponents: NumberDictionary<Dimensions>) {
-        super(exponents, t => dimensionTable[t]);
+        super(exponents, t => DimensionTable[t]);
     }
 }
