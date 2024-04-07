@@ -30,6 +30,9 @@
   },
   "repository": "github:nicfv/npm",
   "license": "MIT",
+  "dependencies": {
+    "smath": "1.7.0"
+  },
   "devDependencies": {
     "typedoc": "0.25.12",
     "typescript": "5.4.4"
