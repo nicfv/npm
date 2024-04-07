@@ -8,7 +8,7 @@ export type Dimensions = 'time' | 'length' | 'mass' | 'current' | 'temperature' 
 
 export class Dimension extends Compound<Dimensions> {
     constructor(exponents: NumberDictionary<Dimensions>) {
-        super(exponents, {
+        super(exponents, t => ({
             'time': 'T',
             'length': 'L',
             'mass': 'M',
@@ -16,7 +16,7 @@ export class Dimension extends Compound<Dimensions> {
             'temperature': '\\Theta',
             'amount': 'N',
             'intensity': 'J',
-        });
+        })[t]);
     }
 }
 
