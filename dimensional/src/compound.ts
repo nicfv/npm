@@ -28,7 +28,7 @@ export class Compound<T extends string> {
      * @param factor The factor to use on the other compound
      * @returns The combination of the two compounds
      */
-    private combine(other: Compound<T>, factor: 1 | -1): Compound<T> {
+    public combine(other: Compound<T>, factor: number): Compound<T> {
         const exponents_combined: NumberDictionary<T> = {};
         for (const t in this.exponents) {
             exponents_combined[t] = this.getExponent(t);
@@ -98,6 +98,9 @@ export class Compound<T extends string> {
     private prettyPrint(dict: NumberDictionary<T>): string {
         let str: string = '';
         for (const t in dict) {
+            if (str.length) {
+                str += ' \\cdot ';
+            }
             const exponent: number = dict[t] ?? 0;
             if (SMath.approx(exponent, 1)) {
                 str += this.toLaTeX(t);
