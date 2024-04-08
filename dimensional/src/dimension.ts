@@ -24,4 +24,7 @@ export class Dimension extends Compound<Dimensions> {
     constructor(exponents: NumberDictionary<Dimensions>) {
         super(exponents, t => DimensionTable[t]);
     }
+    public x(other: Compound<Dimensions>, factor: number): Dimension {
+        return new Dimension(this.combine(other, factor));
+    }
 }

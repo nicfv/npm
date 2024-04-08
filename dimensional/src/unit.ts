@@ -24,7 +24,7 @@ export class Unit extends Compound<Units> {
         super(exponents, t => ConversionTable[t].latex);
         this.dimension = new Dimension({});
         for (const unit of this.getNonzeroExponents()) {
-            this.dimension = this.dimension.combine(ConversionTable[unit].dim, this.getExponent(unit));
+            this.dimension = this.dimension.x(ConversionTable[unit].dim, this.getExponent(unit));
         }
     }
 }
