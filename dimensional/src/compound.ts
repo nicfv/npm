@@ -4,98 +4,49 @@ import { NumberDictionary } from './lib';
 /**
  * Represents a compound unit or dimension.
  */
-export class Compound<T extends string> {
-    private readonly num: NumberDictionary<T> = {};
-    private readonly den: NumberDictionary<T> = {};
-    /**
-     * Create a new compound unit or dimension.
-     * @param exponents Contains an object of exponent values
-     * @param toLaTeX A function to convert the exponent to its representation in LaTeX
-     */
-    constructor(private readonly exponents: NumberDictionary<T>, private readonly toLaTeX: (exponent: T) => string) {
-        for (const t in exponents) {
-            const exponent: number = this.getExponent(t);
-            if (exponent > 0) {
-                this.num[t] = exponent;
-            } else if (exponent < 0) {
-                this.den[t] = -exponent;
-            }
+export abstract class Compound {
+    public static combine<T extends string>(u: NumberDictionary<T>, v: NumberDictionary<T>, factor: number): NumberDictionary<T> {
+        const combined: NumberDictionary<T> = {};
+        for (const t in u) {
+            combined[t] = u[t] ?? 0;
         }
-    }
-    /**
-     * Combine two compounds by applying a factor on the second compound.
-     * @param other Another compount
-     * @param factor The factor to use on the other compound
-     * @returns The combination of the two compounds
-     */
-    public combine(other: Compound<T>, factor: number): Compound<T> {
-        const exponents_combined: NumberDictionary<T> = {};
-        for (const t in this.exponents) {
-            exponents_combined[t] = this.getExponent(t);
+        for (const t in v) {
+            combined[t] = (v[t] ?? 0) + factor * (u[t] ?? 0);
         }
-        for (const t in other.exponents) {
-            exponents_combined[t] = this.getExponent(t) + factor * other.getExponent(t);
-        }
-        return new Compound<T>(exponents_combined, this.toLaTeX);
+        return combined;
     }
-    /**
-     * Multiply this compound by another.
-     * @param other Another compound
-     * @returns The product
-     */
-    public mult(other: Compound<T>): Compound<T> {
-        return this.combine(other, 1);
-    }
-    /**
-     * Divide this compound by another.
-     * @param other Another compound
-     * @returns The dividend
-     */
-    public div(other: Compound<T>): Compound<T> {
-        return this.combine(other, -1);
-    }
-    /**
-     * Determine whether two compounds contain the same units or dimensions.
-     * @param other Another compound
-     * @returns A boolean
-     */
-    public is(other: Compound<T>): boolean {
-        const dividend: Compound<T> = this.div(other);
-        for (let t in dividend.exponents) {
-            const exponent: number = dividend.getExponent(t);
-            if (exponent) {
+    public static is<T extends string>(u: NumberDictionary<T>, v: NumberDictionary<T>): boolean {
+        const dividend: NumberDictionary<T> = Compound.combine(u, v, -1);
+        for (const t in dividend) {
+            const exponent: number = dividend[t] ?? 0;
+            if (SMath.approx(exponent, 0)) {
                 return false;
             }
         }
         return true;
     }
-    /**
-     * Determine the exponent on the specified unit or dimension.
-     * @param exponent The unit or dimension to retrieve the exponent from
-     * @returns The exponent
-     */
-    public getExponent(exponent: T): number {
-        return this.exponents[exponent] ?? 0;
-    }
-    /**
-     * Generate an array of nonzero exponent units or dimensions.
-     * @returns An array of nonzero exponent units or dimensions
-     */
-    public getNonzeroExponents(): Array<T> {
-        const nonzeroExponents: Array<T> = [];
-        for (const t in this.exponents) {
-            if (this.getExponent(t)) {
-                nonzeroExponents.push(t);
+    private static split<T extends string>(u: NumberDictionary<T>): { num: NumberDictionary<T>, den: NumberDictionary<T> } {
+        let num: NumberDictionary<T> = {},
+            den: NumberDictionary<T> = {};
+        for (const t in u) {
+            const exponent: number = u[t] ?? 0;
+            if (exponent > 0) {
+                num[t] = exponent;
+            } else if (exponent < 0) {
+                den[t] = -exponent;
             }
         }
-        return nonzeroExponents;
+        return {
+            num: num,
+            den: den,
+        };
     }
     /**
      * Generate LaTeX code for a number dictionary.
      * @param dict Any number dictionary
      * @returns Partial LaTeX code
      */
-    private prettyPrint(dict: NumberDictionary<T>): string {
+    private static prettyPrint<T extends string>(dict: NumberDictionary<T>, toLaTeX: (exponent: T) => string): string {
         let str: string = '';
         for (const t in dict) {
             if (str.length) {
@@ -103,33 +54,30 @@ export class Compound<T extends string> {
             }
             const exponent: number = dict[t] ?? 0;
             if (SMath.approx(exponent, 1)) {
-                str += this.toLaTeX(t);
+                str += toLaTeX(t);
             } else if (SMath.approx(exponent, 0.5)) {
-                str += '\\sqrt{' + this.toLaTeX(t) + '}';
+                str += '\\sqrt{' + toLaTeX(t) + '}';
             } else {
-                str += this.toLaTeX(t) + '^{' + exponent.toString() + '}';
+                str += toLaTeX(t) + '^{' + exponent.toString() + '}';
             }
         }
         return str;
     }
-    /**
-     * Generate valid LaTeX code representing this compound.
-     * @returns A valid LaTeX equation
-     */
-    public toString(): string {
+    public static toString<T extends string>(u: NumberDictionary<T>, toLaTeX: (exponent: T) => string): string {
         let str: string = '';
-        const hasNum: boolean = Object.keys(this.num).length > 0,
-            hasDen: boolean = Object.keys(this.den).length > 0;
+        const frac = this.split(u);
+        const hasNum: boolean = Object.keys(frac.num).length > 0,
+            hasDen: boolean = Object.keys(frac.den).length > 0;
         if (hasDen) {
             str += '\\frac{';
         }
         if (hasNum) {
-            str += this.prettyPrint(this.num);
+            str += this.prettyPrint(frac.num, toLaTeX);
         } else {
             str += '1';
         }
         if (hasDen) {
-            str += '}{' + this.prettyPrint(this.den) + '}';
+            str += '}{' + this.prettyPrint(frac.den, toLaTeX) + '}';
         }
         return str;
     }
