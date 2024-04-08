@@ -8,9 +8,13 @@ import { NumberDictionary } from './lib';
  */
 export type TimeUnits = 'nanoseconds' | 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
 /**
+ * Contains a list of all units related to distance.
+ */
+export type LengthUnits = 'nanometers' | 'micrometers' | 'microns' | 'millimeters' | 'centimeters' | 'meters' | 'kilometers' | 'inches' | 'feet' | 'yards' | 'miles';
+/**
  * Contains a list of all unit sub-lists.
  */
-export type Units = TimeUnits | 'none';
+export type Units = TimeUnits | LengthUnits;
 /**
  * Defines the class for units for physical quantities.
  */
