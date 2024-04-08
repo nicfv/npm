@@ -25,22 +25,6 @@ export abstract class Compound {
         }
         return true;
     }
-    private static split<T extends string>(u: NumberDictionary<T>): { num: NumberDictionary<T>, den: NumberDictionary<T> } {
-        let num: NumberDictionary<T> = {},
-            den: NumberDictionary<T> = {};
-        for (const t in u) {
-            const exponent: number = u[t] ?? 0;
-            if (exponent > 0) {
-                num[t] = exponent;
-            } else if (exponent < 0) {
-                den[t] = -exponent;
-            }
-        }
-        return {
-            num: num,
-            den: den,
-        };
-    }
     /**
      * Generate LaTeX code for a number dictionary.
      * @param dict Any number dictionary
@@ -65,19 +49,28 @@ export abstract class Compound {
     }
     public static toString<T extends string>(u: NumberDictionary<T>, toLaTeX: (exponent: T) => string): string {
         let str: string = '';
-        const frac = this.split(u);
-        const hasNum: boolean = Object.keys(frac.num).length > 0,
-            hasDen: boolean = Object.keys(frac.den).length > 0;
+        let num: NumberDictionary<T> = {},
+            den: NumberDictionary<T> = {};
+        for (const t in u) {
+            const exponent: number = u[t] ?? 0;
+            if (exponent > 0) {
+                num[t] = exponent;
+            } else if (exponent < 0) {
+                den[t] = -exponent;
+            }
+        }
+        const hasNum: boolean = Object.keys(num).length > 0,
+            hasDen: boolean = Object.keys(den).length > 0;
         if (hasDen) {
             str += '\\frac{';
         }
         if (hasNum) {
-            str += this.prettyPrint(frac.num, toLaTeX);
+            str += this.prettyPrint(num, toLaTeX);
         } else {
             str += '1';
         }
         if (hasDen) {
-            str += '}{' + this.prettyPrint(frac.den, toLaTeX) + '}';
+            str += '}{' + this.prettyPrint(den, toLaTeX) + '}';
         }
         return str;
     }
