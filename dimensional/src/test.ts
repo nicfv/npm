@@ -2,12 +2,33 @@ import { Dimension } from './dimension';
 import { Quantity } from './quantity';
 import { Unit } from './unit';
 
-const u1: Unit = { centimeters: 1, seconds: 1 };
-const u2: Unit = { miles: 1, hours: 1 };
-const d1: Dimension = { amount: 1 };
+const V = new Dimension({});
+const speed = new Dimension({ 'time': -1, 'length': 1, 'temperature': 0.5 })
+console.log(V.toString(), speed.toString(), V.is(speed), V.getExponent('amount'), V.getExponent('time'));
 
-const q1: Quantity = new Quantity(5, u1);
+const hz = new Unit({ 'seconds': -1 });
+console.log(hz.toString());
 
-// const out = Compound.combine(u1, u2, 2);
-const out = q1.as(u2);
-console.log(out.toString());
+class Parent {
+    public func(): void {
+        console.log('hello!');
+    }
+}
+
+class Child extends Parent {
+    public func(): void {
+        super.func();
+        console.log('world!');
+    }
+}
+
+const c = new Child();
+c.func();
+
+const q1 = new Quantity(1, new Unit({ 'hours': 2 }));
+console.log(q1.toString());
+console.log(q1.as(new Unit({ 'minutes': 2 })).toString());
+
+const q2 = new Quantity(60, new Unit({ miles: 1, hours: -1 }));
+console.log(q2.toString());
+console.log(q2.as(new Unit({ meters: 1, seconds: -1 })).toString());

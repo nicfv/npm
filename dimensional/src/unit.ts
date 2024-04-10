@@ -18,16 +18,13 @@ export type Units = TimeUnits | LengthUnits;
 /**
  * Defines the class for units for physical quantities.
  */
-export type Unit = NumberDictionary<Units>;
-/**
- * Calculate the base dimensions for any unit of a quantity.
- * @param unit Any combination of physical units
- * @returns The base dimensions
- */
-export function getBaseDimensions(unit: Unit): Dimension {
-    let dimension: Dimension = {};
-    for (const u in unit) {
-        dimension = Compound.combine(dimension, ConversionTable[u as Units].dim, unit[u as Units] ?? 0);
+export class Unit extends Compound<Units> {
+    public readonly dimension: Dimension;
+    constructor(exponents: NumberDictionary<Units>) {
+        super(exponents, t => ConversionTable[t].latex);
+        this.dimension = new Dimension({});
+        for (const unit of this.getNonzeroExponents()) {
+            this.dimension = this.dimension.combine(ConversionTable[unit].dim, this.getExponent(unit));
+        }
     }
-    return dimension;
 }
