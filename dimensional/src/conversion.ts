@@ -2,9 +2,26 @@ import { Dimension } from './dimension';
 import { Units } from './unit';
 
 /**
+ * Contains information on how units should be converted.
+ */
+export interface Conversion {
+    /**
+     * The LaTeX representation of this unit.
+     */
+    readonly latex: string;
+    /**
+     * The base physical dimensions of this unit.
+     */
+    readonly dim: Dimension;
+    /**
+     * The scale of this unit in relation to the base unit of this dimension.
+     */
+    readonly scale: number;
+}
+/**
  * Represents the full conversion table for **absolute** units only.
  */
-export const ConversionTable: { [index in Units]: { scale: number, latex: string, dim: Dimension } } = {
+export const ConversionTable: { [index in Units]: Conversion } = {
     'centimeters': {
         latex: 'cm',
         dim: new Dimension({ length: 1 }),
