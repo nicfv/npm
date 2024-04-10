@@ -1,4 +1,3 @@
-import { Compound } from './compound';
 import { Dictionary, NumberDictionary } from './lib';
 
 /**
@@ -20,11 +19,4 @@ const DimensionTable: Dictionary<Dimensions> = {
 /**
  * Defines the class for physical base dimensions.
  */
-export class Dimension extends Compound<Dimensions> {
-    constructor(exponents: NumberDictionary<Dimensions>) {
-        super(exponents, t => DimensionTable[t]);
-    }
-    public x(other: Compound<Dimensions>, factor: number): Dimension {
-        return new Dimension(this.combine(other, factor));
-    }
-}
+export type Dimension = NumberDictionary<Dimensions>;
