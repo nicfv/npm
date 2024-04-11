@@ -122,4 +122,49 @@ export const ConversionTable: { [index in Units]: Conversion } = {
         dim: Dim({ time: 1 }),
         scale: 60 * 60 * 24 * 365.25,
     },
+    milligram: {
+        latex: 'mg',
+        dim: Dim({ mass: 1 }),
+        scale: 1e-6,
+    },
+    gram: {
+        latex: 'g',
+        dim: Dim({ mass: 1 }),
+        scale: 1e-3,
+    },
+    kilogram: {
+        latex: 'kg',
+        dim: Dim({ mass: 1 }),
+        scale: 1,
+    },
+    tonne: {
+        latex: 't',
+        dim: Dim({ mass: 1 }),
+        scale: 1e3,
+    },
+    ounce: {
+        latex: 'oz',
+        dim: Dim({ mass: 1 }),
+        scale: 1 / 2.204623 / 16,
+    },
+    poundmass: {
+        latex: 'lbm',
+        dim: Dim({ mass: 1 }),
+        scale: 1 / 2.204623,
+    },
+    slug: {
+        latex: '\\text{slug}',
+        dim: Dim({ mass: 1 }),
+        scale: 1 / 2.204623,
+    },
+    stone: {
+        latex: '\\text{st.}',
+        dim: Dim({ mass: 1 }),
+        scale: 14 / 2.204623,
+    },
+    shortton: {
+        latex: '\\text{tn}',
+        dim: Dim({ mass: 1 }),
+        scale: 2e3 / 2.204623,
+    },
 };

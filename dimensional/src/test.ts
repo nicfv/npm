@@ -15,12 +15,12 @@ import { Unit, UoM } from './unit';
 }
 
 {
-    const meters_per_second: Unit = UoM({ meters: 1, seconds: -1 }),
-        miles_per_hour: Unit = UoM({ miles: 1, hours: -1 });
+    const meters_per_second: Unit = UoM({ meter: 1, second: -1 }),
+        miles_per_hour: Unit = UoM({ mile: 1, hour: -1 });
     X.true(meters_per_second.dimension.is(miles_per_hour.dimension));
     X.false(meters_per_second.is(miles_per_hour));
     X.eq(meters_per_second.getNonzeroExponents().length, 2);
-    X.eq(meters_per_second.getExponent('meters'), 1);
-    X.eq(meters_per_second.getExponent('days'), 0);
+    X.eq(meters_per_second.getExponent('meter'), 1);
+    X.eq(meters_per_second.getExponent('day'), 0);
     X.is(meters_per_second.toString(), '\\frac{m}{s}');
 }

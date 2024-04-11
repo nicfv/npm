@@ -12,7 +12,7 @@ export type Units =
     // Length/distance
     | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
     // Mass
-    | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound-mass' | 'slug' | 'stone' | 'ton'
+    | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'poundmass' | 'slug' | 'stone' | 'shortton'
     // Trailing semicolon
     ;
 /**
