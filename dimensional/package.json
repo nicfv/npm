@@ -1,6 +1,6 @@
 {
   "name": "dimensional",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Dimensional analysis and unit conversions",
   "homepage": "https://npm.nicfv.com/dimensional",
   "bin": "",
@@ -11,12 +11,11 @@
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist types && tsc && node dist/test.js && rm dist/test.js",
+    "build": "rm -rf dist types docs && typedoc --options ../typedoc.json src && node dist/test.js && rm dist/test.js types/test.d.ts",
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
-    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator --excludePrivate --excludeProtected src",
     "prepack": "npm run build",
-    "postpack": "rm -rf dist types"
+    "postpack": "npm run clean"
   },
   "keywords": [],
   "author": {
@@ -35,7 +34,6 @@
   },
   "devDependencies": {
     "exray": "1.0.3",
-    "typedoc": "0.25.13",
-    "typescript": "5.4.5"
+    "typedoc": "0.25.13"
   }
 }
