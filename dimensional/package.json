@@ -14,7 +14,7 @@
     "build": "rm -rf dist types && tsc && node dist/test.js && rm dist/test.js",
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
-    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
+    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator --excludePrivate --excludeProtected src",
     "prepack": "npm run build",
     "postpack": "rm -rf dist types"
   },
