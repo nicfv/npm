@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist types docs && typedoc --options ../typedoc.json src && node dist/test.js && rm dist/test.js types/test.d.ts",
-    "test": "tsc --noEmit",
+    "test": "tsc -v && tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "prepack": "npm run build",
     "postpack": "npm run clean"
