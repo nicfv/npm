@@ -31,7 +31,7 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.8.0"
+    "smath": "1.8.1"
   },
   "devDependencies": {
     "exray": "1.0.3",
