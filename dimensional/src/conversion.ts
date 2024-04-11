@@ -22,105 +22,105 @@ export interface Conversion {
  * Represents the full conversion table for **absolute** units only.
  */
 export const ConversionTable: { [index in Units]: Conversion } = {
-    'centimeter': {
-        latex: 'cm',
-        dim: Dim({ length: 1 }),
-        scale: 1e-2,
-    },
-    'day': {
-        latex: 'd',
-        dim: Dim({ time: 1 }),
-        scale: 60 * 60 * 24,
-    },
-    'foot': {
-        latex: 'ft',
-        dim: Dim({ length: 1 }),
-        scale: 0.3048,
-    },
-    'hour': {
-        latex: 'h',
-        dim: Dim({ time: 1 }),
-        scale: 60 * 60,
-    },
-    'inch': {
-        latex: 'in',
-        dim: Dim({ length: 1 }),
-        scale: 0.3048 / 12,
-    },
-    'kilometer': {
-        latex: 'km',
-        dim: Dim({ length: 1 }),
-        scale: 1e3,
-    },
-    'meter': {
-        latex: 'm',
-        dim: Dim({ length: 1 }),
-        scale: 1,
-    },
-    'micrometer': {
-        latex: '\\mu m',
-        dim: Dim({ length: 1 }),
-        scale: 1e-6,
-    },
-    'micron': {
-        latex: '\\mu m',
-        dim: Dim({ length: 1 }),
-        scale: 1e-6,
-    },
-    'mile': {
-        latex: 'mi',
-        dim: Dim({ length: 1 }),
-        scale: 0.3048 * 5280,
-    },
-    'millimeter': {
-        latex: 'mm',
-        dim: Dim({ length: 1 }),
-        scale: 1e-3,
-    },
-    'millisecond': {
-        latex: 'ms',
-        dim: Dim({ time: 1 }),
-        scale: 1e-3,
-    },
-    'minute': {
-        latex: 'm',
-        dim: Dim({ time: 1 }),
-        scale: 60,
-    },
-    'month': {
-        latex: 'M',
-        dim: Dim({ time: 1 }),
-        scale: 60 * 60 * 24 * 365.25 / 12,
-    },
-    'nanometer': {
-        latex: 'nm',
-        dim: Dim({ length: 1 }),
-        scale: 1e-9,
-    },
-    'nanosecond': {
+    nanosecond: {
         latex: 'ns',
         dim: Dim({ time: 1 }),
         scale: 1e-9,
     },
-    'second': {
+    millisecond: {
+        latex: 'ms',
+        dim: Dim({ time: 1 }),
+        scale: 1e-3,
+    },
+    second: {
         latex: 's',
         dim: Dim({ time: 1 }),
         scale: 1,
     },
-    'week': {
+    minute: {
+        latex: 'm',
+        dim: Dim({ time: 1 }),
+        scale: 60,
+    },
+    hour: {
+        latex: 'h',
+        dim: Dim({ time: 1 }),
+        scale: 60 * 60,
+    },
+    day: {
+        latex: 'd',
+        dim: Dim({ time: 1 }),
+        scale: 60 * 60 * 24,
+    },
+    week: {
         latex: 'w',
         dim: Dim({ time: 1 }),
         scale: 60 * 60 * 24 * 7,
     },
-    'yard': {
+    month: {
+        latex: 'M',
+        dim: Dim({ time: 1 }),
+        scale: 60 * 60 * 24 * 365.25 / 12,
+    },
+    year: {
+        latex: 'y',
+        dim: Dim({ time: 1 }),
+        scale: 60 * 60 * 24 * 365.25,
+    },
+    nanometer: {
+        latex: 'nm',
+        dim: Dim({ length: 1 }),
+        scale: 1e-9,
+    },
+    micrometer: {
+        latex: '\\mu m',
+        dim: Dim({ length: 1 }),
+        scale: 1e-6,
+    },
+    micron: {
+        latex: '\\mu m',
+        dim: Dim({ length: 1 }),
+        scale: 1e-6,
+    },
+    millimeter: {
+        latex: 'mm',
+        dim: Dim({ length: 1 }),
+        scale: 1e-3,
+    },
+    centimeter: {
+        latex: 'cm',
+        dim: Dim({ length: 1 }),
+        scale: 1e-2,
+    },
+    meter: {
+        latex: 'm',
+        dim: Dim({ length: 1 }),
+        scale: 1,
+    },
+    kilometer: {
+        latex: 'km',
+        dim: Dim({ length: 1 }),
+        scale: 1e3,
+    },
+    inch: {
+        latex: 'in',
+        dim: Dim({ length: 1 }),
+        scale: 0.3048 / 12,
+    },
+    foot: {
+        latex: 'ft',
+        dim: Dim({ length: 1 }),
+        scale: 0.3048,
+    },
+    yard: {
         latex: 'yd',
         dim: Dim({ length: 1 }),
         scale: 0.3048,
     },
-    'year': {
-        latex: 'y',
-        dim: Dim({ time: 1 }),
-        scale: 60 * 60 * 24 * 365.25,
+    mile: {
+        latex: 'mi',
+        dim: Dim({ length: 1 }),
+        scale: 0.3048 * 5280,
     },
     milligram: {
         latex: 'mg',
