@@ -28,3 +28,11 @@ export class Dimension extends Compound<Dimensions> {
         return new Dimension(super.combine(other, exponent));
     }
 }
+/**
+ * Shorthand for creating a dimension object.
+ * @param exponents Exponents of each of the physical base dimensions
+ * @returns A new dimension
+ */
+export function Dim(exponents: NumberDictionary<Dimensions>): Dimension {
+    return new Dimension(exponents);
+}

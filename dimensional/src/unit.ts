@@ -31,3 +31,11 @@ export class Unit extends Compound<Units> {
         return new Unit(this.combine(other, exponent));
     }
 }
+/**
+ * Shorthand for creating a new unit object.
+ * @param exponents Exponents on each of the individual units
+ * @returns A new unit object
+ */
+export function U(exponents: NumberDictionary<Units>): Unit {
+    return new Unit(exponents);
+}
