@@ -326,8 +326,8 @@ export namespace SMath {
         min |= 0;
         max |= 0;
         if (min < 0) { min--; }
-        if (max < 0) { max--; }
-        return runif(min, max + 1) | 0; // `| 0` pulls toward 0
+        if (max > 0) { max++; }
+        return clamp(runif(min, max), min, max) | 0; // `| 0` pulls toward 0
     }
     /**
      * Generate a normally-distributed floating-point number.
