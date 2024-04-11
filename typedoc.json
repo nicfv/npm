@@ -1,5 +1,4 @@
 {
-    "cleanOutputDir": true,
     "disableSources": true,
     "emit": "both",
     "excludeExternals": true,
