@@ -3,8 +3,8 @@ nicfv's public NPM packages in one repository
 
 ## Developer Notes
 - Each package must have the following scripts
+    - `build`
     - `test`
-    - `docs`
     - `clean`
     - Something to compile on `npm publish`
 - Each package must contain `README.md` and `CHANGELOG.md`
