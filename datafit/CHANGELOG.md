@@ -3,7 +3,9 @@
 ## 1.4.3
 
 - Update dependency versions
-- Minor tsdoc typo fix
+- Minor tsdoc typo fix for `F`
+- Use global typedoc configuration
+- Compile and build documentation simultaneously
 
 ## 1.4.2
 
