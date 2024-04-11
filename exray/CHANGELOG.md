@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.4
+
+- Use global TypeDoc configuration file
+- Compile and build documentation simultaneously
+- Remove dependency on typescript (TypeDoc will take care of this)
+- Remove declaration types for test on build output
+
 ## 1.0.3
 
 - Update typescript dependency version to 5.4.4
