@@ -8,6 +8,7 @@
 - Compile and build documentation simultaneously
 - Remove dependency on typescript (TypeDoc will take care of this)
 - Remove declaration types for test on build output
+- Output `tsc` version on `npm test`
 
 ## 1.4.2
 
