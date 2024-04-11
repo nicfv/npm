@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Color gradients for data visualization",
   "homepage": "https://npm.nicfv.com/viridis",
   "bin": "",
@@ -11,12 +11,11 @@
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist types && tsc && node dist/test.js && rm dist/test.js",
+    "build": "rm -rf dist types docs && typedoc --options ../typedoc.json src && node dist/test.js && rm dist/test.js types/test.d.ts",
     "test": "tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
-    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepack": "npm run build",
-    "postpack": "rm -rf dist types"
+    "postpack": "npm run clean"
   },
   "keywords": [
     "color",
@@ -43,11 +42,10 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.6.1"
+    "smath": "1.8.1"
   },
   "devDependencies": {
-    "exray": "1.0.2",
-    "typedoc": "0.25.12",
-    "typescript": "5.4.4"
+    "exray": "1.0.3",
+    "typedoc": "0.25.13"
   }
 }
