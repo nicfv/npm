@@ -18,10 +18,14 @@ const DimensionTable: Dictionary<Dimensions> = {
     'time': '\\textbf{T}',
 };
 /**
+ * Is an object containing keys of dimensions and values of nonzero exponents.
+ */
+export interface DimensionExponents extends NumberDictionary<Dimensions> { };
+/**
  * Defines the class for physical base dimensions.
  */
 export class Dimension extends Compound<Dimensions, Dimension> {
-    constructor(exponents: NumberDictionary<Dimensions>) {
+    constructor(exponents: DimensionExponents) {
         super(exponents, t => DimensionTable[t]);
     }
     public mult(other: Dimension, exponent: number): Dimension {
@@ -33,6 +37,6 @@ export class Dimension extends Compound<Dimensions, Dimension> {
  * @param exponents Exponents of each of the physical base dimensions
  * @returns A new dimension
  */
-export function Dim(exponents: NumberDictionary<Dimensions>): Dimension {
+export function Dim(exponents: DimensionExponents): Dimension {
     return new Dimension(exponents);
 }

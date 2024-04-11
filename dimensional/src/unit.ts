@@ -4,23 +4,24 @@ import { Dimension } from './dimension';
 import { NumberDictionary } from './lib';
 
 /**
- * Contains a list of all units related to time.
+ * Contains a list of all physical units of measurement.
  */
-export type TimeUnits = 'nanoseconds' | 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+export type Units =
+    // Time span/duration
+    | 'nanoseconds' | 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years'
+    // Length/distance
+    | 'nanometers' | 'micrometers' | 'microns' | 'millimeters' | 'centimeters' | 'meters' | 'kilometers' | 'inches' | 'feet' | 'yards' | 'miles'
+    ;
 /**
- * Contains a list of all units related to distance.
+ * Is an object containing keys of units and values of nonzero exponents.
  */
-export type LengthUnits = 'nanometers' | 'micrometers' | 'microns' | 'millimeters' | 'centimeters' | 'meters' | 'kilometers' | 'inches' | 'feet' | 'yards' | 'miles';
+export interface UnitExponents extends NumberDictionary<Units> { };
 /**
- * Contains a list of all unit sub-lists.
- */
-export type Units = TimeUnits | LengthUnits;
-/**
- * Defines the class for units for physical quantities.
+ * Defines the class for units of measurement for physical quantities.
  */
 export class Unit extends Compound<Units, Unit> {
     public readonly dimension: Dimension;
-    constructor(exponents: NumberDictionary<Units>) {
+    constructor(exponents: UnitExponents) {
         super(exponents, t => ConversionTable[t].latex);
         this.dimension = new Dimension({});
         for (const unit of this.getNonzeroExponents()) {
@@ -32,10 +33,10 @@ export class Unit extends Compound<Units, Unit> {
     }
 }
 /**
- * Shorthand for creating a new unit object.
+ * Shorthand for creating a new unit of measurement.
  * @param exponents Exponents on each of the individual units
  * @returns A new unit object
  */
-export function U(exponents: NumberDictionary<Units>): Unit {
+export function Uof(exponents: UnitExponents): Unit {
     return new Unit(exponents);
 }
