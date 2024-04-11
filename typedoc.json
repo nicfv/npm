@@ -6,4 +6,5 @@
     "excludeProtected": true,
     "hideGenerator": true,
     "includeVersion": true,
+    "treatValidationWarningsAsErrors": true,
 }
