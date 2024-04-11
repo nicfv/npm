@@ -8,7 +8,7 @@
  * Contains a small math function library including
  * useful interpolation and extrapolation functions.
  */
-export abstract class SMath {
+export namespace SMath {
     /**
      * Check if two numbers are approximately equal with a maximum abolute error.
      * @param a Any number
@@ -21,7 +21,7 @@ export abstract class SMath {
      *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
      * ```
      */
-    public static approx(a: number, b: number, epsilon: number = 1e-6): boolean {
+    export function approx(a: number, b: number, epsilon: number = 1e-6): boolean {
         return a - b < epsilon && b - a < epsilon;
     }
     /**
@@ -36,7 +36,7 @@ export abstract class SMath {
      *       n2 = SMath.clamp(-2, 0, 10); // 0
      * ```
      */
-    public static clamp(n: number, min: number, max: number): number {
+    export function clamp(n: number, min: number, max: number): number {
         if (n < min) {
             return min;
         }
@@ -56,7 +56,7 @@ export abstract class SMath {
      * const y = SMath.normalize(18, 9, 99); // 0.1
      * ```
      */
-    public static normalize(n: number, min: number, max: number): number {
+    export function normalize(n: number, min: number, max: number): number {
         if (min === max) {
             return 0;
         }
@@ -73,7 +73,7 @@ export abstract class SMath {
      * const y = SMath.expand(0.25, 4, 6); // 4.5
      * ```
      */
-    public static expand(n: number, min: number, max: number): number {
+    export function expand(n: number, min: number, max: number): number {
         return (max - min) * n + min;
     }
     /**
@@ -90,8 +90,8 @@ export abstract class SMath {
      *       F = SMath.translate(C, 0, 100, 32, 212); // 68
      * ```
      */
-    public static translate(n: number, min1: number, max1: number, min2: number, max2: number): number {
-        return this.expand(this.normalize(n, min1, max1), min2, max2);
+    export function translate(n: number, min1: number, max1: number, min2: number, max2: number): number {
+        return expand(normalize(n, min1, max1), min2, max2);
     }
     /**
      * Generate an array of linearly spaced numbers.
@@ -105,10 +105,10 @@ export abstract class SMath {
      * // [ 1, 1.8, 2.6, 3.4, 4.2, 5 ]
      * ```
      */
-    public static linspace(min: number, max: number, count: number): Array<number> {
+    export function linspace(min: number, max: number, count: number): Array<number> {
         const space: Array<number> = [];
         for (let i = 0; i < count; i++) {
-            space[i] = this.translate(i, 0, count - 1, min, max);
+            space[i] = translate(i, 0, count - 1, min, max);
         }
         return space;
     }
@@ -124,8 +124,8 @@ export abstract class SMath {
      * // [ 1, 3.2, 10, 31.6, 100 ]
      * ```
      */
-    public static logspace(min: number, max: number, count: number): Array<number> {
-        return this.linspace(min, max, count).map(n => 10 ** n);
+    export function logspace(min: number, max: number, count: number): Array<number> {
+        return linspace(min, max, count).map(n => 10 ** n);
     }
     /**
      * Compute the factorial of `n`.
@@ -136,7 +136,7 @@ export abstract class SMath {
      * const y = SMath.factorial(5); // 120
      * ```
      */
-    public static factorial(n: number): number {
+    export function factorial(n: number): number {
         if (n < 0 || (n | 0) !== n) {
             throw new Error('Input must be a positive integer.');
         } else if (n === 0) {
@@ -144,7 +144,7 @@ export abstract class SMath {
         } else if (n <= 2) {
             return n;
         } else {
-            return n * this.factorial(n - 1);
+            return n * factorial(n - 1);
         }
     }
     /**
@@ -156,7 +156,7 @@ export abstract class SMath {
      * const y = SMath.factors(12); // [ 2, 2, 3 ]
      * ```
      */
-    public static factors(n: number): Array<number> {
+    export function factors(n: number): Array<number> {
         if (n < 0 || (n | 0) !== n) {
             throw new Error('Input must be a positive integer!');
         }
@@ -190,7 +190,7 @@ export abstract class SMath {
      * const e = SMath.error(22.5, 25); // -0.1
      * ```
      */
-    public static error(experimental: number, actual: number): number {
+    export function error(experimental: number, actual: number): number {
         return (experimental - actual) / actual;
     }
     /**
@@ -203,7 +203,7 @@ export abstract class SMath {
      * const y = SMath.sum([1, 2, 3]); // 6
      * ```
      */
-    public static sum(data: Array<number>): number {
+    export function sum(data: Array<number>): number {
         return data.reduce((a, b) => a + b, 0);
     }
     /**
@@ -216,7 +216,7 @@ export abstract class SMath {
      * const y = SMath.prod([2, 2, 3, 5]); // 60
      * ```
      */
-    public static prod(data: Array<number>): number {
+    export function prod(data: Array<number>): number {
         return data.reduce((a, b) => a * b, 1);
     }
     /**
@@ -228,8 +228,8 @@ export abstract class SMath {
      * const y = SMath.avg([1, 2, 4, 4]); // 2.75
      * ```
      */
-    public static avg(data: Array<number>): number {
-        return this.sum(data) / data.length;
+    export function avg(data: Array<number>): number {
+        return sum(data) / data.length;
     }
     /**
      * Compute the median of a set of numbers.
@@ -240,12 +240,12 @@ export abstract class SMath {
      * const y = SMath.median([2, 5, 3, 1]); // 2.5
      * ```
      */
-    public static median(data: Array<number>): number {
+    export function median(data: Array<number>): number {
         data.sort((a, b) => a - b);
         if (data.length % 2) {
             return data[(data.length - 1) / 2];
         }
-        return this.avg([data[data.length / 2 - 1], data[data.length / 2]]);
+        return avg([data[data.length / 2 - 1], data[data.length / 2]]);
     }
     /**
      * Compute the variance of a **complete population**.
@@ -256,10 +256,10 @@ export abstract class SMath {
      * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
      * ```
      */
-    public static varp(data: Array<number>): number {
-        const mean: number = this.avg(data),
+    export function varp(data: Array<number>): number {
+        const mean: number = avg(data),
             squares: Array<number> = data.map(x => (x - mean) ** 2);
-        return this.sum(squares) / data.length;
+        return sum(squares) / data.length;
     }
     /**
      * Compute the variance of a **sample**.
@@ -270,10 +270,10 @@ export abstract class SMath {
      * const y = SMath.vars([1, 2, 4, 4]); // 2.25
      * ```
      */
-    public static vars(data: Array<number>): number {
-        const mean: number = this.avg(data),
+    export function vars(data: Array<number>): number {
+        const mean: number = avg(data),
             squares: Array<number> = data.map(x => (x - mean) ** 2);
-        return this.sum(squares) / (data.length - 1);
+        return sum(squares) / (data.length - 1);
     }
     /**
      * Compute the standard deviation of a **complete population**.
@@ -284,8 +284,8 @@ export abstract class SMath {
      * const y = SMath.stdevp([1, 2, 3, 4]); // 1.118...
      * ```
      */
-    public static stdevp(data: Array<number>): number {
-        return Math.sqrt(this.varp(data));
+    export function stdevp(data: Array<number>): number {
+        return Math.sqrt(varp(data));
     }
     /**
      * Compute the standard deviation of a **sample**.
@@ -296,8 +296,8 @@ export abstract class SMath {
      * const y = SMath.stdevs([1, 2, 3, 4]); // 1.29...
      * ```
      */
-    public static stdevs(data: Array<number>): number {
-        return Math.sqrt(this.vars(data));
+    export function stdevs(data: Array<number>): number {
+        return Math.sqrt(vars(data));
     }
     /**
      * Generate a uniformly-distributed floating-point number within the range.
@@ -309,8 +309,8 @@ export abstract class SMath {
      * const y = SMath.runif(-2, 2); // 0.376...
      * ```
      */
-    public static runif(min: number, max: number): number {
-        return this.expand(Math.random(), min, max);
+    export function runif(min: number, max: number): number {
+        return expand(Math.random(), min, max);
     }
     /**
      * Generate a uniformly-distributed integer within the range.
@@ -322,12 +322,12 @@ export abstract class SMath {
      * const y = SMath.rint(-4, 3); // -4
      * ```
      */
-    public static rint(min: number, max: number): number {
+    export function rint(min: number, max: number): number {
         min |= 0;
         max |= 0;
         if (min < 0) { min--; }
         if (max < 0) { max--; }
-        return this.runif(min, max + 1) | 0; // `| 0` pulls toward 0
+        return runif(min, max + 1) | 0; // `| 0` pulls toward 0
     }
     /**
      * Generate a normally-distributed floating-point number.
@@ -339,7 +339,7 @@ export abstract class SMath {
      * const y = SMath.rnorm(2, 3); // 1.627...
      * ```
      */
-    public static rnorm(mean: number = 0, stdev: number = 1): number {
+    export function rnorm(mean: number = 0, stdev: number = 1): number {
         return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
     }
     /**
@@ -353,10 +353,10 @@ export abstract class SMath {
      * const dataset = SMath.rdist(3); // [ 1.051..., -0.779..., -2.254... ]
      * ```
      */
-    public static rdist(count: number, mean: number = 0, stdev: number = 1): Array<number> {
+    export function rdist(count: number, mean: number = 0, stdev: number = 1): Array<number> {
         const distribution: Array<number> = [];
         for (let i = 0; i < count; i++) {
-            distribution[i] = this.rnorm(mean, stdev);
+            distribution[i] = rnorm(mean, stdev);
         }
         return distribution;
     }
@@ -373,7 +373,7 @@ export abstract class SMath {
      * const y = SMath.lim(Math.log, 0); // -Infinity
      * ```
      */
-    public static lim(f: (x: number) => number, x: number, h: number = 1e-3, discontinuity_cutoff: number = 1): number {
+    export function lim(f: (x: number) => number, x: number, h: number = 1e-3, discontinuity_cutoff: number = 1): number {
         const center: number = f(x),
             left1: number = f(x - h),
             left2: number = f(x - h / 2),
@@ -391,7 +391,7 @@ export abstract class SMath {
             } else if (left2 < left1 - 2 * h) {
                 left = -Infinity;
             } else {
-                left = this.avg([left1, left2]);
+                left = avg([left1, left2]);
             }
         } else if (left1 === left2) { // Handles +/-Infinity case
             left = left1;
@@ -405,7 +405,7 @@ export abstract class SMath {
             } else if (right2 < right1 - 2 * h) {
                 right = -Infinity;
             } else {
-                right = this.avg([right1, right2]);
+                right = avg([right1, right2]);
             }
         } else if (right1 === right2) { // Handles +/-Infinity case
             right = right1;
@@ -416,7 +416,7 @@ export abstract class SMath {
         if (left === right) { // Handles +/-Infinity case
             return left;
         } else if (SMath.approx(left, right, discontinuity_cutoff)) {
-            return this.avg([left, right]);
+            return avg([left, right]);
         } else if (!Number.isNaN(left) && Number.isNaN(right)) {
             return left;
         } else if (Number.isNaN(left) && !Number.isNaN(right)) {
@@ -436,7 +436,7 @@ export abstract class SMath {
      * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
      * ```
      */
-    public static differentiate(f: (x: number) => number, x: number, h: number = 1e-3): number {
+    export function differentiate(f: (x: number) => number, x: number, h: number = 1e-3): number {
         return (f(x + h) - f(x - h)) / (2 * h);
     }
     /**
@@ -451,7 +451,7 @@ export abstract class SMath {
      * const y = SMath.integrate(x => 3 * x ** 2, 1, 2); // 7
      * ```
      */
-    public static integrate(f: (x: number) => number, a: number, b: number, Ndx: number = 1e3): number {
-        return ((b - a) / Ndx) * this.sum(this.linspace(a, b, Ndx).map(x => f(x)));
+    export function integrate(f: (x: number) => number, a: number, b: number, Ndx: number = 1e3): number {
+        return ((b - a) / Ndx) * sum(linspace(a, b, Ndx).map(x => f(x)));
     }
 }
