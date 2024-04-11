@@ -20,7 +20,7 @@ const DimensionTable: Dictionary<Dimensions> = {
 /**
  * Defines the class for physical base dimensions.
  */
-export class Dimension extends Compound<Dimensions> {
+export class Dimension extends Compound<Dimensions, Dimension> {
     constructor(exponents: NumberDictionary<Dimensions>) {
         super(exponents, t => DimensionTable[t]);
     }

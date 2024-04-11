@@ -4,7 +4,7 @@ import { NumberDictionary } from './lib';
 /**
  * Represents a compound unit or dimension.
  */
-export abstract class Compound<T extends string> {
+export abstract class Compound<T extends string, C extends Compound<T, C>> {
     private readonly num: NumberDictionary<T> = {};
     private readonly den: NumberDictionary<T> = {};
     /**
@@ -28,7 +28,7 @@ export abstract class Compound<T extends string> {
      * @param factor The factor to use on the other compound
      * @returns The combination of the two compounds
      */
-    protected combine(other: Compound<T>, factor: number): NumberDictionary<T> {
+    protected combine(other: C, factor: number): NumberDictionary<T> {
         const exponents_combined: NumberDictionary<T> = {};
         for (const t in this.exponents) {
             exponents_combined[t] = this.getExponent(t);
@@ -44,13 +44,13 @@ export abstract class Compound<T extends string> {
      * @param exponent The exponent to apply on the other compound
      * @returns The product of the two compounds
      */
-    public abstract mult(other: Compound<T>, exponent: number): Compound<T>;
+    public abstract mult(other: C, exponent: number): C;
     /**
      * Determine whether two compounds contain the same units or dimensions.
      * @param other Another compound
      * @returns A boolean
      */
-    public is(other: Compound<T>): boolean {
+    public is(other: C): boolean {
         const dividend: NumberDictionary<T> = this.combine(other, -1);
         for (let t in dividend) {
             if (!SMath.approx(dividend[t] ?? 0, 0)) {

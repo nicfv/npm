@@ -18,7 +18,7 @@ export type Units = TimeUnits | LengthUnits;
 /**
  * Defines the class for units for physical quantities.
  */
-export class Unit extends Compound<Units> {
+export class Unit extends Compound<Units, Unit> {
     public readonly dimension: Dimension;
     constructor(exponents: NumberDictionary<Units>) {
         super(exponents, t => ConversionTable[t].latex);
