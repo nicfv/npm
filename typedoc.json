@@ -1,0 +1,10 @@
+{
+    "disableSources": true,
+    "emit": "both",
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "hideGenerator": true,
+    "includeVersion": true,
+    "treatValidationWarningsAsErrors": true,
+}

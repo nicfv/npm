@@ -9,6 +9,7 @@ publish=false
 if [[ "${1}" == 'publish' ]] ; then
     publish=true
 fi
+docdir='.docs'
 
 # Check for and set npm token
 if "${publish}" ; then
@@ -16,8 +17,8 @@ if "${publish}" ; then
         echo 'Missing environment variable NPM_TOKEN'
         exit 1
     else
-        mkdir .docs || exit 1
-        cp .github/workflows/home/* .docs
+        mkdir "${docdir}" || exit 1
+        cp .github/workflows/home/* "${docdir}"
         npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
     fi
 fi
@@ -117,7 +118,7 @@ for dir in */ ; do
             echo "packages['${package_name//"'"/"\\'"}'].time = '${package_date//"'"/"\\'"}';"
             echo "packages['${package_name//"'"/"\\'"}'].ver = '${local_version//"'"/"\\'"}';"
             echo "packages['${package_name//"'"/"\\'"}'].dir = '${dir//"'"/"\\'"}';"
-        } >> '../.docs/index.js'
+        } >> "../${docdir}/index.js"
         # Copy over the template readme file and replace variables
         echo 'Generating readme...'
         cp '../.github/workflows/template.md' README.md
@@ -144,8 +145,8 @@ for dir in */ ; do
         # package generates documentation, then it will
         # overwrite the GH pages archive with that dir only
         echo 'Generating documentation...'
-        npm run docs || exit 1
-        mv docs "../.docs/${dir}"
+        npm run build || exit 1
+        mv docs "../${docdir}/${dir}"
         # Reset the readme file to its original state
         echo "${readme}" > README.md
     fi

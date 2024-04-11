@@ -1,6 +1,6 @@
 {
   "name": "exray",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Lightweight assertion testing framework",
   "homepage": "https://npm.nicfv.com/exray",
   "bin": "",
@@ -11,12 +11,11 @@
     "types"
   ],
   "scripts": {
-    "build": "rm -rf dist types && tsc && node dist/test.js && rm dist/test.js",
-    "test": "tsc --noEmit",
+    "build": "rm -rf dist types docs && typedoc --options ../typedoc.json src && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "test": "tsc -v && tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
-    "docs": "rm -rf docs && typedoc --includeVersion --disableSources --hideGenerator src",
     "prepack": "npm run build",
-    "postpack": "rm -rf dist types"
+    "postpack": "npm run clean"
   },
   "keywords": [
     "except",
@@ -41,7 +40,6 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "devDependencies": {
-    "typedoc": "0.25.12",
-    "typescript": "5.4.4"
+    "typedoc": "0.25.13"
   }
 }
