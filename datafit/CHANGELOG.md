@@ -3,7 +3,7 @@
 ## 1.4.3
 
 - Update dependency versions
-- Minor tsdoc typo fix for `F`
+- Minor documentation update for `F`
 - Use global TypeDoc configuration file
 - Compile and build documentation simultaneously
 - Remove dependency on typescript (TypeDoc will take care of this)
