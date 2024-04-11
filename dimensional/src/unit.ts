@@ -27,4 +27,7 @@ export class Unit extends Compound<Units> {
             this.dimension = this.dimension.mult(ConversionTable[unit].dim, this.getExponent(unit));
         }
     }
+    public mult(other: Unit, exponent: number): Unit {
+        return new Unit(this.combine(other, exponent));
+    }
 }

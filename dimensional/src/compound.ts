@@ -39,6 +39,13 @@ export abstract class Compound<T extends string> {
         return exponents_combined;
     }
     /**
+     * Multiply this compound by another after applying an exponent on the second compound.
+     * @param other Another compound fraction
+     * @param exponent The exponent to apply on the other compound
+     * @returns The product of the two compounds
+     */
+    public abstract mult(other: Compound<T>, exponent: number): Compound<T>;
+    /**
      * Determine whether two compounds contain the same units or dimensions.
      * @param other Another compound
      * @returns A boolean
