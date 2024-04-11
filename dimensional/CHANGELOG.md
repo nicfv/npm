@@ -3,6 +3,7 @@
 ## 0.2.0
 
 - Update dependency versions
+- Remove `docs/` on postpack
 
 ## 0.1.1
 
