@@ -8,9 +8,12 @@ import { NumberDictionary } from './lib';
  */
 export type Units =
     // Time span/duration
-    | 'nanoseconds' | 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years'
+    | 'nanosecond' | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'
     // Length/distance
-    | 'nanometers' | 'micrometers' | 'microns' | 'millimeters' | 'centimeters' | 'meters' | 'kilometers' | 'inches' | 'feet' | 'yards' | 'miles'
+    | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
+    // Mass
+    | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound-mass' | 'slug' | 'stone' | 'ton'
+    // Trailing semicolon
     ;
 /**
  * Is an object containing keys of units and values of nonzero exponents.

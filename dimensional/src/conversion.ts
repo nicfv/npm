@@ -22,102 +22,102 @@ export interface Conversion {
  * Represents the full conversion table for **absolute** units only.
  */
 export const ConversionTable: { [index in Units]: Conversion } = {
-    'centimeters': {
+    'centimeter': {
         latex: 'cm',
         dim: Dim({ length: 1 }),
         scale: 1e-2,
     },
-    'days': {
+    'day': {
         latex: 'd',
         dim: Dim({ time: 1 }),
         scale: 60 * 60 * 24,
     },
-    'feet': {
+    'foot': {
         latex: 'ft',
         dim: Dim({ length: 1 }),
         scale: 0.3048,
     },
-    'hours': {
+    'hour': {
         latex: 'h',
         dim: Dim({ time: 1 }),
         scale: 60 * 60,
     },
-    'inches': {
+    'inch': {
         latex: 'in',
         dim: Dim({ length: 1 }),
         scale: 0.3048 / 12,
     },
-    'kilometers': {
+    'kilometer': {
         latex: 'km',
         dim: Dim({ length: 1 }),
         scale: 1e3,
     },
-    'meters': {
+    'meter': {
         latex: 'm',
         dim: Dim({ length: 1 }),
         scale: 1,
     },
-    'micrometers': {
+    'micrometer': {
         latex: '\\mu m',
         dim: Dim({ length: 1 }),
         scale: 1e-6,
     },
-    'microns': {
+    'micron': {
         latex: '\\mu m',
         dim: Dim({ length: 1 }),
         scale: 1e-6,
     },
-    'miles': {
+    'mile': {
         latex: 'mi',
         dim: Dim({ length: 1 }),
         scale: 0.3048 * 5280,
     },
-    'millimeters': {
+    'millimeter': {
         latex: 'mm',
         dim: Dim({ length: 1 }),
         scale: 1e-3,
     },
-    'milliseconds': {
+    'millisecond': {
         latex: 'ms',
         dim: Dim({ time: 1 }),
         scale: 1e-3,
     },
-    'minutes': {
+    'minute': {
         latex: 'm',
         dim: Dim({ time: 1 }),
         scale: 60,
     },
-    'months': {
+    'month': {
         latex: 'M',
         dim: Dim({ time: 1 }),
         scale: 60 * 60 * 24 * 365.25 / 12,
     },
-    'nanometers': {
+    'nanometer': {
         latex: 'nm',
         dim: Dim({ length: 1 }),
         scale: 1e-9,
     },
-    'nanoseconds': {
+    'nanosecond': {
         latex: 'ns',
         dim: Dim({ time: 1 }),
         scale: 1e-9,
     },
-    'seconds': {
+    'second': {
         latex: 's',
         dim: Dim({ time: 1 }),
         scale: 1,
     },
-    'weeks': {
+    'week': {
         latex: 'w',
         dim: Dim({ time: 1 }),
         scale: 60 * 60 * 24 * 7,
     },
-    'yards': {
+    'yard': {
         latex: 'yd',
         dim: Dim({ length: 1 }),
         scale: 0.3048,
     },
-    'years': {
+    'year': {
         latex: 'y',
         dim: Dim({ time: 1 }),
         scale: 60 * 60 * 24 * 365.25,
