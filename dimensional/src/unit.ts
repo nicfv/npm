@@ -21,10 +21,13 @@ export interface UnitExponents extends NumberDictionary<Units> { };
  */
 export class Unit extends Compound<Units, Unit> {
     public readonly dimension: Dimension;
+    public readonly scale: number;
     constructor(exponents: UnitExponents) {
         super(exponents, t => ConversionTable[t].latex);
+        this.scale = 1;
         this.dimension = new Dimension({});
         for (const unit of this.getNonzeroExponents()) {
+            this.scale *= (ConversionTable[unit].scale ** this.getExponent(unit));
             this.dimension = this.dimension.mult(ConversionTable[unit].dim, this.getExponent(unit));
         }
     }
@@ -37,6 +40,6 @@ export class Unit extends Compound<Units, Unit> {
  * @param exponents Exponents on each of the individual units
  * @returns A new unit object
  */
-export function Uof(exponents: UnitExponents): Unit {
+export function UoM(exponents: UnitExponents): Unit {
     return new Unit(exponents);
 }

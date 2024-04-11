@@ -1,6 +1,6 @@
 import { X } from 'exray';
 import { Dim, Dimension } from './dimension';
-import { Unit, Uof } from './unit';
+import { Unit, UoM } from './unit';
 
 {
     const velocity: Dimension = Dim({ length: 1, time: -1 }),
@@ -15,8 +15,8 @@ import { Unit, Uof } from './unit';
 }
 
 {
-    const meters_per_second: Unit = Uof({ meters: 1, seconds: -1 }),
-        miles_per_hour: Unit = Uof({ miles: 1, hours: -1 });
+    const meters_per_second: Unit = UoM({ meters: 1, seconds: -1 }),
+        miles_per_hour: Unit = UoM({ miles: 1, hours: -1 });
     X.true(meters_per_second.dimension.is(miles_per_hour.dimension));
     X.false(meters_per_second.is(miles_per_hour));
     X.eq(meters_per_second.getNonzeroExponents().length, 2);
