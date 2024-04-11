@@ -7,6 +7,7 @@
 - Remove dependency on typescript (TypeDoc will take care of this)
 - Remove declaration types for test on build output
 - Output `tsc` version on `npm test`
+- For now, export `lib`
 
 ## 0.1.0
 
