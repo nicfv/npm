@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0
+
+- Update dependency versions
+- Exclude private and protected members from documentation output
+- Convert `SMath` from an abstract class to a namespace
+
 ## 1.7.0
 
 - Update `exray` version to 1.0.3
