@@ -4,7 +4,7 @@ import { NumberDictionary } from './lib';
 /**
  * Represents a compound unit or dimension.
  */
-export class Compound<T extends string> {
+export abstract class Compound<T extends string> {
     private readonly num: NumberDictionary<T> = {};
     private readonly den: NumberDictionary<T> = {};
     /**
@@ -28,7 +28,7 @@ export class Compound<T extends string> {
      * @param factor The factor to use on the other compound
      * @returns The combination of the two compounds
      */
-    public combine(other: Compound<T>, factor: number): Compound<T> {
+    protected combine(other: Compound<T>, factor: number): NumberDictionary<T> {
         const exponents_combined: NumberDictionary<T> = {};
         for (const t in this.exponents) {
             exponents_combined[t] = this.getExponent(t);
@@ -36,23 +36,7 @@ export class Compound<T extends string> {
         for (const t in other.exponents) {
             exponents_combined[t] = this.getExponent(t) + factor * other.getExponent(t);
         }
-        return new Compound<T>(exponents_combined, this.toLaTeX);
-    }
-    /**
-     * Multiply this compound by another.
-     * @param other Another compound
-     * @returns The product
-     */
-    public mult(other: Compound<T>): Compound<T> {
-        return this.combine(other, 1);
-    }
-    /**
-     * Divide this compound by another.
-     * @param other Another compound
-     * @returns The dividend
-     */
-    public div(other: Compound<T>): Compound<T> {
-        return this.combine(other, -1);
+        return exponents_combined;
     }
     /**
      * Determine whether two compounds contain the same units or dimensions.
@@ -60,10 +44,9 @@ export class Compound<T extends string> {
      * @returns A boolean
      */
     public is(other: Compound<T>): boolean {
-        const dividend: Compound<T> = this.div(other);
-        for (let t in dividend.exponents) {
-            const exponent: number = dividend.getExponent(t);
-            if (exponent) {
+        const dividend: NumberDictionary<T> = this.combine(other, -1);
+        for (let t in dividend) {
+            if (!SMath.approx(dividend[t] ?? 0, 0)) {
                 return false;
             }
         }

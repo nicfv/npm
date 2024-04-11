@@ -24,4 +24,7 @@ export class Dimension extends Compound<Dimensions> {
     constructor(exponents: NumberDictionary<Dimensions>) {
         super(exponents, t => DimensionTable[t]);
     }
+    public mult(other: Dimension, exponent: number): Dimension {
+        return new Dimension(super.combine(other, exponent));
+    }
 }
