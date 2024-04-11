@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Use global TypeDoc configuration file
+- Compile and build documentation simultaneously
+- Remove dependency on typescript (TypeDoc will take care of this)
+- Remove declaration types for test on build output
+
 ## 0.1.0
 
 - Install relevant dependencies
