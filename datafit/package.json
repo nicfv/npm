@@ -15,7 +15,7 @@
     "test": "tsc -v && tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json dist types docs",
     "prepack": "npm run build",
-    "postpack": "npm run clean"
+    "postpack": "rm -rf dist types"
   },
   "keywords": [
     "math",
