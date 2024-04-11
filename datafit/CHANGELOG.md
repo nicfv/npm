@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.3
+
+- Update dependency versions
+- Minor tsdoc typo fix
+
 ## 1.4.2
 
 - Update dependency versions
