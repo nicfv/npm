@@ -4,8 +4,10 @@
 
 - Update dependency versions
 - Minor tsdoc typo fix for `F`
-- Use global typedoc configuration
+- Use global TypeDoc configuration file
 - Compile and build documentation simultaneously
+- Remove dependency on typescript (TypeDoc will take care of this)
+- Remove declaration types for test on build output
 
 ## 1.4.2
 
