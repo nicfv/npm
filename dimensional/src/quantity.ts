@@ -18,7 +18,7 @@ export namespace Quantity {
          * @param value The value of the quantity
          * @param unit The units attached to the value
          */
-        constructor(private readonly value: number, private readonly unit: Unit.Unit) {
+        constructor(public readonly value: number, public readonly unit: Unit.Unit) {
             this.base = value;
             this.base = SMath.expand(value, 0, unit.scale);
         }
@@ -105,7 +105,7 @@ export namespace Quantity {
          * @returns A valid LaTeX equation
          */
         public toString(): string {
-            return this.value.toString() + '\\left[' + this.unit.toString() + '\\right]';
+            return this.value.toString() + ' \\left[' + this.unit.toString() + '\\right]';
         }
     }
 }
