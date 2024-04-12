@@ -10,9 +10,9 @@ export interface Conversion {
      */
     readonly latex: string;
     /**
-     * The base physical dimensions of this unit.
+     * The base physical dimensions of this unit. Required for simple units.
      */
-    readonly dim: Dimension;
+    readonly dim?: Dimension;
     /**
      * The scale of this unit in relation to the base unit of this dimension.
      */
@@ -152,7 +152,7 @@ export const ConversionTable: { [index in Units]: Conversion } = {
         dim: Dim({ mass: 1 }),
         scale: 1 / 2.204623 / 16,
     },
-    poundmass: {
+    pound_mass: {
         latex: '\\text{lb}_{m}',
         dim: Dim({ mass: 1 }),
         scale: 1 / 2.204623,
@@ -160,7 +160,7 @@ export const ConversionTable: { [index in Units]: Conversion } = {
     slug: {
         latex: '\\text{slug}',
         dim: Dim({ mass: 1 }),
-        scale: 1 / 2.204623,
+        scale: 32.174049 / 2.204623,
     },
     stone: {
         latex: '\\text{st.}',
@@ -171,5 +171,20 @@ export const ConversionTable: { [index in Units]: Conversion } = {
         latex: '\\text{tn}',
         dim: Dim({ mass: 1 }),
         scale: 2e3 / 2.204623,
+    },
+    Newton: {
+        latex: '\\text{N}',
+        scale: 1,
+        makeup: { kilogram: 1, meter: 1, second: -2 },
+    },
+    kiloNewton: {
+        latex: '\\text{kN}',
+        scale: 1e3,
+        makeup: { Newton: 1 },
+    },
+    pound_force: {
+        latex: '\\text{lb}_{f}',
+        scale: 1,
+        makeup: { slug: 1, foot: 1, second: -2 },
     },
 };

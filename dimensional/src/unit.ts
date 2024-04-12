@@ -12,7 +12,9 @@ export type Units =
     // Length/distance
     | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
     // Mass
-    | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'poundmass' | 'slug' | 'stone' | 'shortton'
+    | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound_mass' | 'slug' | 'stone' | 'shortton'
+    // Force
+    | 'Newton' | 'kiloNewton' | 'pound_force'
     // Trailing semicolon
     ;
 /**
@@ -27,20 +29,32 @@ export class Unit extends Compound<Units, Unit> {
     public readonly scale: number;
     constructor(exponents: UnitExponents) {
         super(exponents, t => ConversionTable[t].latex);
-        this.scale = 1;
-        this.dimension = new Dimension({});
-        for (const unit of this.getNonzeroExponents()) {
-            const conversion: Conversion = ConversionTable[unit];
-            this.scale *= (conversion.scale ** this.getExponent(unit));
-            if (conversion.makeup) {
-                // TODO
-            } else {
-                this.dimension = this.dimension.mult(conversion.dim, this.getExponent(unit));
-            }
-        }
+        const conversion = Unit.getConversion(exponents, 1, new Dimension({}));
+        this.scale = conversion.scale;
+        this.dimension = conversion.dimension;
     }
     public mult(other: Unit, exponent: number): Unit {
         return new Unit(this.combine(other, exponent));
+    }
+    private static getConversion(exponents: UnitExponents, scale: number, dimension: Dimension): { scale: number, dimension: Dimension } {
+        for (const unit in exponents) {
+            const conversion: Conversion = ConversionTable[unit as Units],
+                exponent: number = exponents[unit as Units] ?? 0;
+            scale *= (conversion.scale ** exponent);
+            if (conversion.makeup) {
+                const conv = this.getConversion(conversion.makeup, scale, dimension);
+                scale = conv.scale;
+                dimension = conv.dimension;
+            } else if (conversion.dim) {
+                dimension = dimension.mult(conversion.dim, exponent);
+            } else {
+                throw new Error('Makeup or dimension is missing from ' + unit + '!');
+            }
+        }
+        return {
+            scale: scale,
+            dimension: dimension,
+        };
     }
 }
 /**
