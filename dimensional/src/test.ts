@@ -22,5 +22,5 @@ import { Unit, UoM } from './unit';
     X.eq(meters_per_second.getNonzeroExponents().length, 2);
     X.eq(meters_per_second.getExponent('meter'), 1);
     X.eq(meters_per_second.getExponent('day'), 0);
-    X.is(meters_per_second.toString(), '\\frac{m}{s}');
+    X.is(meters_per_second.toString(), '\\frac{\\text{m}}{\\text{s}}');
 }
