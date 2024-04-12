@@ -1,7 +1,7 @@
 /**
  * Contains definitions for metric prefixes.
  */
-export type Prefixes = 'quetta' | 'ronna' | 'yotta' | 'zetta' | 'exa' | 'peta' | 'tera' | 'giga' | 'mega' | 'kilo' | 'hecto' | 'deca' | 'base' | 'deci' | 'centi' | 'milli' | 'micro' | 'nano' | 'pico' | 'femto' | 'atto' | 'zepto' | 'yocto' | 'ronto' | 'quecto';
+export type Prefixes = 'quetta' | 'ronna' | 'yotta' | 'zetta' | 'exa' | 'peta' | 'tera' | 'giga' | 'mega' | 'kilo' | 'hecto' | 'deca' | 'deci' | 'centi' | 'milli' | 'micro' | 'nano' | 'pico' | 'femto' | 'atto' | 'zepto' | 'yocto' | 'ronto' | 'quecto';
 /**
  * Contains information for a metric prefix.
  */
@@ -31,7 +31,6 @@ export const Prefix: { [index in Prefixes]: PrefixData } = {
     kilo: { latex: '\\text{k}', scale: 1e3 },
     hecto: { latex: '\\text{h}', scale: 1e2 },
     deca: { latex: '\\text{da}', scale: 1e1 },
-    base: { latex: '', scale: 1 },
     deci: { latex: '\\text{d}', scale: 1e-1 },
     centi: { latex: '\\text{c}', scale: 1e-2 },
     milli: { latex: '\\text{m}', scale: 1e-3 },
