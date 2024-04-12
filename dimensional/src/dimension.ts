@@ -1,5 +1,4 @@
-import { Compound } from './compound';
-import { Dictionary, NumberDictionary } from './lib';
+import { Compound, Exponents } from './compound';
 
 /**
  * A list of common names for each of the physical base dimensions.
@@ -8,7 +7,7 @@ export type Dimensions = 'time' | 'length' | 'mass' | 'current' | 'temperature' 
 /**
  * Contains all physical base dimensions and their corresponding abbreviations.
  */
-const DimensionTable: Dictionary<Dimensions> = {
+const DimensionTable: { [index in Dimensions]: string } = {
     'amount': '\\textbf{N}',
     'current': '\\textbf{I}',
     'intensity': '\\textbf{J}',
@@ -20,7 +19,7 @@ const DimensionTable: Dictionary<Dimensions> = {
 /**
  * Is an object containing keys of dimensions and values of nonzero exponents.
  */
-export interface DimensionExponents extends NumberDictionary<Dimensions> { };
+export interface DimensionExponents extends Exponents<Dimensions> { };
 /**
  * Defines the class for physical base dimensions.
  */

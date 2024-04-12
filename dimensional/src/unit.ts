@@ -1,7 +1,6 @@
-import { Compound } from './compound';
+import { Compound, Exponents } from './compound';
 import { Complex, ConversionTable, Scaled, Simple } from './conversion';
-import { D, Dimension } from './dimension';
-import { NumberDictionary } from './lib';
+import { Dimension } from './dimension';
 
 /**
  * Contains a list of all physical units of measurement.
@@ -20,7 +19,7 @@ export type Units =
 /**
  * Is an object containing keys of units and values of nonzero exponents.
  */
-export interface UnitExponents extends NumberDictionary<Units> { };
+export interface UnitExponents extends Exponents<Units> { };
 /**
  * Defines the class for units of measurement for physical quantities.
  */

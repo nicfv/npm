@@ -1,18 +1,21 @@
 import { SMath } from 'smath';
-import { NumberDictionary } from './lib';
 
+/**
+ * Represents a type where every object value is a number representing exponents.
+ */
+export type Exponents<T extends string> = { [index in T]?: number };
 /**
  * Represents a compound unit or dimension.
  */
 export abstract class Compound<T extends string, C extends Compound<T, C>> {
-    private readonly num: NumberDictionary<T> = {};
-    private readonly den: NumberDictionary<T> = {};
+    private readonly num: Exponents<T> = {};
+    private readonly den: Exponents<T> = {};
     /**
      * Create a new compound unit or dimension.
      * @param exponents Contains an object of exponent values
      * @param toLaTeX A function to convert the exponent to its representation in LaTeX
      */
-    constructor(private readonly exponents: NumberDictionary<T>, private readonly toLaTeX: (exponent: T) => string) {
+    constructor(private readonly exponents: Exponents<T>, private readonly toLaTeX: (exponent: T) => string) {
         for (const t in exponents) {
             const exponent: number = this.getExponent(t);
             if (exponent > 0) {
@@ -28,8 +31,8 @@ export abstract class Compound<T extends string, C extends Compound<T, C>> {
      * @param factor The factor to use on the other compound
      * @returns The combination of the two compounds
      */
-    protected combine(other: C, factor: number): NumberDictionary<T> {
-        const exponents_combined: NumberDictionary<T> = {};
+    protected combine(other: C, factor: number): Exponents<T> {
+        const exponents_combined: Exponents<T> = {};
         for (const t in this.exponents) {
             exponents_combined[t] = this.getExponent(t);
         }
@@ -51,7 +54,7 @@ export abstract class Compound<T extends string, C extends Compound<T, C>> {
      * @returns A boolean
      */
     public is(other: C): boolean {
-        const dividend: NumberDictionary<T> = this.combine(other, -1);
+        const dividend: Exponents<T> = this.combine(other, -1);
         for (let t in dividend) {
             if (!SMath.approx(dividend[t] ?? 0, 0)) {
                 return false;
@@ -81,17 +84,17 @@ export abstract class Compound<T extends string, C extends Compound<T, C>> {
         return nonzeroExponents;
     }
     /**
-     * Generate LaTeX code for a number dictionary.
-     * @param dict Any number dictionary
+     * Generate LaTeX code for an exponents object.
+     * @param expo Any exponents object
      * @returns Partial LaTeX code
      */
-    private prettyPrint(dict: NumberDictionary<T>): string {
+    private prettyPrint(expo: Exponents<T>): string {
         let str: string = '';
-        for (const t in dict) {
+        for (const t in expo) {
             if (str.length) {
                 str += ' \\cdot ';
             }
-            const exponent: number = dict[t] ?? 0;
+            const exponent: number = expo[t] ?? 0;
             if (SMath.approx(exponent, 1)) {
                 str += this.toLaTeX(t);
             } else if (SMath.approx(exponent, 0.5)) {
