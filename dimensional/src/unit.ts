@@ -1,5 +1,5 @@
 import { Compound } from './compound';
-import { ConversionTable } from './conversion';
+import { ConversionTable, Conversion } from './conversion';
 import { Dimension } from './dimension';
 import { NumberDictionary } from './lib';
 
@@ -30,8 +30,13 @@ export class Unit extends Compound<Units, Unit> {
         this.scale = 1;
         this.dimension = new Dimension({});
         for (const unit of this.getNonzeroExponents()) {
-            this.scale *= (ConversionTable[unit].scale ** this.getExponent(unit));
-            this.dimension = this.dimension.mult(ConversionTable[unit].dim, this.getExponent(unit));
+            const conversion: Conversion = ConversionTable[unit];
+            this.scale *= (conversion.scale ** this.getExponent(unit));
+            if (conversion.makeup) {
+                // TODO
+            } else {
+                this.dimension = this.dimension.mult(conversion.dim, this.getExponent(unit));
+            }
         }
     }
     public mult(other: Unit, exponent: number): Unit {

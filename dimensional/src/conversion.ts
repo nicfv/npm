@@ -1,5 +1,5 @@
 import { Dim, Dimension } from './dimension';
-import { Units } from './unit';
+import { UnitExponents, Units } from './unit';
 
 /**
  * Contains information on how units should be converted.
@@ -17,6 +17,11 @@ export interface Conversion {
      * The scale of this unit in relation to the base unit of this dimension.
      */
     readonly scale: number;
+    /**
+     * For complex units, (e.g. Newton) this contains the equivalent makeup of base units (e.g. kg*m/s^2)
+     * Physical base dimensions will be overridden using the makeup of base units.
+     */
+    readonly makeup?: UnitExponents;
 }
 /**
  * Represents the full conversion table for **absolute** units only.
