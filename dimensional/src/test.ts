@@ -24,3 +24,15 @@ import { Unit, UoM } from './unit';
     X.eq(meters_per_second.getExponent('day'), 0);
     X.is(meters_per_second.toString(), '\\frac{\\text{m}}{\\text{s}}');
 }
+
+{
+    const kN: Unit = UoM({ kiloNewton: 1 }),
+        kg_m_s2: Unit = UoM({ kilogram: 1, meter: 1, second: -2 });
+    X.true(kN.dimension.is(kg_m_s2.dimension));
+    X.false(kN.is(kg_m_s2));
+    X.eq(kN.getNonzeroExponents().length, 1);
+    X.eq(kN.getExponent('kiloNewton'), 1);
+    X.eq(kN.getExponent('Newton'), 0);
+    X.eq(kN.scale, 1000);
+    X.is(kN.toString(), '\\text{kN}');
+}
