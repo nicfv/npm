@@ -1,34 +1,38 @@
-import { Compound, Exponents } from './compound';
-
+import { Compound } from './compound';
 /**
- * A list of common names for each of the physical base dimensions.
+ * Contains all software used for the calculation of physical base dimensions.
  */
-export type Dimensions = 'time' | 'length' | 'mass' | 'current' | 'temperature' | 'amount' | 'intensity';
-/**
- * Contains all physical base dimensions and their corresponding abbreviations.
- */
-const DimensionTable: { [index in Dimensions]: string } = {
-    'amount': '\\textbf{N}',
-    'current': '\\textbf{I}',
-    'intensity': '\\textbf{J}',
-    'length': '\\textbf{L}',
-    'mass': '\\textbf{M}',
-    'temperature': '\\boldsymbol{\\Theta}',
-    'time': '\\textbf{T}',
-};
-/**
- * Is an object containing keys of dimensions and values of nonzero exponents.
- */
-export interface DimensionExponents extends Exponents<Dimensions> { };
-/**
- * Defines the class for physical base dimensions.
- */
-export class Dimension extends Compound<Dimensions, Dimension> {
-    constructor(exponents: DimensionExponents) {
-        super(exponents, t => DimensionTable[t]);
-    }
-    public mult(other: Dimension, exponent: number): Dimension {
-        return new Dimension(super.combine(other, exponent));
+export namespace Dimension {
+    /**
+     * A list of common names for each of the physical base dimensions.
+     */
+    export type Name = 'time' | 'length' | 'mass' | 'current' | 'temperature' | 'amount' | 'intensity';
+    /**
+     * Contains all physical base dimensions and their corresponding abbreviations.
+     */
+    const Table: { [index in Name]: string } = {
+        'amount': '\\textbf{N}',
+        'current': '\\textbf{I}',
+        'intensity': '\\textbf{J}',
+        'length': '\\textbf{L}',
+        'mass': '\\textbf{M}',
+        'temperature': '\\boldsymbol{\\Theta}',
+        'time': '\\textbf{T}',
+    };
+    /**
+     * Is an object containing keys of dimensions and values of nonzero exponents.
+     */
+    export interface Exponents extends Compound.Exponents<Name> { };
+    /**
+     * Defines the class for physical base dimensions.
+     */
+    export class Dimension extends Compound.Compound<Name, Dimension> {
+        constructor(exponents: Exponents) {
+            super(exponents, t => Table[t]);
+        }
+        public mult(other: Dimension, exponent: number): Dimension {
+            return new Dimension(super.combine(other, exponent));
+        }
     }
 }
 /**
@@ -36,6 +40,6 @@ export class Dimension extends Compound<Dimensions, Dimension> {
  * @param exponents Exponents of each of the physical base dimensions
  * @returns A new dimension
  */
-export function D(exponents: DimensionExponents): Dimension {
-    return new Dimension(exponents);
-}
+// export function D(exponents: DimensionExponents): Dimension {
+//     return new Dimension(exponents);
+// }

@@ -1,5 +1,5 @@
 /**
- * Contains all related methods and variables for metric prefixes.
+ * Contains all software used for the calculation of metric prefixes.
  */
 export namespace Prefix {
     /**
