@@ -34,4 +34,8 @@ export namespace Dimension {
             return new Dimension(super.combine(other, exponent));
         }
     }
+    /**
+     * Represents a dimensionless value.
+     */
+    export const None = new Dimension({});
 }

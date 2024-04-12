@@ -30,7 +30,7 @@ export namespace Unit {
         public readonly dimension: Dimension.Dimension;
         public readonly scale: number;
         constructor(exponents: Exponents) {
-            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, new Dimension.Dimension({}));
+            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Dimension.None);
             super(exponents, t => Conversion.Table[t]().latex);
             this.scale = conversion.scale;
             this.dimension = conversion.dimension;
@@ -48,4 +48,8 @@ export namespace Unit {
             return new Conversion.Conversion('', scale, dimension);
         }
     }
+    /**
+     * Represents a unitless value.
+     */
+    export const None = new Unit({});
 }
