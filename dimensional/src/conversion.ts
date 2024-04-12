@@ -1,4 +1,4 @@
-import { Dimension, DimensionExponents, Dimensions } from './dimension';
+import { Dimension, Dimensions } from './dimension';
 import { Prefix } from './prefix';
 import { UnitExponents, Units } from './unit';
 
