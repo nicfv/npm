@@ -35,11 +35,11 @@ export class Conversion {
      * Create a new unit that is relative to another.
      * @param latex The LaTeX representation of this unit.
      * @param scale The scale of this unit in relation to the relative unit.
-     * @param to The relative unit.
+     * @param ref The relative or reference unit.
      * @returns A relative scale formula between this unit and a relative one.
      */
-    public static relative(latex: string, scale: number, to: Units): Conversion {
-        return new Conversion(latex, scale * ConversionTable[to]().scale, ConversionTable[to]().dimension);
+    public static relative(latex: string, scale: number, ref: Units): Conversion {
+        return new Conversion(latex, scale * ConversionTable[ref]().scale, ConversionTable[ref]().dimension);
     }
     /**
      * @param latex The LaTeX representation of this unit.
@@ -73,27 +73,27 @@ export const ConversionTable: Conversions = {
     week: () => Conversion.relative('\\text{w}', 7, 'day'),
     month: () => Conversion.relative('\\text{M}', 1 / 12, 'year'),
     year: () => Conversion.relative('\\text{y}', 365.25, 'day'),
-    // nanometer: new Complex('\\text{nm}', 1e-9, { meter: 1 }),
-    // micrometer: new Complex('\\mu\\text{m}', 1e-6, { meter: 1 }),
-    // micron: new Scaled('micro', 'meter'),
-    // millimeter: new Scaled('milli', 'meter'),
-    // centimeter: new Scaled('centi', 'meter'),
-    // meter: new Simple('\\text{m}', { length: 1 }),
-    // kilometer: new Scaled('kilo', 'meter'),
-    // inch: new Complex('\\text{in}', 1 / 12, { foot: 1 }),
-    // foot: new Complex('\\text{ft}', 0.3048, { meter: 1 }),
-    // yard: new Complex('\\text{yd}', 3, { foot: 1 }),
-    // mile: new Complex('\\text{mi}', 5280, { foot: 1 }),
-    // milligram: new Scaled('milli', 'gram'),
-    // gram: new Simple('\\text{g}', { mass: 1 }), // `kg` is the base unit... but `g` makes things easier.
-    // kilogram: new Scaled('kilo', 'gram'),
-    // tonne: new Scaled('mega', 'gram'),
-    // ounce: new Complex('\\text{oz}', 1 / 16, { pound_mass: 1 }),
-    // pound_mass: new Complex('\\text{lb}_{m}', 1 / 2.204623, { kilogram: 1 }),
-    // slug: new Complex('\\text{slug}', 32.174049, { pound_mass: 1 }),
-    // stone: new Complex('\\text{st.}', 14, { pound_mass: 1 }),
-    // shortton: new Complex('\\text{tn}', 2000, { pound_mass: 1 }),
-    // Newton: new Complex('\\text{N}', 1, { kilogram: 1, meter: 1, second: -2 }),
-    // kiloNewton: new Scaled('kilo', 'Newton'),
-    // pound_force: new Complex('\\text{lb}_{f}', 1, { slug: 1, foot: 1, second: -2 }),
+    nanometer: () => Conversion.scaled('nano', 'meter'),
+    micrometer: () => Conversion.scaled('micro', 'meter'),
+    micron: () => Conversion.scaled('micro', 'meter'),
+    millimeter: () => Conversion.scaled('milli', 'meter'),
+    centimeter: () => Conversion.scaled('centi', 'meter'),
+    meter: () => Conversion.simple('\\text{m}', 'length'),
+    kilometer: () => Conversion.scaled('kilo', 'meter'),
+    inch: () => Conversion.relative('\\text{in}', 1 / 12, 'foot'),
+    foot: () => Conversion.relative('\\text{ft}', 0.3048, 'meter'),
+    yard: () => Conversion.relative('\\text{yd}', 3, 'foot'),
+    mile: () => Conversion.relative('\\text{mi}', 5280, 'foot'),
+    milligram: () => Conversion.scaled('milli', 'gram'),
+    gram: () => Conversion.simple('\\text{g}', 'mass'), // `kg` is the base unit... but `g` makes things easier.
+    kilogram: () => Conversion.scaled('kilo', 'gram'),
+    tonne: () => Conversion.scaled('mega', 'gram'),
+    ounce: () => Conversion.relative('\\text{oz}', 1 / 16, 'pound_mass'),
+    pound_mass: () => Conversion.relative('\\text{lb}_{m}', 1 / 2.204623, 'kilogram'),
+    slug: () => Conversion.relative('\\text{slug}', 32.174049, 'pound_mass'),
+    stone: () => Conversion.relative('\\text{st.}', 14, 'pound_mass'),
+    shortton: () => Conversion.relative('\\text{tn}', 2000, 'pound_mass'),
+    Newton: () => Conversion.complex('\\text{N}', { kilogram: 1, meter: 1, second: -2 }),
+    kiloNewton: () => Conversion.scaled('kilo', 'Newton'),
+    pound_force: () => Conversion.complex('\\text{lb}_{f}', { slug: 1, foot: 1, second: -2 }),
 };
