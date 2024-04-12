@@ -1,5 +1,5 @@
 import { Compound } from './compound';
-import { ConversionTable, Conversion } from './conversion';
+import { Complex, ConversionTable, Scaled, Simple } from './conversion';
 import { D, Dimension } from './dimension';
 import { NumberDictionary } from './lib';
 
@@ -38,17 +38,22 @@ export class Unit extends Compound<Units, Unit> {
     }
     private static getConversion(exponents: UnitExponents, scale: number, dimension: Dimension): { scale: number, dimension: Dimension } {
         for (const unit in exponents) {
-            const conversion: Conversion = ConversionTable[unit as Units],
+            const conversion = ConversionTable[unit as Units],
                 exponent: number = exponents[unit as Units] ?? 0;
-            if (conversion.scale && conversion.makeup) {
+            if (conversion instanceof Simple) {
+                dimension = dimension.mult(conversion.dim, exponent);
+            } else if (conversion instanceof Scaled) {
                 scale *= (conversion.scale ** exponent);
-                const conv = this.getConversion(U({}).combine(U(conversion.makeup), exponent), scale, dimension);
+                const conv = this.getConversion(U({}).combine(conversion.baseUnits, exponent), scale, dimension);
                 scale = conv.scale;
                 dimension = conv.dimension;
-            } else if (conversion.dim) {
-                dimension = dimension.mult(D(conversion.dim), exponent);
+            } else if (conversion instanceof Complex) {
+                scale *= (conversion.scale ** exponent);
+                const conv = this.getConversion(U({}).combine(conversion.baseUnits, exponent), scale, dimension);
+                scale = conv.scale;
+                dimension = conv.dimension;
             } else {
-                throw new Error('Mal-formed ' + unit + ' data! Keys: ' + Object.keys(conversion));
+                throw new Error('Unknown conversion instance.');
             }
         }
         return {
