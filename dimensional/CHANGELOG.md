@@ -4,6 +4,13 @@
 
 - Update dependency versions
 - Remove `docs/` on postpack
+- Scope everything using namespaces
+- Add unit conversions for several units
+- Add `None` types for dimensionless and unitless quantities
+- Export helper functions `D()`, `U()`, and `Q()` for shorthand creation of dimensions, units, and quantities
+- Create internal methods for metric prefixes and measurement types
+- Unit scaling is now computed in the `Unit` class instead of `Quantity`
+- Add several unit tests
 
 ## 0.1.1
 
