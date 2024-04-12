@@ -50,7 +50,7 @@ export namespace Conversion {
          */
         public static complex(latex: string, makeup: Unit.Exponents): Conversion {
             let scale: number = 1,
-                dim: Dimension.Dimension = new Dimension.Dimension({});
+                dim: Dimension.Dimension = Dimension.None;
             for (const unit in makeup) {
                 const exponent: number = makeup[unit as Unit.Name] ?? 0;
                 scale *= (Table[unit as Unit.Name]().scale ** exponent);
