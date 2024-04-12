@@ -15,6 +15,14 @@ export namespace Unit {
         | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
         // Mass
         | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound_mass' | 'slug' | 'stone' | 'shortton'
+        // Current
+        | 'milliampere' | 'ampere'
+        // Temperature
+        | 'Kelvin' | 'Rankine' | 'Celsius_rel' | 'Fahrenheight_rel'
+        // Substance
+        | 'mole'
+        // Luminous Intensity
+        | 'candela' | 'lumen'
         // Force
         | 'Newton' | 'kiloNewton' | 'pound_force'
         // Trailing semicolon
