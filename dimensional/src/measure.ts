@@ -32,7 +32,7 @@ export namespace Measure {
         mass: { latex: 'm', dim: { mass: 1 } },
         current: { latex: 'I', dim: { current: 1 } },
         temperature: { latex: 'T', dim: { temperature: 1 } },
-        amount: { latex: 'n', dim: { amount: 1 } },
+        substance: { latex: 'n', dim: { substance: 1 } },
         intensity: { latex: 'I_{V}', dim: { intensity: 1 } },
         area: { latex: 'A', dim: { length: 2 } },
         volume: { latex: 'V', dim: { length: 3 } },

@@ -6,18 +6,18 @@ export namespace Dimension {
     /**
      * A list of common names for each of the physical base dimensions.
      */
-    export type Name = 'time' | 'length' | 'mass' | 'current' | 'temperature' | 'amount' | 'intensity';
+    export type Name = 'time' | 'length' | 'mass' | 'current' | 'temperature' | 'substance' | 'intensity';
     /**
      * Contains all physical base dimensions and their corresponding abbreviations.
      */
     const Table: { [index in Name]: string } = {
-        'amount': '\\textbf{N}',
-        'current': '\\textbf{I}',
-        'intensity': '\\textbf{J}',
-        'length': '\\textbf{L}',
-        'mass': '\\textbf{M}',
-        'temperature': '\\boldsymbol{\\Theta}',
-        'time': '\\textbf{T}',
+        current: '\\textbf{I}',
+        intensity: '\\textbf{J}',
+        length: '\\textbf{L}',
+        mass: '\\textbf{M}',
+        substance: '\\textbf{N}',
+        temperature: '\\boldsymbol{\\Theta}',
+        time: '\\textbf{T}',
     };
     /**
      * Is an object containing keys of dimensions and values of nonzero exponents.
