@@ -1,5 +1,5 @@
 import { Dimension, DimensionExponents } from './dimension';
-import { Prefix, Prefixes } from './prefix';
+import { Prefix } from './prefix';
 import { Unit, UnitExponents, Units } from './unit';
 
 /**
@@ -44,10 +44,10 @@ export class Scaled extends Conversion {
      * @param prefix The metric prefix of this unit.
      * @param base The base unit of this dimension.
      */
-    constructor(prefix: Prefixes, base: Units) {
+    constructor(prefix: Prefix.Name, base: Units) {
         const unitTemp: Unit = new Unit({ [base]: 1 });
-        super(Prefix[prefix].latex + ' ' + unitTemp.toString());
-        this.scale = Prefix[prefix].scale;
+        super(Prefix.Table[prefix].latex + ' ' + unitTemp.toString());
+        this.scale = Prefix.Table[prefix].scale;
         this.baseUnits = unitTemp;
     }
 }
