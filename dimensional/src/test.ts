@@ -1,11 +1,11 @@
 import { X } from 'exray';
-import { Dim, Dimension } from './dimension';
-import { Unit, UoM } from './unit';
+import { D, Dimension } from './dimension';
+import { U, Unit } from './unit';
 
 {
-    const velocity: Dimension = Dim({ length: 1, time: -1 }),
-        distance: Dimension = Dim({ length: 1 }),
-        time: Dimension = Dim({ time: 1 });
+    const velocity: Dimension = D({ length: 1, time: -1 }),
+        distance: Dimension = D({ length: 1 }),
+        time: Dimension = D({ time: 1 });
     X.eq(velocity.getExponent('length'), 1);
     X.eq(velocity.getExponent('current'), 0);
     X.eq(velocity.getNonzeroExponents().length, 2);
@@ -15,8 +15,8 @@ import { Unit, UoM } from './unit';
 }
 
 {
-    const meters_per_second: Unit = UoM({ meter: 1, second: -1 }),
-        miles_per_hour: Unit = UoM({ mile: 1, hour: -1 });
+    const meters_per_second: Unit = U({ meter: 1, second: -1 }),
+        miles_per_hour: Unit = U({ mile: 1, hour: -1 });
     X.true(meters_per_second.dimension.is(miles_per_hour.dimension));
     X.false(meters_per_second.is(miles_per_hour));
     X.eq(meters_per_second.getNonzeroExponents().length, 2);
@@ -26,8 +26,8 @@ import { Unit, UoM } from './unit';
 }
 
 {
-    const kN: Unit = UoM({ kiloNewton: 1 }),
-        kg_m_s2: Unit = UoM({ kilogram: 1, meter: 1, second: -2 });
+    const kN: Unit = U({ kiloNewton: 1 }),
+        kg_m_s2: Unit = U({ kilogram: 1, meter: 1, second: -2 });
     X.true(kN.dimension.is(kg_m_s2.dimension));
     X.false(kN.is(kg_m_s2));
     X.eq(kN.getNonzeroExponents().length, 1);

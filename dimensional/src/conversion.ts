@@ -1,4 +1,4 @@
-import { Dim, DimensionExponents } from './dimension';
+import { DimensionExponents } from './dimension';
 import { UnitExponents, Units } from './unit';
 
 /**
@@ -177,7 +177,7 @@ export const ConversionTable: { [index in Units]: Conversion } = {
     kiloNewton: {
         latex: '\\text{kN}',
         scale: 1e3,
-        // makeup: { Newton: 1 },
+        makeup: { Newton: 1 },
     },
     pound_force: {
         latex: '\\text{lb}_{f}',

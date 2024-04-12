@@ -37,6 +37,6 @@ export class Dimension extends Compound<Dimensions, Dimension> {
  * @param exponents Exponents of each of the physical base dimensions
  * @returns A new dimension
  */
-export function Dim(exponents: DimensionExponents): Dimension {
+export function D(exponents: DimensionExponents): Dimension {
     return new Dimension(exponents);
 }
