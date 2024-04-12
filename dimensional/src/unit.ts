@@ -1,5 +1,5 @@
 import { Compound, Exponents } from './compound';
-import { Complex, ConversionTable, Scaled, Simple } from './conversion';
+import { Conversion, ConversionTable } from './conversion';
 import { Dimension } from './dimension';
 
 /**
@@ -9,11 +9,11 @@ export type Units =
     // Time span/duration
     | 'nanosecond' | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'
     // Length/distance
-    | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
+    // | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
     // Mass
-    | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound_mass' | 'slug' | 'stone' | 'shortton'
+    // | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound_mass' | 'slug' | 'stone' | 'shortton'
     // Force
-    | 'Newton' | 'kiloNewton' | 'pound_force'
+    // | 'Newton' | 'kiloNewton' | 'pound_force'
     // Trailing semicolon
     ;
 /**
@@ -27,38 +27,22 @@ export class Unit extends Compound<Units, Unit> {
     public readonly dimension: Dimension;
     public readonly scale: number;
     constructor(exponents: UnitExponents) {
-        super(exponents, t => ConversionTable[t].latex);
-        const conversion = Unit.getConversion(exponents, 1, new Dimension({}));
+        const conversion: Conversion = Unit.getConversion(exponents, 1, new Dimension({}));
+        super(exponents, t => ConversionTable[t]().latex);
         this.scale = conversion.scale;
         this.dimension = conversion.dimension;
     }
     public mult(other: Unit, exponent: number): Unit {
         return new Unit(this.combine(other, exponent));
     }
-    private static getConversion(exponents: UnitExponents, scale: number, dimension: Dimension): { scale: number, dimension: Dimension } {
+    private static getConversion(exponents: UnitExponents, scale: number, dimension: Dimension): Conversion {
         for (const unit in exponents) {
-            const conversion = ConversionTable[unit as Units],
+            const conversion: Conversion = ConversionTable[unit as Units](),
                 exponent: number = exponents[unit as Units] ?? 0;
-            if (conversion instanceof Simple) {
-                dimension = dimension.mult(conversion.dim, exponent);
-            } else if (conversion instanceof Scaled) {
-                scale *= (conversion.scale ** exponent);
-                const conv = this.getConversion(U({}).combine(conversion.baseUnits, exponent), scale, dimension);
-                scale = conv.scale;
-                dimension = conv.dimension;
-            } else if (conversion instanceof Complex) {
-                scale *= (conversion.scale ** exponent);
-                const conv = this.getConversion(U({}).combine(conversion.baseUnits, exponent), scale, dimension);
-                scale = conv.scale;
-                dimension = conv.dimension;
-            } else {
-                throw new Error('Unknown conversion instance.');
-            }
+            scale *= (conversion.scale ** exponent);
+            dimension = dimension.mult(conversion.dimension, exponent);
         }
-        return {
-            scale: scale,
-            dimension: dimension,
-        };
+        return new Conversion('', scale, dimension);
     }
 }
 /**
