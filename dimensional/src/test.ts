@@ -1,11 +1,12 @@
 import { X } from 'exray';
-import { D, Dimension } from './dimension';
-import { U, Unit } from './unit';
+import { Dimension } from './dimension';
+import { Unit } from './unit';
+import { D, U } from './lib';
 
 {
-    const velocity: Dimension = D({ length: 1, time: -1 }),
-        distance: Dimension = D({ length: 1 }),
-        time: Dimension = D({ time: 1 });
+    const velocity: Dimension.Dimension = D({ length: 1, time: -1 }),
+        distance: Dimension.Dimension = D({ length: 1 }),
+        time: Dimension.Dimension = D({ time: 1 });
     X.eq(velocity.getExponent('length'), 1);
     X.eq(velocity.getExponent('current'), 0);
     X.eq(velocity.getNonzeroExponents().length, 2);
@@ -15,8 +16,8 @@ import { U, Unit } from './unit';
 }
 
 {
-    const meters_per_second: Unit = U({ meter: 1, second: -1 }),
-        miles_per_hour: Unit = U({ mile: 1, hour: -1 });
+    const meters_per_second: Unit.Unit = U({ meter: 1, second: -1 }),
+        miles_per_hour: Unit.Unit = U({ mile: 1, hour: -1 });
     X.true(meters_per_second.dimension.is(miles_per_hour.dimension));
     X.false(meters_per_second.is(miles_per_hour));
     X.gt(miles_per_hour.scale, 0.44); // 0.447...
@@ -28,9 +29,9 @@ import { U, Unit } from './unit';
 }
 
 {
-    const kN: Unit = U({ kiloNewton: 1 }),
-        kg_m_s2: Unit = U({ kilogram: 1, meter: 1, second: -2 }),
-        lbf: Unit = U({ pound_force: 1 });
+    const kN: Unit.Unit = U({ kiloNewton: 1 }),
+        kg_m_s2: Unit.Unit = U({ kilogram: 1, meter: 1, second: -2 }),
+        lbf: Unit.Unit = U({ pound_force: 1 });
     X.true(kN.dimension.is(kg_m_s2.dimension));
     X.false(kN.is(kg_m_s2));
     X.eq(kN.getNonzeroExponents().length, 1);

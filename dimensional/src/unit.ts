@@ -1,7 +1,9 @@
 import { Compound } from './compound';
 import { Conversion } from './conversion';
 import { Dimension } from './dimension';
-
+/**
+ * Contains all software used for the calculation of units of measurement.
+ */
 export namespace Unit {
     /**
      * Contains a list of all physical units of measurement.
@@ -47,11 +49,3 @@ export namespace Unit {
         }
     }
 }
-/**
- * Shorthand for creating a new unit of measurement.
- * @param exponents Exponents on each of the individual units
- * @returns A new unit object
- */
-// export function U(exponents: UnitExponents): Unit {
-//     return new Unit(exponents);
-// }

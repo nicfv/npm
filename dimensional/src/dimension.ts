@@ -35,11 +35,3 @@ export namespace Dimension {
         }
     }
 }
-/**
- * Shorthand for creating a dimension object.
- * @param exponents Exponents of each of the physical base dimensions
- * @returns A new dimension
- */
-// export function D(exponents: DimensionExponents): Dimension {
-//     return new Dimension(exponents);
-// }

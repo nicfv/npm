@@ -6,3 +6,4 @@
  */
 export * from './dimension';
 export * from './unit';
+export * from './lib';
