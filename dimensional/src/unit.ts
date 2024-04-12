@@ -1,6 +1,6 @@
 import { Compound } from './compound';
 import { ConversionTable, Conversion } from './conversion';
-import { Dimension } from './dimension';
+import { Dim, Dimension } from './dimension';
 import { NumberDictionary } from './lib';
 
 /**
@@ -40,15 +40,15 @@ export class Unit extends Compound<Units, Unit> {
         for (const unit in exponents) {
             const conversion: Conversion = ConversionTable[unit as Units],
                 exponent: number = exponents[unit as Units] ?? 0;
-            scale *= (conversion.scale ** exponent);
-            if (conversion.makeup) {
+            if (conversion.scale && conversion.makeup) {
+                scale *= (conversion.scale ** exponent);
                 const conv = this.getConversion(conversion.makeup, scale, dimension);
                 scale = conv.scale;
                 dimension = conv.dimension;
             } else if (conversion.dim) {
-                dimension = dimension.mult(conversion.dim, exponent);
+                dimension = dimension.mult(Dim(conversion.dim), exponent);
             } else {
-                throw new Error('Makeup or dimension is missing from ' + unit + '!');
+                throw new Error('Mal-formed ' + unit + ' data! Keys: ' + Object.keys(conversion));
             }
         }
         return {
