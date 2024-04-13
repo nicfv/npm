@@ -45,8 +45,21 @@ export namespace Measure {
         public mult(other: Measure, exponent: number): Measure {
             return new Measure('', super.combine(other, exponent));
         }
+        /**
+         * Return the common measurement name for this type, or undefined if none exist.
+         * @returns The common measurement name, if one exists
+         */
+        public getName(): Name | undefined {
+            for (const m in Table) {
+                if (this.dimension.is(Table[m as Name]().dimension)) {
+                    return (m as Name);
+                }
+            }
+            return undefined;
+        }
         public override toString(): string {
-            return this.latex ?? super.toString();
+            const name: Name | undefined = this.getName();
+            return name ? Table[name]().latex : (this.latex || super.toString());
         }
     }
     /**
@@ -71,28 +84,6 @@ export namespace Measure {
         force: () => new Measure('F', { mass: 1, acceleration: 1 }),
         power: () => new Measure('P', { force: 1, length: 1 }),
     };
-    /**
-     * Get the corresponding measure data for the type name.
-     * @param measure The measure name
-     * @returns The measure object
-     */
-    export function get(measure: Name): Measure {
-        return Table[measure]();
-    }
-    /**
-     * Return the common measurement name for this type, or undefined if none exist.
-     * @param measure_or_dimension The measure or dimension object
-     * @returns The common measurement name, if one exists
-     */
-    export function is(measure_or_dimension: Measure | Dimension.Dimension): Name | undefined {
-        const dimension: Dimension.Dimension = (measure_or_dimension instanceof Measure) ? measure_or_dimension.dimension : measure_or_dimension;
-        for (const m in Table) {
-            if (dimension.is(Table[m as Name]().dimension)) {
-                return (m as Name);
-            }
-        }
-        return undefined;
-    }
     /**
      * Represents a dimensionless measurement type.
      */
