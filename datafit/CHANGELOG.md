@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.4
+
+- Update dependency versions
+- Update build scripts
+
 ## 1.4.3
 
 - Update dependency versions
