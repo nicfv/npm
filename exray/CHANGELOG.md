@@ -5,6 +5,7 @@
 - Change `X` from a class to a namespace
 - **Breaking change**: `X.true()` and `X.false()` are now `X.isTrue()` and `X.isFalse()` (since `true` and `false` are reserved keywords)
 - Add a few more test cases
+- Minor changes in the main readme documentation
 
 ## 1.0.5
 
