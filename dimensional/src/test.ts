@@ -79,3 +79,14 @@ import { D, Q, U } from './lib';
     X.is(speed_limit_mph.toString(), '60 \\left[\\frac{\\text{mi}}{\\text{h}}\\right]');
     console.log(speed_limit_mph.plus(tolerance).toString());
 }
+
+{
+    const degR = Q(460 + 32, U({ Rankine: 1 })); // About freezing temperature
+    X.eq(degR.value, 492);
+    X.eq(degR.unit.getExponent('Rankine'), 1);
+    X.eq(degR.unit.dimension.getExponent('temperature'), 1);
+    X.gt(degR.as(U({ Kelvin: 1 })).value, 273); // 273.333...
+    X.lt(degR.as(U({ Kelvin: 1 })).value, 274);
+    X.gt(degR.as(U({ Fahrenheight_rel: 1 })).value, 491.9); // To allow for small error
+    X.lt(degR.as(U({ Fahrenheight_rel: 1 })).value, 492.1);
+}
