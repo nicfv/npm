@@ -8,16 +8,16 @@ import { D, Q, U } from './lib';
     X.eq(velocity.getExponent('length'), 1);
     X.eq(velocity.getExponent('current'), 0);
     X.eq(velocity.getNonzeroExponents().length, 2);
-    X.true(velocity.is(distance.mult(time, -1)));
-    X.false(velocity.is(distance.mult(time, 1)));
+    X.isTrue(velocity.is(distance.mult(time, -1)));
+    X.isFalse(velocity.is(distance.mult(time, 1)));
     X.is(velocity.toString(), '\\frac{\\textbf{L}}{\\textbf{T}}')
 }
 
 {
     const meters_per_second = U({ meter: 1, second: -1 }),
         miles_per_hour = U({ mile: 1, hour: -1 });
-    X.true(meters_per_second.dimension.is(miles_per_hour.dimension));
-    X.false(meters_per_second.is(miles_per_hour));
+    X.isTrue(meters_per_second.dimension.is(miles_per_hour.dimension));
+    X.isFalse(meters_per_second.is(miles_per_hour));
     X.gt(miles_per_hour.scale, 0.44); // 0.447...
     X.lt(miles_per_hour.scale, 0.45);
     X.eq(meters_per_second.getNonzeroExponents().length, 2);
@@ -30,14 +30,14 @@ import { D, Q, U } from './lib';
     const kN = U({ kiloNewton: 1 }),
         kg_m_s2 = U({ kilogram: 1, meter: 1, second: -2 }),
         lbf = U({ pound_force: 1 });
-    X.true(kN.dimension.is(kg_m_s2.dimension));
-    X.false(kN.is(kg_m_s2));
+    X.isTrue(kN.dimension.is(kg_m_s2.dimension));
+    X.isFalse(kN.is(kg_m_s2));
     X.eq(kN.getNonzeroExponents().length, 1);
     X.eq(kN.getExponent('kiloNewton'), 1);
     X.eq(kN.getExponent('Newton'), 0);
     X.eq(kN.scale / kg_m_s2.scale, 1000);
     X.is(kN.toString(), '\\text{k} \\text{N}');
-    X.true(kN.dimension.is(lbf.dimension));
+    X.isTrue(kN.dimension.is(lbf.dimension));
     X.gt(lbf.scale / kg_m_s2.scale, 4.44);// 4.448...
     X.lt(lbf.scale / kg_m_s2.scale, 4.45);
     X.is(lbf.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}')
@@ -46,8 +46,8 @@ import { D, Q, U } from './lib';
 {
     const speed_limit_mph = Q(60, U({ mile: 1, hour: -1 })),
         tolerance = Q(1, U({ meter: 1, second: -1 }));
-    X.true(speed_limit_mph.is(tolerance));
-    X.false(speed_limit_mph.pow(0.5).is(tolerance));
+    X.isTrue(speed_limit_mph.is(tolerance));
+    X.isFalse(speed_limit_mph.pow(0.5).is(tolerance));
     X.gt(speed_limit_mph.plus(tolerance).value, 62.23); // 62.236936...
     X.lt(speed_limit_mph.plus(tolerance).value, 62.24);
     X.eq(speed_limit_mph.plus(tolerance).unit.getExponent('mile'), 1);

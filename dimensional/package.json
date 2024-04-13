@@ -1,6 +1,6 @@
 {
   "name": "dimensional",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Dimensional analysis and unit conversions",
   "homepage": "https://npm.nicfv.com/dimensional",
   "bin": "",
@@ -30,10 +30,10 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.8.2"
+    "smath": "1.8.3"
   },
   "devDependencies": {
-    "exray": "1.0.4",
+    "exray": "1.1.0",
     "typedoc": "0.25.13"
   }
 }
