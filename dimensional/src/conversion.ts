@@ -99,7 +99,7 @@ export namespace Conversion {
         milliampere: () => Conversion.scaled('milli', 'ampere'),
         ampere: () => Conversion.simple('\\text{A}', 'current'),
         Kelvin: () => Conversion.simple('\\text{K}', 'temperature'),
-        Rankine: () => Conversion.relative('\\degree\\text{R}', 1.8, 'Kelvin'),
+        Rankine: () => Conversion.relative('\\degree\\text{R}', 5 / 9, 'Kelvin'),
         Celsius_rel: () => Conversion.relative('\\degree\\text{C}_{\\Delta}', 1, 'Kelvin'),
         Fahrenheight_rel: () => Conversion.relative('\\degree\\text{F}_{\\Delta}', 1, 'Rankine'),
         mole: () => Conversion.simple('\\text{mol}', 'substance'),
