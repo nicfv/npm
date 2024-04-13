@@ -44,8 +44,8 @@ export namespace Unit {
          */
         public readonly dimension: Dimension.Dimension;
         constructor(exponents: Exponents) {
-            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Dimension.None);
             super(exponents, t => Conversion.Table[t]().latex);
+            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Dimension.None);
             this.scale = conversion.scale;
             this.dimension = conversion.dimension;
         }
