@@ -49,6 +49,9 @@ export namespace Measure {
             return this.latex ?? super.toString();
         }
     }
+    /**
+     * The template type for the table of measures.
+     */
     type Measures = { [index in Name]: () => Measure };
     /**
      * Contains information for common types of measurement types.
@@ -68,8 +71,27 @@ export namespace Measure {
         force: () => new Measure('F', { mass: 1, acceleration: 1 }),
         power: () => new Measure('P', { force: 1, length: 1 }),
     };
+    /**
+     * Get the corresponding measure data for the type name.
+     * @param measure The measure name
+     * @returns The measure object
+     */
     export function get(measure: Name): Measure {
         return Table[measure]();
+    }
+    /**
+     * Return the common measurement name for this type, or undefined if none exist.
+     * @param measure_or_dimension The measure or dimension object
+     * @returns The common measurement name, if one exists
+     */
+    export function is(measure_or_dimension: Measure | Dimension.Dimension): Name | undefined {
+        const dimension: Dimension.Dimension = (measure_or_dimension instanceof Measure) ? measure_or_dimension.dimensions : measure_or_dimension;
+        for (const m in Table) {
+            if (dimension.is(Table[m as Name]().dimensions)) {
+                return (m as Name);
+            }
+        }
+        return undefined;
     }
     /**
      * Represents a dimensionless measurement type.
