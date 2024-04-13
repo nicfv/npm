@@ -22,7 +22,7 @@ export namespace Measure {
         /**
          * Contains the base dimensions for this measurement type.
          */
-        public readonly dimensions: Dimension.Dimension;
+        public readonly dimension: Dimension.Dimension;
         /**
          * Define a new measurement type.
          * @param latex A valid LaTeX equation representing this measurement type
@@ -33,12 +33,12 @@ export namespace Measure {
             const dimExpTemp: Dimension.Exponents = base ? { [base]: 1 } : exponents;
             super(dimExpTemp, t => Table[t]().latex);
             if (base) {
-                this.dimensions = new Dimension.Dimension(dimExpTemp);
+                this.dimension = new Dimension.Dimension(dimExpTemp);
             } else {
-                this.dimensions = Dimension.None;
+                this.dimension = Dimension.None;
                 for (const m in exponents) {
                     const exponent: number = exponents[m as Name] ?? 0;
-                    this.dimensions = this.dimensions.mult(Table[m as Name]().dimensions, exponent);
+                    this.dimension = this.dimension.mult(Table[m as Name]().dimension, exponent);
                 }
             }
         }
@@ -85,9 +85,9 @@ export namespace Measure {
      * @returns The common measurement name, if one exists
      */
     export function is(measure_or_dimension: Measure | Dimension.Dimension): Name | undefined {
-        const dimension: Dimension.Dimension = (measure_or_dimension instanceof Measure) ? measure_or_dimension.dimensions : measure_or_dimension;
+        const dimension: Dimension.Dimension = (measure_or_dimension instanceof Measure) ? measure_or_dimension.dimension : measure_or_dimension;
         for (const m in Table) {
-            if (dimension.is(Table[m as Name]().dimensions)) {
+            if (dimension.is(Table[m as Name]().dimension)) {
                 return (m as Name);
             }
         }
