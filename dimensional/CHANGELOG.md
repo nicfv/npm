@@ -11,6 +11,7 @@
 - Create internal methods for metric prefixes and measurement types
 - Unit scaling is now computed in the `Unit` class instead of `Quantity`
 - Add several unit tests
+- Add two basic examples
 
 ## 0.1.1
 
