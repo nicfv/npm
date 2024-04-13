@@ -1,3 +1,4 @@
+import { Compound } from './compound';
 import { Dimension } from './dimension';
 /**
  * Contains all software used for the calculation of measurement types.
@@ -11,34 +12,50 @@ export namespace Measure {
         | 'velocity' | 'acceleration'
         | 'force' | 'power';
     /**
+     * Is an object containing keys of measurement types and values of nonzero exponents.
+     */
+    interface Exponents extends Compound.Exponents<Name> { };
+    /**
      * Contains information for a measurement type.
      */
-    interface Measure {
-        /**
-         * The LaTeX representation of this measurement type.
-         */
-        readonly latex: string;
-        /**
-         * The base dimensions for this measurement.
-         */
-        readonly dim: Dimension.Exponents;
+    class Measure extends Compound.Compound<Name, Measure> {
+        public readonly dimensions: Dimension.Dimension;
+        constructor(private readonly latex: string, exponents: Exponents, private readonly isBase: boolean = false) {
+            super(exponents, t => latex ?? Table[t]().latex);
+            if (isBase) {
+                this.dimensions = new Dimension.Dimension(exponents);
+            } else {
+                this.dimensions = Dimension.None;
+                for (const m in exponents) {
+                    const exponent: number = exponents[m as Name] ?? 0;
+                    this.dimensions = this.dimensions.mult(Table[m as Name]().dimensions, exponent);
+                }
+            }
+        }
+        public mult(other: Measure, exponent: number): Measure {
+            return new Measure('', super.combine(other, exponent));
+        }
+        public static base(latex: string, dimension: Dimension.Name): Measure {
+            return new Measure(latex, { [dimension]: 1 }, true);
+        }
     }
+    type Measures = { [index in Name]: () => Measure };
     /**
      * Contains information for common types of measurement types.
      */
-    export const Table: { [index in Name]: Measure } = {
-        time: { latex: 't', dim: { time: 1 } },
-        length: { latex: '\\Delta x', dim: { length: 1 } },
-        mass: { latex: 'm', dim: { mass: 1 } },
-        current: { latex: 'I', dim: { current: 1 } },
-        temperature: { latex: 'T', dim: { temperature: 1 } },
-        substance: { latex: 'n', dim: { substance: 1 } },
-        intensity: { latex: 'I_{V}', dim: { intensity: 1 } },
-        area: { latex: 'A', dim: { length: 2 } },
-        volume: { latex: 'V', dim: { length: 3 } },
-        velocity: { latex: 'v', dim: { length: 1, time: -1 } },
-        acceleration: { latex: 'a', dim: { length: 1, time: -2 } },
-        force: { latex: 'F', dim: { mass: 1, length: 1, time: -2 } },
-        power: { latex: 'P', dim: { mass: 1, length: 2, time: -2 } },
+    export const Table: Measures = {
+        time: () => Measure.base('t', 'time'),
+        length: () => Measure.base('x', 'length'),
+        mass: () => Measure.base('m', 'mass'),
+        current: () => Measure.base('I', 'current'),
+        temperature: () => Measure.base('T', 'temperature'),
+        substance: () => Measure.base('n', 'substance'),
+        intensity: () => Measure.base('I_{V}', 'intensity'),
+        area: () => new Measure('A', { length: 2 }),
+        volume: () => new Measure('V', { length: 3 }),
+        velocity: () => new Measure('v', { length: 1, time: -1 }),
+        acceleration: () => new Measure('a', { length: 1, time: -2 }),
+        force: () => new Measure('F', { mass: 1, acceleration: 1 }),
+        power: () => new Measure('P', { force: 1, length: 1 }),
     };
 }
