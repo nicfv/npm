@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3
+
+- Update dependency versions
+- Update build scripts
+
 ## 1.1.2
 
 - Update dependency versions

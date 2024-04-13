@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.3
+
+- Update dependency versions
+- Update build scripts
+
 ## 1.8.2
 
 - Use global TypeDoc configuration file

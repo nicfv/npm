@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5
+
+- Update build scripts
+
 ## 1.0.4
 
 - Use global TypeDoc configuration file
