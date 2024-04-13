@@ -1,38 +1,41 @@
 import { Compound } from './compound';
-import { Dictionary, NumberDictionary } from './lib';
-
 /**
- * A list of common names for each of the physical base dimensions.
+ * Contains all software used for the calculation of physical base dimensions.
  */
-export type Dimensions = 'time' | 'length' | 'mass' | 'current' | 'temperature' | 'amount' | 'intensity';
-/**
- * Contains all physical base dimensions and their corresponding abbreviations.
- */
-const DimensionTable: Dictionary<Dimensions> = {
-    'amount': '\\textbf{N}',
-    'current': '\\textbf{I}',
-    'intensity': '\\textbf{J}',
-    'length': '\\textbf{L}',
-    'mass': '\\textbf{M}',
-    'temperature': '\\boldsymbol{\\Theta}',
-    'time': '\\textbf{T}',
-};
-/**
- * Defines the class for physical base dimensions.
- */
-export class Dimension extends Compound<Dimensions, Dimension> {
-    constructor(exponents: NumberDictionary<Dimensions>) {
-        super(exponents, t => DimensionTable[t]);
+export namespace Dimension {
+    /**
+     * A list of common names for each of the physical base dimensions.
+     */
+    export type Name = 'time' | 'length' | 'mass' | 'current' | 'temperature' | 'substance' | 'intensity';
+    /**
+     * Contains all physical base dimensions and their corresponding abbreviations.
+     */
+    const Table: { [index in Name]: string } = {
+        current: '\\textbf{I}',
+        intensity: '\\textbf{J}',
+        length: '\\textbf{L}',
+        mass: '\\textbf{M}',
+        substance: '\\textbf{N}',
+        temperature: '\\boldsymbol{\\Theta}',
+        time: '\\textbf{T}',
+    };
+    /**
+     * Is an object containing keys of dimensions and values of nonzero exponents.
+     */
+    export interface Exponents extends Compound.Exponents<Name> { };
+    /**
+     * Defines the class for physical base dimensions.
+     */
+    export class Dimension extends Compound.Compound<Name, Dimension> {
+        constructor(exponents: Exponents) {
+            super(exponents, t => Table[t]);
+        }
+        public mult(other: Dimension, exponent: number): Dimension {
+            return new Dimension(super.combine(other, exponent));
+        }
     }
-    public mult(other: Dimension, exponent: number): Dimension {
-        return new Dimension(super.combine(other, exponent));
-    }
-}
-/**
- * Shorthand for creating a dimension object.
- * @param exponents Exponents of each of the physical base dimensions
- * @returns A new dimension
- */
-export function Dim(exponents: NumberDictionary<Dimensions>): Dimension {
-    return new Dimension(exponents);
+    /**
+     * Represents a dimensionless value.
+     */
+    export const None = new Dimension({});
 }
