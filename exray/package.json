@@ -1,6 +1,6 @@
 {
   "name": "exray",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Lightweight assertion testing framework",
   "homepage": "https://npm.nicfv.com/exray",
   "bin": "",
