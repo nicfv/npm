@@ -11,7 +11,7 @@ export namespace Conversion {
     export class Conversion {
         /**
          * Create a new unit conversion.
-         * @param latex 
+         * @param latex The LaTeX representation of this unit.
          * @param scale The scale of this unit in relation to the base units that make up this dimension.
          * @param dimension The base physical dimensions of this unit.
          */
