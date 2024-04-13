@@ -10,7 +10,7 @@ import { D, Q, U } from './lib';
     X.eq(velocity.getNonzeroExponents().length, 2);
     X.isTrue(velocity.is(distance.mult(time, -1)));
     X.isFalse(velocity.is(distance.mult(time, 1)));
-    X.is(velocity.toString(), '\\frac{\\textbf{L}}{\\textbf{T}}')
+    X.is(velocity.toString(), '\\frac{\\textbf{L}}{\\textbf{T}}');
 }
 
 {
@@ -40,7 +40,7 @@ import { D, Q, U } from './lib';
     X.isTrue(kN.dimension.is(lbf.dimension));
     X.gt(lbf.scale / kg_m_s2.scale, 4.44);// 4.448...
     X.lt(lbf.scale / kg_m_s2.scale, 4.45);
-    X.is(lbf.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}')
+    X.is(lbf.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}');
 }
 
 {
