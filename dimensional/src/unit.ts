@@ -35,8 +35,14 @@ export namespace Unit {
      * Defines the class for units of measurement for physical quantities.
      */
     export class Unit extends Compound.Compound<Name, Unit> {
-        public readonly dimension: Dimension.Dimension;
+        /**
+         * The scale of this unit relative to the base unit.
+         */
         public readonly scale: number;
+        /**
+         * The physical base dimensions of this unit.
+         */
+        public readonly dimension: Dimension.Dimension;
         constructor(exponents: Exponents) {
             const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Dimension.None);
             super(exponents, t => Conversion.Table[t]().latex);
@@ -44,7 +50,7 @@ export namespace Unit {
             this.dimension = conversion.dimension;
         }
         public mult(other: Unit, exponent: number): Unit {
-            return new Unit(this.combine(other, exponent));
+            return new Unit(super.combine(other, exponent));
         }
         private static getConversion(exponents: Exponents, scale: number, dimension: Dimension.Dimension): Conversion.Conversion {
             for (const unit in exponents) {
