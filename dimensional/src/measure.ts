@@ -14,16 +14,26 @@ export namespace Measure {
     /**
      * Is an object containing keys of measurement types and values of nonzero exponents.
      */
-    interface Exponents extends Compound.Exponents<Name> { };
+    export interface Exponents extends Compound.Exponents<Name> { };
     /**
      * Contains information for a measurement type.
      */
-    class Measure extends Compound.Compound<Name, Measure> {
+    export class Measure extends Compound.Compound<Name, Measure> {
+        /**
+         * Contains the base dimensions for this measurement type.
+         */
         public readonly dimensions: Dimension.Dimension;
-        constructor(private readonly latex: string, exponents: Exponents, private readonly isBase: boolean = false) {
-            super(exponents, t => latex ?? Table[t]().latex);
-            if (isBase) {
-                this.dimensions = new Dimension.Dimension(exponents);
+        /**
+         * Define a new measurement type.
+         * @param latex A valid LaTeX equation representing this measurement type
+         * @param exponents The exponents of the measurements that make up this type
+         * @param base Determines the base dimension measured by this type (overrides `exponents`)
+         */
+        constructor(private readonly latex: string, exponents: Exponents, base?: Dimension.Name) {
+            const dimExpTemp: Dimension.Exponents = base ? { [base]: 1 } : exponents;
+            super(dimExpTemp, t => Table[t]().latex);
+            if (base) {
+                this.dimensions = new Dimension.Dimension(dimExpTemp);
             } else {
                 this.dimensions = Dimension.None;
                 for (const m in exponents) {
@@ -35,22 +45,22 @@ export namespace Measure {
         public mult(other: Measure, exponent: number): Measure {
             return new Measure('', super.combine(other, exponent));
         }
-        public static base(latex: string, dimension: Dimension.Name): Measure {
-            return new Measure(latex, { [dimension]: 1 }, true);
+        public override toString(): string {
+            return this.latex ?? super.toString();
         }
     }
     type Measures = { [index in Name]: () => Measure };
     /**
      * Contains information for common types of measurement types.
      */
-    export const Table: Measures = {
-        time: () => Measure.base('t', 'time'),
-        length: () => Measure.base('x', 'length'),
-        mass: () => Measure.base('m', 'mass'),
-        current: () => Measure.base('I', 'current'),
-        temperature: () => Measure.base('T', 'temperature'),
-        substance: () => Measure.base('n', 'substance'),
-        intensity: () => Measure.base('I_{V}', 'intensity'),
+    const Table: Measures = {
+        time: () => new Measure('t', {}, 'time'),
+        length: () => new Measure('x', {}, 'length'),
+        mass: () => new Measure('m', {}, 'mass'),
+        current: () => new Measure('I', {}, 'current'),
+        temperature: () => new Measure('T', {}, 'temperature'),
+        substance: () => new Measure('n', {}, 'substance'),
+        intensity: () => new Measure('I_{V}', {}, 'intensity'),
         area: () => new Measure('A', { length: 2 }),
         volume: () => new Measure('V', { length: 3 }),
         velocity: () => new Measure('v', { length: 1, time: -1 }),
@@ -58,4 +68,11 @@ export namespace Measure {
         force: () => new Measure('F', { mass: 1, acceleration: 1 }),
         power: () => new Measure('P', { force: 1, length: 1 }),
     };
+    export function get(measure: Name): Measure {
+        return Table[measure]();
+    }
+    /**
+     * Represents a dimensionless measurement type.
+     */
+    export const None = new Measure('1', {});
 }
