@@ -25,11 +25,11 @@ export namespace Measure {
         public readonly dimension: Dimension.Dimension;
         /**
          * Define a new measurement type.
-         * @param latex A valid LaTeX equation representing this measurement type
          * @param exponents The exponents of the measurements that make up this type
+         * @param latex A valid LaTeX equation representing this measurement type
          * @param base Determines the base dimension measured by this type (overrides `exponents`)
          */
-        constructor(private readonly latex: string, exponents: Exponents, base?: Dimension.Name) {
+        constructor(exponents: Exponents, private readonly latex: string = '', base?: Dimension.Name) {
             const dimExpTemp: Dimension.Exponents = base ? { [base]: 1 } : exponents;
             super(dimExpTemp, t => Table[t]().latex);
             if (base) {
@@ -43,7 +43,7 @@ export namespace Measure {
             }
         }
         public mult(other: Measure, exponent: number): Measure {
-            return new Measure('', super.combine(other, exponent));
+            return new Measure(super.combine(other, exponent));
         }
         /**
          * Return the common measurement name for this type, or undefined if none exist.
@@ -70,22 +70,22 @@ export namespace Measure {
      * Contains information for common types of measurement types.
      */
     const Table: Measures = {
-        time: () => new Measure('t', {}, 'time'),
-        length: () => new Measure('x', {}, 'length'),
-        mass: () => new Measure('m', {}, 'mass'),
-        current: () => new Measure('I', {}, 'current'),
-        temperature: () => new Measure('T', {}, 'temperature'),
-        substance: () => new Measure('n', {}, 'substance'),
-        intensity: () => new Measure('I_{V}', {}, 'intensity'),
-        area: () => new Measure('A', { length: 2 }),
-        volume: () => new Measure('V', { length: 3 }),
-        velocity: () => new Measure('v', { length: 1, time: -1 }),
-        acceleration: () => new Measure('a', { length: 1, time: -2 }),
-        force: () => new Measure('F', { mass: 1, acceleration: 1 }),
-        power: () => new Measure('P', { force: 1, length: 1 }),
+        time: () => new Measure({}, 't', 'time'),
+        length: () => new Measure({}, 'x', 'length'),
+        mass: () => new Measure({}, 'm', 'mass'),
+        current: () => new Measure({}, 'I', 'current'),
+        temperature: () => new Measure({}, 'T', 'temperature'),
+        substance: () => new Measure({}, 'n', 'substance'),
+        intensity: () => new Measure({}, 'I_{V}', 'intensity'),
+        area: () => new Measure({ length: 2 }, 'A'),
+        volume: () => new Measure({ length: 3 }, 'V'),
+        velocity: () => new Measure({ length: 1, time: -1 }, 'v'),
+        acceleration: () => new Measure({ length: 1, time: -2 }, 'a'),
+        force: () => new Measure({ mass: 1, acceleration: 1 }, 'F'),
+        power: () => new Measure({ force: 1, length: 1 }, 'P'),
     };
     /**
      * Represents a dimensionless measurement type.
      */
-    export const None = new Measure('1', {});
+    export const None = new Measure({});
 }

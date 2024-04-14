@@ -18,7 +18,7 @@ export function D(exponents: Dimension.Exponents): Dimension.Dimension {
  * @returns A new measurement object
  */
 export function M(exponents: Measure.Exponents): Measure.Measure {
-    return new Measure.Measure('', exponents);
+    return new Measure.Measure(exponents);
 }
 
 /**
