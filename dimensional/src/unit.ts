@@ -1,6 +1,6 @@
 import { Compound } from './compound';
 import { Conversion } from './conversion';
-import { Dimension } from './dimension';
+import { Measure } from './measure';
 /**
  * Contains all software used for the calculation of units of measurement.
  */
@@ -42,24 +42,24 @@ export namespace Unit {
         /**
          * The physical base dimensions of this unit.
          */
-        public readonly dimension: Dimension.Dimension;
+        public readonly measure: Measure.Measure;
         constructor(exponents: Exponents) {
             super(exponents, t => Conversion.Table[t]().latex);
-            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Dimension.None);
+            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Measure.None);
             this.scale = conversion.scale;
-            this.dimension = conversion.dimension;
+            this.measure = conversion.measure;
         }
         public mult(other: Unit, exponent: number): Unit {
             return new Unit(super.combine(other, exponent));
         }
-        private static getConversion(exponents: Exponents, scale: number, dimension: Dimension.Dimension): Conversion.Conversion {
+        private static getConversion(exponents: Exponents, scale: number, measure: Measure.Measure): Conversion.Conversion {
             for (const unit in exponents) {
                 const conversion: Conversion.Conversion = Conversion.Table[unit as Unit.Name](),
                     exponent: number = exponents[unit as Unit.Name] ?? 0;
                 scale *= (conversion.scale ** exponent);
-                dimension = dimension.mult(conversion.dimension, exponent);
+                measure = measure.mult(conversion.measure, exponent);
             }
-            return new Conversion.Conversion('', scale, dimension);
+            return new Conversion.Conversion('', scale, measure);
         }
     }
     /**

@@ -1,4 +1,5 @@
 import { Dimension } from './dimension';
+import { Measure } from './measure';
 import { Prefix } from './prefix';
 import { Unit } from './unit';
 /**
@@ -15,7 +16,7 @@ export namespace Conversion {
          * @param scale The scale of this unit in relation to the base units that make up this dimension.
          * @param dimension The base physical dimensions of this unit.
          */
-        constructor(public readonly latex: string, public readonly scale: number, public readonly dimension: Dimension.Dimension) { }
+        constructor(public readonly latex: string, public readonly scale: number, public readonly measure: Measure.Measure) { }
         /**
          * Create a simple unit conversion that defines this unit as the base for its dimension.
          * @param latex The LaTeX representation of this unit.
@@ -23,7 +24,7 @@ export namespace Conversion {
          * @returns A simple conversion formula.
          */
         public static simple(latex: string, dimension: Dimension.Name): Conversion {
-            return new Conversion(latex, 1, new Dimension.Dimension({ [dimension]: 1 }));
+            return new Conversion(latex, 1, new Measure.Measure({}, '', dimension));
         }
         /**
          * Create a new scaled unit using a metric prefix.
@@ -32,7 +33,7 @@ export namespace Conversion {
          * @returns A scaling conversion formula.
          */
         public static scaled(prefix: Prefix.Name, base: Unit.Name): Conversion {
-            return new Conversion(Prefix.Table[prefix].latex + ' ' + Table[base]().latex, Prefix.Table[prefix].scale * Table[base]().scale, Table[base]().dimension);
+            return new Conversion(Prefix.Table[prefix].latex + ' ' + Table[base]().latex, Prefix.Table[prefix].scale * Table[base]().scale, Table[base]().measure);
         }
         /**
          * Create a new unit that is relative to another.
@@ -42,7 +43,7 @@ export namespace Conversion {
          * @returns A relative scale formula between this unit and a relative one.
          */
         public static relative(latex: string, scale: number, ref: Unit.Name): Conversion {
-            return new Conversion(latex, scale * Table[ref]().scale, Table[ref]().dimension);
+            return new Conversion(latex, scale * Table[ref]().scale, Table[ref]().measure);
         }
         /**
          * @param latex The LaTeX representation of this unit.
@@ -54,9 +55,15 @@ export namespace Conversion {
             for (const unit in makeup) {
                 const exponent: number = makeup[unit as Unit.Name] ?? 0;
                 scale *= (Table[unit as Unit.Name]().scale ** exponent);
-                dim = dim.mult(Table[unit as Unit.Name]().dimension, exponent);
+                dim = dim.mult(Table[unit as Unit.Name]().measure.dimension, exponent);
             }
-            return new Conversion(latex, scale, dim);
+            // Reconstruct dimension.exponents (private member)
+            const exponents: Measure.Exponents = {};
+            for (const d of dim.getNonzeroExponents()) {
+                exponents[d] = dim.getExponent(d);
+            }
+            // Build a new measurement type using deconstructed dimension
+            return new Conversion(latex, scale, new Measure.Measure(exponents));
         }
     }
     /**
