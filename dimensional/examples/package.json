@@ -3,6 +3,6 @@
     "clean": "rm -rf node_modules package-lock.json"
   },
   "dependencies": {
-    "dimensional": "file:dimensional-0.2.1.tgz"
+    "dimensional": "file:dimensional-0.3.0.tgz"
   }
 }
