@@ -44,7 +44,7 @@ export namespace Unit {
          */
         public readonly scale: number;
         /**
-         * The physical base dimensions of this unit.
+         * The physical attribute measured by this unit.
          */
         public readonly attribute: Attribute.Attribute;
         constructor(exponents: Exponents, attrOverride?: Attribute.Attribute) {
