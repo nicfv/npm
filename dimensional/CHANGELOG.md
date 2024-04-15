@@ -3,6 +3,15 @@
 ## 0.3.0
 
 - Update dependency versions
+- Export class to represent measurement types and `M()` shorthand
+- Add a few common measurement types (base dimensions, geometry, and kinetics/kinematics)
+- "Ownership chain" = `Quantity` > `Unit` > `Measure` > `Dimension`
+- Fix bug with incorrect temperature scaling factor
+- Rename `Fahrenheight/Celsius_rel` to `_delta`
+- Add energy/power measurement types, and Joule/Watt units
+- Add `isBase` member for dimensions to quickly determine if it is a base dimension
+- Add extra documentation in `Unit` class
+- Satisfying simplifications in `Unit` class
 
 ## 0.2.0
 
