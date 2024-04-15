@@ -1,4 +1,5 @@
 import { Dimension } from './dimension';
+import { Measure } from './measure';
 import { Quantity } from './quantity';
 import { Unit } from './unit';
 
@@ -9,6 +10,15 @@ import { Unit } from './unit';
  */
 export function D(exponents: Dimension.Exponents): Dimension.Dimension {
     return new Dimension.Dimension(exponents);
+}
+
+/**
+ * Shorthand for creating a new measurement type.
+ * @param exponents Exponents that make up this measurement
+ * @returns A new measurement object
+ */
+export function M(exponents: Measure.Exponents): Measure.Measure {
+    return new Measure.Measure(exponents);
 }
 
 /**

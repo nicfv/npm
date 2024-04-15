@@ -1,6 +1,6 @@
 import { Compound } from './compound';
 import { Conversion } from './conversion';
-import { Dimension } from './dimension';
+import { Measure } from './measure';
 /**
  * Contains all software used for the calculation of units of measurement.
  */
@@ -18,13 +18,17 @@ export namespace Unit {
         // Current
         | 'milliampere' | 'ampere'
         // Temperature
-        | 'Kelvin' | 'Rankine' | 'Celsius_rel' | 'Fahrenheight_rel'
+        | 'Kelvin' | 'Rankine' | 'Celsius_delta' | 'Fahrenheight_delta'
         // Substance
         | 'mole'
         // Luminous Intensity
         | 'candela' | 'lumen'
         // Force
         | 'Newton' | 'kiloNewton' | 'pound_force'
+        // Energy
+        | 'Joule'
+        // Power
+        | 'Watt'
         // Trailing semicolon
         ;
     /**
@@ -35,25 +39,35 @@ export namespace Unit {
      * Defines the class for units of measurement for physical quantities.
      */
     export class Unit extends Compound.Compound<Name, Unit> {
-        public readonly dimension: Dimension.Dimension;
+        /**
+         * The scale of this unit relative to the base unit.
+         */
         public readonly scale: number;
-        constructor(exponents: Exponents) {
-            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Dimension.None);
+        /**
+         * The physical base dimensions of this unit.
+         */
+        public readonly measure: Measure.Measure;
+        constructor(exponents: Exponents, measureOverride?: Measure.Measure) {
             super(exponents, t => Conversion.Table[t]().latex);
-            this.scale = conversion.scale;
-            this.dimension = conversion.dimension;
+            this.scale = 1;
+            this.measure = Measure.None;
+            for (const unit in exponents) {
+                const conversion: Conversion.Conversion = Conversion.Table[unit as Name](),
+                    exponent: number = super.getExponent(unit as Name);
+                this.scale *= (conversion.scale ** exponent);
+                this.measure = this.measure.mult(conversion.measure, exponent);
+            }
+            this.measure = this.measure.simplify();
+            if (measureOverride) {
+                if (this.measure.dimension.is(measureOverride.dimension)) {
+                    this.measure = measureOverride;
+                } else {
+                    throw new Error('\\text{Override dimensions do not match! } ' + this.measure.dimension.toString() + ' \\text{ vs. } ' + measureOverride.dimension.toString());
+                }
+            }
         }
         public mult(other: Unit, exponent: number): Unit {
-            return new Unit(this.combine(other, exponent));
-        }
-        private static getConversion(exponents: Exponents, scale: number, dimension: Dimension.Dimension): Conversion.Conversion {
-            for (const unit in exponents) {
-                const conversion: Conversion.Conversion = Conversion.Table[unit as Unit.Name](),
-                    exponent: number = exponents[unit as Unit.Name] ?? 0;
-                scale *= (conversion.scale ** exponent);
-                dimension = dimension.mult(conversion.dimension, exponent);
-            }
-            return new Conversion.Conversion('', scale, dimension);
+            return new Unit(super.combine(other, exponent), this.measure?.mult(other.measure, exponent));
         }
     }
     /**

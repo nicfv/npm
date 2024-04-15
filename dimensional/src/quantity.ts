@@ -1,6 +1,7 @@
 import { SMath } from 'smath';
 import { Unit } from './unit';
 import { Dimension } from './dimension';
+import { Measure } from './measure';
 /**
  * Contains all software used for the calculation of physical quantities.
  */
@@ -30,7 +31,7 @@ export namespace Quantity {
          */
         public as(newUnit: Unit.Unit): Quantity {
             if (!this.is(newUnit)) {
-                throw new Error('\\text{Dimensions do not match! } ' + this.unit.dimension.toString() + ' \\text{ vs. } ' + newUnit.dimension.toString())
+                throw new Error('\\text{Dimensions do not match! } ' + this.unit.measure.dimension.toString() + ' \\text{ vs. } ' + newUnit.measure.dimension.toString())
             }
             return new Quantity(SMath.normalize(this.base, 0, newUnit.scale), newUnit);
         }
@@ -39,13 +40,15 @@ export namespace Quantity {
          * @param other Another quantity, unit, or dimension
          * @returns True if the dimensions match, false otherwise
          */
-        public is(other: Quantity | Unit.Unit | Dimension.Dimension): boolean {
+        public is(other: Quantity | Unit.Unit | Measure.Measure | Dimension.Dimension): boolean {
             if (other instanceof Quantity) {
-                return this.unit.dimension.is(other.unit.dimension);
+                return this.unit.measure.dimension.is(other.unit.measure.dimension);
             } else if (other instanceof Unit.Unit) {
-                return this.unit.dimension.is(other.dimension);
+                return this.unit.measure.dimension.is(other.measure.dimension);
+            } else if (other instanceof Measure.Measure) {
+                return this.unit.measure.dimension.is(other.dimension);
             } else if (other instanceof Dimension.Dimension) {
-                return this.unit.dimension.is(other);
+                return this.unit.measure.dimension.is(other);
             } else {
                 throw new Error('Cannot compare to ' + (typeof other) + '!');
             }

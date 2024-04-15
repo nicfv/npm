@@ -14,6 +14,6 @@ When we divide force by acceleration, the units from force and acceleration will
 
 $$\frac{lb_{f}}{\frac{m}{s^{2}}}=\frac{lb_{f}s^{2}}{m}$$
 
-What are the dimensions on this unit? We can run a quick dimensional analysis using `Quantity.Unit.Dimension.toString()` to get a human-readable representation of our physical base dimensions. Believe it or not, the dimension of that unit is just mass! That means, we can convert quantities with that unit to any unit of mass.
+What are the dimensions on this unit? We can run a quick dimensional analysis using `Quantity.Unit.Measure.Dimension.toString()` to get a human-readable representation of our physical base dimensions. Believe it or not, the dimension of that unit is just mass! That means, we can convert quantities with that unit to any unit of mass.
 
 From plugging it into an online calculator, I expect the result to be about \\\(68 [kg]\\\).

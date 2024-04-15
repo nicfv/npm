@@ -27,8 +27,13 @@ export namespace Dimension {
      * Defines the class for physical base dimensions.
      */
     export class Dimension extends Compound.Compound<Name, Dimension> {
+        /**
+         * Determine if this dimension is a "simple" base dimension.
+         */
+        public readonly isBase: boolean;
         constructor(exponents: Exponents) {
             super(exponents, t => Table[t]);
+            this.isBase = (super.getNonzeroExponents().length === 1 && super.getExponent(super.getNonzeroExponents()[0]) === 1);
         }
         public mult(other: Dimension, exponent: number): Dimension {
             return new Dimension(super.combine(other, exponent));
