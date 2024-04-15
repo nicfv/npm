@@ -57,6 +57,13 @@ export namespace Measure {
             }
             return undefined;
         }
+        /**
+         * Determine the equivalent measurement type, else return this object.
+         * @returns The equivalent measurement type, if one exists
+         * @example
+         * `mass` * `velocity^2` => `energy`
+         * `time` * `time` => `time^2` // no equivalent
+         */
         public simplify(): Measure {
             const name: Name | undefined = this.getName();
             if (name) {
