@@ -47,7 +47,7 @@ export namespace Unit {
          * The physical base dimensions of this unit.
          */
         public readonly measure: Measure.Measure;
-        constructor(exponents: Exponents) {
+        constructor(exponents: Exponents, measureOverride?: Measure.Measure) {
             super(exponents, t => Conversion.Table[t]().latex);
             this.scale = 1;
             this.measure = Measure.None;
@@ -58,9 +58,16 @@ export namespace Unit {
                 this.measure = this.measure.mult(conversion.measure, exponent);
             }
             this.measure = this.measure.simplify();
+            if (measureOverride) {
+                if (this.measure.dimension.is(measureOverride.dimension)) {
+                    this.measure = measureOverride;
+                } else {
+                    throw new Error('\\text{Override dimensions do not match! } ' + this.measure.dimension.toString() + ' \\text{ vs. } ' + measureOverride.dimension.toString());
+                }
+            }
         }
         public mult(other: Unit, exponent: number): Unit {
-            return new Unit(super.combine(other, exponent));
+            return new Unit(super.combine(other, exponent), this.measure?.mult(other.measure, exponent));
         }
     }
     /**
