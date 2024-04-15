@@ -3,8 +3,8 @@ import { D, M, Q, U } from './lib';
 
 {
     const velocity = D({ length: 1, time: -1 }),
-        distance = D({ length: 1 }),
-        time = D({ time: 1 });
+        distance = D('length'),
+        time = D('time');
     X.eq(velocity.getExponent('length'), 1);
     X.eq(velocity.getExponent('current'), 0);
     X.eq(velocity.getNonzeroExponents().length, 2);
@@ -17,10 +17,10 @@ import { D, M, Q, U } from './lib';
 }
 
 {
-    const velocity1 = M({ velocity: 1 }),
+    const velocity1 = M('velocity'),
         velocity2 = M({ length: 1, time: -1 }),
         velocity3 = M({ length: 1 }).mult(M({ time: -1 }), 1),
-        velocity4 = M({ length: 1 }).mult(M({ time: 1 }), -1),
+        velocity4 = M('length').mult(M('time'), -1),
         velocity5 = velocity4.simplify();
     X.isTrue(velocity1.dimension.is(velocity2.dimension));
     X.isTrue(velocity1.dimension.is(velocity3.dimension));
@@ -51,7 +51,7 @@ import { D, M, Q, U } from './lib';
 {
     const energy1 = M({ length: 1, time: -1 }).mult(M({ mass: 1, velocity: 1 }), 1),
         energy2 = M({ force: 1, length: 1 }),
-        energy3 = M({ energy: 1 });
+        energy3 = M('energy');
     X.isFalse(energy1.is(energy2));
     X.isFalse(energy2.is(energy3));
     X.isFalse(energy1.is(energy3));
@@ -86,9 +86,9 @@ import { D, M, Q, U } from './lib';
 }
 
 {
-    const kN = U({ kiloNewton: 1 }),
+    const kN = U('kiloNewton'),
         kg_m_s2 = U({ kilogram: 1, meter: 1, second: -2 }),
-        lbf = U({ pound_force: 1 });
+        lbf = U('pound_force');
     X.isTrue(kN.measure.dimension.is(kg_m_s2.measure.dimension));
     X.isFalse(kN.is(kg_m_s2));
     X.eq(kN.getNonzeroExponents().length, 1);
@@ -152,7 +152,7 @@ import { D, M, Q, U } from './lib';
 }
 
 {
-    const degR = Q(460 + 32, U({ Rankine: 1 })); // About freezing temperature
+    const degR = Q(460 + 32, U('Rankine')); // About freezing temperature
     X.eq(degR.value, 492);
     X.eq(degR.unit.getExponent('Rankine'), 1);
     X.eq(degR.unit.measure.getExponent('temperature'), 1);
