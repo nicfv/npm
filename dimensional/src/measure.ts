@@ -67,7 +67,7 @@ export namespace Measure {
         public simplify(): Measure {
             const name: Name | undefined = this.getName();
             if (name) {
-                return Table[name]();
+                return new Measure({ [name]: 1 }, Table[name]().latex);
             } else {
                 return this;
             }
