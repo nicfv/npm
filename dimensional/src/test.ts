@@ -11,17 +11,62 @@ import { D, M, Q, U } from './lib';
     X.isTrue(velocity.is(distance.mult(time, -1)));
     X.isFalse(velocity.is(distance.mult(time, 1)));
     X.is(velocity.toString(), '\\frac{\\textbf{L}}{\\textbf{T}}');
+    X.isFalse(velocity.isBase);
+    X.isTrue(distance.isBase);
+    X.isTrue(time.isBase);
 }
 
 {
     const velocity1 = M({ velocity: 1 }),
         velocity2 = M({ length: 1, time: -1 }),
-        velocity3 = M({ length: 1 }).mult(M({ time: -1 }), 1);
-    console.log(velocity1.toString(), velocity2.toString(), velocity3.toString());
-    const energy1 = velocity1.mult(M({ mass: 1, velocity: 1 }), 1),
+        velocity3 = M({ length: 1 }).mult(M({ time: -1 }), 1),
+        velocity4 = M({ length: 1 }).mult(M({ time: 1 }), -1),
+        velocity5 = velocity4.simplify();
+    X.isTrue(velocity1.dimension.is(velocity2.dimension));
+    X.isTrue(velocity1.dimension.is(velocity3.dimension));
+    X.isTrue(velocity1.dimension.is(velocity4.dimension));
+    X.isFalse(velocity1.is(velocity2));
+    X.isTrue(velocity2.is(velocity3));
+    X.isTrue(velocity3.is(velocity4));
+    X.isFalse(velocity4.is(velocity5));
+    X.isTrue(velocity1.is(velocity5));
+    X.isTrue(velocity5.simplify().simplify().is(velocity1));
+    X.is(velocity1.toString(), 'v');
+    X.is(velocity2.toString(), '\\frac{x}{t}');
+    X.is(velocity2.toString(), velocity3.toString());
+    X.eq(velocity1.getNonzeroExponents().length, 1);
+    X.eq(velocity1.getExponent('velocity'), 1);
+    X.eq(velocity1.getExponent('length'), 0);
+    X.eq(velocity2.getNonzeroExponents().length, 2);
+    X.eq(velocity2.getExponent('velocity'), 0);
+    X.eq(velocity2.getExponent('length'), 1);
+    X.eq(velocity2.getExponent('time'), -1);
+    X.is(velocity1.getName()!, 'velocity');
+    X.is(velocity2.getName()!, 'velocity');
+    X.is(velocity3.getName()!, 'velocity');
+    X.is(velocity4.getName()!, 'velocity');
+    X.is(velocity5.getName()!, 'velocity');
+}
+
+{
+    const energy1 = M({ length: 1, time: -1 }).mult(M({ mass: 1, velocity: 1 }), 1),
         energy2 = M({ force: 1, length: 1 }),
         energy3 = M({ energy: 1 });
-    console.log(energy1.toString(), energy2.toString(), energy3.toString());
+    X.isFalse(energy1.is(energy2));
+    X.isFalse(energy2.is(energy3));
+    X.isFalse(energy1.is(energy3));
+    X.isTrue(energy1.dimension.is(energy2.dimension));
+    X.isTrue(energy1.dimension.is(energy3.dimension));
+    X.eq(energy1.getNonzeroExponents().length, 4);
+    X.eq(energy2.getNonzeroExponents().length, 2);
+    X.eq(energy3.getNonzeroExponents().length, 1);
+    X.is(energy1.getName()!, 'energy');
+    X.not(energy1.toString(), 'E');
+    X.is(energy1.simplify().toString(), 'E');
+    X.not(energy2.toString(), 'E');
+    X.is(energy2.simplify().toString(), 'E');
+    X.is(energy3.toString(), 'E');
+    X.is(energy3.simplify().toString(), 'E');
 }
 
 {
