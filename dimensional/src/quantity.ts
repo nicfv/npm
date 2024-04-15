@@ -45,6 +45,8 @@ export namespace Quantity {
                 return this.unit.measure.dimension.is(other.unit.measure.dimension);
             } else if (other instanceof Unit.Unit) {
                 return this.unit.measure.dimension.is(other.measure.dimension);
+            } else if (other instanceof Measure.Measure) {
+                return this.unit.measure.dimension.is(other.dimension);
             } else if (other instanceof Dimension.Dimension) {
                 return this.unit.measure.dimension.is(other);
             } else {
