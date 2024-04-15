@@ -1,6 +1,6 @@
+import { Attribute } from './attribute';
 import { Compound } from './compound';
 import { Conversion } from './conversion';
-import { Measure } from './measure';
 /**
  * Contains all software used for the calculation of units of measurement.
  */
@@ -46,28 +46,28 @@ export namespace Unit {
         /**
          * The physical base dimensions of this unit.
          */
-        public readonly measure: Measure.Measure;
-        constructor(exponents: Exponents, measureOverride?: Measure.Measure) {
+        public readonly attribute: Attribute.Attribute;
+        constructor(exponents: Exponents, attrOverride?: Attribute.Attribute) {
             super(exponents, t => Conversion.Table[t]().latex);
             this.scale = 1;
-            this.measure = Measure.None;
+            this.attribute = Attribute.None;
             for (const unit in exponents) {
                 const conversion: Conversion.Conversion = Conversion.Table[unit as Name](),
                     exponent: number = super.getExponent(unit as Name);
                 this.scale *= (conversion.scale ** exponent);
-                this.measure = this.measure.mult(conversion.measure, exponent);
+                this.attribute = this.attribute.mult(conversion.attribute, exponent);
             }
-            this.measure = this.measure.simplify();
-            if (measureOverride) {
-                if (this.measure.dimension.is(measureOverride.dimension)) {
-                    this.measure = measureOverride;
+            this.attribute = this.attribute.simplify();
+            if (attrOverride) {
+                if (this.attribute.dimension.is(attrOverride.dimension)) {
+                    this.attribute = attrOverride;
                 } else {
-                    throw new Error('\\text{Override dimensions do not match! } ' + this.measure.dimension.toString() + ' \\text{ vs. } ' + measureOverride.dimension.toString());
+                    throw new Error('\\text{Override dimensions do not match! } ' + this.attribute.dimension.toString() + ' \\text{ vs. } ' + attrOverride.dimension.toString());
                 }
             }
         }
         public mult(other: Unit, exponent: number): Unit {
-            return new Unit(super.combine(other, exponent), this.measure?.mult(other.measure, exponent));
+            return new Unit(super.combine(other, exponent), this.attribute.mult(other.attribute, exponent));
         }
     }
     /**

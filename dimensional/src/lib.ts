@@ -1,5 +1,5 @@
+import { Attribute } from './attribute';
 import { Dimension } from './dimension';
-import { Measure } from './measure';
 import { Quantity } from './quantity';
 import { Unit } from './unit';
 
@@ -13,12 +13,12 @@ export function D(exponents: Dimension.Exponents | Dimension.Name): Dimension.Di
 }
 
 /**
- * Shorthand for creating a new measurement type.
- * @param exponents Exponents that make up this measurement
- * @returns A new measurement object
+ * Shorthand for creating a new attribute.
+ * @param exponents Exponents that make up this attribute
+ * @returns A new attribute object
  */
-export function M(exponents: Measure.Exponents | Measure.Name): Measure.Measure {
-    return new Measure.Measure((typeof exponents === 'object') ? exponents : { [exponents]: 1 });
+export function A(exponents: Attribute.Exponents | Attribute.Name): Attribute.Attribute {
+    return new Attribute.Attribute((typeof exponents === 'object') ? exponents : { [exponents]: 1 });
 }
 
 /**

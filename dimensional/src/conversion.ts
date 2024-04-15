@@ -1,5 +1,5 @@
+import { Attribute } from './attribute';
 import { Dimension } from './dimension';
-import { Measure } from './measure';
 import { Prefix } from './prefix';
 import { Unit } from './unit';
 /**
@@ -14,9 +14,9 @@ export namespace Conversion {
          * Create a new unit conversion.
          * @param latex The LaTeX representation of this unit.
          * @param scale The scale of this unit in relation to the base units that make up this dimension.
-         * @param dimension The base physical dimensions of this unit.
+         * @param attribute The physical attribute measured by this unit.
          */
-        constructor(public readonly latex: string, public readonly scale: number, public readonly measure: Measure.Measure) { }
+        constructor(public readonly latex: string, public readonly scale: number, public readonly attribute: Attribute.Attribute) { }
         /**
          * Create a simple unit conversion that defines this unit as the base for its dimension.
          * @param latex The LaTeX representation of this unit.
@@ -24,7 +24,7 @@ export namespace Conversion {
          * @returns A simple conversion formula.
          */
         public static simple(latex: string, dimension: Dimension.Name): Conversion {
-            return new Conversion(latex, 1, new Measure.Measure({}, '', dimension));
+            return new Conversion(latex, 1, new Attribute.Attribute({}, '', dimension));
         }
         /**
          * Create a new scaled unit using a metric prefix.
@@ -33,7 +33,7 @@ export namespace Conversion {
          * @returns A scaling conversion formula.
          */
         public static scaled(prefix: Prefix.Name, base: Unit.Name): Conversion {
-            return new Conversion(Prefix.Table[prefix].latex + ' ' + Table[base]().latex, Prefix.Table[prefix].scale * Table[base]().scale, Table[base]().measure);
+            return new Conversion(Prefix.Table[prefix].latex + ' ' + Table[base]().latex, Prefix.Table[prefix].scale * Table[base]().scale, Table[base]().attribute);
         }
         /**
          * Create a new unit that is relative to another.
@@ -43,7 +43,7 @@ export namespace Conversion {
          * @returns A relative scale formula between this unit and a relative one.
          */
         public static relative(latex: string, scale: number, ref: Unit.Name): Conversion {
-            return new Conversion(latex, scale * Table[ref]().scale, Table[ref]().measure);
+            return new Conversion(latex, scale * Table[ref]().scale, Table[ref]().attribute);
         }
         /**
          * @param latex The LaTeX representation of this unit.
@@ -51,13 +51,13 @@ export namespace Conversion {
          */
         public static complex(latex: string, makeup: Unit.Exponents): Conversion {
             let scale: number = 1,
-                meas: Measure.Measure = Measure.None;
+                attr: Attribute.Attribute = Attribute.None;
             for (const unit in makeup) {
                 const exponent: number = makeup[unit as Unit.Name] ?? 0;
                 scale *= (Table[unit as Unit.Name]().scale ** exponent);
-                meas = meas.mult(Table[unit as Unit.Name]().measure, exponent);
+                attr = attr.mult(Table[unit as Unit.Name]().attribute, exponent);
             }
-            return new Conversion(latex, scale, meas);
+            return new Conversion(latex, scale, attr);
         }
     }
     /**
