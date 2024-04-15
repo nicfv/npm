@@ -2,7 +2,8 @@
 
 ## 0.4.0
 
-- Shorthand for "simple" units, measures, and dimensions
+- Shorthand for "simple" units, attributes, and dimensions
+- Rename `Measure` to `Attribute` (now the **QUAD** acronym works!)
 
 ## 0.3.0
 
