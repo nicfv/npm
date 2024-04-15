@@ -102,7 +102,17 @@ import { D, M, Q, U } from './lib';
     X.is(lbf.measure.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}');
     X.is(lbf.measure.toString(), 'F');
     X.is(lbf.measure.getName()!, 'force');
-    console.log(lbf.measure.getNonzeroExponents());
+    X.eq(lbf.measure.getNonzeroExponents().length, 1);
+}
+
+{
+    const force_ma = U({ kilogram: 1 }).mult(U({ meter: 1, second: -2 }), 1),
+        force1 = U({ kilogram: 1, meter: 1, second: -2 }),
+        force2 = U({ Newton: 1 });
+    X.is(force_ma.measure.toString(), 'm \\cdot a');
+    X.is(force1.measure.toString(), 'F');
+    X.is(force2.measure.toString(), 'F');
+    X.is(force_ma.mult(U({ foot: 1, minute: -2 }), -1).measure.toString(), 'm');
 }
 
 {
