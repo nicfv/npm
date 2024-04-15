@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- Shorthand for "simple" units, measures, and dimensions
+
 ## 0.3.0
 
 - Update dependency versions
