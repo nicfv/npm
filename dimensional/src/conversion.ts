@@ -51,19 +51,13 @@ export namespace Conversion {
          */
         public static complex(latex: string, makeup: Unit.Exponents): Conversion {
             let scale: number = 1,
-                dim: Dimension.Dimension = Dimension.None;
+                meas: Measure.Measure = Measure.None;
             for (const unit in makeup) {
                 const exponent: number = makeup[unit as Unit.Name] ?? 0;
                 scale *= (Table[unit as Unit.Name]().scale ** exponent);
-                dim = dim.mult(Table[unit as Unit.Name]().measure.dimension, exponent);
+                meas = meas.mult(Table[unit as Unit.Name]().measure, exponent);
             }
-            // Reconstruct dimension.exponents (private member)
-            const exponents: Measure.Exponents = {};
-            for (const d of dim.getNonzeroExponents()) {
-                exponents[d] = dim.getExponent(d);
-            }
-            // Build a new measurement type using deconstructed dimension
-            return new Conversion(latex, scale, new Measure.Measure(exponents));
+            return new Conversion(latex, scale, meas);
         }
     }
     /**
@@ -107,13 +101,15 @@ export namespace Conversion {
         ampere: () => Conversion.simple('\\text{A}', 'current'),
         Kelvin: () => Conversion.simple('\\text{K}', 'temperature'),
         Rankine: () => Conversion.relative('\\degree\\text{R}', 5 / 9, 'Kelvin'),
-        Celsius_rel: () => Conversion.relative('\\degree\\text{C}_{\\Delta}', 1, 'Kelvin'),
-        Fahrenheight_rel: () => Conversion.relative('\\degree\\text{F}_{\\Delta}', 1, 'Rankine'),
+        Celsius_delta: () => Conversion.relative('\\degree\\text{C}_{\\Delta}', 1, 'Kelvin'),
+        Fahrenheight_delta: () => Conversion.relative('\\degree\\text{F}_{\\Delta}', 1, 'Rankine'),
         mole: () => Conversion.simple('\\text{mol}', 'substance'),
         candela: () => Conversion.simple('\\text{cd}', 'intensity'),
         lumen: () => Conversion.relative('\\text{lm}', 4 * Math.PI, 'candela'),
         Newton: () => Conversion.complex('\\text{N}', { kilogram: 1, meter: 1, second: -2 }),
         kiloNewton: () => Conversion.scaled('kilo', 'Newton'),
         pound_force: () => Conversion.complex('\\text{lb}_{f}', { slug: 1, foot: 1, second: -2 }),
+        Joule: () => Conversion.complex('\\text{J}', { Newton: 1, meter: 1 }),
+        Watt: () => Conversion.complex('\\text{W}', { Joule: 1, second: -1 }),
     };
 }

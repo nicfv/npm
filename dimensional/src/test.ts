@@ -1,5 +1,5 @@
 import { X } from 'exray';
-import { D, Q, U } from './lib';
+import { D, M, Q, U } from './lib';
 
 {
     const velocity = D({ length: 1, time: -1 }),
@@ -11,6 +11,17 @@ import { D, Q, U } from './lib';
     X.isTrue(velocity.is(distance.mult(time, -1)));
     X.isFalse(velocity.is(distance.mult(time, 1)));
     X.is(velocity.toString(), '\\frac{\\textbf{L}}{\\textbf{T}}');
+}
+
+{
+    const velocity1 = M({ velocity: 1 }),
+        velocity2 = M({ length: 1, time: -1 }),
+        velocity3 = M({ length: 1 }).mult(M({ time: -1 }), 1);
+    console.log(velocity1.toString(), velocity2.toString(), velocity3.toString());
+    const energy1 = velocity1.mult(M({ mass: 1, velocity: 1 }), 1),
+        energy2 = M({ force: 1, length: 1 }),
+        energy3 = M({ energy: 1 });
+    console.log(energy1.toString(), energy2.toString(), energy3.toString());
 }
 
 {
@@ -26,7 +37,7 @@ import { D, Q, U } from './lib';
     X.eq(meters_per_second.getExponent('day'), 0);
     X.is(meters_per_second.toString(), '\\frac{\\text{m}}{\\text{s}}');
     X.is(meters_per_second.measure.toString(), 'v');
-    X.is(meters_per_second.measure.getName() ?? '', 'velocity');
+    X.is(meters_per_second.measure.getName()!, 'velocity');
 }
 
 {
@@ -45,7 +56,7 @@ import { D, Q, U } from './lib';
     X.lt(lbf.scale / kg_m_s2.scale, 4.45);
     X.is(lbf.measure.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}');
     X.is(lbf.measure.toString(), 'F');
-    X.is(lbf.measure.getName() ?? '', 'force');
+    X.is(lbf.measure.getName()!, 'force');
     console.log(lbf.measure.getNonzeroExponents());
 }
 
@@ -93,6 +104,6 @@ import { D, Q, U } from './lib';
     X.eq(degR.unit.measure.dimension.getExponent('temperature'), 1);
     X.gt(degR.as(U({ Kelvin: 1 })).value, 273); // 273.333...
     X.lt(degR.as(U({ Kelvin: 1 })).value, 274);
-    X.gt(degR.as(U({ Fahrenheight_rel: 1 })).value, 491.9); // To allow for small error
-    X.lt(degR.as(U({ Fahrenheight_rel: 1 })).value, 492.1);
+    X.gt(degR.as(U({ Fahrenheight_delta: 1 })).value, 491.9); // To allow for small error
+    X.lt(degR.as(U({ Fahrenheight_delta: 1 })).value, 492.1);
 }

@@ -18,13 +18,17 @@ export namespace Unit {
         // Current
         | 'milliampere' | 'ampere'
         // Temperature
-        | 'Kelvin' | 'Rankine' | 'Celsius_rel' | 'Fahrenheight_rel'
+        | 'Kelvin' | 'Rankine' | 'Celsius_delta' | 'Fahrenheight_delta'
         // Substance
         | 'mole'
         // Luminous Intensity
         | 'candela' | 'lumen'
         // Force
         | 'Newton' | 'kiloNewton' | 'pound_force'
+        // Energy
+        | 'Joule'
+        // Power
+        | 'Watt'
         // Trailing semicolon
         ;
     /**
@@ -59,7 +63,7 @@ export namespace Unit {
                 scale *= (conversion.scale ** exponent);
                 measure = measure.mult(conversion.measure, exponent);
             }
-            return new Conversion.Conversion('', scale, measure);
+            return new Conversion.Conversion('', scale, measure.simplify());
         }
     }
     /**

@@ -10,7 +10,7 @@ export namespace Measure {
     export type Name = Dimension.Name
         | 'area' | 'volume'
         | 'velocity' | 'acceleration'
-        | 'force' | 'power';
+        | 'force' | 'energy' | 'power';
     /**
      * Is an object containing keys of measurement types and values of nonzero exponents.
      */
@@ -57,9 +57,16 @@ export namespace Measure {
             }
             return undefined;
         }
-        public override toString(): string {
+        public simplify(): Measure {
             const name: Name | undefined = this.getName();
-            return name ? Table[name]().latex : (this.latex || super.toString());
+            if (name) {
+                return Table[name]();
+            } else {
+                return this;
+            }
+        }
+        public override toString(): string {
+            return (this.latex || super.toString());
         }
     }
     /**
@@ -82,7 +89,8 @@ export namespace Measure {
         velocity: () => new Measure({ length: 1, time: -1 }, 'v'),
         acceleration: () => new Measure({ length: 1, time: -2 }, 'a'),
         force: () => new Measure({ mass: 1, acceleration: 1 }, 'F'),
-        power: () => new Measure({ force: 1, length: 1 }, 'P'),
+        energy: () => new Measure({ force: 1, length: 1 }, 'E'), // Same as mv^2, mgh, ...
+        power: () => new Measure({ energy: 1, time: -1 }, 'P'),
     };
     /**
      * Represents a dimensionless measurement type.
