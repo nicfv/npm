@@ -49,21 +49,18 @@ export namespace Unit {
         public readonly measure: Measure.Measure;
         constructor(exponents: Exponents) {
             super(exponents, t => Conversion.Table[t]().latex);
-            const conversion: Conversion.Conversion = Unit.getConversion(exponents, 1, Measure.None);
-            this.scale = conversion.scale;
-            this.measure = conversion.measure;
+            this.scale = 1;
+            this.measure = Measure.None;
+            for (const unit in exponents) {
+                const conversion: Conversion.Conversion = Conversion.Table[unit as Name](),
+                    exponent: number = super.getExponent(unit as Name);
+                this.scale *= (conversion.scale ** exponent);
+                this.measure = this.measure.mult(conversion.measure, exponent);
+            }
+            this.measure = this.measure.simplify();
         }
         public mult(other: Unit, exponent: number): Unit {
             return new Unit(super.combine(other, exponent));
-        }
-        private static getConversion(exponents: Exponents, scale: number, measure: Measure.Measure): Conversion.Conversion {
-            for (const unit in exponents) {
-                const conversion: Conversion.Conversion = Conversion.Table[unit as Unit.Name](),
-                    exponent: number = exponents[unit as Unit.Name] ?? 0;
-                scale *= (conversion.scale ** exponent);
-                measure = measure.mult(conversion.measure, exponent);
-            }
-            return new Conversion.Conversion('', scale, measure.simplify());
         }
     }
     /**
