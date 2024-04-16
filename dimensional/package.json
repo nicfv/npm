@@ -1,6 +1,6 @@
 {
   "name": "dimensional",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Dimensional analysis and unit conversions",
   "homepage": "https://npm.nicfv.com/dimensional",
   "bin": "",

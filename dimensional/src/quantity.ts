@@ -1,7 +1,7 @@
 import { SMath } from 'smath';
 import { Unit } from './unit';
 import { Dimension } from './dimension';
-import { Measure } from './measure';
+import { Attribute } from './attribute';
 /**
  * Contains all software used for the calculation of physical quantities.
  */
@@ -31,24 +31,24 @@ export namespace Quantity {
          */
         public as(newUnit: Unit.Unit): Quantity {
             if (!this.is(newUnit)) {
-                throw new Error('\\text{Dimensions do not match! } ' + this.unit.measure.dimension.toString() + ' \\text{ vs. } ' + newUnit.measure.dimension.toString())
+                throw new Error('\\text{Dimensions do not match! } ' + this.unit.attribute.dimension.toString() + ' \\text{ vs. } ' + newUnit.attribute.dimension.toString())
             }
             return new Quantity(SMath.normalize(this.base, 0, newUnit.scale), newUnit);
         }
         /**
          * Determine whether the dimensions of this quantity matches the input object.
-         * @param other Another quantity, unit, or dimension
+         * @param other Another quantity, unit, attribute, or dimension
          * @returns True if the dimensions match, false otherwise
          */
-        public is(other: Quantity | Unit.Unit | Measure.Measure | Dimension.Dimension): boolean {
+        public is(other: Quantity | Unit.Unit | Attribute.Attribute | Dimension.Dimension): boolean {
             if (other instanceof Quantity) {
-                return this.unit.measure.dimension.is(other.unit.measure.dimension);
+                return this.unit.attribute.dimension.is(other.unit.attribute.dimension);
             } else if (other instanceof Unit.Unit) {
-                return this.unit.measure.dimension.is(other.measure.dimension);
-            } else if (other instanceof Measure.Measure) {
-                return this.unit.measure.dimension.is(other.dimension);
+                return this.unit.attribute.dimension.is(other.attribute.dimension);
+            } else if (other instanceof Attribute.Attribute) {
+                return this.unit.attribute.dimension.is(other.dimension);
             } else if (other instanceof Dimension.Dimension) {
-                return this.unit.measure.dimension.is(other);
+                return this.unit.attribute.dimension.is(other);
             } else {
                 throw new Error('Cannot compare to ' + (typeof other) + '!');
             }

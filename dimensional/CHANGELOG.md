@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0
+
+- Shorthand for "simple" units, attributes, and dimensions
+- Rename `Measure` to `Attribute` (now the **QUAD** acronym works!)
+    - Add "QUAD" documentation in base readme
+- Minor documentation fix in `Unit`
+- Add new shorthand methods for simple values
+
 ## 0.3.0
 
 - Update dependency versions

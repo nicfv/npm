@@ -1,10 +1,10 @@
 import { X } from 'exray';
-import { D, M, Q, U } from './lib';
+import { A, D, Q, U } from './lib';
 
 {
     const velocity = D({ length: 1, time: -1 }),
-        distance = D({ length: 1 }),
-        time = D({ time: 1 });
+        distance = D('length'),
+        time = D('time');
     X.eq(velocity.getExponent('length'), 1);
     X.eq(velocity.getExponent('current'), 0);
     X.eq(velocity.getNonzeroExponents().length, 2);
@@ -17,10 +17,10 @@ import { D, M, Q, U } from './lib';
 }
 
 {
-    const velocity1 = M({ velocity: 1 }),
-        velocity2 = M({ length: 1, time: -1 }),
-        velocity3 = M({ length: 1 }).mult(M({ time: -1 }), 1),
-        velocity4 = M({ length: 1 }).mult(M({ time: 1 }), -1),
+    const velocity1 = A('velocity'),
+        velocity2 = A({ length: 1, time: -1 }),
+        velocity3 = A({ length: 1 }).mult(A({ time: -1 }), 1),
+        velocity4 = A('length').mult(A('time'), -1),
         velocity5 = velocity4.simplify();
     X.isTrue(velocity1.dimension.is(velocity2.dimension));
     X.isTrue(velocity1.dimension.is(velocity3.dimension));
@@ -49,9 +49,9 @@ import { D, M, Q, U } from './lib';
 }
 
 {
-    const energy1 = M({ length: 1, time: -1 }).mult(M({ mass: 1, velocity: 1 }), 1),
-        energy2 = M({ force: 1, length: 1 }),
-        energy3 = M({ energy: 1 });
+    const energy1 = A({ length: 1, time: -1 }).mult(A({ mass: 1, velocity: 1 }), 1),
+        energy2 = A({ force: 1, length: 1 }),
+        energy3 = A('energy');
     X.isFalse(energy1.is(energy2));
     X.isFalse(energy2.is(energy3));
     X.isFalse(energy1.is(energy3));
@@ -73,46 +73,46 @@ import { D, M, Q, U } from './lib';
     const meters_per_second = U({ meter: 1, second: -1 }),
         miles_per_hour = U({ mile: 1, hour: -1 });
     X.isFalse(meters_per_second.is(miles_per_hour));
-    X.isTrue(meters_per_second.measure.is(miles_per_hour.measure));
-    X.isTrue(meters_per_second.measure.dimension.is(miles_per_hour.measure.dimension));
+    X.isTrue(meters_per_second.attribute.is(miles_per_hour.attribute));
+    X.isTrue(meters_per_second.attribute.dimension.is(miles_per_hour.attribute.dimension));
     X.gt(miles_per_hour.scale, 0.44); // 0.447...
     X.lt(miles_per_hour.scale, 0.45);
     X.eq(meters_per_second.getNonzeroExponents().length, 2);
     X.eq(meters_per_second.getExponent('meter'), 1);
     X.eq(meters_per_second.getExponent('day'), 0);
     X.is(meters_per_second.toString(), '\\frac{\\text{m}}{\\text{s}}');
-    X.is(meters_per_second.measure.toString(), 'v');
-    X.is(meters_per_second.measure.getName()!, 'velocity');
+    X.is(meters_per_second.attribute.toString(), 'v');
+    X.is(meters_per_second.attribute.getName()!, 'velocity');
 }
 
 {
-    const kN = U({ kiloNewton: 1 }),
+    const kN = U('kiloNewton'),
         kg_m_s2 = U({ kilogram: 1, meter: 1, second: -2 }),
-        lbf = U({ pound_force: 1 });
-    X.isTrue(kN.measure.dimension.is(kg_m_s2.measure.dimension));
+        lbf = U('pound_force');
+    X.isTrue(kN.attribute.dimension.is(kg_m_s2.attribute.dimension));
     X.isFalse(kN.is(kg_m_s2));
     X.eq(kN.getNonzeroExponents().length, 1);
     X.eq(kN.getExponent('kiloNewton'), 1);
     X.eq(kN.getExponent('Newton'), 0);
     X.eq(kN.scale / kg_m_s2.scale, 1000);
     X.is(kN.toString(), '\\text{k} \\text{N}');
-    X.isTrue(kN.measure.dimension.is(lbf.measure.dimension));
+    X.isTrue(kN.attribute.dimension.is(lbf.attribute.dimension));
     X.gt(lbf.scale / kg_m_s2.scale, 4.44);// 4.448...
     X.lt(lbf.scale / kg_m_s2.scale, 4.45);
-    X.is(lbf.measure.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}');
-    X.is(lbf.measure.toString(), 'F');
-    X.is(lbf.measure.getName()!, 'force');
-    X.eq(lbf.measure.getNonzeroExponents().length, 1);
+    X.is(lbf.attribute.dimension.toString(), '\\frac{\\textbf{M} \\cdot \\textbf{L}}{\\textbf{T}^{2}}');
+    X.is(lbf.attribute.toString(), 'F');
+    X.is(lbf.attribute.getName()!, 'force');
+    X.eq(lbf.attribute.getNonzeroExponents().length, 1);
 }
 
 {
     const force_ma = U({ kilogram: 1 }).mult(U({ meter: 1, second: -2 }), 1),
         force1 = U({ kilogram: 1, meter: 1, second: -2 }),
         force2 = U({ Newton: 1 });
-    X.is(force_ma.measure.toString(), 'm \\cdot a');
-    X.is(force1.measure.toString(), 'F');
-    X.is(force2.measure.toString(), 'F');
-    X.is(force_ma.mult(U({ foot: 1, minute: -2 }), -1).measure.toString(), 'm');
+    X.is(force_ma.attribute.toString(), 'm \\cdot a');
+    X.is(force1.attribute.toString(), 'F');
+    X.is(force2.attribute.toString(), 'F');
+    X.is(force_ma.mult(U({ foot: 1, minute: -2 }), -1).attribute.toString(), 'm');
 }
 
 {
@@ -152,11 +152,11 @@ import { D, M, Q, U } from './lib';
 }
 
 {
-    const degR = Q(460 + 32, U({ Rankine: 1 })); // About freezing temperature
+    const degR = Q(460 + 32, U('Rankine')); // About freezing temperature
     X.eq(degR.value, 492);
     X.eq(degR.unit.getExponent('Rankine'), 1);
-    X.eq(degR.unit.measure.getExponent('temperature'), 1);
-    X.eq(degR.unit.measure.dimension.getExponent('temperature'), 1);
+    X.eq(degR.unit.attribute.getExponent('temperature'), 1);
+    X.eq(degR.unit.attribute.dimension.getExponent('temperature'), 1);
     X.gt(degR.as(U({ Kelvin: 1 })).value, 273); // 273.333...
     X.lt(degR.as(U({ Kelvin: 1 })).value, 274);
     X.gt(degR.as(U({ Fahrenheight_delta: 1 })).value, 491.9); // To allow for small error

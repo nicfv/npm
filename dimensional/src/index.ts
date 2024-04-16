@@ -4,8 +4,8 @@
  * 
  * Exports the public-facing API for `dimensional`
  */
-export * from './dimension';
-export * from './measure';
-export * from './unit';
 export * from './quantity';
+export * from './unit';
+export * from './attribute';
+export * from './dimension';
 export * from './lib';
