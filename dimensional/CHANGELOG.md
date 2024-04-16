@@ -4,6 +4,7 @@
 
 - Update donation URL
 - Minor LaTeX fix in main readme page
+- Add keywords
 
 ## 0.4.0
 
