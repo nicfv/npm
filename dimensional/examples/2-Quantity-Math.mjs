@@ -14,7 +14,7 @@ const mass = weight_lbs.over(gravity);
 console.log(mass.toString());
 
 // What are the dimensions on this weird unit?
-console.log('dim=' + mass.unit.measure.dimension.toString());
+console.log('dim=' + mass.unit.attribute.dimension.toString());
 
 // We can use the Quantity.as(unit) method to convert to kg
 console.log(mass.as(U({ kilogram: 1 })).toString());
