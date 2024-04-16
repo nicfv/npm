@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.5
+
+- Update donation URL
+
 ## 1.4.4
 
 - Update dependency versions

@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/datafit",
   "bin": "",
@@ -45,7 +45,7 @@
   },
   "funding": {
     "type": "paypal",
-    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
+    "url": "https://paypal.me/nicfv"
   },
   "repository": "github:nicfv/npm",
   "license": "MIT",
