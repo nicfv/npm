@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+
+- Update donation URL
+
 ## 1.1.3
 
 - Update dependency versions
