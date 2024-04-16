@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/smath",
   "bin": "dist/bin.js",
@@ -51,7 +51,7 @@
   },
   "funding": {
     "type": "paypal",
-    "url": "https://www.paypal.com/donate/?business=UM6EEKPW8GXA2&no_recurring=0&item_name=Open+source+development&currency_code=USD"
+    "url": "https://paypal.me/nicfv"
   },
   "repository": "github:nicfv/npm",
   "license": "MIT",
