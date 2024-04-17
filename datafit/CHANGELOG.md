@@ -2,7 +2,9 @@
 
 ## 1.4.5
 
+- Update dependency versions
 - Update donation URL
+- Minor readme template updates
 
 ## 1.4.4
 
