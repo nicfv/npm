@@ -24,7 +24,7 @@ try {
 } catch (e) {
     caught = true;
 }
-X.true(caught);
+X.isTrue(caught);
 
 // Test gradient functionality
 const gradient: Gradient = new Gradient([
