@@ -5,6 +5,8 @@
 - Update donation URL
 - Minor LaTeX fix in main readme page
 - Add keywords
+- Update dependency versions
+- Minor readme template updates
 
 ## 0.4.0
 
