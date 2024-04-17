@@ -15,4 +15,4 @@ How is the data structured? Remember the acronym "**QUAD**"! Math is performed p
 - **Q**uantity (5) [What is the value of measurement?]
     - **U**nit (kN) [What is the unit of measurement?]
         - **A**ttribute (force) [What is being measured?]
-            - **D**imension (\\\(\frac{\textbf{ML}}\frac{\textbf{T}^{2}}\\\)) [What are the base dimensions?]
+            - **D**imension (\\\(\frac{\textbf{ML}}{\textbf{T}^{2}}\\\)) [What are the base dimensions?]

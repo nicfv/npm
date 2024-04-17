@@ -1,16 +1,16 @@
 import { SMath } from './index';
 import { X } from 'exray';
 
-X.true(SMath.approx(0.1 + 0.2, 0.3));
-X.true(SMath.approx(0.3 - 0.1, 0.2));
-X.true(SMath.approx(1 + 1e-7, 1));
-X.true(SMath.approx(1 - 1e-7, 1));
-X.false(SMath.approx(1 + 1e-5, 1));
-X.false(SMath.approx(1 - 1e-5, 1));
-X.false(SMath.approx(1 + 1e-7, 1, 1e-8));
-X.false(SMath.approx(1 - 1e-7, 1, 1e-8));
-X.true(SMath.approx(1 + 1e-5, 1, 1e-4));
-X.true(SMath.approx(1 - 1e-5, 1, 1e-4));
+X.isTrue(SMath.approx(0.1 + 0.2, 0.3));
+X.isTrue(SMath.approx(0.3 - 0.1, 0.2));
+X.isTrue(SMath.approx(1 + 1e-7, 1));
+X.isTrue(SMath.approx(1 - 1e-7, 1));
+X.isFalse(SMath.approx(1 + 1e-5, 1));
+X.isFalse(SMath.approx(1 - 1e-5, 1));
+X.isFalse(SMath.approx(1 + 1e-7, 1, 1e-8));
+X.isFalse(SMath.approx(1 - 1e-7, 1, 1e-8));
+X.isTrue(SMath.approx(1 + 1e-5, 1, 1e-4));
+X.isTrue(SMath.approx(1 - 1e-5, 1, 1e-4));
 
 X.eq(SMath.clamp(4, 2, 6), 4);
 X.eq(SMath.clamp(1, 2, 6), 2);
@@ -138,10 +138,10 @@ for (let i = 0; i < 100; i++) {
         normStdevCalc1: number = SMath.stdevp(normDist1),
         normMeanCalc2: number = SMath.avg(normDist2),
         normStdevCalc2: number = SMath.stdevp(normDist2);
-    X.true(SMath.approx(normMeanCalc1, normMean, tolerance));
-    X.true(SMath.approx(normStdevCalc1, normStdev, tolerance));
-    X.true(SMath.approx(normMeanCalc2, normMean, tolerance));
-    X.true(SMath.approx(normStdevCalc2, normStdev, tolerance));
+    X.isTrue(SMath.approx(normMeanCalc1, normMean, tolerance));
+    X.isTrue(SMath.approx(normStdevCalc1, normStdev, tolerance));
+    X.isTrue(SMath.approx(normMeanCalc2, normMean, tolerance));
+    X.isTrue(SMath.approx(normStdevCalc2, normStdev, tolerance));
 }
 
 function f1(x: number): number {
@@ -171,10 +171,10 @@ X.gt(SMath.differentiate(f1, 2), 11.99); // 12
 X.lt(SMath.differentiate(f1, 2), 12.01);
 X.gt(SMath.differentiate(f2, -2), -0.26); // -0.25
 X.lt(SMath.differentiate(f2, -2), -0.24);
-X.true(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
+X.isTrue(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
 
 X.gt(SMath.integrate(f1, 1, 3), 25.99); // 26
 X.lt(SMath.integrate(f1, 1, 3), 26.01);
 X.gt(SMath.integrate(f2, 2, 4), 0.69); // 0.693...
 X.lt(SMath.integrate(f2, 2, 4), 0.70);
-X.true(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
+X.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));

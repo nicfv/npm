@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.5
+
+- Update `exray` dependency version to 1.1.1
+- Minor readme template updates
+
+## 1.8.4
+
+- Update donation URL
+
 ## 1.8.3
 
 - Update dependency versions

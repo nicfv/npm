@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.2
+
+- Minor readme template updates
+
+## 1.1.1
+
+- Update donation URL
+
 ## 1.1.0
 
 - Change `X` from a class to a namespace

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.4
+
+- Update dependency versions
+- Update donation URL
+- Minor readme template updates
+
 ## 1.1.3
 
 - Update dependency versions

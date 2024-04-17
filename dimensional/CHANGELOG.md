@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.1
+
+- Update donation URL
+- Minor LaTeX fix in main readme page
+- Add keywords
+- Update dependency versions
+- Minor readme template updates
+
 ## 0.4.0
 
 - Shorthand for "simple" units, attributes, and dimensions
