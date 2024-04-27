@@ -11,11 +11,10 @@
     "types"
   ],
   "scripts": {
-    "build": "npm run postpack && typedoc && node dist/test.js && rm dist/test.js types/test.d.ts",
-    "test": "tsc -v && tsc --noEmit",
-    "clean": "rm -rf node_modules package-lock.json && npm run postpack",
+    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "test": "tsc --noEmit",
     "prepack": "npm run build",
-    "postpack": "rm -rf dist types docs"
+    "postpack": "rm -rf dist types"
   },
   "keywords": [
     "math",
