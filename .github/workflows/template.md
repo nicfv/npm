@@ -1,4 +1,4 @@
-[Home](https://npm.nicfv.com/) | [Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | [Changelog](https://github.com/nicfv/npm/blob/main/%DIR%/CHANGELOG.md) | [YouTube](https://www.youtube.com/@n1cfv) | %DESC%
+[Home](https://npm.nicfv.com/) | [Docs](https://npm.nicfv.com/%DIR%) | [GitHub](https://github.com/nicfv/npm/tree/main/%DIR%) | [npm](https://www.npmjs.com/package/%NAME%) | [Changelog](https://github.com/nicfv/npm/blob/main/%DIR%/CHANGELOG.md) | [YouTube](https://www.youtube.com/@nikfv) | %DESC%
 
 ![NPM Downloads](https://img.shields.io/npm/dt/%NAME%)
 ![NPM Version](https://img.shields.io/npm/v/%NAME%)
