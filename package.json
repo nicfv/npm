@@ -2,11 +2,18 @@
   "name": "npm",
   "version": "1.0.0",
   "description": "nicfv's public NPM packages in one repository",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docs": "npm run build --workspaces --if-present",
+    "clean": "rm -rf node_modules package-lock.json docs && npm run clean --workspaces --if-present"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "workspaces": [
+    "datafit",
+    "dimensional",
+    "exray",
+    "smath",
+    "viridis"
+  ],
+  "devDependencies": {
+    "typedoc": "0.25.13"
+  }
 }
