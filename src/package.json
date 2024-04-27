@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tsc -b",
+    "build-all": "tsc -p packages/datafit -p packages/dimensional -p packages/exray -p packages/smath -p packages/viridis",
     "test": "tsc -v && tsc --noEmit",
     "docs": "typedoc",
     "clean": "rm -rf node_modules package-lock.json docs && npm run clean --workspaces --if-present"
