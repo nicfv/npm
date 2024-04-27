@@ -38,8 +38,5 @@
     "url": "https://paypal.me/nicfv"
   },
   "repository": "github:nicfv/npm",
-  "license": "MIT",
-  "devDependencies": {
-    "typedoc": "0.25.13"
-  }
+  "license": "MIT"
 }

@@ -47,7 +47,6 @@
     "smath": "1.8.4"
   },
   "devDependencies": {
-    "exray": "1.1.1",
-    "typedoc": "0.25.13"
+    "exray": "1.1.1"
   }
 }
