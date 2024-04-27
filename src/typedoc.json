@@ -1,0 +1,12 @@
+{
+    "entryPointStrategy": "packages",
+    "entryPoints": [
+        "packages/*",
+    ],
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "hideGenerator": true,
+    "name": "npm.nicfv.com",
+    // "treatValidationWarningsAsErrors": true,
+}

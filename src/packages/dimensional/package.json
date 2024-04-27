@@ -11,7 +11,7 @@
     "types"
   ],
   "scripts": {
-    "build": "npm run postpack && typedoc --options ../typedoc.json src && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "build": "npm run postpack && typedoc && node dist/test.js && rm dist/test.js types/test.d.ts",
     "test": "tsc -v && tsc --noEmit",
     "clean": "rm -rf node_modules package-lock.json && npm run postpack",
     "prepack": "npm run build",
