@@ -1,8 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strict": true,
     "outDir": "dist",
-    "declaration": true,
     "declarationDir": "types",
     "lib": [
       "ES2015",
