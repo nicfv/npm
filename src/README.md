@@ -1,8 +1,8 @@
 [Docs](https://npm.nicfv.com/) | [GitHub](https://github.com/nicfv/npm) | [npm](https://www.npmjs.com/~nicfv) | [YouTube](https://www.youtube.com/@nikfv)
 
-![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)
-![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)
-![GitHub Repo stars](https://img.shields.io/github/stars/nicfv/npm)
+[![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)](https://github.com/nicfv/npm)
+[![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)](https://github.com/nicfv/npm/fork)
+[![GitHub Repo stars](https://img.shields.io/github/stars/nicfv/npm)](https://github.com/nicfv/npm)
 [![Static Badge](https://img.shields.io/badge/donate-PayPal-blue)](https://paypal.me/nicfv)
 
 ## Navigation

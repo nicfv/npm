@@ -1,4 +1,5 @@
 {
+    "cleanOutputDir": true,
     "entryPointStrategy": "packages",
     "entryPoints": [
         "packages/*",
