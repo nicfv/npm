@@ -2,7 +2,9 @@
  * @packageDocumentation
  * Dimensional analysis and unit conversions
  * 
- * Exports the public-facing API for `dimensional`
+ * ```shell
+ * npm i dimensional
+ * ```
  */
 export * from './quantity';
 export * from './unit';

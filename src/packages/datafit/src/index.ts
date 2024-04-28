@@ -2,7 +2,9 @@
  * @packageDocumentation
  * Simple curve-fitting algorithm
  * 
- * Exports the public-facing API for `datafit`
+ * ```shell
+ * npm i datafit
+ * ```
  */
 export * from './types';
 export * from './lib';

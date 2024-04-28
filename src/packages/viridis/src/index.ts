@@ -2,7 +2,9 @@
  * @packageDocumentation
  * Color gradients for data visualization
  * 
- * Exports the public-facing API for `viridis`
+ * ```shell
+ * npm i viridis
+ * ```
  */
 export * from './Color';
 export * from './Gradient';

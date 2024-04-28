@@ -2,7 +2,9 @@
  * @packageDocumentation
  * Small math function library
  * 
- * Exports the public-facing API for `smath`
+ * ```shell
+ * npm i smath
+ * ```
  */
 /**
  * Contains a small math function library including
