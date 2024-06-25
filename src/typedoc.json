@@ -1,0 +1,21 @@
+{
+    "cleanOutputDir": true,
+    "customFooterHtml": "Nicolas Ventura &copy; 2024 | <a href=\"https://github.com/nicfv\">GitHub</a> | <a href=\"https://www.youtube.com/@nikfv\">YouTube</a>",
+    "entryPointStrategy": "packages",
+    "entryPoints": [
+        "packages/*",
+    ],
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "hideGenerator": true,
+    "name": "npm.nicfv.com",
+    "packageOptions": {
+        "disableSources": true,
+        "includeVersion": true,
+        "entryPoints": [
+            "src/index.ts",
+        ],
+    }
+    // "treatValidationWarningsAsErrors": true,
+}

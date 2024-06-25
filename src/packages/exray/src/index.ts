@@ -2,7 +2,10 @@
  * @packageDocumentation
  * Lightweight assertion testing framework
  * 
- * Exports the public-facing API for `exray`
+ * ```shell
+ * npm i exray
+ * ```
+ * @document ../CHANGELOG.md
  */
 /**
  * Lightweight framework to expect
