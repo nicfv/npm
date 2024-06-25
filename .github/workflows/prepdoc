@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# Fail if node or npm not found
+node -v || exit 1
+npm -v || exit 1
+
+for package in packages/*/ ; do
+    echo "Checking ${package}"
+    cd "${package}" || exit 1
+    # Check for required files
+    [ -f README.md ] || exit 1
+    [ -d examples ] || exit 1
+    # Pack the package
+    npm pack --pack-destination examples || exit 1
+    cd examples && {
+        example_file='examples-tmp.md'
+        {
+            echo '## Examples'
+            echo "Here are a few quickstart examples written in JavaScript that showcase some out-of-box features of the \`${package_name}\` package."
+        } >> "${example_file}"
+        npm i || exit 1
+        for example in * ; do
+            if [[ "${example}" =~ ^([0-9]+-([a-zA-Z0-9_-]+))\.([mc]?js)$ ]] ; then
+                # Save example output to a markdown file
+                echo "Running example ${example}..."
+                {
+                    echo "### ${BASH_REMATCH[2]//-/ }"
+                    cat "${BASH_REMATCH[1]}.md" || exit 1
+                    echo
+                    echo '#### Instructions'
+                    echo '1. Copy the source code'
+                    echo '1. Paste into a new file'
+                    echo "1. Save as \`${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\`"
+                    echo '1. Run this command in your terminal'
+                    echo '    ```shell'
+                    echo "    node ${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+                    echo '    ```'
+                    echo '#### Source'
+                    echo '```js'
+                    cat "${example}"
+                    echo
+                    echo '```'
+                    echo '#### Output'
+                    echo '```text'
+                    node "${example}" || exit 1
+                    echo '```'
+                } >> "${example_file}"
+            else
+                echo "Skipping file ${example}"
+            fi
+        done
+        # Store the output from the examples and remove the file
+        # Then clean the project and reset the working directory
+        examples="$(cat "${example_file}")"
+        rm "${example_file}"
+        npm run clean || exit 1
+        cd ..
+    } || exit 1
+done
+
+# Reset to original state
+# git checkout HEAD packages/*/README.md
+
+# package_name="$(npm --silent v ./ name)"

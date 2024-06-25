@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Fail if node or npm not found
+node -v || exit 1
+npm -v || exit 1
+
+# Determine package and changelog versions
+pkg_version="$(npm --silent v ./ version)" &&
+    echo "Package = ${pkg_version}" ||
+    exit 1
+log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)" &&
+    echo "Changelog = ${log_version}" ||
+    exit 1
+
+# Compare versions, and fail if no match
+[ "${pkg_version}" = "${log_version}" ] || exit 1
