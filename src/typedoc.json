@@ -9,5 +9,12 @@
     "excludeProtected": true,
     "hideGenerator": true,
     "name": "npm.nicfv.com",
+    "packageOptions": {
+        "disableSources": true,
+        "includeVersion": true,
+        "entryPoints": [
+            "src/index.ts",
+        ],
+    }
     // "treatValidationWarningsAsErrors": true,
 }
