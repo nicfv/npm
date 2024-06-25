@@ -1,5 +1,6 @@
 {
     "cleanOutputDir": true,
+    "customFooterHtml": "Nicolas Ventura &copy; 2024 | <a href=\"https://github.com/nicfv\">GitHub</a> | <a href=\"https://www.youtube.com/@nikfv\">YouTube</a>",
     "entryPointStrategy": "packages",
     "entryPoints": [
         "packages/*",
