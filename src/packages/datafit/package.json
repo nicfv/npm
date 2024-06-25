@@ -11,8 +11,7 @@
     "types"
   ],
   "scripts": {
-    "x": "../../../.github/workflows/checkver",
-    "build": "[ \"$(grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' CHANGELOG.md | head -n1)\" = \"$(npm --silent v ./ version)\" ] && npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
     "test": "tsc --noEmit",
     "prepack": "npm run build",
     "postpack": "rm -rf dist types"
