@@ -2,7 +2,7 @@
   "name": "dimensional",
   "version": "0.4.1",
   "description": "Dimensional analysis and unit conversions",
-  "homepage": "https://npm.nicfv.com/dimensional",
+  "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

@@ -2,7 +2,7 @@
   "name": "viridis",
   "version": "1.1.4",
   "description": "Color gradients for data visualization",
-  "homepage": "https://npm.nicfv.com/viridis",
+  "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

@@ -2,7 +2,7 @@
   "name": "smath",
   "version": "1.8.5",
   "description": "Small math function library",
-  "homepage": "https://npm.nicfv.com/smath",
+  "homepage": "https://npm.nicfv.com/",
   "bin": "dist/bin.js",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

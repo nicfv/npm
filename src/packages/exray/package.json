@@ -2,7 +2,7 @@
   "name": "exray",
   "version": "1.1.2",
   "description": "Lightweight assertion testing framework",
-  "homepage": "https://npm.nicfv.com/exray",
+  "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

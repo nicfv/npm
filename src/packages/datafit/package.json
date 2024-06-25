@@ -2,7 +2,7 @@
   "name": "datafit",
   "version": "1.4.5",
   "description": "Simple curve-fitting algorithm",
-  "homepage": "https://npm.nicfv.com/datafit",
+  "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
