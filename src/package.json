@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "typedoc": "0.25.13",
-    "typescript": "5.4.5"
+    "typedoc": "0.26.2",
+    "typescript": "5.5.2"
   }
 }
