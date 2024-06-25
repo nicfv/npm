@@ -5,6 +5,7 @@
  * ```shell
  * npm i viridis
  * ```
+ * @document ../CHANGELOG.md
  */
 export * from './Color';
 export * from './Gradient';

@@ -5,6 +5,7 @@
  * ```shell
  * npm i exray
  * ```
+ * @document ../CHANGELOG.md
  */
 /**
  * Lightweight framework to expect
