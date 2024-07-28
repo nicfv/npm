@@ -4,161 +4,51 @@
 node -v || exit 1
 npm -v || exit 1
 
-# Check for publish flag
-publish=false
-if [[ "${1}" == 'publish' ]] ; then
-    publish=true
-fi
-docdir='.docs'
-
-# Check for and set npm token
-if "${publish}" ; then
-    if [[ -z "${NPM_TOKEN}" ]] ; then
-        echo 'Missing environment variable NPM_TOKEN'
-        exit 1
-    else
-        mkdir "${docdir}" || exit 1
-        cp .github/workflows/home/* "${docdir}"
-        npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
-    fi
-fi
-
 # Run tests on ci workflow
 cd src || exit 1
 npm run clean && npm i && npm test || exit 1
 
-if "${publish}" ; then
-    echo publishing...
-fi
-
-for dir in */ ; do
-    echo -e "\n=== Checking directory '${dir}' ===\n"
-    # Skip directories that are not an npm project
-    npm --silent v "${dir}" || {
-        echo "${dir} is not an NPM project"
-        continue
-    }
-    # Set working directory to package directory
-    cd "${dir}" || exit 1
-    # Extract package name, changelog version, and package version
-    package_name="$(npm --silent v ./ name)"
-    echo "Package Name   = ${package_name}"
-    package_desc="$(npm --silent v ./ description)"
-    echo "Description    = ${package_desc}"
-    package_date="$(date --date="$(npm --silent v "${package_name}" time.modified)" +%s)"
-    echo "Publish Date   = ${package_date}"
-    local_version="$(npm --silent v ./ version)"
-    echo "Local Version  = ${local_version}"
-    log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
-    echo "Log Version    = ${log_version}"
-    # Make sure package.json and changelog versions match
-    if [[ "${local_version}" != "${log_version}" ]] ; then
-        echo 'Package and changelog versions do not match!'
+# Check for and set npm token if publish flag is set
+if [[ "${1}" == 'publish' ]] ; then
+    if [[ -z "${NPM_TOKEN}" ]] ; then
+        echo 'Missing environment variable NPM_TOKEN'
         exit 1
-    fi
-    # Store readme content for resetting later
-    readme="$(cat README.md)"
-    # Install dependencies and run test script
-    echo 'Installing dependencies...'
-    npm i || exit 1
-    echo 'Running tests...'
-    npm test || exit 1
-    # Generate package and run all examples
-    echo 'Generating tarball...'
-    npm pack --pack-destination examples || exit 1
-    cd examples && {
-        example_file='examples-tmp.md'
-        {
-            echo '## Examples'
-            echo "Here are a few quickstart examples written in JavaScript that showcase some out-of-box features of the \`${package_name}\` package."
-        } >> "${example_file}"
-        npm i || exit 1
-        for example in * ; do
-            if [[ "${example}" =~ ^([0-9]+-([a-zA-Z0-9_-]+))\.([mc]?js)$ ]] ; then
-                # Save example output to a markdown file
-                echo "Running example ${example}..."
-                {
-                    echo "### ${BASH_REMATCH[2]//-/ }"
-                    cat "${BASH_REMATCH[1]}.md" || exit 1
-                    echo
-                    echo '#### Instructions'
-                    echo '1. Copy the source code'
-                    echo '1. Paste into a new file'
-                    echo "1. Save as \`${BASH_REMATCH[2]}.${BASH_REMATCH[3]}\`"
-                    echo '1. Run this command in your terminal'
-                    echo '    ```shell'
-                    echo "    node ${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
-                    echo '    ```'
-                    echo '#### Source'
-                    echo '```js'
-                    cat "${example}"
-                    echo
-                    echo '```'
-                    echo '#### Output'
-                    echo '```text'
-                    node "${example}" || exit 1
-                    echo '```'
-                } >> "${example_file}"
-            else
-                echo "Skipping file ${example}"
+    else
+        npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}" || exit 1
+        # Check each directory and publish each project
+        cd packages || exit 1
+        for dir in */ ; do
+            echo -e "\n=== Checking directory '${dir}' ===\n"
+            # Skip directories that are not an npm project
+            npm --silent v "${dir}" || {
+                echo "${dir} is not an NPM project"
+                continue
+            }
+            # Set working directory to package directory
+            cd "${dir}" || exit 1
+            # Extract package name, changelog version, and package version
+            package_name="$(npm --silent v ./ name)"
+            echo "Package Name   = ${package_name}"
+            local_version="$(npm --silent v ./ version)"
+            echo "Local Version  = ${local_version}"
+            log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
+            echo "Log Version    = ${log_version}"
+            # Determine latest published version on the registry
+            npm_version="$(npm --silent v "${package_name}" version)"
+            echo "Version on NPM = ${npm_version}"
+            # Make sure package.json and changelog versions match
+            if [[ "${local_version}" != "${log_version}" ]] ; then
+                echo 'Package and changelog versions do not match!'
+                exit 1
             fi
+            # Make sure that the local version number is higher before publishing
+            if [[ "${local_version}" == "${npm_version}" ]] ; then
+                echo 'Skipping publish step'
+            else
+                echo 'Publishing...'
+                npm publish || exit 1
+            fi
+            cd ..
         done
-        # Store the output from the examples and remove the file
-        # Then clean the project and reset the working directory
-        examples="$(cat "${example_file}")"
-        rm "${example_file}"
-        npm run clean || exit 1
-        cd ..
-    } || exit 1
-    if "${publish}" ; then
-        # Determine latest published version on the registry
-        npm_version="$(npm --silent v "${package_name}" version)"
-        echo "Version on NPM = ${npm_version}"
-        if [[ "${local_version}" != "${npm_version}" ]] ; then
-            # When publishing, we need to overwrite the
-            # package date with the current timestamp
-            package_date="$(date +%s)"
-        fi
-        # Add package details to homepage script
-        {
-            echo "packages['${package_name//"'"/"\\'"}'] = {};"
-            echo "packages['${package_name//"'"/"\\'"}'].desc = '${package_desc//"'"/"\\'"}';"
-            echo "packages['${package_name//"'"/"\\'"}'].time = '${package_date//"'"/"\\'"}';"
-            echo "packages['${package_name//"'"/"\\'"}'].ver = '${local_version//"'"/"\\'"}';"
-            echo "packages['${package_name//"'"/"\\'"}'].dir = '${dir//"'"/"\\'"}';"
-        } >> "../${docdir}/index.js"
-        # Copy over the template readme file and replace variables
-        echo 'Generating readme...'
-        cp '../.github/workflows/template.md' README.md
-        sed -i "s:%NAME%:${package_name//':'/';'}:g" README.md
-        sed -i "s:%DESC%:${package_desc//':'/';'}:g" README.md
-        sed -i "s:%DIR%:${dir//':'/';'}:g" README.md
-        sed -i "s:%VER%:${local_version//':'/';'}:g" README.md
-        sed -i "s:%TIME%:${package_date//':'/';'}:g" README.md
-        # Append the readme content and example outputs at the end
-        {
-            echo "${readme}"
-            echo "${examples}"
-        } >> README.md
-        if [[ "${local_version}" == "${npm_version}" ]] ; then
-            echo 'Skipping publish step'
-        else
-            echo 'Publishing...'
-            npm publish || exit 1
-        fi
-        # Only add the MathJax script for documentation
-        # because in npm, it will show up as plain text
-        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>' >> README.md
-        # Always generate documentation because if only one
-        # package generates documentation, then it will
-        # overwrite the GH pages archive with that dir only
-        echo 'Generating documentation...'
-        npm run build || exit 1
-        mv docs "../${docdir}/${dir}"
-        # Reset the readme file to its original state
-        echo "${readme}" > README.md
     fi
-    # Run cleanup tasks and reset working directory
-    npm run clean || exit 1
-    cd ..
-done
+fi
