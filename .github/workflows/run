@@ -23,6 +23,14 @@ if "${publish}" ; then
     fi
 fi
 
+# Run tests on ci workflow
+cd src || exit 1
+npm run clean && npm i && npm test || exit 1
+
+if "${publish}" ; then
+    echo publishing...
+fi
+
 for dir in */ ; do
     echo -e "\n=== Checking directory '${dir}' ===\n"
     # Skip directories that are not an npm project
