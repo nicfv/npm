@@ -109,7 +109,7 @@ for dir in */ ; do
         if [[ "${local_version}" != "${npm_version}" ]] ; then
             # When publishing, we need to overwrite the
             # package date with the current timestamp
-            package_date=$(date +%s)
+            package_date="$(date +%s)"
         fi
         # Add package details to homepage script
         {
