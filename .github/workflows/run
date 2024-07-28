@@ -50,5 +50,7 @@ if [[ "${1}" == 'publish' ]] ; then
             fi
             cd ..
         done
+        # Build documentation
+        npm run docs
     fi
 fi
