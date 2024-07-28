@@ -17,6 +17,7 @@
         "YouTube": "https://www.youtube.com/@nikfv",
     },
     "packageOptions": {
+        "alwaysCreateEntryPointModule": false,
         "disableSources": true,
         "includeVersion": true,
         "entryPoints": [
