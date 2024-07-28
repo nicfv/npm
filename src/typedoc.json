@@ -1,6 +1,6 @@
 {
     "cleanOutputDir": true,
-    "customFooterHtml": "Nicolas Ventura &copy; 2024 | <a href=\"https://npm.nicfv.com/\">Docs</a> | <a href=\"https://github.com/nicfv\">GitHub</a> | <a href=\"https://www.npmjs.com/~nicfv\">npm</a> | <a href=\"https://www.youtube.com/@nikfv\">YouTube</a>",
+    "customFooterHtml": "Nicolas Ventura &copy; 2024",
     "entryPointStrategy": "packages",
     "entryPoints": [
         "packages/*",
@@ -10,12 +10,18 @@
     "excludeProtected": true,
     "hideGenerator": true,
     "name": "npm.nicfv.com",
+    "navigationLinks": {
+        "Donate": "https://paypal.me/nicfv",
+        "GitHub": "https://github.com/nicfv/npm",
+        "npm": "https://www.npmjs.com/~nicfv",
+        "YouTube": "https://www.youtube.com/@nikfv",
+    },
     "packageOptions": {
         "disableSources": true,
         "includeVersion": true,
         "entryPoints": [
             "src/index.ts",
         ],
-    }
+    },
     // "treatValidationWarningsAsErrors": true,
 }

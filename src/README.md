@@ -1,9 +1,6 @@
-[Docs](https://npm.nicfv.com/) | [GitHub](https://github.com/nicfv/npm) | [npm](https://www.npmjs.com/~nicfv) | [YouTube](https://www.youtube.com/@nikfv)
-
 [![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)](https://github.com/nicfv/npm)
 [![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)](https://github.com/nicfv/npm/fork)
 [![GitHub Repo stars](https://img.shields.io/github/stars/nicfv/npm)](https://github.com/nicfv/npm)
-[![Static Badge](https://img.shields.io/badge/donate-PayPal-blue)](https://paypal.me/nicfv)
 
 ## Navigation
 
@@ -11,7 +8,7 @@ Click the links in the navigation tree on the left to explore the documentation 
 
 ## Bugs and Requests
 
-Is there a way we can make any of these packages better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues, please send an email to <npm@nicfv.com>.
+Is there a way we can make any of these packages better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues that need immediate attention, please send an email to <npm@nicfv.com>.
 
 ## Contribute
 
