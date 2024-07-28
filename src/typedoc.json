@@ -22,6 +22,9 @@
         "entryPoints": [
             "src/index.ts",
         ],
+        "projectDocuments": [
+            "CHANGELOG.md",
+        ],
     },
     // "treatValidationWarningsAsErrors": true,
 }

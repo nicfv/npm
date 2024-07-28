@@ -5,7 +5,6 @@
  * ```shell
  * npm i dimensional
  * ```
- * @document ../CHANGELOG.md
  */
 export * from './quantity';
 export * from './unit';

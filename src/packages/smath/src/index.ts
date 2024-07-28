@@ -5,7 +5,6 @@
  * ```shell
  * npm i smath
  * ```
- * @document ../CHANGELOG.md
  */
 /**
  * Contains a small math function library including
