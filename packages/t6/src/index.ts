@@ -9,7 +9,7 @@
  * Exceptions can be caught with
  * standard `try ... catch` blocks.
  */
-export namespace X {
+export namespace T6 {
     /**
      * Increments for every test run.
      */

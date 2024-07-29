@@ -1,20 +1,20 @@
-import { X } from './index';
+import { T6 } from './index';
 
-X.isTrue(true);
-X.isFalse(false);
-X.eq(1, 1);
-X.ge(1, 1);
-X.ge(2, 1);
-X.gt(2, 1);
+T6.isTrue(true);
+T6.isFalse(false);
+T6.eq(1, 1);
+T6.ge(1, 1);
+T6.ge(2, 1);
+T6.gt(2, 1);
 
 try {
-    X.isTrue(false);
+    T6.isTrue(false);
 } catch (e) {
-    X.is((e as Error).message, 'Exception found in test #7! The test returned false.');
+    T6.is((e as Error).message, 'Exception found in test #7! The test returned false.');
 }
 
 try {
-    X.ne(1, 1, 'Custom');
+    T6.ne(1, 1, 'Custom');
 } catch (e) {
-    X.is((e as Error).message, 'Exception found in test #9! Custom');
+    T6.is((e as Error).message, 'Exception found in test #9! Custom');
 }
