@@ -50,8 +50,9 @@ if [[ "${1}" == 'publish' ]] ; then
                     if [[ "${example}" =~ ^([0-9]+-([a-zA-Z0-9_-]+))\.([mc]?js)$ ]] ; then
                         # Save example output to a markdown file
                         echo "Running example ${example}..."
-                        demo_file_name="${BASH_REMATCH[2]// /-}.${BASH_REMATCH[3]}"
+                        demo_file_name="${BASH_REMATCH[2]// /_}.${BASH_REMATCH[3]}"
                         {
+                            echo
                             echo '## Installation'
                             echo "Copy the source code and paste it into a new file called \`${demo_file_name}\` and save the file. In the same directory, run the following commands:"
                             echo '```shell'
@@ -68,6 +69,7 @@ if [[ "${1}" == 'publish' ]] ; then
                             echo '```text'
                             node "${example}" || exit 1
                             echo '```'
+                            echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
                         } >> "${BASH_REMATCH[1]}.md"
                     else
                         echo "Skipping file ${example}"
