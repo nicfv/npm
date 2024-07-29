@@ -1,0 +1,51 @@
+{
+  "name": "dimensional",
+  "version": "0.4.1",
+  "description": "Dimensional analysis and unit conversions",
+  "homepage": "https://npm.nicfv.com/",
+  "bin": "",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "test": "tsc --noEmit",
+    "prepack": "npm run build",
+    "postpack": "rm -rf dist types"
+  },
+  "keywords": [
+    "quantity",
+    "unit",
+    "attribute",
+    "dimension",
+    "dimensional",
+    "analysis",
+    "convert",
+    "conversion",
+    "metric",
+    "system",
+    "prefix",
+    "SI",
+    "imperial"
+  ],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/nicfv"
+  },
+  "repository": "github:nicfv/npm",
+  "license": "MIT",
+  "dependencies": {
+    "smath": "1.8.4"
+  },
+  "devDependencies": {
+    "exray": "1.1.1"
+  }
+}

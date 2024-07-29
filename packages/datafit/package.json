@@ -1,0 +1,57 @@
+{
+  "name": "datafit",
+  "version": "1.4.5",
+  "description": "Simple curve-fitting algorithm",
+  "homepage": "https://npm.nicfv.com/",
+  "bin": "",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "test": "tsc --noEmit",
+    "prepack": "npm run build",
+    "postpack": "rm -rf dist types"
+  },
+  "keywords": [
+    "math",
+    "curve",
+    "fit",
+    "fitting",
+    "least",
+    "squares",
+    "regression",
+    "analysis",
+    "data",
+    "dataset",
+    "point",
+    "function",
+    "parameters",
+    "linear",
+    "nonlinear",
+    "variable",
+    "multivariable",
+    "multivariant",
+    "multivariate"
+  ],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/nicfv"
+  },
+  "repository": "github:nicfv/npm",
+  "license": "MIT",
+  "dependencies": {
+    "smath": "1.8.4"
+  },
+  "devDependencies": {
+    "exray": "1.1.1"
+  }
+}

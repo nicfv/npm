@@ -1,31 +1,15 @@
-# npm [![Publish](https://github.com/nicfv/npm/actions/workflows/publish.yml/badge.svg)](https://github.com/nicfv/npm/actions/workflows/publish.yml)
-nicfv's public NPM packages in one repository
+[![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)](https://github.com/nicfv/npm)
+[![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)](https://github.com/nicfv/npm/fork)
+[![GitHub Repo stars](https://img.shields.io/github/stars/nicfv/npm)](https://github.com/nicfv/npm)
 
-## Developer Notes
-- Each package must have the following scripts
-    - `build`
-    - `test`
-    - `clean`
-    - Something to compile on `npm publish`
-- Each package must contain `README.md` and `CHANGELOG.md`
-- Each package must contain examples in `examples/`
-    - Examples must be written in JavaScript
-    - File name pattern must follow `123-Example-Name.ext`
-    - File extensions can be `js`, `mjs`, or `cjs`
-    - Each example must have a corresponding `123-Example-Name.md` documentation file that is shown above the example.
-    - Follow the steps in [pack](#pack) to test the latest package updates before publishing to npm. This is required by the CI workflow.
-    - Example directory must have its own `clean` script
-- Packages *should* contain a series of unit tests in `src/test.ts` which is executed on each build
-- Package descriptions containing ":" will be changed to ";"
+## Navigation
 
-## Pack
-```shell
-cd $package
-npm i
-npm pack --pack-destination examples/
-# .tgz file created in examples/
-cd examples
-npm i
-node $example
-```
-> Make sure that `examples/package.json` has an up-to-date dependency where the version number matches that of the main `package.json` file.
+Click the links in the navigation tree on the left to explore the documentation of all the different packages in the repository. Documentation is generated for the latest version of each package. It is recommended to always update to the latest version for the latest bug fixes and security updates.
+
+## Bugs and Requests
+
+Is there a way we can make any of these packages better? Please report all bugs, issues, and new feature requests to the [issues](https://github.com/nicfv/npm/issues) page in the [official repository](https://github.com/nicfv/npm). For critical security issues that need immediate attention, please send an email to <npm@nicfv.com>.
+
+## Contribute
+
+Thank you for your interest in contributing! This project is a collection of open source software packages maintained by Nicolas Ventura ([@nicfv](https://github.com/nicfv)) for users like you! You are allowed to fork the repository as permitted by the [MIT License](https://raw.githubusercontent.com/nicfv/npm/main/LICENSE) terms. Contributions are welcome by submitting a [pull request](https://github.com/nicfv/npm/pulls). Please follow the existing code styling if submitting a pull request. Thank you for your consideration!

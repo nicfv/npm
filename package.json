@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "tsc -v && npm test --workspaces",
+    "docs": "typedoc",
+    "clean": "rm -rf packages/*/node_modules node_modules package-lock.json docs && npm run postpack --workspaces"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "typedoc": "0.26.5",
+    "typescript": "5.5.4"
+  }
+}
