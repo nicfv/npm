@@ -25,6 +25,7 @@
         ],
         "projectDocuments": [
             "CHANGELOG.md",
+            "examples/*.md",
         ],
     },
     // "treatValidationWarningsAsErrors": true,
