@@ -5,7 +5,6 @@ node -v || exit 1
 npm -v || exit 1
 
 # Run tests on ci workflow
-cd src || exit 1
 npm run clean && npm i && npm test || exit 1
 
 # Check for and set npm token if publish flag is set
