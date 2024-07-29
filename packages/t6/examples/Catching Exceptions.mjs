@@ -1,4 +1,4 @@
-import { X } from 'exray';
+import { T6 } from 't6';
 
 // Oops! There was a logic
 // error in returns8()!
@@ -8,7 +8,7 @@ function returns8() {
 
 try {
     // This test will fail
-    X.eq(returns8(), 8);
+    T6.eq(returns8(), 8);
 } catch (e) {
     console.log(e.message);
 }

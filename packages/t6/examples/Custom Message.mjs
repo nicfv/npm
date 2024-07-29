@@ -1,4 +1,4 @@
-import { X } from 'exray';
+import { T6 } from 't6';
 
 // Here's a simulation of
 // an API to obtain the
@@ -14,7 +14,7 @@ function getPrice() {
 // an error. For this example,
 // we will catch the exception.
 try {
-    X.le(getPrice(), 40);
+    T6.le(getPrice(), 40);
     console.log('Processing item.');
 } catch (e) {
     console.log(e.message);
@@ -23,7 +23,7 @@ try {
 // Here is the same logic using
 // a custom exception message.
 try {
-    X.le(getPrice(), 40, 'Price exceeded $40 limit.');
+    T6.le(getPrice(), 40, 'Price exceeded $40 limit.');
     console.log('Processing item.');
 } catch (e) {
     console.log(e.message);

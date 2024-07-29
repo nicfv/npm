@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * ![NPM Downloads](https://img.shields.io/npm/d18m/exray) Lightweight assertion testing framework
+ * ![NPM Downloads](https://img.shields.io/npm/d18m/t6) Lightweight assertion testing framework
  */
 /**
  * Lightweight framework to expect
