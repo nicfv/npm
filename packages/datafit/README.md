@@ -14,7 +14,7 @@ The folling factors affect computation time and resources:
 
 Each one alone has a linear effect on performance, but combined has an incremental effect.
 
-$$time = iterations \times ( parameters + dataset )$$
+`time = iterations * ( parameters + dataset )`
 
 The dimensionality, or number of free `x` variables per data point, should not have an impact on computation time.
 

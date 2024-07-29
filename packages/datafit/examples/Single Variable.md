@@ -1,3 +1,5 @@
+# Single Variable
+
 In this example written in TypeScript, we will fit a generic 2nd degree polynomial defined to a given set of \\\((x,y)\\\) points. We'll create this dataset based on a known formula for a 2nd degree polynomial, and add some random high-frequency noise. The initial guess for our constants will all be zero, given by \\\(a_{2} = a_{1} = a_{0} = 0\\\). Then, we'll determine the true value and best-fit value of \\\(f(3)\\\) using the parameter set found by the `fit()` function. We're able to use the best-fit curve given by our summary to extrapolate for any \\\(x\\\) value.
 
 Here is the function used to generate the dataset.

@@ -1,3 +1,5 @@
+# Use The Force
+
 One day, you step onto a scale to determine your weight. It reads the number **150**. What is this number? It is the **force** you are applying on to the scale. Europeans would be terrified to see this number, but Americans wouldn't even think twice. See, in the United States, scales read out units of **pounds** where in Europe, it would read out units of **kilograms**. What would a European scale say your weight is?
 
 Now, here's an interesting predicament - pounds are units of **force** whereas kilograms are units of **mass**, which are completely different **dimensions**. In reality, a European scale is also measuring the force you apply, but in a different unit, called **Newtons**.

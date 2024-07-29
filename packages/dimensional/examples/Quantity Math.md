@@ -1,3 +1,5 @@
+# Quantity Math
+
 Great, our first example checks out! But like I mentioned, European scales don't actually read out in Newtons, but in kilograms. Remember the relationship between force and mass from your physics class?
 
 $$F=ma$$
