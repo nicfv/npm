@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3
+
+- Rename package to `t6`
+
 ## 1.1.2
 
 - Minor readme template updates
