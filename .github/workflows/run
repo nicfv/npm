@@ -47,7 +47,7 @@ if [[ "${1}" == 'publish' ]] ; then
             cd examples && {
                 npm i || exit 1
                 for example in * ; do
-                    if [[ "${example}" =~ ^([0-9]+-([a-zA-Z0-9_-]+))\.([mc]?js)$ ]] ; then
+                    if [[ "${example}" =~ ^([0-9]+-(.+))\.([mc]?js)$ ]] ; then
                         # Save example output to a markdown file
                         echo "Running example ${example}..."
                         demo_file_name="${BASH_REMATCH[2]// /_}.${BASH_REMATCH[3]}"
