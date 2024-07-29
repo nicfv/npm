@@ -3,6 +3,8 @@
 ## 1.1.3
 
 - Rename package to `t6`
+- Update typescript dependency version to 5.5.4
+- Rebuild package and documentation in monorepo style
 
 ## 1.1.2
 
