@@ -1,10 +1,6 @@
 /**
  * @packageDocumentation
- * Small math function library
- * 
- * ```shell
- * npm i smath
- * ```
+ * ![NPM Downloads](https://img.shields.io/npm/d18m/smath) Small math function library
  */
 /**
  * Contains a small math function library including

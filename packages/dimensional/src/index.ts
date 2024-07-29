@@ -1,10 +1,6 @@
 /**
  * @packageDocumentation
- * Dimensional analysis and unit conversions
- * 
- * ```shell
- * npm i dimensional
- * ```
+ * ![NPM Downloads](https://img.shields.io/npm/d18m/dimensional) Dimensional analysis and unit conversions
  */
 export * from './quantity';
 export * from './unit';
