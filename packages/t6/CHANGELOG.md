@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.4
+
+- Fix typos in documentation
+- Fix issue where documentation was not getting published
+
 ## 1.1.3
 
 - Rename package to `t6`
