@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.5
+
+- Fix typos in documentation
+
 ## 1.1.4
 
 - Fix typos in documentation
