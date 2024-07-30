@@ -1,6 +1,6 @@
 # Changelog
 
-## Unpublished
+## Unpublished (0.4.1)
 
 - Update typescript dependency version to 5.5.4
 - Rebuild package and documentation in monorepo style
