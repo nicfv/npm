@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.6
+
+- Update typescript dependency version to 5.5.4
+- Rebuild package and documentation in monorepo style
+- Replace testing framework dependency
+
 ## 1.4.5
 
 - Update dependency versions

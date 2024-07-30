@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.6
+
+- Update typescript dependency version to 5.5.4
+- Rebuild package and documentation in monorepo style
+- Replace testing framework dependency
+
 ## 1.8.5
 
 - Update `exray` dependency version to 1.1.1

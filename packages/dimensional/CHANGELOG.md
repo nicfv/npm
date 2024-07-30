@@ -1,5 +1,11 @@
 # Changelog
 
+## Unpublished
+
+- Update typescript dependency version to 5.5.4
+- Rebuild package and documentation in monorepo style
+- Replace testing framework dependency
+
 ## 0.4.1
 
 - Update donation URL
