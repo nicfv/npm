@@ -1,6 +1,6 @@
 {
     "cleanOutputDir": true,
-    "customFooterHtml": "Nicolas Ventura &copy; 2024",
+    "customFooterHtml": "<a href=\"https://nicolasventura.com/\" target=\"_blank\">Nicolas Ventura</a> &copy; 2024",
     "entryPointStrategy": "packages",
     "entryPoints": [
         "packages/*",
