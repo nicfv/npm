@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.0
+
+- Add `rseq` to generate a random sequence of integers
+
 ## 1.8.6
 
 - Update typescript dependency version to 5.5.4
