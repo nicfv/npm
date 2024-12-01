@@ -13,19 +13,14 @@ while getopts ':cbt' opt ; do
     esac
 done
 
-echo "${clean},${build},${test}"
-
 if "${clean}" ; then
-    echo cleaning
-    # rm -rf dist types
+    rm -rf dist types
 fi
 
 if "${build}" ; then
-    echo building
-    # tsc && node dist/test.js && rm dist/test.js types/test.d.ts
+    tsc && node dist/test.js && rm dist/test.js types/test.d.ts
 fi
 
 if "${test}" ; then
-    echo testing
-    # tsc --noEmit
+    tsc --noEmit
 fi
