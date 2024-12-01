@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+clean=false
+build=false
+test=false
+
+while getopts ':cbt' opt ; do
+    case "${opt}" in
+        'c') clean=true ;;
+        'b') build=true ;;
+        't') test=true ;;
+        *) echo "Invalid option ${OPTARG}" && exit 1 ;;
+    esac
+done
+
+echo "${clean},${build},${test}"
+
+if "${clean}" ; then
+    echo cleaning
+    # rm -rf dist types
+fi
+
+if "${build}" ; then
+    echo building
+    # tsc && node dist/test.js && rm dist/test.js types/test.d.ts
+fi
+
+if "${test}" ; then
+    echo testing
+    # tsc --noEmit
+fi
