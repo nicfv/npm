@@ -3,6 +3,6 @@
     "clean": "rm -rf node_modules package-lock.json"
   },
   "dependencies": {
-    "viridis": "file:viridis-1.1.5.tgz"
+    "viridis": "file:viridis-1.1.6.tgz"
   }
 }
