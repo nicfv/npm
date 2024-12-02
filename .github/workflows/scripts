@@ -2,22 +2,16 @@
 
 clean=false
 build=false
-test=false
 pack=false
 
-while getopts ':cbtp' opt ; do
+while getopts ':cbp' opt ; do
     case "${opt}" in
         'c') clean=true ;;
         'b') build=true ;;
-        't') test=true ;;
         'p') pack=true ;;
         *) echo "Invalid option ${OPTARG}" && exit 1 ;;
     esac
 done
-
-if "${test}" ; then
-    tsc --noEmit
-fi
 
 if "${build}" ; then
     tsc && node dist/test.js && rm dist/test.js types/test.d.ts
