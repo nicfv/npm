@@ -144,6 +144,13 @@ for (let i = 0; i < 100; i++) {
     T6.isTrue(SMath.approx(normStdevCalc2, normStdev, tolerance));
 }
 
+T6.eq(SMath.rseq(8, 10).length, 3);
+T6.eq(Math.min(...SMath.rseq(8, 10)), 8);
+T6.eq(Math.max(...SMath.rseq(8, 10)), 10);
+T6.eq(SMath.rseq(-2, 3).length, 6);
+T6.eq(Math.min(...SMath.rseq(-2, 3)), -2);
+T6.eq(Math.max(...SMath.rseq(-2, 3)), 3);
+
 function f1(x: number): number {
     return 3 * x ** 2;
 }

@@ -40,6 +40,7 @@ if (func.includes('help')) {
     console.log('  rint <min> <max>         : Generate a uniformly-distributed random integer, range inclusive');
     console.log('  rnorm [mean] [stdev]     : Generate a normally-distributed random float');
     console.log('  rdist <n> [mean] [stdev] : Generate `n` normally-distributed random floats');
+    console.log('  rseq <min> <max>         : Randomize a sequence of integers from `min` to `max`');
     process.exit(1);
 }
 
@@ -130,6 +131,10 @@ switch (func) {
     }
     case ('rdist'): {
         console.log(SMath.rdist(nums[0], nums[1], nums[2]));
+        break;
+    }
+    case ('rseq'): {
+        console.log(SMath.rseq(nums[0], nums[1]));
         break;
     }
     case (''): {
