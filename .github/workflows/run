@@ -83,7 +83,7 @@ if [[ "${1}" == 'publish' ]] ; then
                 echo 'Skipping publish step'
             else
                 echo 'Publishing...'
-                npm publish || exit 1
+                npm publish --provenance || exit 1
             fi
             cd ..
         done
