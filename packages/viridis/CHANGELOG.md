@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.6
+
+- Update typescript dependency version to 5.7.2
+- Publish with provenance
+- Update dependency versions
+
 ## 1.1.5
 
 - Update typescript dependency version to 5.5.4
