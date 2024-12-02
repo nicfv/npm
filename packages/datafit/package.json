@@ -1,6 +1,6 @@
 {
   "name": "datafit",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Simple curve-fitting algorithm",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
@@ -49,9 +49,9 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.8.4"
+    "smath": "1.9.0"
   },
   "devDependencies": {
-    "t6": "1.1.4"
+    "t6": "1.1.5"
   }
 }

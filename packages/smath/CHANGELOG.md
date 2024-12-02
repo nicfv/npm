@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.9.1
+
+- Publish with provenance
+- Update dependency versions
+
 ## 1.9.0
 
 - Add `rseq` to generate a random sequence of integers
