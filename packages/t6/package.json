@@ -11,10 +11,10 @@
     "types"
   ],
   "scripts": {
-    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
+    "preinstall": "../../.github/workflows/scripts -b",
     "test": "tsc --noEmit",
-    "prepack": "npm run build",
-    "postpack": "rm -rf dist types"
+    "prepack": "../../.github/workflows/scripts -b",
+    "postpack": "../../.github/workflows/scripts -c"
   },
   "keywords": [
     "except",
