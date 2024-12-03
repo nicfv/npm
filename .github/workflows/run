@@ -25,6 +25,8 @@ if [[ "${1}" == 'publish' ]] ; then
             }
             # Set working directory to package directory
             cd "${dir}" || exit 1
+            # Remove "-local" from package version
+            sed -i 's/\("version".*:.*[0-9]\+\.[0-9]\+\.[0-9]\+\)-local"/\1"/' package.json
             # Extract package name, changelog version, and package version
             package_name="$(npm --silent v ./ name)"
             echo "Package Name   = ${package_name}"
