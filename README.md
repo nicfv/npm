@@ -1,3 +1,4 @@
+[![Publish](https://github.com/nicfv/npm/actions/workflows/publish.yml/badge.svg)](https://github.com/nicfv/npm/actions/workflows/publish.yml)
 [![GitHub watchers](https://img.shields.io/github/watchers/nicfv/npm)](https://github.com/nicfv/npm)
 [![GitHub forks](https://img.shields.io/github/forks/nicfv/npm)](https://github.com/nicfv/npm/fork)
 [![GitHub Repo stars](https://img.shields.io/github/stars/nicfv/npm)](https://github.com/nicfv/npm)
