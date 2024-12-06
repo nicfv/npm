@@ -11,10 +11,7 @@
     "types"
   ],
   "scripts": {
-    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
-    "test": "tsc --noEmit",
-    "prepack": "npm run build",
-    "postpack": "rm -rf dist types"
+    "start": "../../.github/workflows/scripts"
   },
   "keywords": [
     "quantity",
