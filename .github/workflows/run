@@ -40,7 +40,7 @@ if [[ "${1}" == 'publish' ]] ; then
                 echo 'Package and changelog versions do not match!'
                 exit 1
             fi
-            # Generate package and run all examples
+            # Run all examples and generate output
             cd examples && {
                 npm i || exit 1
                 for example in * ; do
