@@ -8,6 +8,7 @@
     "excludeExternals": true,
     "excludePrivate": true,
     "excludeProtected": true,
+    "favicon": "icon.svg",
     "hideGenerator": true,
     "name": "npm.nicfv.com",
     "navigationLinks": {
