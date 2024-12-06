@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.2
+
+- This version is functionally identical to the previous, but is published as a test of the updated workflow, with a cleaned up `package.json` file
+
 ## 1.9.1
 
 - Publish with provenance

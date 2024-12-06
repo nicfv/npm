@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.8
+
+- This version is functionally identical to the previous, but is published as a test of the updated workflow, with a cleaned up `package.json` file
+
 ## 1.4.7
 
 - Update typescript dependency version to 5.7.2
