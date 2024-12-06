@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.8
+## Unpublished (1.4.7)
 
 - This version is functionally identical to the previous, but is published as a test of the updated workflow, with a cleaned up `package.json` file
 

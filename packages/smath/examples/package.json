@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "smath": "file:smath-1.9.2.tgz"
+    "smath": "file:smath-1.9.1.tgz"
   }
 }
