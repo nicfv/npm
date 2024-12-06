@@ -1,8 +1,5 @@
 {
-  "scripts": {
-    "clean": "rm -rf node_modules package-lock.json"
-  },
   "dependencies": {
-    "smath": "file:smath-1.9.1.tgz"
+    "smath": "file:smath-1.9.2.tgz"
   }
 }

@@ -1,7 +1,4 @@
 {
-  "scripts": {
-    "clean": "rm -rf node_modules package-lock.json"
-  },
   "dependencies": {
     "dimensional": "file:dimensional-0.4.1.tgz"
   }
