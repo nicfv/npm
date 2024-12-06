@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "npm i && tsc -v && npm start --workspaces",
-    "stop": "rm -rf packages/*/node_modules packages/*/dist packages/*/types node_modules package-lock.json docs",
+    "stop": "rm -rf packages/*/node_modules packages/*/dist packages/*/types packages/*/examples/*.tgz node_modules package-lock.json docs",
     "docs": "typedoc --version && typedoc"
   },
   "workspaces": [
