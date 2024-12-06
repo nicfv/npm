@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/",
   "bin": "dist/bin.js",
@@ -11,10 +11,7 @@
     "types"
   ],
   "scripts": {
-    "build": "npm run postpack && tsc && node dist/test.js && rm dist/test.js types/test.d.ts",
-    "test": "tsc --noEmit",
-    "prepack": "npm run build",
-    "postpack": "rm -rf dist types"
+    "start": "../../.github/workflows/scripts"
   },
   "keywords": [
     "small",
@@ -56,6 +53,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "22.10.1",
-    "t6": "1.1.5"
+    "t6": "1.1.7"
   }
 }

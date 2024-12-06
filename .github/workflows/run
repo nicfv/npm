@@ -5,7 +5,7 @@ node -v || exit 1
 npm -v || exit 1
 
 # Run tests on ci workflow
-npm run clean && npm i && npm test || exit 1
+npm start || exit 1
 
 # Check for and set npm token if publish flag is set
 if [[ "${1}" == 'publish' ]] ; then
@@ -40,9 +40,7 @@ if [[ "${1}" == 'publish' ]] ; then
                 echo 'Package and changelog versions do not match!'
                 exit 1
             fi
-            # Generate package and run all examples
-            echo 'Generating tarball...'
-            npm pack --pack-destination examples || exit 1
+            # Run all examples and generate output
             cd examples && {
                 npm i || exit 1
                 for example in * ; do
@@ -74,8 +72,7 @@ if [[ "${1}" == 'publish' ]] ; then
                         echo "Skipping file ${example}"
                     fi
                 done
-                # Clean the project and reset the working directory
-                npm run clean || exit 1
+                # Reset the working directory
                 cd ..
             } || exit 1
             # Make sure that the local version number is higher before publishing

@@ -1,26 +1,3 @@
 #!/usr/bin/env bash
 
-clean=false
-build=false
-pack=false
-
-while getopts ':cbp' opt ; do
-    case "${opt}" in
-        'c') clean=true ;;
-        'b') build=true ;;
-        'p') pack=true ;;
-        *) echo "Invalid option ${OPTARG}" && exit 1 ;;
-    esac
-done
-
-if "${build}" ; then
-    tsc && node dist/test.js && rm dist/test.js types/test.d.ts
-fi
-
-if "${pack}" ; then
-    npm pack --pack-destination examples
-fi
-
-if "${clean}" ; then
-    rm -rf dist types
-fi
+rm -rf dist types && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && npm pack --pack-destination examples
