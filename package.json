@@ -6,6 +6,8 @@
     "clean": "rm -rf packages/*/node_modules node_modules package-lock.json docs && npm run postpack --workspaces"
   },
   "workspaces": [
+    "packages/t6",
+    "packages/smath",
     "packages/*"
   ],
   "devDependencies": {
