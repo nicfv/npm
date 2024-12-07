@@ -1,3 +1,42 @@
 #!/usr/bin/env bash
 
-rm -rf dist types && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples && npm i
+# Extract local package version and changelog version
+local_version="$(npm --silent v ./ version)"
+echo "Local Version = ${local_version}"
+log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
+echo "Log Version   = ${log_version}"
+
+# Make sure package.json and changelog versions match
+if [[ "${local_version}" != "${log_version}" ]] ; then
+    echo 'Package and changelog versions do not match!'
+    exit 1
+fi
+
+# Clean, compile, and test the package
+rm -rf dist types Example && mkdir Example && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples
+
+# Run all the examples for the package
+for example in *.mjs ; do
+    echo "Running example ${example}..."
+    {
+        cat "${example%.*}.md"
+        echo
+        echo '## Installation'
+        echo "Copy the source code and paste it into a new file called \`${example// /_}\` and save the file. In the same directory, run the following commands:"
+        echo '```shell'
+        echo 'npm init -y'
+        echo "npm i ${package_name}@${local_version}"
+        echo "node ${example// /_}"
+        echo '```'
+        echo '## Source'
+        echo '```js'
+        cat "${example}"
+        echo
+        echo '```'
+        echo '## Output'
+        echo '```text'
+        node "${example}" || exit 1
+        echo '```'
+        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
+    } >> "../Example/${example%.*}.md"
+done
