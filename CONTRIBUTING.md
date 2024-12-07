@@ -14,11 +14,8 @@ nicfv's public NPM packages in one repository
 
 ### Examples
 - Must depend on the latest version of the package
-    - The local package comes from an `npm pack` command which is automatically executed on build
-    - Can optionally have other dependencies
-- Must be written in JavaScript
-    - Modular JavaScript must have the file extension `.mjs`
-    - CommonJS must have the file extension `.cjs`
+    - Cannot have dependencies other than the ones in this repository (keep it simple)
+- Must be written in modular JavaScript with the `.mjs` extension
 - Each example must have a corresponding `<Example Name>.md` documentation file
     - This is shown above the example code in the generated documentation
     - This file supports LaTeX (uses MathJax for rendering)
