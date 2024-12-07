@@ -8,6 +8,7 @@
     "excludeExternals": true,
     "excludePrivate": true,
     "excludeProtected": true,
+    "favicon": "icon.svg",
     "hideGenerator": true,
     "name": "npm.nicfv.com",
     "navigationLinks": {
@@ -25,7 +26,7 @@
         ],
         "projectDocuments": [
             "CHANGELOG.md",
-            "examples/*.md",
+            "Example/*.md",
         ],
     },
     // "treatValidationWarningsAsErrors": true,
