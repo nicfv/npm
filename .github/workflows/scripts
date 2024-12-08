@@ -12,8 +12,8 @@ if [[ "${local_version}" != "${log_version}" ]] ; then
     exit 1
 fi
 
-# Clean, compile, and test the package
-rm -rf dist types Example && mkdir Example && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples
+# Compile and test the package
+mkdir -p Example && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples
 
 # Run all the examples for the package
 for example in *.mjs ; do
@@ -38,5 +38,5 @@ for example in *.mjs ; do
         node "${example}" || exit 1
         echo '```'
         echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
-    } >> "../Example/${example%.*}.md"
+    } > "../Example/${example%.*}.md"
 done
