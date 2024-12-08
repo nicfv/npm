@@ -14,4 +14,4 @@ Is there a way we can make any of these packages better? Please report all bugs,
 
 ## User Feedback
 
-Are you using any one of these packages in your project? Please share your story to <npm@nicfv.com> to have it featured on this website!
+Are you using any one of these packages in your project? Please share your story to <npm@nicfv.com> to have it featured on this website or participate in a case study!
