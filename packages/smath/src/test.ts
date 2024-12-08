@@ -151,6 +151,12 @@ T6.eq(SMath.rseq(-2, 3).length, 6);
 T6.eq(Math.min(...SMath.rseq(-2, 3)), -2);
 T6.eq(Math.max(...SMath.rseq(-2, 3)), 3);
 
+T6.eq(SMath.shuffle(['a', 'b', 'c']).length, 3);
+T6.eq(SMath.shuffle([1, 2, 3]).length, 3);
+T6.eq(Math.min(...SMath.shuffle([1, 2, 3])), 1);
+T6.eq(Math.max(...SMath.shuffle([1, 2, 3])), 3);
+T6.eq(SMath.avg(SMath.shuffle([1, 2, 3])), 2);
+
 function f1(x: number): number {
     return 3 * x ** 2;
 }
