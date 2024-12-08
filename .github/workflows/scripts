@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# Extract local package version and changelog version
+# Extract local package name and version and changelog version
+package_name="$(npm --silent v ./ name)"
+echo "Package Name  = ${package_name}"
 local_version="$(npm --silent v ./ version)"
 echo "Local Version = ${local_version}"
 log_version="$(grep -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | head -n1)"
@@ -22,18 +24,25 @@ for example in *.mjs ; do
         cat "${example%.*}.md"
         echo
         echo '## Installation'
-        echo "Copy the source code and paste it into a new file called \`${example// /_}\` and save the file. In the same directory, run the following commands:"
+        echo "Follow these steps to create a new project workspace and install the ${package_name} dependency to run this example."
         echo '```shell'
         echo 'npm init -y'
         echo "npm i ${package_name}@${local_version}"
-        echo "node ${example// /_}"
+        echo "touch ${example// /_}"
+        echo "open ${example// /_}"
         echo '```'
         echo '## Source'
+        echo 'Copy and paste this source code into the newly created file.'
         echo '```js'
         cat "${example}"
         echo
         echo '```'
         echo '## Output'
+        echo 'Execute this script to run the file and generate an output.'
+        echo '```shell'
+        echo "node ${example// /_}"
+        echo '```'
+        echo 'You should expect to see an output similar to the one below.'
         echo '```text'
         node "${example}" || exit 1
         echo '```'
