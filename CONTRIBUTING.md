@@ -1,7 +1,9 @@
-# npm [![Publish](https://github.com/nicfv/npm/actions/workflows/publish.yml/badge.svg)](https://github.com/nicfv/npm/actions/workflows/publish.yml)
-nicfv's public NPM packages in one repository
+# Contribution Guidelines
+Thank you for your interest in contributing! This project is a collection of open source software packages maintained by Nicolas Ventura ([@nicfv](https://github.com/nicfv)) for users like you! You are allowed to fork the repository as permitted by the [MIT License](https://raw.githubusercontent.com/nicfv/npm/main/LICENSE) terms. Contributions are welcome by submitting a [pull request](https://github.com/nicfv/npm/pulls). Please follow the existing code styling if submitting a pull request, and please be respectful and constructive in your interactions with other contributors. Once again, thank you for your consideration!
 
 ## Requirements
+Below is a list of requirements that must be followed when contributing to this project.
+
 ### Package
 - Exists within `./packages/<name>/`
 - Generally, `package.json` should follow the existing design pattern
