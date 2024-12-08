@@ -369,6 +369,7 @@ export namespace SMath {
      * ```js
      * const sequence = SMath.rseq(-2, 2); // [ 2, 0, 1, -2, -1 ]
      * ```
+     * @deprecated Use `SMath.shuffle()` instead
      */
     export function rseq(min: number, max: number): Array<number> {
         min |= 0;

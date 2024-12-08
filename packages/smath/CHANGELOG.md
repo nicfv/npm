@@ -6,6 +6,7 @@
 - Add more clarifying naviation instructions, link to contributing, and call for user feedback on homepage
 - Add `shuffle` function to shuffle and array of arbitrary elements
 - Add tests and example for shuffling a deck of cards
+- Deprecate `rseq` in favor of `shuffle` (has all capabilities and more, can shuffle a `linspace` if need to replicate the functionality of `rseq`)
 
 ## 1.9.2
 
