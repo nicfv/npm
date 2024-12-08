@@ -17,7 +17,11 @@ if [[ "${1}" == 'publish' ]] ; then
         # Check each directory and publish each project
         cd packages || exit 1
         for dir in */ ; do
-            npm --silent v "${dir}" && { npm publish --provenance || echo "Cannot publish ${dir}" ; }
+            npm --silent v "${dir}" && {
+                cd "${dir}" || exit 1
+                npm publish --provenance || echo "Cannot publish ${dir}"
+                cd ..
+            }
         done
     fi
 fi
