@@ -1,6 +1,8 @@
 /**
  * @packageDocumentation
- * ![NPM Downloads](https://img.shields.io/npm/d18m/smath) Small math function library
+ * Small math function library
+ * 
+ * ![NPM Downloads](https://img.shields.io/npm/d18m/smath)
  */
 /**
  * Contains a small math function library including
@@ -367,6 +369,7 @@ export namespace SMath {
      * ```js
      * const sequence = SMath.rseq(-2, 2); // [ 2, 0, 1, -2, -1 ]
      * ```
+     * @deprecated Use `SMath.shuffle()` instead
      */
     export function rseq(min: number, max: number): Array<number> {
         min |= 0;
@@ -375,6 +378,21 @@ export namespace SMath {
         const rawData: Array<{ index: number, value: number }> = []
         for (let i = min; i < max; i++) {
             rawData.push({ index: runif(-1, 1), value: i });
+        }
+        return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
+    }
+    /**
+     * Randomize an array of arbitrary elements.
+     * @param stack An array of arbitrary elements
+     * @returns The `stack` array in a random order
+     * @example
+     * ```js
+     * ```
+     */
+    export function shuffle<T>(stack: Array<T>): Array<T> {
+        const rawData: Array<{ index: number, value: T }> = []
+        for (const item of stack) {
+            rawData.push({ index: Math.random(), value: item });
         }
         return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
     }
