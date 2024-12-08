@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.10.0
+
+- Update how examples are written and update instructions
+- Add more clarifying naviation instructions, link to contributing, and call for user feedback on homepage
+- Add `shuffle` function to shuffle and array of arbitrary elements
+- Add tests and example for shuffling a deck of cards
+
 ## 1.9.2
 
 - This version is functionally identical to the previous, but is published as a test of the updated workflow, with a cleaned up `package.json` file
