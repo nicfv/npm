@@ -10,7 +10,8 @@ export namespace Attribute {
     export type Name = Dimension.Name
         | 'area' | 'volume'
         | 'velocity' | 'acceleration'
-        | 'force' | 'energy' | 'power';
+        | 'force' | 'energy' | 'power'
+        | 'pressure' | 'flow' | 'viscosity';
     /**
      * Is an object containing keys of attributes and values of nonzero exponents.
      */
@@ -98,6 +99,9 @@ export namespace Attribute {
         force: () => new Attribute({ mass: 1, acceleration: 1 }, 'F'),
         energy: () => new Attribute({ force: 1, length: 1 }, 'E'), // Same as mv^2, mgh, ...
         power: () => new Attribute({ energy: 1, time: -1 }, 'P'),
+        pressure: () => new Attribute({ force: 1, area: -1 }, 'P'),
+        flow: () => new Attribute({ volume: 1, time: -1 }, 'Q'),
+        viscosity: () => new Attribute({ pressure: 1, time: -1 }, '\\mu'),
     };
     /**
      * Represents a dimensionless attribute.

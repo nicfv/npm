@@ -12,7 +12,7 @@ export namespace Unit {
         // Time span/duration
         | 'nanosecond' | 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'
         // Length/distance
-        | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
+        | 'nanometer' | 'micrometer' | 'micron' | 'millimeter' | 'centimeter' | 'decimeter' | 'meter' | 'kilometer' | 'inch' | 'foot' | 'yard' | 'mile'
         // Mass
         | 'milligram' | 'gram' | 'kilogram' | 'tonne' | 'ounce' | 'pound_mass' | 'slug' | 'stone' | 'shortton'
         // Current
@@ -23,12 +23,18 @@ export namespace Unit {
         | 'mole'
         // Luminous Intensity
         | 'candela' | 'lumen'
+        // Volume
+        | 'milliliter' | 'liter' | 'gallon'
         // Force
         | 'Newton' | 'kiloNewton' | 'pound_force'
         // Energy
-        | 'Joule'
+        | 'Joule' | 'calorie' | 'Calorie' | 'WattHour' | 'kiloWattHour' | 'BritishThermalUnit'
         // Power
         | 'Watt'
+        // Pressure
+        | 'Pascal' | 'kiloPascal' | 'atmosphere' | 'millibar' | 'bar' | 'mmHg' | 'pounds_per_square_inch'
+        // Viscosity
+        | 'poise' | 'centipoise' | 'stoke' | 'centistoke'
         // Trailing semicolon
         ;
     /**
