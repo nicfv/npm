@@ -366,6 +366,7 @@ export namespace SMath {
      * @returns The `stack` array in a random order
      * @example
      * ```js
+     * const shuffled = SMath.shuffle(['a', 'b', 'c']); // [ 'c', 'a', 'b' ]
      * ```
      */
     export function shuffle<T>(stack: Array<T>): Array<T> {
