@@ -1,6 +1,6 @@
 ## Builtin Palettes
 
-This list is best viewed on the [official documentation](https://npm.nicfv.com/viridis/), and contains all the builtin color palettes obtained by `Palette.Name` or `Palette['Name']`.
+This list is best viewed on the [official documentation](https://npm.nicfv.com/modules/viridis.html), and contains all the builtin color palettes obtained by `Palette.Name` or `Palette['Name']`.
 
 <style>
     div.viridis-palette {

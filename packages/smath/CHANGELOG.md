@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.0
+
+- Add fraction functions `rat()` to decompose ratios and `mixed()` to decompose mixed numbers
+- Update dependency versions
+- Remove `rseq()` support
+- Update functions in `npx` binary
+- Add example on finding a tangent line
+
 ## 1.10.0
 
 - Update how examples are written and update instructions

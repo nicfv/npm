@@ -18,3 +18,5 @@ try {
 } catch (e) {
     T6.is((e as Error).message, 'Exception found in test #9! Custom');
 }
+
+T6.eq(T6.getTestNumber(), 10);

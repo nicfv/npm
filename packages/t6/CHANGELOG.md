@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.9
+
+- Add a helper `getTestNumber()` function for debugging purposes.
+
 ## 1.1.8
 
 - This version is functionally identical to the previous, and is published as another test of the updated workflow system
