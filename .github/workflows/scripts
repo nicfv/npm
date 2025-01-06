@@ -15,7 +15,7 @@ if [[ "${local_version}" != "${log_version}" ]] ; then
 fi
 
 # Compile and test the package
-mkdir -p Example && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples
+mkdir -p Example && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples || exit 1
 
 # Run all the examples for the package
 for example in *.mjs ; do
