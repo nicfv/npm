@@ -19,12 +19,12 @@ if (func.includes('help')) {
     console.log('  help                     : Show this page');
     console.log('  approx <a> <b> [eps]     : Check if `a` and `b` are approximately equal');
     console.log('  clamp <n> <min> <max>    : Clamp `n` between `min` and `max`');
-    console.log('  expand <n> <min> <max>   : Expand normalized `n` between `min` and `max`');
-    console.log('  linspace <min> <max> <n> : Generate `n` linearly spaced numbers between `min` and `max`');
-    console.log('  logspace <min> <max> <n> : Generate `n` logarithmically spaced numbers between `min` and `max`');
     console.log('  normalize <n> <min> <max>: Normalize `n` between `min` and `max`');
+    console.log('  expand <n> <min> <max>   : Expand normalized `n` between `min` and `max`');
     console.log('  translate <n> <min1> <max1> <min2> <max2>');
     console.log('                           : Linearly interpolate `n` from `min1`, `max1` to `min2`, `max2`');
+    console.log('  linspace <min> <max> <n> : Generate `n` linearly spaced numbers between `min` and `max`');
+    console.log('  logspace <min> <max> <n> : Generate `n` logarithmically spaced numbers between `min` and `max`');
     console.log('  factorial <n>            : Compute `n!` (factorial)');
     console.log('  factors <n>              : List the prime factors of `n`');
     console.log('  error <exp> <act>        : Calculate the normaized percent error between `exp` and `act`');
@@ -40,7 +40,8 @@ if (func.includes('help')) {
     console.log('  rint <min> <max>         : Generate a uniformly-distributed random integer, range inclusive');
     console.log('  rnorm [mean] [stdev]     : Generate a normally-distributed random float');
     console.log('  rdist <n> [mean] [stdev] : Generate `n` normally-distributed random floats');
-    console.log('  rseq <min> <max>         : Randomize a sequence of integers from `min` to `max`');
+    console.log('  rat <n> [eps]            : Decompose `n` into a ratio');
+    console.log('  mixed <n> [eps]          : Decompose `n` into a mixed number');
     process.exit(1);
 }
 
@@ -53,8 +54,16 @@ switch (func) {
         console.log(SMath.clamp(nums[0], nums[1], nums[2]));
         break;
     }
+    case ('normalize'): {
+        console.log(SMath.normalize(nums[0], nums[1], nums[2]));
+        break;
+    }
     case ('expand'): {
         console.log(SMath.expand(nums[0], nums[1], nums[2]));
+        break;
+    }
+    case ('translate'): {
+        console.log(SMath.translate(nums[0], nums[1], nums[2], nums[3], nums[4]));
         break;
     }
     case ('linspace'): {
@@ -63,14 +72,6 @@ switch (func) {
     }
     case ('logspace'): {
         console.log(SMath.logspace(nums[0], nums[1], nums[2]));
-        break;
-    }
-    case ('normalize'): {
-        console.log(SMath.normalize(nums[0], nums[1], nums[2]));
-        break;
-    }
-    case ('translate'): {
-        console.log(SMath.translate(nums[0], nums[1], nums[2], nums[3], nums[4]));
         break;
     }
     case ('factorial'): {
@@ -131,6 +132,14 @@ switch (func) {
     }
     case ('rdist'): {
         console.log(SMath.rdist(nums[0], nums[1], nums[2]));
+        break;
+    }
+    case ('rat'): {
+        console.log(SMath.rat(nums[0], nums[1] ?? 1e-6));
+        break;
+    }
+    case ('mixed'): {
+        console.log(SMath.mixed(nums[0], nums[1] ?? 1e-6));
         break;
     }
     case (''): {
