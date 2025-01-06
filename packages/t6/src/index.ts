@@ -1,6 +1,8 @@
 /**
  * @packageDocumentation
- * ![NPM Downloads](https://img.shields.io/npm/d18m/t6) Lightweight assertion testing framework
+ * Lightweight assertion testing framework
+ * 
+ * ![NPM Downloads](https://img.shields.io/npm/d18m/t6)
  */
 /**
  * Lightweight framework to expect
@@ -14,6 +16,13 @@ export namespace T6 {
      * Increments for every test run.
      */
     let i: number = 0;
+    /**
+     * Return the number of the test that last completed.
+     * @returns The current test number.
+     */
+    export function getTestNumber(): number {
+        return i;
+    }
     /**
      * Expect a test to return **true**.
      * @param test A test that returns a boolean result
