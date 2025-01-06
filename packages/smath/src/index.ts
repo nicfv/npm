@@ -490,4 +490,43 @@ export namespace SMath {
     export function integrate(f: (x: number) => number, a: number, b: number, Ndx: number = 1e3): number {
         return ((b - a) / Ndx) * sum(linspace(a, b, Ndx).map(x => f(x)));
     }
+    /**
+     * Convert an arbitrary decimal number into a simplified fraction (or ratio).
+     * See `mixed()` for instructions on how to break out the whole number part.
+     * @param n The decimal number to convert
+     * @param epsilon Maximum absolute error
+     * @returns An object containing the fraction's numerator and denominator
+     * @example
+     * ```js
+     * const frac = SMath.rat(0.625); // { num: 5, den: 8 }
+     * ```
+     */
+    export function rat(n: number, epsilon: number = 1e-6): { num: number, den: number } {
+        let num: number = 0,
+            den: number = 1,
+            sign: number = n < 0 ? -1 : 1;
+        while (!approx(sign * n, num / den, epsilon)) {
+            if (sign * n > num / den) {
+                num++;
+            } else {
+                den++;
+            }
+        }
+        return { num: sign * num, den: den };
+    }
+    /**
+     * Convert an arbitrary decimal number into a simplified fraction, after
+     * breaking out the whole number part first. See `rat()` for keeping the
+     * number as a ratio without separating the whole number part.
+     * @param n A decimal number to convert
+     * @param epsilon Maximum absolute error
+     * @returns An object containing the whole part and fraction numerator and denominator
+     * @example
+     * ```js
+     * const frac = SMath.mixed(-8 / 6); // { whole: -1, num: 1, den: 3 }
+     * ```
+     */
+    export function mixed(n: number, epsilon: number = 1e-6): { whole: number, num: number, den: number } {
+        return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
+    }
 }

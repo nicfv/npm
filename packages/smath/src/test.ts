@@ -191,3 +191,68 @@ T6.lt(SMath.integrate(f1, 1, 3), 26.01);
 T6.gt(SMath.integrate(f2, 2, 4), 0.69); // 0.693...
 T6.lt(SMath.integrate(f2, 2, 4), 0.70);
 T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
+
+{
+    let frac: { num: number, den: number };
+    frac = SMath.rat(1 / 3);
+    T6.eq(frac.num, 1);
+    T6.eq(frac.den, 3);
+    frac = SMath.rat(0.625);
+    T6.eq(frac.num, 5);
+    T6.eq(frac.den, 8);
+    frac = SMath.rat(-9 / 21);
+    T6.eq(frac.num, -3);
+    T6.eq(frac.den, 7);
+    frac = SMath.rat(0);
+    T6.eq(frac.num, 0);
+    T6.eq(frac.den, 1);
+    frac = SMath.rat(1);
+    T6.eq(frac.num, 1);
+    T6.eq(frac.den, 1);
+    frac = SMath.rat(-1);
+    T6.eq(frac.num, -1);
+    T6.eq(frac.den, 1);
+    frac = SMath.rat(2.75);
+    T6.eq(frac.num, 11);
+    T6.eq(frac.den, 4);
+}
+
+{
+    let frac: { whole: number, num: number, den: number };
+    frac = SMath.mixed(1 / 3);
+    T6.eq(frac.whole, 0);
+    T6.eq(frac.num, 1);
+    T6.eq(frac.den, 3);
+    frac = SMath.mixed(1.625);
+    T6.eq(frac.whole, 1);
+    T6.eq(frac.num, 5);
+    T6.eq(frac.den, 8);
+    frac = SMath.mixed(-9 / 20);
+    T6.eq(frac.whole, 0);
+    T6.eq(frac.num, -9);
+    T6.eq(frac.den, 20);
+    frac = SMath.mixed(0);
+    T6.eq(frac.whole, 0);
+    T6.eq(frac.num, 0);
+    T6.eq(frac.den, 1);
+    frac = SMath.mixed(1);
+    T6.eq(frac.whole, 1);
+    T6.eq(frac.num, 0);
+    T6.eq(frac.den, 1);
+    frac = SMath.mixed(-1);
+    T6.eq(frac.whole, -1);
+    T6.eq(frac.num, 0);
+    T6.eq(frac.den, 1);
+    frac = SMath.mixed(2.75);
+    T6.eq(frac.whole, 2);
+    T6.eq(frac.num, 3);
+    T6.eq(frac.den, 4);
+    frac = SMath.mixed(-4 / 2);
+    T6.eq(frac.whole, -2);
+    T6.eq(frac.num, 0);
+    T6.eq(frac.den, 1);
+    frac = SMath.mixed(-8 / 6);
+    T6.eq(frac.whole, -1);
+    T6.eq(frac.num, 1);
+    T6.eq(frac.den, 3);
+}
