@@ -4,6 +4,7 @@
 
 - Add fraction functions `rat()` to decompose ratios and `mixed()` to decompose mixed numbers
 - Update dependency versions
+- Remove `rseq()` support
 
 ## 1.10.0
 

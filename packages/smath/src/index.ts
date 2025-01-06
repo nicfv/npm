@@ -361,27 +361,6 @@ export namespace SMath {
         return distribution;
     }
     /**
-     * Randomize a sequence of integers from `min` to `max`.
-     * @param min The minimum integer in the randomized sequence
-     * @param max The maximum integer in the randomized sequence
-     * @returns A randomized sequence of integers from `min` to `max`
-     * @example
-     * ```js
-     * const sequence = SMath.rseq(-2, 2); // [ 2, 0, 1, -2, -1 ]
-     * ```
-     * @deprecated Use `SMath.shuffle()` instead
-     */
-    export function rseq(min: number, max: number): Array<number> {
-        min |= 0;
-        max |= 0;
-        max++;
-        const rawData: Array<{ index: number, value: number }> = []
-        for (let i = min; i < max; i++) {
-            rawData.push({ index: runif(-1, 1), value: i });
-        }
-        return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
-    }
-    /**
      * Randomize an array of arbitrary elements.
      * @param stack An array of arbitrary elements
      * @returns The `stack` array in a random order

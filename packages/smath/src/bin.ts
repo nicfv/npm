@@ -133,10 +133,6 @@ switch (func) {
         console.log(SMath.rdist(nums[0], nums[1], nums[2]));
         break;
     }
-    case ('rseq'): {
-        console.log(SMath.rseq(nums[0], nums[1]));
-        break;
-    }
     case (''): {
         console.error('Missing argument. Use with "help" for a list of commands.');
         process.exit(1);
