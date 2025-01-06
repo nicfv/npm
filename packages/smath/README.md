@@ -7,7 +7,7 @@ Small math? Simple math? Or supplemental math? Canonically, "SMath" is pronounce
 SMath is also packaged with an executabe that can be run directly through `npx` in the terminal - even outside of a NodeJS project! In fact, open your terminal now, and type the following to show a list of valid `npx smath` commands!
 
 ```shell
-npx smath
+npx smath help
 ```
 
 Commands are all structured like this.
@@ -21,3 +21,5 @@ This example command returns the value 0.4.
 ```shell
 npx smath normalize 4 0 10
 ```
+
+> Most `SMath` functions are available through `npx`, except for calculus functions which require a functional argument.
