@@ -6,6 +6,7 @@
 - Update dependency versions
 - Remove `rseq()` support
 - Update functions in `npx` binary
+- Add example on finding a tangent line
 
 ## 1.10.0
 
