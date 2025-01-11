@@ -27,6 +27,7 @@ if (func.includes('help')) {
     console.log('  logspace <min> <max> <n> : Generate `n` logarithmically spaced numbers between `min` and `max`');
     console.log('  factorial <n>            : Compute `n!` (factorial)');
     console.log('  factors <n>              : List the prime factors of `n`');
+    console.log('  round2 <n> <base>        : Round `n` to a multiple of any `base`');
     console.log('  error <exp> <act>        : Calculate the normaized percent error between `exp` and `act`');
     console.log('  sum <c0> [c1] ... [cn]   : Compute a total of `n` numbers');
     console.log('  prod <c0> [c1] ... [cn]  : Compute a product of `n` numbers');
@@ -80,6 +81,10 @@ switch (func) {
     }
     case ('factors'): {
         console.log(SMath.factors(nums[0]));
+        break;
+    }
+    case ('round2'): {
+        console.log(SMath.round2(nums[0], nums[1]));
         break;
     }
     case ('error'): {

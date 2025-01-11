@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.0
+
+- Add `round2()` function to round to the nearest multiple of an arbitrary base
+
 ## 1.11.0
 
 - Add fraction functions `rat()` to decompose ratios and `mixed()` to decompose mixed numbers
