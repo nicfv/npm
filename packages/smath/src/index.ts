@@ -176,6 +176,20 @@ export namespace SMath {
         return f;
     }
     /**
+     * Round a number to the nearest multiple of an arbitrary
+     * base. Does not round when the base is set to zero.
+     * @param n Any number to round
+     * @param base Any base to round to
+     * @returns `n` rounded to the nearest multiple of `base`
+     * @example
+     * ```js
+     * const y = SMath.round2(Math.PI, 0.2); // 3.2
+     * ```
+     */
+    export function round2(n: number, base: number): number {
+        return base ? base * Math.round(n / base) : n;
+    }
+    /**
      * Calculate the relative normalized error or deviation from any
      * value to an accepted value. An error of 0 indicates that the
      * two values are identical. An error of -0.1 indicates that the
