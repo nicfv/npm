@@ -1,7 +1,7 @@
 {
   "name": "buildform",
   "version": "0.0.1",
-  "description": "Build complex HTML forms with JavaScript",
+  "description": "Build complex HTML forms with simple JavaScript",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
@@ -35,5 +35,11 @@
   },
   "repository": "github:nicfv/npm",
   "license": "MIT",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "smath": "1.12.0"
+  },
+  "devDependencies": {
+    "t6": "1.1.9"
+  }
 }
