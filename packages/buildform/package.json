@@ -1,0 +1,45 @@
+{
+  "name": "buildform",
+  "version": "0.0.1",
+  "description": "Build complex HTML forms with simple JavaScript",
+  "homepage": "https://npm.nicfv.com/",
+  "bin": "",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "start": "../../.github/workflows/scripts"
+  },
+  "keywords": [
+    "html",
+    "form",
+    "builder",
+    "build",
+    "user",
+    "input",
+    "prompt",
+    "ui",
+    "ux"
+  ],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/nicfv"
+  },
+  "repository": "github:nicfv/npm",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "smath": "1.12.0"
+  },
+  "devDependencies": {
+    "t6": "1.1.9"
+  }
+}
