@@ -4,4 +4,4 @@
  * 
  * ![NPM Downloads](https://img.shields.io/npm/d18m/buildform)
  */
-export * from './lib';
+export * from './TextInput';
