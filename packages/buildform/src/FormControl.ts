@@ -2,7 +2,7 @@
  * Options for a generic form input.
  * All of them have default values.
  */
-export interface FormInputOptions {
+export interface FormControlOptions {
     /**
      * Determine if the label should appear before the control.
      */
@@ -19,7 +19,7 @@ export interface FormInputOptions {
 /**
  * Represents a generic form control element.
  */
-export abstract class FormInput<T extends keyof HTMLElementTagNameMap> {
+export abstract class FormControl<T extends keyof HTMLElementTagNameMap> {
     /**
      * A unique serial number for each input.
      */
@@ -41,8 +41,8 @@ export abstract class FormInput<T extends keyof HTMLElementTagNameMap> {
      * @param control Create a new HTML element to use as the form control element.
      * @param options Data options for this form input.
      */
-    constructor(controlType: T, options?: FormInputOptions) {
-        FormInput.serial++;
+    constructor(controlType: T, options?: FormControlOptions) {
+        FormControl.serial++;
         this.container = document.createElement('div');
         this.label = document.createElement('label');
         this.control = document.createElement(controlType);
@@ -66,7 +66,7 @@ export abstract class FormInput<T extends keyof HTMLElementTagNameMap> {
      * @returns The unique ID for this control
      */
     private getId(prefix: string): string {
-        return prefix + '_' + FormInput.serial;
+        return prefix + '_' + FormControl.serial;
     }
     /**
      * Set the text of the associated label.
