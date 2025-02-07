@@ -25,7 +25,9 @@ export abstract class FormInput extends FormControl<'input'> {
         this.control.setAttribute('type', options?.type ?? 'text');
         this.control.setAttribute('name', options?.name ?? '');
         this.control.setAttribute('form', options?.form ?? '');
-        this.control.setAttribute('disabled', (options?.disabled ?? false).toString());
+        if (options?.disabled) {
+            this.control.setAttribute('disabled', 'true');
+        }
     }
 
     public addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: () => void) {
