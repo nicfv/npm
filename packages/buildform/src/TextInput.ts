@@ -1,8 +1,6 @@
-import { FormInput } from './FormInput';
+import { FormInput, FormInputOptions } from './FormInput';
 
-export interface TextOptions {
-    readonly title?: string;
-    readonly label?: string;
+export interface TextOptions extends FormInputOptions {
     readonly placeholder?: string;
     readonly maxLength?: number;
     readonly onInput?: (value: string) => void;
