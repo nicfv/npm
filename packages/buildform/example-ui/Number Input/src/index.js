@@ -12,12 +12,12 @@ const numberInput = new NumberInput({
 });
 
 // Define a function to use for the event listener.
-function printValue() {
-    console.log(numberInput.getValue());
+function showValue() {
+    document.getElementById('selectedAge').textContent = 'Age is ' + numberInput.getValue();
 }
 
-// Attach an event listener.
-numberInput.addEventListener('input', printValue);
+// Attach the event listener.
+numberInput.addEventListener('input', showValue);
 
 // Append this onto the HTML parent element.
 window.addEventListener('load', () => {
