@@ -15,7 +15,7 @@ if [[ "${local_version}" != "${log_version}" ]] ; then
 fi
 
 # Compile and test the package
-mkdir -p Example && tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples || exit 1
+mkdir -p Example && npx tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd examples || exit 1
 
 # Run all the examples for the package
 for example in *.mjs ; do
@@ -26,6 +26,8 @@ for example in *.mjs ; do
         echo '## Installation'
         echo "Follow these steps to create a new project workspace and install the ${package_name} dependency to run this example."
         echo '```shell'
+        echo "mkdir ${package_name}_demo"
+        echo "cd ${package_name}_demo"
         echo 'npm init -y'
         echo "npm i ${package_name}@${local_version}"
         echo "touch ${example// /_}"
@@ -49,3 +51,45 @@ for example in *.mjs ; do
         echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
     } > "../Example/${example%.*}.md"
 done
+
+# Run UI example, if exists
+if [ -d ../example-ui ] ; then
+    cd ../example-ui && npm i && npx webpack --mode production && cd ..
+    {
+        cat *.md
+        echo
+        echo '## Installation'
+        echo "Follow these steps to create a new [webpack](https://webpack.js.org/) project and install the ${package_name} dependency to run this example."
+        echo '```shell'
+        echo '# Initialize project'
+        echo "mkdir ${package_name}_demo"
+        echo "cd ${package_name}_demo"
+        echo 'npm init -y'
+        echo "npm i ${package_name}@${local_version} webpack webpack-cli"
+        echo '# Create project structure'
+        echo 'touch index.html'
+        echo 'mkdir src'
+        echo 'touch src/index.js'
+        echo '# Open new files'
+        echo 'open index.html'
+        echo 'open src/index.js'
+        echo '```'
+        echo '## Source'
+        echo 'Copy and paste the following source code blocks into the newly created files.'
+        echo '### index.html'
+        echo '```html'
+        cat 'index.html' || exit 1
+        echo
+        echo '```'
+        echo '### index.js'
+        echo '```js'
+        cat 'src/index.js' || exit 1
+        echo
+        echo '```'
+        echo '## Build Project'
+        echo "In the base project directory \`${package_name}_demo/\`, run the following commands, and then open your \`index.html\` file in a web browser!."
+        echo '```shell'
+        echo 'npx webpack --mode development # or --mode production'
+        echo '```'
+    } > "../Example/UI Example.md"
+fi
