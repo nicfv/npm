@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Delete build files in each package
+find packages -name package-lock.json -type f -delete
+find packages -name node_modules -type d | xargs rm -rf
+find packages -name dist -type d | xargs rm -rf
+find packages -name types -type d | xargs rm -rf
+find packages -name Example -type d | xargs rm -rf
+
+# Delete build files in the main directory
+rm -rf node_modules package-lock.json docs

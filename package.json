@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "npm i && tsc -v && npm start --workspaces && typedoc --version && typedoc",
-    "stop": "rm -rf packages/*/node_modules packages/*/dist packages/*/types packages/*/Example node_modules package-lock.json docs"
+    "stop": ".github/workflows/clean"
   },
   "workspaces": [
     "packages/t6",
