@@ -83,6 +83,14 @@ export abstract class FormControl<T extends keyof HTMLElementTagNameMap> {
         return this.label.innerText;
     }
     /**
+     * Add an event listener to the control element.
+     * @param type The type of event listener
+     * @param listener A function to callback every time the event is raised
+     */
+    public addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: () => void) {
+        this.control.addEventListener(type, listener);
+    }
+    /**
      * Get the parent element to append onto the form.
      * @returns The container `<div>` element
      */

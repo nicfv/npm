@@ -29,16 +29,4 @@ export abstract class FormInput extends FormControl<'input'> {
             this.control.setAttribute('disabled', 'true');
         }
     }
-
-    public addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: () => void) {
-        this.control.addEventListener(type, listener);
-    }
-
-    public setValue(value: string): void {
-        this.control.value = value;
-    }
-
-    public getValue(): string {
-        return this.control.value;
-    }
 }
