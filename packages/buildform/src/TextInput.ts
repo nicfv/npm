@@ -8,7 +8,7 @@ export interface TextOptions extends FormInputOptions {
 
 export class TextInput extends FormInput<'input'> {
     constructor(options?: TextOptions) {
-        super('input', { label: options?.label, title: options?.title });
+        super('input', options);
         this.control.setAttribute('type', 'text');
         this.control.setAttribute('maxlength', (options?.maxLength ?? 0).toFixed());
         this.control.setAttribute('placeholder', options?.placeholder ?? '');
