@@ -5,39 +5,33 @@ export interface TextOptions {
     readonly label?: string;
     readonly placeholder?: string;
     readonly maxLength?: number;
+    readonly onInput?: (value: string) => void;
 }
 
-export class TextInput extends FormInput {
-    private readonly inputHandle: HTMLInputElement;
-    private value: string = '';
-    constructor(options: TextOptions) {
-        const input: HTMLInputElement = document.createElement('input'),
-            label: HTMLLabelElement = document.createElement('label');
-        super([input, label]);
-        this.inputHandle = input;
-        input.setAttribute('id', this.getId());
-        label.setAttribute('for', this.getId());
-        input.setAttribute('title', options.title ?? '');
-        label.setAttribute('title', options.title ?? '');
-        label.textContent = options.label ?? '';
-        label.setAttribute('placeholder', options.placeholder ?? '');
-        label.setAttribute('maxlength', (options.maxLength ?? 0).toFixed());
-        input.addEventListener('input', () => this.value = input.value);
+export class TextInput extends FormInput<'input'> {
+    constructor(options?: TextOptions) {
+        super('input', { label: options?.label, title: options?.title });
+        this.control.setAttribute('type', 'text');
+        this.control.setAttribute('maxlength', (options?.maxLength ?? 0).toFixed());
+        this.control.setAttribute('placeholder', options?.placeholder ?? '');
+        if (options?.onInput) {
+            this.control.addEventListener('input', () => options.onInput!(this.getValue()));
+        }
     }
 
     public setReadonly(readonly: boolean): void {
         if (readonly) {
-            this.inputHandle.setAttribute('readonly', 'true');
+            this.control.setAttribute('readonly', 'true');
         } else {
-            this.inputHandle.removeAttribute('readonly');
+            this.control.removeAttribute('readonly');
         }
     }
 
     public setValue(value: string): void {
-        this.inputHandle.value = value;
+        this.control.value = value;
     }
 
     public getValue(): string {
-        return this.value;
+        return this.control.value;
     }
 }
