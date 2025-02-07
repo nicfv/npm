@@ -1,20 +1,35 @@
-import { FormInput, FormInputOptions } from './FormInput';
+import { FormControl, FormControlOptions } from './FormControl';
 
-export interface TextOptions extends FormInputOptions {
-    readonly placeholder?: string;
-    readonly maxLength?: number;
-    readonly onInput?: (value: string) => void;
+export interface InputOptions extends FormControlOptions {
+    /**
+     * Type of form control
+     */
+    readonly type?: string;
+    /**
+     * Name of the form control. Submitted with the form as part of a name/value pair
+     */
+    readonly name?: string;
+    /**
+     * Associates the control with a form element
+     */
+    readonly form?: string;
+    /**
+     * Whether the form control is disabled
+     */
+    readonly disabled?: boolean;
 }
 
-export class TextInput extends FormInput<'input'> {
-    constructor(options?: TextOptions) {
+export abstract class TextInput extends FormControl<'input'> {
+    constructor(options?: InputOptions) {
         super('input', options);
-        this.control.setAttribute('type', 'text');
-        this.control.setAttribute('maxlength', (options?.maxLength ?? 0).toFixed());
-        this.control.setAttribute('placeholder', options?.placeholder ?? '');
-        if (options?.onInput) {
-            this.control.addEventListener('input', () => options.onInput!(this.getValue()));
-        }
+        this.control.setAttribute('type', options?.type ?? 'text');
+        this.control.setAttribute('name', options?.name ?? '');
+        this.control.setAttribute('form', options?.form ?? '');
+        this.control.setAttribute('disabled', (options?.disabled ?? false).toString());
+    }
+
+    public addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: () => void) {
+        this.control.addEventListener(type, listener);
     }
 
     public setReadonly(readonly: boolean): void {
