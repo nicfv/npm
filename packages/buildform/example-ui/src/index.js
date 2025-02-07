@@ -1,5 +1,6 @@
 import { NumberInput } from 'buildform';
 
+// Define a new NumberInput element.
 const numberInput = new NumberInput({
     label: 'Enter your age:',
     labelFirst: true,
@@ -18,9 +19,7 @@ function printValue() {
 // Attach an event listener.
 numberInput.addEventListener('input', printValue);
 
+// Append this onto the HTML parent element.
 window.addEventListener('load', () => {
     document.body.append(numberInput.getElement());
 });
-
-// Append this onto the HTML parent element.
-numberInput.getElement();
