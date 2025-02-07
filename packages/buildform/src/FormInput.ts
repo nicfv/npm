@@ -5,7 +5,7 @@ export abstract class FormInput {
     /**
      * Parent container for any input.
      */
-    private readonly element: Element;
+    private readonly element: HTMLDivElement;
     /**
      * A unique serial number for each input.
      */
