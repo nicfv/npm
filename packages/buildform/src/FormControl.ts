@@ -38,14 +38,14 @@ export abstract class FormControl<T extends keyof HTMLElementTagNameMap, O exten
     protected readonly control: HTMLElementTagNameMap[T];
     /**
      * Initialize a new form input.
-     * @param control Create a new HTML element to use as the form control element.
+     * @param controlTag Define the HTML element tag.
      * @param options Data options for this form input.
      */
-    constructor(controlType: T, protected readonly options?: O) {
+    constructor(controlTag: T, protected readonly options?: O) {
         FormControl.serial++;
         this.container = document.createElement('div');
         this.label = document.createElement('label');
-        this.control = document.createElement(controlType);
+        this.control = document.createElement(controlTag);
         this.container.setAttribute('id', this.getId('container'));
         this.container.setAttribute('title', options?.title ?? '');
         this.label.setAttribute('for', this.getId('control'));
@@ -70,7 +70,7 @@ export abstract class FormControl<T extends keyof HTMLElementTagNameMap, O exten
     }
     /**
      * Set the text of the associated label.
-     * @param value The new text value
+     * @param text The new text value
      */
     public setLabelText(text: string): void {
         this.label.innerText = text;

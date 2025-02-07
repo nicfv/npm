@@ -1,6 +1,6 @@
 {
   "name": "buildform",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Build complex HTML forms with simple JavaScript",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",

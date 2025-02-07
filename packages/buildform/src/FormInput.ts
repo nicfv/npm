@@ -1,5 +1,8 @@
 import { FormControl, FormControlOptions } from './FormControl';
 
+/**
+ * Options for a form input of any type.
+ */
 export interface FormInputOptions extends FormControlOptions {
     /**
      * Type of form control
@@ -19,6 +22,9 @@ export interface FormInputOptions extends FormControlOptions {
     readonly disabled?: boolean;
 }
 
+/**
+ * Represents an `<input>` HTML form element.
+ */
 export abstract class FormInput<O extends FormInputOptions> extends FormControl<'input', O> {
     constructor(options?: O) {
         super('input', options);
