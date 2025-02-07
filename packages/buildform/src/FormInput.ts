@@ -19,8 +19,8 @@ export interface FormInputOptions extends FormControlOptions {
     readonly disabled?: boolean;
 }
 
-export abstract class FormInput extends FormControl<'input'> {
-    constructor(options?: FormInputOptions) {
+export abstract class FormInput<O extends FormInputOptions> extends FormControl<'input', O> {
+    constructor(options?: O) {
         super('input', options);
         this.control.setAttribute('type', options?.type ?? 'text');
         this.control.setAttribute('name', options?.name ?? '');

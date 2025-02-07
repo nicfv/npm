@@ -19,7 +19,7 @@ export interface FormControlOptions {
 /**
  * Represents a generic form control element.
  */
-export abstract class FormControl<T extends keyof HTMLElementTagNameMap> {
+export abstract class FormControl<T extends keyof HTMLElementTagNameMap, O extends FormControlOptions> {
     /**
      * A unique serial number for each input.
      */
@@ -41,7 +41,7 @@ export abstract class FormControl<T extends keyof HTMLElementTagNameMap> {
      * @param control Create a new HTML element to use as the form control element.
      * @param options Data options for this form input.
      */
-    constructor(controlType: T, options?: FormControlOptions) {
+    constructor(controlType: T, protected readonly options?: O) {
         FormControl.serial++;
         this.container = document.createElement('div');
         this.label = document.createElement('label');
