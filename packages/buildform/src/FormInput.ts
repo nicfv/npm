@@ -1,6 +1,6 @@
 import { FormControl, FormControlOptions } from './FormControl';
 
-export interface InputOptions extends FormControlOptions {
+export interface FormInputOptions extends FormControlOptions {
     /**
      * Type of form control
      */
@@ -19,8 +19,8 @@ export interface InputOptions extends FormControlOptions {
     readonly disabled?: boolean;
 }
 
-export abstract class TextInput extends FormControl<'input'> {
-    constructor(options?: InputOptions) {
+export abstract class FormInput extends FormControl<'input'> {
+    constructor(options?: FormInputOptions) {
         super('input', options);
         this.control.setAttribute('type', options?.type ?? 'text');
         this.control.setAttribute('name', options?.name ?? '');
@@ -30,14 +30,6 @@ export abstract class TextInput extends FormControl<'input'> {
 
     public addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: () => void) {
         this.control.addEventListener(type, listener);
-    }
-
-    public setReadonly(readonly: boolean): void {
-        if (readonly) {
-            this.control.setAttribute('readonly', 'true');
-        } else {
-            this.control.removeAttribute('readonly');
-        }
     }
 
     public setValue(value: string): void {
