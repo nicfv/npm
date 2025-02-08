@@ -7,4 +7,5 @@
  */
 export * from './psychart';
 export * from './psystate';
+export * from './defaults';
 export * from './types';
