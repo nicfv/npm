@@ -5,3 +5,4 @@
  * ![NPM Downloads](https://img.shields.io/npm/d18m/buildform)
  */
 export * from './NumberInput';
+export * from './TextInput';
