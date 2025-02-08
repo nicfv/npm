@@ -275,6 +275,8 @@ export class Psychart {
         this.endTime = this.startTime + this.style.timeSpan;
         // Set the chart's viewport size.
         this.base.setAttribute('viewBox', '0 0 ' + this.layout.size.x + ' ' + this.layout.size.y);
+        this.base.setAttribute('width', layout.size.x + 'px');
+        this.base.setAttribute('height', layout.size.y + 'px');
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/lba' : 'kgw/kga');
