@@ -1,7 +1,7 @@
 {
   "name": "psychart",
   "version": "0.0.1",
-  "description": "View air conditions on a psychrometric chart.",
+  "description": "View air conditions on a psychrometric chart",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
