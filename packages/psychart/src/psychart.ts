@@ -1,5 +1,5 @@
 import { Color, Palette, PaletteName } from 'viridis';
-import { PsyState } from 'psystate';
+import { PsyState } from './psystate';
 import { SMath } from 'smath';
 import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, RegionName, DataOptions } from './types';
 

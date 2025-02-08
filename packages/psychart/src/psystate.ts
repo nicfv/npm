@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { PsyOptions, Datum, Layout, Point } from 'types';
+import { PsyOptions, Datum, Layout, Point } from './types';
 const Psychrolib = require('psychrolib');
 
 /**
