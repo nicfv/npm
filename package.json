@@ -6,6 +6,7 @@
   "workspaces": [
     "packages/t6",
     "packages/smath",
+    "packages/viridis",
     "packages/*"
   ],
   "devDependencies": {

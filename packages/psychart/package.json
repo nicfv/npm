@@ -1,7 +1,7 @@
 {
   "name": "psychart",
-  "version": "0.0.1",
-  "description": "View air conditions on a psychrometric chart.",
+  "version": "0.1.0",
+  "description": "View air conditions on a psychrometric chart",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
@@ -47,6 +47,10 @@
   },
   "repository": "github:nicfv/npm",
   "license": "BSD-3-Clause-LBNL",
+  "dependencies": {
+    "smath": "1.12.0",
+    "viridis": "1.1.7"
+  },
   "devDependencies": {
     "t6": "1.1.9"
   }

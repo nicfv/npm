@@ -3,6 +3,7 @@
  * Lightweight assertion testing framework
  * 
  * ![NPM Downloads](https://img.shields.io/npm/d18m/t6)
+ * ![NPM Last Update](https://img.shields.io/npm/last-update/t6)
  */
 /**
  * Lightweight framework to expect
