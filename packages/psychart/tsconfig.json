@@ -4,6 +4,10 @@
     "rootDir": "src",
     "outDir": "dist",
     "declarationDir": "types",
+    "lib": [
+      "ES2015",
+      "DOM",
+    ],
   },
   "include": [
     "src",
