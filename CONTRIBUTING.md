@@ -12,7 +12,7 @@ Below is a list of requirements that must be followed when contributing to this 
 - Source code must be written in `./packages/<name>/src/` and in the latest supported version of TypeScript
     - Includes `index.ts` as the entry point file
     - Includes `test.ts` for unit/integration testing
-- Must contain examples in `examples/`
+- Must contain examples in `example/`
 
 ### Examples
 - Must depend on the latest version of the package
@@ -21,7 +21,7 @@ Below is a list of requirements that must be followed when contributing to this 
 - Each example must have a corresponding `<Example Name>.md` documentation file
     - This is shown above the example code in the generated documentation
     - This file supports LaTeX (uses MathJax for rendering)
-- UI examples must be contained in their own subfolder within `examples/`
+- UI examples must be contained in their own subfolder within the examples folder
     - Must depend on `webpack-cli` in addition to the above requirements
     - Allowed files: `index.html`, `src/index.js` (for webpack's no-config setup, this isn't a webpack tutorial!)
     - Must include a descriptive `README.md` file in subfolder
