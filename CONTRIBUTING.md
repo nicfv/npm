@@ -21,6 +21,10 @@ Below is a list of requirements that must be followed when contributing to this 
 - Each example must have a corresponding `<Example Name>.md` documentation file
     - This is shown above the example code in the generated documentation
     - This file supports LaTeX (uses MathJax for rendering)
+- UI examples must be contained in their own subfolder within `examples/`
+    - Must depend on `webpack-cli` in addition to the above requirements
+    - Allowed files: `index.html`, `src/index.js` (for webpack's no-config setup, this isn't a webpack tutorial!)
+    - Must include a descriptive `README.md` file in subfolder
 
 ### Versioning
 - Packages begin development at version `0.0.0`
