@@ -23,7 +23,7 @@ export abstract class FormControl<T extends keyof HTMLElementTagNameMap, O exten
     /**
      * A unique serial number for each input.
      */
-    private static serial: number;
+    private static serial: number = 0;
     /**
      * Parent container for any input.
      */
