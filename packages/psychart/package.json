@@ -1,13 +1,50 @@
 {
   "name": "psychart",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "View air conditions on a psychrometric chart.",
+  "homepage": "https://npm.nicfv.com/",
+  "bin": "",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "../../.github/workflows/scripts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "description": ""
+  "keywords": [
+    "air",
+    "temperature",
+    "humidity",
+    "hvac",
+    "thermodynamic",
+    "psychrometric",
+    "psychrometry",
+    "psychart",
+    "chart",
+    "engineering",
+    "ashrae",
+    "wetbulb",
+    "drybulb",
+    "dewpoint",
+    "enthalpy",
+    "vapor",
+    "mixture",
+    "conditioning",
+    "visual",
+    "state",
+    "graph"
+  ],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/nicfv"
+  },
+  "repository": "github:nicfv/npm",
+  "license": "BSD-3-Clause-LBNL"
 }
