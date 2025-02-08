@@ -67,7 +67,7 @@ for exampledir in */ ; do
     example="${exampledir%/}"
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
-    cd "${example}" && npm i && npx webpack --mode production || exit 1
+    cd "${example}" && npm i && npx webpack --mode development || exit 1
     {
         cat ./*.md || exit 1
         echo
