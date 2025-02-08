@@ -2,10 +2,10 @@
 
 # Delete build files in each package
 find packages -name package-lock.json -type f -delete
-find packages -name node_modules -type d -print0 | xargs rm -rf
-find packages -name dist -type d -print0 | xargs rm -rf
-find packages -name types -type d -print0 | xargs rm -rf
-find packages -name Examples -type d -print0 | xargs rm -rf
+find packages -name node_modules -type d -print0 | xargs --null rm -rf
+find packages -name dist -type d -print0 | xargs --null rm -rf
+find packages -name types -type d -print0 | xargs --null rm -rf
+find packages -name Examples -type d -print0 | xargs --null rm -rf
 
 # Delete build files in the main directory
 rm -rf node_modules package-lock.json docs
