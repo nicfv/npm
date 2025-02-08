@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Add defaults and incorporate into the example
+
 ## 0.1.0
 
 - Install required dependencies, and copy files from original repository
@@ -10,6 +14,7 @@
 ## 0.0.1
 
 - Set up project structure as per contribution guidelines
+- No longer available on npm
 
 ## 0.0.0
 
