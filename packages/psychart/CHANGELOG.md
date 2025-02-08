@@ -5,6 +5,7 @@
 - Install required dependencies, and copy files from original repository
 - Fix related bugs from directly copy/pasting files
 - Add last update badge to all package documentation
+- Embed *psychrolib* into this package
 
 ## 0.0.1
 
