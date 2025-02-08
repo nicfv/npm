@@ -251,9 +251,9 @@ export class Psychart {
     /**
      * Returns the path to the gradient icon.
      */
-    public static getGradientIcon(gradient: PaletteName): string {
-        return require('img/' + gradient.toLowerCase() + '.svg');
-    }
+    // public static getGradientIcon(gradient: PaletteName): string {
+    //     return require('img/' + gradient.toLowerCase() + '.svg');
+    // }
     /**
      * Convert from Celsius to Fahrenheit.
      */
