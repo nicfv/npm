@@ -18,44 +18,46 @@ fi
 mkdir -p Examples && npx tsc && node dist/test.js && rm dist/test.js types/test.d.ts && cd example || exit 1
 
 # Run all the examples for the package starting with basic NodeJS examples
-for example in *.mjs ; do
-    if [ ! -f "${example}" ] ; then
+for examplejs in *.mjs ; do
+    if [ ! -f "${examplejs}" ] ; then
         continue
     fi
+    example="${examplejs%.*}"
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
     {
-        cat "${example%.*}.md"
+        cat "${example}.md" || exit 1
         echo
         echo '## Installation'
         echo "Follow these steps to create a new project workspace and install the ${package_name} dependency to run this example."
         echo '```shell'
-        echo '# Initialize project'
+        echo '# Create and open project folder'
         echo "mkdir ${projectdir}"
         echo "cd ${projectdir}"
+        echo '# Initialize project and install dependencies'
         echo 'npm init -y'
         echo "npm i ${package_name}@${local_version}"
         echo '# Create and open source file'
-        echo "touch ${example// /_}"
-        echo "open ${example// /_}"
+        echo "touch \"${examplejs}\""
+        echo "open \"${examplejs}\""
         echo '```'
         echo '## Source'
-        echo 'Copy and paste this source code into the newly created file.'
+        echo "Copy and paste this source code into \`${examplejs}\`."
         echo '```js'
-        cat "${example}"
+        cat "${examplejs}" || exit 1
         echo
         echo '```'
         echo '## Output'
-        echo "In \`${projectdir}/\`, execute this script to generate an output."
+        echo "In \`${projectdir}/\`, execute \`${examplejs}\` with NodeJS to generate an output."
         echo '```shell'
-        echo "node ${example// /_}"
+        echo "node \"${examplejs}\""
         echo '```'
         echo 'You should expect to see an output similar to the one below.'
         echo '```text'
-        node "${example}" || exit 1
+        node "${examplejs}" || exit 1
         echo '```'
         echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
-    } > "../Examples/${example%.*}.md"
+    } > "../Examples/${example}.md"
 done
 # Run UI examples with webpack
 for exampledir in */ ; do
@@ -65,17 +67,19 @@ for exampledir in */ ; do
     example="${exampledir%/}"
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
-    cd "${example}" && npm i && npx webpack --mode production
+    cd "${example}" && npm i && npx webpack --mode production || exit 1
     {
-        cat ./*.md
+        cat ./*.md || exit 1
         echo
         echo '## Installation'
         echo "Follow these steps to create a new [webpack](https://webpack.js.org/) project and install the ${package_name} dependency to run this example."
         echo '```shell'
-        echo '# Initialize project'
+        echo '# Create and open project folder'
         echo "mkdir ${projectdir}"
         echo "cd ${projectdir}"
+        echo '# Initialize project and install dependencies'
         echo 'npm init -y'
+        echo 'npm pkg set type="module"'
         echo "npm i ${package_name}@${local_version} webpack webpack-cli"
         echo '# Create source files'
         echo 'touch index.html'
@@ -98,10 +102,12 @@ for exampledir in */ ; do
         echo
         echo '```'
         echo '## Build Project'
-        echo "In the base project directory \`${projectdir}/\`, run the following commands, and then open your \`index.html\` file in a web browser!"
+        echo "In the base project directory \`${projectdir}/\`, run the following commands, and then open your \`index.html\` file in any web browser of your choice! Uncomment the second line to open the project in Firefox, for example."
         echo '```shell'
         echo 'npx webpack --mode development # or --mode production'
+        echo '# firefox index.html'
         echo '```'
+        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
     } > "../../Examples/${example}.md"
     cd ..
 done
