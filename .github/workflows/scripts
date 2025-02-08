@@ -22,6 +22,7 @@ for example in *.mjs ; do
     if [ ! -f "${example}" ] ; then
         continue
     fi
+    projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
     {
         cat "${example%.*}.md"
@@ -29,10 +30,12 @@ for example in *.mjs ; do
         echo '## Installation'
         echo "Follow these steps to create a new project workspace and install the ${package_name} dependency to run this example."
         echo '```shell'
-        echo "mkdir ${example}_demo"
-        echo "cd ${example}_demo"
+        echo '# Initialize project'
+        echo "mkdir ${projectdir}"
+        echo "cd ${projectdir}"
         echo 'npm init -y'
         echo "npm i ${package_name}@${local_version}"
+        echo '# Create and open source file'
         echo "touch ${example// /_}"
         echo "open ${example// /_}"
         echo '```'
@@ -43,7 +46,7 @@ for example in *.mjs ; do
         echo
         echo '```'
         echo '## Output'
-        echo 'Execute this script to run the file and generate an output.'
+        echo "In \`${projectdir}/\`, execute this script to generate an output."
         echo '```shell'
         echo "node ${example// /_}"
         echo '```'
@@ -64,7 +67,7 @@ for exampledir in */ ; do
     echo "Running example ${example}..."
     cd "${example}" && npm i && npx webpack --mode production
     {
-        cat *.md
+        cat ./*.md
         echo
         echo '## Installation'
         echo "Follow these steps to create a new [webpack](https://webpack.js.org/) project and install the ${package_name} dependency to run this example."
@@ -74,7 +77,7 @@ for exampledir in */ ; do
         echo "cd ${projectdir}"
         echo 'npm init -y'
         echo "npm i ${package_name}@${local_version} webpack webpack-cli"
-        echo '# Create project structure'
+        echo '# Create source files'
         echo 'touch index.html'
         echo 'mkdir src'
         echo 'touch src/index.js'
@@ -84,12 +87,12 @@ for exampledir in */ ; do
         echo '```'
         echo '## Source'
         echo 'Copy and paste the following source code blocks into the newly created files.'
-        echo '### `index.html`'
+        echo '### index.html'
         echo '```html'
         cat 'index.html' || exit 1
         echo
         echo '```'
-        echo '### `index.js`'
+        echo '### index.js'
         echo '```js'
         cat 'src/index.js' || exit 1
         echo

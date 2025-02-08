@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.0.3
+
+- Expose a new `TextInput` class for a customized string input
+- Minor workflow fixes
+- Fix typos in example documentation
+- Fix bug where form control IDs were `NaN`
+
 ## 0.0.2
 
 - Expose a new `NumberInput` class for a customized number input
