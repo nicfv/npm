@@ -8,6 +8,7 @@
       "ES2015",
       "DOM",
     ],
+    "allowJs": true,
   },
   "include": [
     "src",
