@@ -26,7 +26,7 @@ for examplejs in *.mjs ; do
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
     {
-        cat "${example}.md"
+        cat "${example}.md" || exit 1
         echo
         echo '## Installation'
         echo "Follow these steps to create a new project workspace and install the ${package_name} dependency to run this example."
@@ -44,7 +44,7 @@ for examplejs in *.mjs ; do
         echo '## Source'
         echo "Copy and paste this source code into \`${examplejs}\`."
         echo '```js'
-        cat "${examplejs}"
+        cat "${examplejs}" || exit 1
         echo
         echo '```'
         echo '## Output'
@@ -67,9 +67,9 @@ for exampledir in */ ; do
     example="${exampledir%/}"
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
-    cd "${example}" && npm i && npx webpack --mode production
+    cd "${example}" && npm i && npx webpack --mode production || exit 1
     {
-        cat ./*.md
+        cat ./*.md || exit 1
         echo
         echo '## Installation'
         echo "Follow these steps to create a new [webpack](https://webpack.js.org/) project and install the ${package_name} dependency to run this example."
