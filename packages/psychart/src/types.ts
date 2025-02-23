@@ -112,6 +112,10 @@ export interface PsyOptions {
      */
     readonly flipXY: boolean;
     /**
+     * Defines whether to use dew point or humidity ratio on the Y-axis.
+     */
+    readonly yAxis: 'dp' | 'hr';
+    /**
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
