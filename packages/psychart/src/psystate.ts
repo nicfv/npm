@@ -67,17 +67,12 @@ export class PsyState {
      */
     private static flipXY: boolean;
     /**
-     * Which variable type should be linear on the y-axis.
-     */
-    private static yAxis: 'dp' | 'hr';
-    /**
      * Compute a first-time initialization of psychrolib.
      */
     public static initialize(layout: Layout, config: PsyOptions): void {
         PsyState.size = layout.size;
         PsyState.padding = layout.padding;
         PsyState.flipXY = config.flipXY;
-        PsyState.yAxis = config.yAxis;
         Psychrolib.SetUnitSystem(config.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
         PsyState.atm = Psychrolib.GetStandardAtmPressure(config.altitude);
         PsyState.dbMin = config.dbMin;
