@@ -8,6 +8,7 @@ export function getDefaultPsyOptions(): PsyOptions {
         dbMin: 20,
         dpMax: 90,
         flipXY: false,
+        yAxis: 'dp',
         regions: [],
         series: {},
         unitSystem: 'IP',
