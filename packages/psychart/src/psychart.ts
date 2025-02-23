@@ -20,6 +20,10 @@ export class Psychart {
         v: '',
     };
     /**
+     * Defines a scaling factor for humidity ratio.
+     */
+    private readonly hrFactor: number;
+    /**
      * Defines the base element to attach to the viewing window.
      */
     private readonly base: SVGElement = document.createElementNS(NS, 'svg');
@@ -279,10 +283,12 @@ export class Psychart {
         this.base.setAttribute('height', layout.size.y + 'px');
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
-        this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/lba x1000' : 'gw/kga');
+        this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
         this.units.vp = (this.config.unitSystem === 'IP' ? 'Psi' : 'Pa');
         this.units.h = (this.config.unitSystem === 'IP' ? 'Btu/lb' : 'J/kg');
         this.units.v = (this.config.unitSystem === 'IP' ? 'ft\u00B3/lb' : 'm\u00B3/kg');
+        // Set the humidity ratio scaling factor
+        this.hrFactor = (this.config.unitSystem === 'IP' ? 1e3 : 1e3);
         // Create new SVG groups, and append all the
         // layers into the chart.
         Object.values(this.g).forEach(group => this.base.appendChild(group));
@@ -311,8 +317,8 @@ export class Psychart {
             }
         } else if (config.yAxis === 'hr') {
             // Draw constant humidity ratio horizontal lines.
-            const maxHr: number = new PsyState({ db: config.dbMax, measurement: 'dbdp', other: config.dpMax }).hr;
-            const step: number = this.style.major / 1e3;
+            const maxHr: number = new PsyState({ db: config.dbMax, measurement: 'dbdp', other: config.dpMax }).hr,
+                step: number = this.style.major / this.hrFactor;
             for (let hr = step; hr < maxHr + step; hr += step) {
                 hr = SMath.clamp(hr, 0, maxHr);
                 const data: PsyState[] = [];
@@ -323,7 +329,7 @@ export class Psychart {
                 data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                 // Draw the axis and the label
                 this.drawAxis(data);
-                this.drawLabel(Math.round(hr * 1e3) + this.units.hr, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio');
+                this.drawLabel(Math.round(hr * this.hrFactor) + this.units.hr, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio');
             }
         }
         // Draw constant wet bulb diagonal lines.
@@ -606,7 +612,7 @@ export class Psychart {
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
             currentState.dp.toFixed(1) + this.units.temp + ' Dew Point' +
             (options.advanced ? '\n' +
-                (currentState.hr * 1e3).toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
+                (currentState.hr * this.hrFactor).toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
                 currentState.vp.toFixed(1) + ' ' + this.units.vp + ' Vap. Press.\n' +
                 currentState.h.toFixed(1) + ' ' + this.units.h + ' Enthalpy\n' +
                 currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume' : '');
