@@ -297,16 +297,26 @@ export class Psychart {
             this.drawAxis(data);
             this.drawLabel(db + this.units.temp, data[0], config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb');
         }
-        // Draw constant dew point horizontal lines.
-        for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major) {
-            const data: PsyState[] = [];
-            // The left point is on the saturation line (db = dp)
-            data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
-            // The right point is at the maximum dry bulb temperature
-            data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
-            // Draw the axis and the label
-            this.drawAxis(data);
-            this.drawLabel(dp + this.units.temp, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point');
+        if (config.yAxis === 'dp') {
+            // Draw constant dew point horizontal lines.
+            for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major) {
+                const data: PsyState[] = [];
+                // The left point is on the saturation line (db = dp)
+                data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
+                // The right point is at the maximum dry bulb temperature
+                data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
+                // Draw the axis and the label
+                this.drawAxis(data);
+                this.drawLabel(dp + this.units.temp, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point');
+            }
+        } else if (config.yAxis === 'hr') {
+            // Draw constant humidity ratio horizontal lines.
+            const maxHr: number = new PsyState({ db: config.dbMax, measurement: 'dbdp', other: config.dpMax }).hr;
+            for (let hr = 0; hr <= maxHr; hr += this.style.major) {
+                const data: PsyState[] = [];
+                // The left point is on the saturation line
+                // TODO!
+            }
         }
         // Draw constant wet bulb diagonal lines.
         for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.style.major) {
