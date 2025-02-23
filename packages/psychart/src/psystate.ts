@@ -83,6 +83,13 @@ export class PsyState {
         PsyState.dbMin = config.dbMin;
         PsyState.dbMax = config.dbMax;
         PsyState.hrMax = Psychrolib.GetHumRatioFromTDewPoint(config.dpMax, PsyState.atm);
+        console.log(this.hrMax);
+    }
+    /**
+     * A static helper function to convert a humidity ratio into a dew point.
+     */
+    public static hr2dp(db: number, hr: number): number {
+        return Psychrolib.GetTDewPointFromHumRatio(db, hr, PsyState.atm);
     }
     /**
      * Initialize a new psychrometric state.
