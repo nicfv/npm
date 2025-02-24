@@ -80,7 +80,7 @@ for exampledir in */ ; do
         echo '# Initialize project and install dependencies'
         echo 'npm init -y'
         echo 'npm pkg set type="module"'
-        echo "npm i ${package_name}@${local_version} webpack webpack-cli"
+        echo "npm i ${package_name}@${local_version} webpack-cli"
         echo '# Create source files'
         echo 'touch index.html'
         echo 'mkdir src'
