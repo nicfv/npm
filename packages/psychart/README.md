@@ -42,7 +42,7 @@ Allows the user to select whether measurements are being reported in US or SI un
 
 In here we also define how data series are displayed using the `series` property.
 
-#### DataOptions
+### DataOptions
 
 These options help process the incoming data and change the visual appearance of data within the chart.
 
