@@ -6,6 +6,7 @@
 - Scale up humidity ratio by x1,000 and adjust units appropriately
 - Allow y-axis to be set to either dew point or humidity ratio (still allows flipping X and Y axes)
 - Update examples, show how to render a Mollier diagram with an example
+- Update base README file
 
 ## 0.1.1
 
