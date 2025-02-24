@@ -253,12 +253,6 @@ export class Psychart {
             '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
     }
     /**
-     * Returns the path to the gradient icon.
-     */
-    // public static getGradientIcon(gradient: PaletteName): string {
-    //     return require('img/' + gradient.toLowerCase() + '.svg');
-    // }
-    /**
      * Convert from Celsius to Fahrenheit.
      */
     private static CtoF(C: number): number {
