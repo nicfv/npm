@@ -77,9 +77,22 @@ export interface StyleOptions {
      */
     readonly resolution: number;
     /**
-     * The major axis interval.
+     * The major axis intervals for different units.
      */
-    readonly major: number;
+    readonly major: {
+        /**
+         * Temperature
+         */
+        readonly temp: number;
+        /**
+         * Humidity Ratio
+         */
+        readonly humRat: number;
+        /**
+         * Relative Humidity
+         */
+        readonly relHum: number;
+    };
     /**
      * The default time span (ms) between the first and last plotted point.
      */

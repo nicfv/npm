@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- Major axis intervals are independent for axes of different unit types
+- Show units in major axis tooltips
+
 ## 0.2.0
 
 - Depend on npm package `psychrolib` instead of including its source code directly
