@@ -238,7 +238,11 @@ export class Psychart {
             lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
             fontSize: 12,
             resolution: 0.5,
-            major: 10,
+            major: {
+                temp: 10,
+                humRat: 10,
+                relHum: 10,
+            },
             timeSpan: 60 * 60 * 1e3,
         } as StyleOptions;
     }
@@ -287,7 +291,7 @@ export class Psychart {
         // layers into the chart.
         Object.values(this.g).forEach(group => this.base.appendChild(group));
         // Draw constant dry bulb vertical lines.
-        for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.major) {
+        for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.major.temp) {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
             data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }));
@@ -295,12 +299,12 @@ export class Psychart {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + this.units.temp, data[0], config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb');
+            this.drawLabel(db + this.units.temp, data[0], config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb [' + this.units.temp + ']');
         }
         switch (config.yAxis) {
             case ('dp'): {
                 // Draw constant dew point horizontal lines.
-                for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major) {
+                for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major.temp) {
                     const data: PsyState[] = [];
                     // The left point is on the saturation line (db = dp)
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
@@ -308,14 +312,14 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + this.units.temp, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point');
+                    this.drawLabel(dp + this.units.temp, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point [' + this.units.temp + ']');
                 }
                 break;
             }
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
                 const maxHr: number = new PsyState({ db: config.dbMax, measurement: 'dbdp', other: config.dpMax }).hr,
-                    step: number = this.style.major / this.hrFactor;
+                    step: number = this.style.major.humRat / this.hrFactor;
                 for (let hr = step; hr < maxHr + step; hr += step) {
                     hr = SMath.clamp(hr, 0, maxHr);
                     const data: PsyState[] = [],
@@ -326,7 +330,7 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.hrFactor) + this.units.hr, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio');
+                    this.drawLabel(Math.round(hr * this.hrFactor) + this.units.hr, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio [' + this.units.hr + ']');
                 }
                 break;
             }
@@ -335,7 +339,7 @@ export class Psychart {
             }
         }
         // Draw constant wet bulb diagonal lines.
-        for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.style.major) {
+        for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.style.major.temp) {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
             for (let db = wb; db <= this.config.dbMax; db += this.style.resolution) {
@@ -343,10 +347,10 @@ export class Psychart {
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + this.units.temp, data[0], config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb');
+            this.drawLabel(wb + this.units.temp, data[0], config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb [' + this.units.temp + ']');
         }
         // Draw constant relative humidity lines.
-        for (let rh = 0; rh <= 100; rh += this.style.major) {
+        for (let rh = 0; rh <= 100; rh += this.style.major.relHum) {
             const data: PsyState[] = [];
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
@@ -361,7 +365,7 @@ export class Psychart {
             // Draw the axis and the label
             this.drawAxis(data);
             if (rh > 0 && rh < 100) {
-                this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity');
+                this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity [%]');
             }
         }
         // Draw any regions, if applicable
