@@ -15,17 +15,6 @@ export interface Point {
     y: number;
 }
 
-export interface Layout {
-    /**
-     * The outer size of Psychart, in pixels.
-     */
-    readonly size: Point;
-    /**
-     * The padding in pixels.
-     */
-    readonly padding: Point;
-}
-
 export interface Datum {
     /**
      * Dry Bulb
@@ -55,7 +44,15 @@ export interface Region {
     readonly data: Datum[];
 }
 
-export interface StyleOptions {
+export interface PsychartOptions {
+    /**
+     * The outer size of Psychart, in pixels.
+     */
+    readonly size: Point;
+    /**
+     * The padding in pixels.
+     */
+    readonly padding: Point;
     /**
      * Determines whether or not the user is using a dark theme.
      */
@@ -84,9 +81,6 @@ export interface StyleOptions {
      * The default time span (ms) between the first and last plotted point.
      */
     readonly timeSpan: number;
-}
-
-export interface PsyOptions {
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
      */
