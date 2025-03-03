@@ -48,92 +48,92 @@ export interface PsychartOptions {
     /**
      * The outer size of Psychart, in pixels.
      */
-    readonly size: Point;
+    readonly size?: Point;
     /**
      * The padding in pixels.
      */
-    readonly padding: Point;
+    readonly padding?: Point;
     /**
      * Determines whether or not the user is using a dark theme.
      */
-    readonly darkTheme: boolean;
+    readonly darkTheme?: boolean;
     /**
      * The font color.
      */
-    readonly fontColor: Color;
+    readonly fontColor?: Color;
     /**
      * The axis color.
      */
-    readonly lineColor: Color;
+    readonly lineColor?: Color;
     /**
      * The font size, in pixels.
      */
-    readonly fontSize: number;
+    readonly fontSize?: number;
     /**
      * The chart resolution, in units.
      */
-    readonly resolution: number;
+    readonly resolution?: number;
     /**
      * The major axis intervals for different units.
      */
-    readonly major: {
+    readonly major?: {
         /**
          * Temperature
          */
-        readonly temp: number;
+        readonly temp?: number;
         /**
          * Humidity Ratio
          */
-        readonly humRat: number;
+        readonly humRat?: number;
         /**
          * Relative Humidity
          */
-        readonly relHum: number;
+        readonly relHum?: number;
     };
     /**
      * The default time span (ms) between the first and last plotted point.
      */
-    readonly timeSpan: number;
+    readonly timeSpan?: number;
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
      */
-    readonly unitSystem: 'IP' | 'SI';
+    readonly unitSystem?: 'IP' | 'SI';
     /**
      * The altitude of measurements taken.
      */
-    readonly altitude: number;
+    readonly altitude?: number;
     /**
      * The minimum value on the dry bulb axis.
      */
-    readonly dbMin: number;
+    readonly dbMin?: number;
     /**
      * The maximum value on the dry bulb axis.
      */
-    readonly dbMax: number;
+    readonly dbMax?: number;
     /**
      * The maximum value on the dew point axis.
      */
-    readonly dpMax: number;
+    readonly dpMax?: number;
     /**
      * Determine whether to render a Mollier diagram.
      */
-    readonly flipXY: boolean;
+    readonly flipXY?: boolean;
     /**
      * Defines whether to use dew point or humidity ratio on the Y-axis.
      */
-    readonly yAxis: 'dp' | 'hr';
+    readonly yAxis?: 'dp' | 'hr';
     /**
      * Render pre-defined shaded regions.
      */
-    readonly regions: RegionName[];
+    readonly regions?: RegionName[];
     /**
      * The number of data series to render.
      */
-    readonly count: number;
+    readonly count?: number;
     /**
      * The data series information.
      */
-    readonly series: DataSeries;
+    readonly series?: DataSeries;
 }
 
 export interface DataOptions {
