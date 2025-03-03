@@ -18,7 +18,7 @@ export function getDefaultPsychartOptions(isDarkTheme: boolean): PsychartOptions
             relHum: 10,
             temp: 10,
         },
-        padding: { x: 20, y: 20 },
+        padding: { x: 40, y: 20 },
         regions: [],
         resolution: 0.5,
         series: {},
