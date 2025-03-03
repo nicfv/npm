@@ -1,24 +1,14 @@
-import { Psychart } from 'psychart';
+import { getDefaultPsychartOptions, Psychart } from 'psychart';
 
-const ps = new Psychart(
-    {
-        padding: { x: 40, y: 20 },
-        size: { x: 800, y: 600 },
-    },
-    {
-        altitude: 100, // [m]
-        count: 0,
-        dbMin: 10, // [degC]
-        dbMax: 50, // [degC]
-        dpMax: 40, // [degC]
-        flipXY: true,
-        regions: [],
-        series: {},
-        unitSystem: 'SI',
-        yAxis: 'hr', // Humidity ratio
-    },
-    Psychart.getDefaultStyleOptions(false)
-);
+const customPsyOptions = getDefaultPsychartOptions(false);
+customPsyOptions.unitSystem = 'SI';
+customPsyOptions.dbMax = 50; // [deg C]
+customPsyOptions.dbMin = 10; // [deg C]
+customPsyOptions.dpMax = 40; // [deg C]
+customPsyOptions.flipXY = true;
+customPsyOptions.yAxis = 'hr'; // Humidity Ratio
+
+const ps = new Psychart(customPsyOptions);
 
 window.addEventListener('load', () => {
     document.body.append(ps.getElement());
