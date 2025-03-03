@@ -13,7 +13,11 @@ export function getDefaultPsychartOptions(isDarkTheme: boolean): PsychartOptions
         fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
         fontSize: 12,
         lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
-        major: 10,
+        major: {
+            humRat: 10,
+            relHum: 10,
+            temp: 10,
+        },
         padding: { x: 20, y: 20 },
         regions: [],
         resolution: 0.5,
