@@ -1,4 +1,4 @@
-import { Psychart, getDefaultDataOptions, getDefaultPsyOptions } from 'psychart';
+import { Psychart, getDefaultDataOptions, getDefaultPsychartOptions } from 'psychart';
 
 // Create some custom data options for tracking the
 // psychrometrics for two fictitious rooms called "R1" and "R2"
@@ -16,7 +16,7 @@ R2DataOptions.gradient = 'Sunset';
 // set custom data options for series 1 (R1) and 2 (R2).
 // Series ID#s can be set to any numeric value and
 // do not need to be 0- or 1-indexed.
-const customPsyOptions = getDefaultPsyOptions();
+const customPsyOptions = getDefaultPsychartOptions(false);
 customPsyOptions.series = {
     1: R1DataOptions,
     2: R2DataOptions,
@@ -31,14 +31,7 @@ customPsyOptions.regions = [
 ];
 
 // Initialize Psychart.
-const ps = new Psychart(
-    {
-        padding: { x: 40, y: 20 },
-        size: { x: 800, y: 600 },
-    },
-    customPsyOptions,
-    Psychart.getDefaultStyleOptions(false)
-);
+const ps = new Psychart(customPsyOptions);
 
 // Append Psychart onto the document and plot data.
 window.addEventListener('load', () => {
