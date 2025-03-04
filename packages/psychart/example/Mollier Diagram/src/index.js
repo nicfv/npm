@@ -12,6 +12,7 @@ const ps = new Psychart(
         dbMax: 50, // [degC]
         dpMax: 40, // [degC]
         flipXY: true,
+        showUnits: 'both',
         regions: [],
         series: {},
         unitSystem: 'SI',
