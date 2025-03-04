@@ -129,6 +129,10 @@ export interface PsyOptions {
      */
     readonly yAxis: 'dp' | 'hr';
     /**
+     * Determine where to show units.
+     */
+    readonly showUnits: 'tooltip' | 'axis' | 'both';
+    /**
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
