@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Add option of where to show units (in the tooltip only, axis only, or both)
+
 ## 0.2.1
 
 - Major axis intervals are independent for axes of different unit types
