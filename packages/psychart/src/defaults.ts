@@ -16,6 +16,7 @@ export function setDefaults<T extends { [key: string]: any }>(optional: Partial<
 }
 
 export function getDefaultPsychartOptions(isDarkTheme: boolean): PsychartOptions {
+    return setDefaults()
     return {
         altitude: 0,
         count: 0,

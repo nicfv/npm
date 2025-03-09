@@ -1,5 +1,6 @@
 import { Color, PaletteName } from 'viridis';
 
+export type Theme = 'light' | 'dark';
 export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
 export type DataSeries = { [index: number]: DataOptions };
@@ -44,6 +45,20 @@ export interface Region {
     readonly data: Datum[];
 }
 
+/**
+ * Color settings for Psychart.
+ */
+export interface Colors {
+    /**
+     * The font color.
+     */
+    readonly font: Color;
+    /**
+     * The axis color.
+     */
+    readonly axis: Color;
+}
+
 export interface PsychartOptions {
     /**
      * The outer size of Psychart, in pixels.
@@ -56,15 +71,11 @@ export interface PsychartOptions {
     /**
      * Determines whether or not the user is using a dark theme.
      */
-    readonly darkTheme: boolean;
+    readonly theme: Theme;
     /**
-     * The font color.
+     * The default color settings for all Psychart themes.
      */
-    readonly fontColor: Color;
-    /**
-     * The axis color.
-     */
-    readonly lineColor: Color;
+    readonly colors: { [K in Theme]: Colors };
     /**
      * The font size, in pixels.
      */
