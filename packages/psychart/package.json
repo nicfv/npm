@@ -48,7 +48,7 @@
   "repository": "github:nicfv/npm",
   "license": "BSD-3-Clause-LBNL",
   "dependencies": {
-    "psychrolib": "1.0.0",
+    "psychrolib": "1.1.0",
     "smath": "1.12.0",
     "viridis": "1.1.7"
   },
