@@ -216,9 +216,6 @@ export class Psychart {
      * The timestamp that's used as the final time for plotting. By default, this is 1 hour after `startTime`
      */
     private readonly endTime: number;
-    private readonly defaultColors = {
-        fontLight: new Color(0, 0, 0),
-    };
     /**
      * Return an array of all allowed gradient names.
      */
