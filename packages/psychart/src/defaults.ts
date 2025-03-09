@@ -36,6 +36,7 @@ export function getDefaultPsychartOptions(isDarkTheme: boolean): PsychartOptions
         regions: [],
         resolution: 0.5,
         series: {},
+        showUnits: 'both',
         size: { x: 800, y: 600 },
         timeSpan: 60 * 60 * 1e3,
         unitSystem: 'IP',
