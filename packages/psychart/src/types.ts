@@ -57,6 +57,10 @@ export interface Colors {
      * The axis color.
      */
     readonly axis: Color;
+    /**
+     * Defines the palette name used for region coloring.
+     */
+    readonly regionGradient: PaletteName;
 }
 
 export interface PsychartOptions {
