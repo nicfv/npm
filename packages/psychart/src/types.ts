@@ -85,6 +85,10 @@ export interface PsychartOptions {
      */
     readonly fontSize: number;
     /**
+     * The name of the font used for Psychart.
+     */
+    readonly fontFamily: string;
+    /**
      * The chart resolution, in units.
      */
     readonly resolution: number;

@@ -39,10 +39,6 @@ export class Psychart {
         tooltips: document.createElementNS(NS, 'g'),
     };
     /**
-     * Defines the palette name used for region coloring.
-     */
-    private static readonly regionGradient: PaletteName = 'Purplish';
-    /**
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
      * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
      */
@@ -217,12 +213,6 @@ export class Psychart {
      */
     private readonly endTime: number;
     /**
-     * Return an array of all allowed gradient names.
-     */
-    public static getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => name !== this.regionGradient) as PaletteName[];
-    }
-    /**
      * Return an array of region names and their corresponding tooltips.
      */
     public static getRegionNamesAndTips(): Array<[RegionName, string]> {
@@ -358,8 +348,8 @@ export class Psychart {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
                     maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
-                    minSpan = config.darkTheme ? maxRegion : minRegion,
-                    maxSpan = config.darkTheme ? minRegion : maxRegion,
+                    minSpan = (config.theme === 'dark') ? maxRegion : minRegion,
+                    maxSpan = (config.theme === 'dark') ? minRegion : maxRegion,
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -370,7 +360,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
+                this.drawRegion(data, Palette[this.config.colors[this.config.theme].regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
                 regionIndex++;
             });
     }
@@ -387,7 +377,7 @@ export class Psychart {
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
-        this.g.axes.appendChild(this.createLine(data, this.config.lineColor, 1.0));
+        this.g.axes.appendChild(this.createLine(data, this.config.colors[this.config.theme].axis, 1.0));
     }
     /**
      * Create a line to append onto a parent element.
@@ -406,10 +396,11 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
-        const label = this.createLabel(text, location.toXY(), this.config.fontColor, anchor);
+        const fontColor: Color = this.config.colors[this.config.theme].font;
+        const label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
         if (!!tooltip) {
-            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, this.config.fontColor));
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor));
             label.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
     }
@@ -419,7 +410,7 @@ export class Psychart {
     private createLabel(text: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
         const label = document.createElementNS(NS, 'text');
         label.setAttribute('fill', color.toString());
-        label.setAttribute('font-family', 'sans-serif');
+        label.setAttribute('font-family', this.config.fontFamily);
         label.setAttribute('font-size', this.config.fontSize + 'px');
         // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
         switch (anchor) {
@@ -547,6 +538,12 @@ export class Psychart {
         return JSON.parse(JSON.stringify(obj));
     }
     /**
+     * Return an array of all allowed gradient names.
+     */
+    public getGradientNames(): PaletteName[] {
+        return Object.keys(Palette).filter(name => name !== this.config.colors[this.config.theme].regionGradient) as PaletteName[];
+    }
+    /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
     public plot(state: Datum, id = 0, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
@@ -575,8 +572,8 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin = this.config.darkTheme ? endTime : startTime,
-            tMax = this.config.darkTheme ? startTime : endTime,
+        const tMin = (this.config.theme === 'dark') ? endTime : startTime,
+            tMax = (this.config.theme === 'dark') ? startTime : endTime,
             color = Palette[options.gradient].getColor(time, tMin, tMax);
         // Determine whether to connect the states with a line
         if (!!this.lastState[id]) {
