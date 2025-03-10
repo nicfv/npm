@@ -402,10 +402,10 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
-        const fontColor: Color = this.config.colors[this.config.theme].font;
-        const label = this.createLabel(text, location.toXY(), fontColor, anchor);
+        const fontColor: Color = this.config.colors[this.config.theme].font,
+            label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
-        if (!!tooltip) {
+        if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor));
             label.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
