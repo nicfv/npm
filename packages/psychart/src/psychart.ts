@@ -1,7 +1,8 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import { SMath } from 'smath';
-import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, RegionName, DataOptions } from './types';
+import { PsychartOptions, Datum, Point, Region, RegionName, DataOptions } from './types';
+import { defaultPsychartOptions, setDefaults } from './defaults';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -9,6 +10,10 @@ const NS = 'http://www.w3.org/2000/svg';
  * Generates an interactive psychrometric chart with plotting capabilities.
  */
 export class Psychart {
+    /**
+     * Psychart full configuration.
+     */
+    private readonly config: PsychartOptions;
     /**
      * Defines the string representations of the current unit system.
      */
@@ -38,10 +43,6 @@ export class Psychart {
         points: document.createElementNS(NS, 'g'),
         tooltips: document.createElementNS(NS, 'g'),
     };
-    /**
-     * Defines the palette name used for region coloring.
-     */
-    private static readonly regionGradient: PaletteName = 'Purplish';
     /**
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
      * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
@@ -217,34 +218,10 @@ export class Psychart {
      */
     private readonly endTime: number;
     /**
-     * Return an array of all allowed gradient names.
-     */
-    public static getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => name !== this.regionGradient) as PaletteName[];
-    }
-    /**
      * Return an array of region names and their corresponding tooltips.
      */
     public static getRegionNamesAndTips(): Array<[RegionName, string]> {
         return Object.entries(this.regions).map(([name, region]) => [name as RegionName, region.tooltip]);
-    }
-    /**
-     * Return some suggested style options based on if the current display is dark or light theme.
-     */
-    public static getDefaultStyleOptions(isDarkTheme: boolean): StyleOptions {
-        return {
-            darkTheme: isDarkTheme,
-            fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
-            lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
-            fontSize: 12,
-            resolution: 0.5,
-            major: {
-                temp: 10,
-                humRat: 10,
-                relHum: 10,
-            },
-            timeSpan: 60 * 60 * 1e3,
-        } as StyleOptions;
     }
     /**
      * Generate an SVG element to use as this gradient's icon.
@@ -265,20 +242,21 @@ export class Psychart {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(private readonly layout: Layout, private readonly config: PsyOptions, private readonly style: StyleOptions) {
+    constructor(options: Partial<PsychartOptions> = {}) {
+        this.config = setDefaults(options, defaultPsychartOptions);
         // Compute a first-time initialization of psychrolib
-        PsyState.initialize(layout, config);
+        PsyState.initialize(this.config);
         // Check to make sure that dpMax is less than dbMax
-        if (config.dpMax > config.dbMax) {
+        if (this.config.dpMax > this.config.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
         }
         // Set the starting and ending timestamps
         this.startTime = Date.now();
-        this.endTime = this.startTime + this.style.timeSpan;
+        this.endTime = this.startTime + this.config.timeSpan;
         // Set the chart's viewport size.
-        this.base.setAttribute('viewBox', '0 0 ' + this.layout.size.x + ' ' + this.layout.size.y);
-        this.base.setAttribute('width', layout.size.x + 'px');
-        this.base.setAttribute('height', layout.size.y + 'px');
+        this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
+        this.base.setAttribute('width', this.config.size.x + 'px');
+        this.base.setAttribute('height', this.config.size.y + 'px');
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -291,7 +269,7 @@ export class Psychart {
         // layers into the chart.
         Object.values(this.g).forEach(group => this.base.appendChild(group));
         // Draw constant dry bulb vertical lines.
-        for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.major.temp) {
+        for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.config.major.temp) {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
             data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }));
@@ -299,12 +277,12 @@ export class Psychart {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + (this.config.showUnits !== 'tooltip' ? this.units.temp : ''), data[0], config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits !== 'axis' ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         }
-        switch (config.yAxis) {
+        switch (this.config.yAxis) {
             case ('dp'): {
                 // Draw constant dew point horizontal lines.
-                for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major.temp) {
+                for (let dp = 0; dp <= this.config.dpMax; dp += this.config.major.temp) {
                     const data: PsyState[] = [];
                     // The left point is on the saturation line (db = dp)
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
@@ -312,14 +290,14 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + (this.config.showUnits !== 'tooltip' ? this.units.temp : ''), data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits !== 'axis' ? ' [' + this.units.temp + ']' : ''));
+                    this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
                 }
                 break;
             }
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
-                const maxHr: number = new PsyState({ db: config.dbMax, measurement: 'dbdp', other: config.dpMax }).hr,
-                    step: number = this.style.major.humRat / this.hrFactor;
+                const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }).hr,
+                    step: number = this.config.major.humRat / this.hrFactor;
                 for (let hr = step; hr < maxHr + step; hr += step) {
                     hr = SMath.clamp(hr, 0, maxHr);
                     const data: PsyState[] = [],
@@ -330,54 +308,54 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.hrFactor) + (this.config.showUnits !== 'tooltip' ? this.units.hr : ''), data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits !== 'axis' ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(Math.round(hr * this.hrFactor) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 }
                 break;
             }
             default: {
-                throw new Error('Invalid y-axis type: ' + config.yAxis);
+                throw new Error('Invalid y-axis type: ' + this.config.yAxis);
             }
         }
         // Draw constant wet bulb diagonal lines.
-        for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.style.major.temp) {
+        for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.config.major.temp) {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
-            for (let db = wb; db <= this.config.dbMax; db += this.style.resolution) {
+            for (let db = wb; db <= this.config.dbMax; db += this.config.resolution) {
                 data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }));
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + (this.config.showUnits !== 'tooltip' ? this.units.temp : ''), data[0], config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits !== 'axis' ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         }
         // Draw constant relative humidity lines.
-        for (let rh = 0; rh <= 100; rh += this.style.major.relHum) {
+        for (let rh = 0; rh <= 100; rh += this.config.major.relHum) {
             const data: PsyState[] = [];
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
-            for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.resolution) {
+            for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.config.resolution) {
                 data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
-                    preferredAnchor = config.flipXY ? TextAnchor.W : TextAnchor.S;
+                    preferredAnchor = this.config.flipXY ? TextAnchor.W : TextAnchor.S;
                     break;
                 }
             }
             // Draw the axis and the label
             this.drawAxis(data);
             if (rh > 0 && rh < 100) {
-                this.drawLabel(rh + (this.config.showUnits !== 'tooltip' ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.config.showUnits !== 'axis' ? ' [%]' : ''));
+                this.drawLabel(rh + (this.config.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.config.showUnits.tooltip ? ' [%]' : ''));
             }
         }
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(Psychart.regions)
-            .filter(([name,]) => config.regions?.includes(name as RegionName))
+            .filter(([name,]) => this.config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
                     maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
-                    minSpan = style.darkTheme ? maxRegion : minRegion,
-                    maxSpan = style.darkTheme ? minRegion : maxRegion,
+                    minSpan = (this.config.theme === 'dark') ? maxRegion : minRegion,
+                    maxSpan = (this.config.theme === 'dark') ? minRegion : maxRegion,
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -388,7 +366,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
+                this.drawRegion(data, Palette[this.config.colors[this.config.theme].regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
                 regionIndex++;
             });
     }
@@ -405,7 +383,7 @@ export class Psychart {
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
-        this.g.axes.appendChild(this.createLine(data, this.style.lineColor, 1.0));
+        this.g.axes.appendChild(this.createLine(data, this.config.colors[this.config.theme].axis, 1.0));
     }
     /**
      * Create a line to append onto a parent element.
@@ -424,10 +402,11 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
-        const label = this.createLabel(text, location.toXY(), this.style.fontColor, anchor);
+        const fontColor: Color = this.config.colors[this.config.theme].font,
+            label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
-        if (!!tooltip) {
-            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, this.style.fontColor));
+        if (tooltip) {
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor));
             label.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
     }
@@ -437,61 +416,61 @@ export class Psychart {
     private createLabel(text: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
         const label = document.createElementNS(NS, 'text');
         label.setAttribute('fill', color.toString());
-        label.setAttribute('font-family', 'sans-serif');
-        label.setAttribute('font-size', this.style.fontSize + 'px');
+        label.setAttribute('font-family', this.config.fontFamily);
+        label.setAttribute('font-size', this.config.fontSize + 'px');
         // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
         switch (anchor) {
             case (TextAnchor.NW): {
-                label.setAttribute('x', (location.x + this.style.fontSize / 2).toString());
-                label.setAttribute('y', (location.y + this.style.fontSize / 2).toString());
+                label.setAttribute('x', (location.x + this.config.fontSize / 2).toString());
+                label.setAttribute('y', (location.y + this.config.fontSize / 2).toString());
                 label.setAttribute('text-anchor', 'start');
                 label.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case (TextAnchor.N): {
                 label.setAttribute('x', location.x.toString());
-                label.setAttribute('y', (location.y + this.style.fontSize / 2).toString());
+                label.setAttribute('y', (location.y + this.config.fontSize / 2).toString());
                 label.setAttribute('text-anchor', 'middle');
                 label.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case (TextAnchor.NE): {
-                label.setAttribute('x', (location.x - this.style.fontSize / 2).toString());
-                label.setAttribute('y', (location.y + this.style.fontSize / 2).toString());
+                label.setAttribute('x', (location.x - this.config.fontSize / 2).toString());
+                label.setAttribute('y', (location.y + this.config.fontSize / 2).toString());
                 label.setAttribute('text-anchor', 'end');
                 label.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case (TextAnchor.E): {
-                label.setAttribute('x', (location.x - this.style.fontSize / 2).toString());
+                label.setAttribute('x', (location.x - this.config.fontSize / 2).toString());
                 label.setAttribute('y', location.y.toString());
                 label.setAttribute('text-anchor', 'end');
                 label.setAttribute('dominant-baseline', 'middle');
                 break;
             }
             case (TextAnchor.SE): {
-                label.setAttribute('x', (location.x - this.style.fontSize / 2).toString());
-                label.setAttribute('y', (location.y - this.style.fontSize / 2).toString());
+                label.setAttribute('x', (location.x - this.config.fontSize / 2).toString());
+                label.setAttribute('y', (location.y - this.config.fontSize / 2).toString());
                 label.setAttribute('text-anchor', 'end');
                 label.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
             case (TextAnchor.S): {
                 label.setAttribute('x', location.x.toString());
-                label.setAttribute('y', (location.y - this.style.fontSize / 2).toString());
+                label.setAttribute('y', (location.y - this.config.fontSize / 2).toString());
                 label.setAttribute('text-anchor', 'middle');
                 label.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
             case (TextAnchor.SW): {
-                label.setAttribute('x', (location.x + this.style.fontSize / 2).toString());
-                label.setAttribute('y', (location.y - this.style.fontSize / 2).toString());
+                label.setAttribute('x', (location.x + this.config.fontSize / 2).toString());
+                label.setAttribute('y', (location.y - this.config.fontSize / 2).toString());
                 label.setAttribute('text-anchor', 'start');
                 label.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
             case (TextAnchor.W): {
-                label.setAttribute('x', (location.x + this.style.fontSize / 2).toString());
+                label.setAttribute('x', (location.x + this.config.fontSize / 2).toString());
                 label.setAttribute('y', location.y.toString());
                 label.setAttribute('text-anchor', 'start');
                 label.setAttribute('dominant-baseline', 'middle');
@@ -520,14 +499,14 @@ export class Psychart {
             padding = 10,
             background = document.createElementNS(NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
-        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.style.fontSize }, color.getContrastingColor(), TextAnchor.NW)));
+        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.config.fontSize }, color.getContrastingColor(), TextAnchor.NW)));
         // Append the elements onto the window
         tooltipBase.appendChild(background);
         labelElements.forEach(element => tooltipBase.appendChild(element));
         this.g.tooltips.appendChild(tooltipBase);
         // Compute the maximum width of any line in this tooltip and height for the background
         const maxWidth = labelElements.map(element => element.getBBox().width).reduce((a, b) => Math.max(a, b)) + padding,
-            maxHeight = labelElements.length * this.style.fontSize + padding;
+            maxHeight = labelElements.length * this.config.fontSize + padding;
         // Define styling properties for the tooltip background
         background.setAttribute('stroke', color.getContrastingColor().toString());
         background.setAttribute('fill', color.toString());
@@ -538,12 +517,12 @@ export class Psychart {
         background.setAttribute('rx', (padding / 2) + 'px');
         background.setAttribute('stroke-width', '1px');
         // Adjust the position if out-of-bounds
-        if (location.x + padding + maxWidth > this.layout.size.x) {
+        if (location.x + padding + maxWidth > this.config.size.x) {
             location.x -= (maxWidth + padding);
         } else {
             location.x += padding;
         }
-        if (location.y + padding + maxHeight > this.layout.size.y) {
+        if (location.y + padding + maxHeight > this.config.size.y) {
             location.y -= (maxHeight + padding);
         } else {
             location.y += padding;
@@ -563,6 +542,12 @@ export class Psychart {
      */
     private deepCopy<T>(obj: T): T {
         return JSON.parse(JSON.stringify(obj));
+    }
+    /**
+     * Return an array of all allowed gradient names.
+     */
+    public getGradientNames(): PaletteName[] {
+        return Object.keys(Palette).filter(name => name !== this.config.colors[this.config.theme].regionGradient) as PaletteName[];
     }
     /**
      * Plot one psychrometric state onto the psychrometric chart.
@@ -593,8 +578,8 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin = this.style.darkTheme ? endTime : startTime,
-            tMax = this.style.darkTheme ? startTime : endTime,
+        const tMin = (this.config.theme === 'dark') ? endTime : startTime,
+            tMax = (this.config.theme === 'dark') ? startTime : endTime,
             color = Palette[options.gradient].getColor(time, tMin, tMax);
         // Determine whether to connect the states with a line
         if (!!this.lastState[id]) {
@@ -639,7 +624,7 @@ export class Psychart {
             if (lastDatum.measurement === 'dbrh' && currentDatum.measurement === 'dbrh' && SMath.approx(lastDatum.other, currentDatum.other)) {
                 const range = Math.abs(currentDatum.db - lastDatum.db);
                 // Calculate several psychrometric states with a dry bulb step of `resolution`
-                for (let i = 0; i < range; i += this.style.resolution) {
+                for (let i = 0; i < range; i += this.config.resolution) {
                     const db = SMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
                     data.push(new PsyState({ db: db, other: lastDatum.other, measurement: 'dbrh' }));
                 }
