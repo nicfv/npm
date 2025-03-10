@@ -144,7 +144,16 @@ export interface PsychartOptions {
     /**
      * Determine where to show units.
      */
-    readonly showUnits: 'tooltip' | 'axis' | 'both';
+    readonly showUnits: {
+        /**
+         * Show units on the tooltips.
+         */
+        readonly tooltip: boolean;
+        /**
+         * Show units on the axes.
+         */
+        readonly axis: boolean;
+    }
     /**
      * Render pre-defined shaded regions.
      */
