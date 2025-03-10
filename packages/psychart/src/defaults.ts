@@ -22,13 +22,13 @@ export const defaultPsychartOptions: PsychartOptions = {
     altitude: 0,
     colors: {
         light: {
-            axis: new Color(0, 0, 0),
-            font: new Color(0, 0, 0),
+            axis: new Color(224, 224, 224),
+            font: new Color(32, 32, 32),
             regionGradient: 'Purplish',
         },
         dark: {
-            axis: new Color(0, 0, 0),
-            font: new Color(0, 0, 0),
+            axis: new Color(48, 48, 48),
+            font: new Color(208, 208, 208),
             regionGradient: 'Purplish',
         },
     },
