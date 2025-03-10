@@ -1,4 +1,4 @@
-import { Psychart, getDefaultDataOptions, getDefaultPsychartOptions } from 'psychart';
+import { Psychart, getDefaultDataOptions } from 'psychart';
 
 // Create some custom data options for tracking the
 // psychrometrics for two fictitious rooms called "R1" and "R2"
@@ -12,26 +12,19 @@ R2DataOptions.line = true;
 // it easier to visually differentiate between the two.
 R2DataOptions.gradient = 'Sunset';
 
-// Start with the default options for Psychart, but
-// set custom data options for series 1 (R1) and 2 (R2).
-// Series ID#s can be set to any numeric value and
-// do not need to be 0- or 1-indexed.
-const customPsyOptions = getDefaultPsychartOptions(false);
-customPsyOptions.series = {
-    1: R1DataOptions,
-    2: R2DataOptions,
-};
-
-// Also, let's render a few ASHRAE standard-55 psychrometric
-// envelopes for the current season onto our chart.
-customPsyOptions.regions = [
-    'Summer (sitting)',
-    'Summer (walking)',
-    'Summer (light work)'
-];
-
 // Initialize Psychart.
-const ps = new Psychart(customPsyOptions);
+const ps = new Psychart({
+    // Set custom data options for series 1 (R1) and 2 (R2).
+    // Series ID#s can be set to any numeric value and
+    // do not need to be 0- or 1-indexed.
+    series: {
+        1: R1DataOptions,
+        2: R2DataOptions,
+    },
+    // Also, let's render a few ASHRAE standard-55 psychrometric
+    // envelopes for the current season onto our chart.
+    regions: ['Summer (light work)', 'Summer (sitting)', 'Summer (walking)'],
+});
 
 // Append Psychart onto the document and plot data.
 window.addEventListener('load', () => {
