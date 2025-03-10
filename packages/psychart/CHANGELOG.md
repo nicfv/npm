@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0
+
+- Remove function to generate default Psychart options, replace with a constant
+- Major updates to how options are configured
+    - Psychart only takes 1 optional parameter, with all properties optional
+    - Add property to configure font family
+    - Configuration, layout, and styling options are combined
+- Region gradients are specific to themes
+
 ## 0.2.2
 
 - Add option of where to show units (in the tooltip only, axis only, or both)
