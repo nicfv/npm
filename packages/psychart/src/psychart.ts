@@ -2,6 +2,7 @@ import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import { SMath } from 'smath';
 import { PsychartOptions, Datum, Point, Region, RegionName, DataOptions } from './types';
+import { defaultPsychartOptions, setDefaults } from './defaults';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -9,6 +10,10 @@ const NS = 'http://www.w3.org/2000/svg';
  * Generates an interactive psychrometric chart with plotting capabilities.
  */
 export class Psychart {
+    /**
+     * Psychart full configuration.
+     */
+    private readonly config: PsychartOptions;
     /**
      * Defines the string representations of the current unit system.
      */
@@ -237,11 +242,12 @@ export class Psychart {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(private readonly config: PsychartOptions) {
+    constructor(options: Partial<PsychartOptions>) {
+        this.config = setDefaults(options, defaultPsychartOptions);
         // Compute a first-time initialization of psychrolib
-        PsyState.initialize(config);
+        PsyState.initialize(this.config);
         // Check to make sure that dpMax is less than dbMax
-        if (config.dpMax > config.dbMax) {
+        if (this.config.dpMax > this.config.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
         }
         // Set the starting and ending timestamps
@@ -249,8 +255,8 @@ export class Psychart {
         this.endTime = this.startTime + this.config.timeSpan;
         // Set the chart's viewport size.
         this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
-        this.base.setAttribute('width', config.size.x + 'px');
-        this.base.setAttribute('height', config.size.y + 'px');
+        this.base.setAttribute('width', this.config.size.x + 'px');
+        this.base.setAttribute('height', this.config.size.y + 'px');
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -271,9 +277,9 @@ export class Psychart {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + (this.config.showUnits !== 'tooltip' ? this.units.temp : ''), data[0], config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits !== 'axis' ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         }
-        switch (config.yAxis) {
+        switch (this.config.yAxis) {
             case ('dp'): {
                 // Draw constant dew point horizontal lines.
                 for (let dp = 0; dp <= this.config.dpMax; dp += this.config.major.temp) {
@@ -284,13 +290,13 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + (this.config.showUnits !== 'tooltip' ? this.units.temp : ''), data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits !== 'axis' ? ' [' + this.units.temp + ']' : ''));
+                    this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
                 }
                 break;
             }
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
-                const maxHr: number = new PsyState({ db: config.dbMax, measurement: 'dbdp', other: config.dpMax }).hr,
+                const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }).hr,
                     step: number = this.config.major.humRat / this.hrFactor;
                 for (let hr = step; hr < maxHr + step; hr += step) {
                     hr = SMath.clamp(hr, 0, maxHr);
@@ -302,12 +308,12 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.hrFactor) + (this.config.showUnits !== 'tooltip' ? this.units.hr : ''), data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits !== 'axis' ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(Math.round(hr * this.hrFactor) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 }
                 break;
             }
             default: {
-                throw new Error('Invalid y-axis type: ' + config.yAxis);
+                throw new Error('Invalid y-axis type: ' + this.config.yAxis);
             }
         }
         // Draw constant wet bulb diagonal lines.
@@ -319,7 +325,7 @@ export class Psychart {
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + (this.config.showUnits !== 'tooltip' ? this.units.temp : ''), data[0], config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits !== 'axis' ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         }
         // Draw constant relative humidity lines.
         for (let rh = 0; rh <= 100; rh += this.config.major.relHum) {
@@ -330,26 +336,26 @@ export class Psychart {
                 data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
-                    preferredAnchor = config.flipXY ? TextAnchor.W : TextAnchor.S;
+                    preferredAnchor = this.config.flipXY ? TextAnchor.W : TextAnchor.S;
                     break;
                 }
             }
             // Draw the axis and the label
             this.drawAxis(data);
             if (rh > 0 && rh < 100) {
-                this.drawLabel(rh + (this.config.showUnits !== 'tooltip' ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.config.showUnits !== 'axis' ? ' [%]' : ''));
+                this.drawLabel(rh + (this.config.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.config.showUnits.tooltip ? ' [%]' : ''));
             }
         }
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(Psychart.regions)
-            .filter(([name,]) => config.regions?.includes(name as RegionName))
+            .filter(([name,]) => this.config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
                     maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
-                    minSpan = (config.theme === 'dark') ? maxRegion : minRegion,
-                    maxSpan = (config.theme === 'dark') ? minRegion : maxRegion,
+                    minSpan = (this.config.theme === 'dark') ? maxRegion : minRegion,
+                    maxSpan = (this.config.theme === 'dark') ? minRegion : maxRegion,
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
