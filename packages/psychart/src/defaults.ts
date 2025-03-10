@@ -15,34 +15,49 @@ export function setDefaults<T extends { [key: string]: any }>(optional: Partial<
     return required;
 }
 
-export function getDefaultPsychartOptions(isDarkTheme: boolean): PsychartOptions {
-    return {
-        altitude: 0,
-        count: 0,
-        darkTheme: isDarkTheme,
-        dbMax: 120,
-        dbMin: 20,
-        dpMax: 90,
-        flipXY: false,
-        fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
-        fontSize: 12,
-        lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
-        major: {
-            humRat: 10,
-            relHum: 10,
-            temp: 10,
+/**
+ * Represents a set of default options for Psychart.
+ */
+export const defaultPsychartOptions: PsychartOptions = {
+    altitude: 0,
+    colors: {
+        light: {
+            axis: new Color(0, 0, 0),
+            font: new Color(0, 0, 0),
+            regionGradient: 'Purplish',
         },
-        padding: { x: 40, y: 20 },
-        regions: [],
-        resolution: 0.5,
-        series: {},
-        showUnits: 'both',
-        size: { x: 800, y: 600 },
-        timeSpan: 60 * 60 * 1e3,
-        unitSystem: 'IP',
-        yAxis: 'dp',
-    };
-}
+        dark: {
+            axis: new Color(0, 0, 0),
+            font: new Color(0, 0, 0),
+            regionGradient: 'Purplish',
+        },
+    },
+    count: 0,
+    dbMax: 120,
+    dbMin: 20,
+    dpMax: 90,
+    flipXY: false,
+    fontFamily: 'sans-serif',
+    fontSize: 12,
+    major: {
+        humRat: 10,
+        relHum: 10,
+        temp: 10,
+    },
+    padding: { x: 40, y: 20 },
+    regions: [],
+    resolution: 0.5,
+    series: {},
+    showUnits: {
+        axis: true,
+        tooltip: true,
+    },
+    size: { x: 800, y: 600 },
+    theme: 'light',
+    timeSpan: 60 * 60 * 1e3,
+    unitSystem: 'IP',
+    yAxis: 'dp',
+};
 
 export function getDefaultDataOptions(legend = ''): DataOptions {
     return {
