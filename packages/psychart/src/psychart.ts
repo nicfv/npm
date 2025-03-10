@@ -242,7 +242,7 @@ export class Psychart {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(options: Partial<PsychartOptions>) {
+    constructor(options: Partial<PsychartOptions> = {}) {
         this.config = setDefaults(options, defaultPsychartOptions);
         // Compute a first-time initialization of psychrolib
         PsyState.initialize(this.config);
