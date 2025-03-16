@@ -240,6 +240,18 @@ export class Psychart {
         return SMath.translate(C, 0, 100, 32, 212);
     }
     /**
+     * Get a range of numbers used for an axis.
+     */
+    private static getRange(min: number, max: number, step: number): number[] {
+        const stepMin: number = SMath.round2(min + step * 0.49, step),
+            stepMax: number = SMath.round2(max - step * 0.49, step),
+            range: number[] = [];
+        for (let i = stepMin; i <= stepMax; i += step) {
+            range.push(i);
+        }
+        return range;
+    }
+    /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
     constructor(options: Partial<PsychartOptions> = {}) {
@@ -269,7 +281,7 @@ export class Psychart {
         // layers into the chart.
         Object.values(this.g).forEach(group => this.base.appendChild(group));
         // Draw constant dry bulb vertical lines.
-        for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.config.major.temp) {
+        Psychart.getRange(this.config.dbMin, this.config.dbMax, this.config.major.temp).forEach(db => {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
             data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }));
@@ -278,11 +290,29 @@ export class Psychart {
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
-        }
+        });
+        // Draw min and max dry bulb vertical axes.
+        this.drawAxis([
+            new PsyState({ db: this.config.dbMin, other: 0, measurement: 'dbrh' }),
+            new PsyState({ db: this.config.dbMin, other: 1, measurement: 'dbrh' }),
+        ]);
+        this.drawAxis([
+            new PsyState({ db: this.config.dbMax, other: 0, measurement: 'dbrh' }),
+            new PsyState({ db: this.config.dbMax, other: 1, measurement: 'dbrh' }),
+        ]);
+        // Draw min and max dew point horizontal axes.
+        this.drawAxis([
+            new PsyState({ db: this.config.dbMin, other: 0, measurement: 'dbrh' }),
+            new PsyState({ db: this.config.dbMax, other: 0, measurement: 'dbrh' }),
+        ]);
+        this.drawAxis([
+            new PsyState({ db: this.config.dpMax, other: this.config.dpMax, measurement: 'dbdp' }),
+            new PsyState({ db: this.config.dbMax, other: this.config.dpMax, measurement: 'dbdp' }),
+        ]);
         switch (this.config.yAxis) {
             case ('dp'): {
                 // Draw constant dew point horizontal lines.
-                for (let dp = 0; dp <= this.config.dpMax; dp += this.config.major.temp) {
+                Psychart.getRange(0, this.config.dpMax, this.config.major.temp).forEach(dp => {
                     const data: PsyState[] = [];
                     // The left point is on the saturation line (db = dp)
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
@@ -291,15 +321,14 @@ export class Psychart {
                     // Draw the axis and the label
                     this.drawAxis(data);
                     this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
-                }
+                });
                 break;
             }
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
                 const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }).hr,
                     step: number = this.config.major.humRat / this.hrFactor;
-                for (let hr = step; hr < maxHr + step; hr += step) {
-                    hr = SMath.clamp(hr, 0, maxHr);
+                Psychart.getRange(0, maxHr, step).forEach(hr => {
                     const data: PsyState[] = [],
                         dp: number = PsyState.hr2dp(this.config.dbMax, hr);
                     // The left point is on the saturation line
@@ -309,7 +338,7 @@ export class Psychart {
                     // Draw the axis and the label
                     this.drawAxis(data);
                     this.drawLabel(Math.round(hr * this.hrFactor) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
-                }
+                });
                 break;
             }
             default: {
@@ -317,7 +346,7 @@ export class Psychart {
             }
         }
         // Draw constant wet bulb diagonal lines.
-        for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.config.major.temp) {
+        Psychart.getRange(this.config.dbMin, this.config.dpMax, this.config.major.temp).forEach(wb => {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
             for (let db = wb; db <= this.config.dbMax; db += this.config.resolution) {
@@ -326,9 +355,9 @@ export class Psychart {
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
-        }
+        });
         // Draw constant relative humidity lines.
-        for (let rh = 0; rh <= 100; rh += this.config.major.relHum) {
+        Psychart.getRange(0, 100, this.config.major.relHum).forEach(rh => {
             const data: PsyState[] = [];
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
@@ -345,7 +374,7 @@ export class Psychart {
             if (rh > 0 && rh < 100) {
                 this.drawLabel(rh + (this.config.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.config.showUnits.tooltip ? ' [%]' : ''));
             }
-        }
+        });
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(Psychart.regions)
