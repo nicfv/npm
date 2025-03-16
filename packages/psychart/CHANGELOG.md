@@ -8,6 +8,9 @@
     - Add property to configure font family
     - Configuration, layout, and styling options are combined
 - Region gradients are specific to themes
+- Remove some legacy Grafana options
+- Throw error if data series ID is invalid
+- Always show graph bounds, even if they don't perfectly align with major axes
 
 ## 0.2.2
 
