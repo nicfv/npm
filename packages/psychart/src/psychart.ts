@@ -557,8 +557,11 @@ export class Psychart {
         if (typeof state.db !== 'number' || typeof state.other !== 'number') {
             return;
         }
-        // Grab the corresponding data options
+        // Grab the corresponding data options, throwing an error if the ID is invalid.
         const options: DataOptions = this.config.series[id];
+        if (!options) {
+            throw new Error('There is no data series with id ' + id + '.');
+        }
         // Skip series that are disabled.
         if (options.enabled === false) {
             return;
