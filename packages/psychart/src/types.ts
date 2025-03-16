@@ -159,10 +159,6 @@ export interface PsychartOptions {
      */
     readonly regions: RegionName[];
     /**
-     * The number of data series to render.
-     */
-    readonly count: number;
-    /**
      * The data series information.
      */
     readonly series: DataSeries;
@@ -177,14 +173,6 @@ export interface DataOptions {
      * The type of measurements that were taken.
      */
     readonly measurement: Measurement;
-    /**
-     * The name of the dry bulb series.
-     */
-    readonly dryBulb: string;
-    /**
-     * The name of the wet bulb, dew point, or relative humidity series, depending on `measurement`.
-     */
-    readonly other: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */

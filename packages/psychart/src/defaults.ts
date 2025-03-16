@@ -32,7 +32,6 @@ export const defaultPsychartOptions: PsychartOptions = {
             regionGradient: 'Purplish',
         },
     },
-    count: 0,
     dbMax: 120,
     dbMin: 20,
     dpMax: 90,
@@ -64,13 +63,11 @@ export const defaultPsychartOptions: PsychartOptions = {
  */
 export const defaultDataOptions: DataOptions = {
     advanced: false,
-    dryBulb: '',
     enabled: true,
     gradient: 'Viridis',
     legend: '',
     line: true,
     measurement: 'dbwb',
-    other: '',
     pointRadius: 5,
     relHumType: 'percent',
 };
