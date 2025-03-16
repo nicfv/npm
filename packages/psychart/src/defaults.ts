@@ -59,6 +59,9 @@ export const defaultPsychartOptions: PsychartOptions = {
     yAxis: 'dp',
 };
 
+/**
+ * Represents a set of default data options.
+ */
 export const defaultDataOptions: DataOptions = {
     advanced: false,
     dryBulb: '',
