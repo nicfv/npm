@@ -59,17 +59,15 @@ export const defaultPsychartOptions: PsychartOptions = {
     yAxis: 'dp',
 };
 
-export function getDefaultDataOptions(legend = ''): DataOptions {
-    return {
-        advanced: false,
-        dryBulb: '',
-        enabled: true,
-        gradient: 'Viridis',
-        legend: legend,
-        line: true,
-        measurement: 'dbwb',
-        other: '',
-        pointRadius: 5,
-        relHumType: 'percent',
-    };
-}
+export const defaultDataOptions: DataOptions = {
+    advanced: false,
+    dryBulb: '',
+    enabled: true,
+    gradient: 'Viridis',
+    legend: '',
+    line: true,
+    measurement: 'dbwb',
+    other: '',
+    pointRadius: 5,
+    relHumType: 'percent',
+};
