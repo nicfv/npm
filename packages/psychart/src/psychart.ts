@@ -416,61 +416,61 @@ export class Psychart {
     private createLabel(text: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
         const label = document.createElementNS(NS, 'text');
         label.setAttribute('fill', color.toString());
-        label.setAttribute('font-family', this.config.fontFamily);
-        label.setAttribute('font-size', this.config.fontSize + 'px');
+        label.setAttribute('font-family', this.config.font.family);
+        label.setAttribute('font-size', this.config.font.size + 'px');
         // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
         switch (anchor) {
             case (TextAnchor.NW): {
-                label.setAttribute('x', (location.x + this.config.fontSize / 2).toString());
-                label.setAttribute('y', (location.y + this.config.fontSize / 2).toString());
+                label.setAttribute('x', (location.x + this.config.font.size / 2).toString());
+                label.setAttribute('y', (location.y + this.config.font.size / 2).toString());
                 label.setAttribute('text-anchor', 'start');
                 label.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case (TextAnchor.N): {
                 label.setAttribute('x', location.x.toString());
-                label.setAttribute('y', (location.y + this.config.fontSize / 2).toString());
+                label.setAttribute('y', (location.y + this.config.font.size / 2).toString());
                 label.setAttribute('text-anchor', 'middle');
                 label.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case (TextAnchor.NE): {
-                label.setAttribute('x', (location.x - this.config.fontSize / 2).toString());
-                label.setAttribute('y', (location.y + this.config.fontSize / 2).toString());
+                label.setAttribute('x', (location.x - this.config.font.size / 2).toString());
+                label.setAttribute('y', (location.y + this.config.font.size / 2).toString());
                 label.setAttribute('text-anchor', 'end');
                 label.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case (TextAnchor.E): {
-                label.setAttribute('x', (location.x - this.config.fontSize / 2).toString());
+                label.setAttribute('x', (location.x - this.config.font.size / 2).toString());
                 label.setAttribute('y', location.y.toString());
                 label.setAttribute('text-anchor', 'end');
                 label.setAttribute('dominant-baseline', 'middle');
                 break;
             }
             case (TextAnchor.SE): {
-                label.setAttribute('x', (location.x - this.config.fontSize / 2).toString());
-                label.setAttribute('y', (location.y - this.config.fontSize / 2).toString());
+                label.setAttribute('x', (location.x - this.config.font.size / 2).toString());
+                label.setAttribute('y', (location.y - this.config.font.size / 2).toString());
                 label.setAttribute('text-anchor', 'end');
                 label.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
             case (TextAnchor.S): {
                 label.setAttribute('x', location.x.toString());
-                label.setAttribute('y', (location.y - this.config.fontSize / 2).toString());
+                label.setAttribute('y', (location.y - this.config.font.size / 2).toString());
                 label.setAttribute('text-anchor', 'middle');
                 label.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
             case (TextAnchor.SW): {
-                label.setAttribute('x', (location.x + this.config.fontSize / 2).toString());
-                label.setAttribute('y', (location.y - this.config.fontSize / 2).toString());
+                label.setAttribute('x', (location.x + this.config.font.size / 2).toString());
+                label.setAttribute('y', (location.y - this.config.font.size / 2).toString());
                 label.setAttribute('text-anchor', 'start');
                 label.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
             case (TextAnchor.W): {
-                label.setAttribute('x', (location.x + this.config.fontSize / 2).toString());
+                label.setAttribute('x', (location.x + this.config.font.size / 2).toString());
                 label.setAttribute('y', location.y.toString());
                 label.setAttribute('text-anchor', 'start');
                 label.setAttribute('dominant-baseline', 'middle');
@@ -499,14 +499,14 @@ export class Psychart {
             padding = 10,
             background = document.createElementNS(NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
-        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.config.fontSize }, color.getContrastingColor(), TextAnchor.NW)));
+        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.config.font.size }, color.getContrastingColor(), TextAnchor.NW)));
         // Append the elements onto the window
         tooltipBase.appendChild(background);
         labelElements.forEach(element => tooltipBase.appendChild(element));
         this.g.tooltips.appendChild(tooltipBase);
         // Compute the maximum width of any line in this tooltip and height for the background
         const maxWidth = labelElements.map(element => element.getBBox().width).reduce((a, b) => Math.max(a, b)) + padding,
-            maxHeight = labelElements.length * this.config.fontSize + padding;
+            maxHeight = labelElements.length * this.config.font.size + padding;
         // Define styling properties for the tooltip background
         background.setAttribute('stroke', color.getContrastingColor().toString());
         background.setAttribute('fill', color.toString());

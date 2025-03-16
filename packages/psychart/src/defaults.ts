@@ -36,8 +36,10 @@ export const defaultPsychartOptions: PsychartOptions = {
     dbMin: 20,
     dpMax: 90,
     flipXY: false,
-    fontFamily: 'sans-serif',
-    fontSize: 12,
+    font: {
+        family: 'sans-serif',
+        size: 12,
+    },
     major: {
         humRat: 10,
         relHum: 10,

@@ -81,13 +81,18 @@ export interface PsychartOptions {
      */
     readonly colors: { [K in Theme]: Colors };
     /**
-     * The font size, in pixels.
+     * Details for the font used in Psychart.
      */
-    readonly fontSize: number;
-    /**
-     * The name of the font used for Psychart.
-     */
-    readonly fontFamily: string;
+    readonly font: {
+        /**
+         * The font size, in pixels.
+         */
+        readonly size: number;
+        /**
+         * The name of the font.
+         */
+        readonly family: string;
+    };
     /**
      * The chart resolution, in units.
      */
