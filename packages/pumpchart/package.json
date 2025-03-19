@@ -24,5 +24,8 @@
     "url": "https://paypal.me/nicfv"
   },
   "repository": "github:nicfv/npm",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "t6": "1.1.9"
+  }
 }
