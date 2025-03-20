@@ -1,9 +1,21 @@
 import { Color, PaletteName } from 'viridis';
 
+/**
+ * Color theme for Psychart.
+ */
 export type Theme = 'light' | 'dark';
+/**
+ * Which two measurement types for a datum were taken.
+ */
 export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
+/**
+ * A human-readable name for a psychrometric envelope.
+ */
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
 
+/**
+ * An (x,y) cartesian coordinate pair.
+ */
 export interface Point {
     /**
      * The x-coordinate (horizontal)
@@ -15,6 +27,9 @@ export interface Point {
     y: number;
 }
 
+/**
+ * This data object fixes the psychrometric state.
+ */
 export interface Datum {
     /**
      * Dry Bulb
@@ -33,6 +48,9 @@ export interface Datum {
     readonly measurement: Measurement;
 }
 
+/**
+ * Contains data to render a psychrometric envelope.
+ */
 export interface Region {
     /**
      * The text to display on mouse hover
@@ -62,6 +80,9 @@ export interface Colors {
     readonly regionGradient: PaletteName;
 }
 
+/**
+ * Configuration options for Psychart.
+ */
 export interface PsychartOptions {
     /**
      * The outer size of Psychart, in pixels.
@@ -160,6 +181,9 @@ export interface PsychartOptions {
     readonly regions: RegionName[];
 }
 
+/**
+ * Configuration settings for plotting data.
+ */
 export interface DataOptions {
     /**
      * Add a label to this data series.
