@@ -3,7 +3,6 @@ import { Color, PaletteName } from 'viridis';
 export type Theme = 'light' | 'dark';
 export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
-export type DataSeries = { [index: number]: DataOptions };
 
 export interface Point {
     /**
@@ -115,10 +114,6 @@ export interface PsychartOptions {
         readonly relHum: number;
     };
     /**
-     * The default time span (ms) between the first and last plotted point.
-     */
-    readonly timeSpan: number;
-    /**
      * Represents the unit system, in either US (IP) or metric (SI)
      */
     readonly unitSystem: 'IP' | 'SI';
@@ -163,10 +158,6 @@ export interface PsychartOptions {
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
-    /**
-     * The data series information.
-     */
-    readonly series: DataSeries;
 }
 
 export interface DataOptions {
@@ -191,9 +182,30 @@ export interface DataOptions {
      */
     readonly line: boolean;
     /**
+     * Determine the solid color for time-independent plots.
+     */
+    readonly color: Color;
+    /**
      * Determines the color gradient for time series plots.
      */
     readonly gradient: PaletteName;
+    /**
+     * Set the timespan for this time-dependent data series.
+     */
+    readonly time: {
+        /**
+         * The timestamp for the first data point.
+         */
+        readonly start: number;
+        /**
+         * The timestamp for the current data point.
+         */
+        readonly now: number;
+        /**
+         * The timestamp for the last data point.
+         */
+        readonly end: number;
+    }
     /**
      * Defines whether or not to show advanced state variables.
      */

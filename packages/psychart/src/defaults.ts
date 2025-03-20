@@ -57,14 +57,12 @@ export const defaultPsychartOptions: PsychartOptions = {
     padding: { x: 40, y: 20 },
     regions: [],
     resolution: 0.5,
-    series: {},
     showUnits: {
         axis: true,
         tooltip: true,
     },
     size: { x: 800, y: 600 },
     theme: 'light',
-    timeSpan: 60 * 60 * 1e3,
     unitSystem: 'IP',
     yAxis: 'dp',
 };
@@ -74,6 +72,7 @@ export const defaultPsychartOptions: PsychartOptions = {
  */
 export const defaultDataOptions: DataOptions = {
     advanced: false,
+    color: new Color(255, 0, 0),
     enabled: true,
     gradient: 'Viridis',
     legend: '',
@@ -81,4 +80,9 @@ export const defaultDataOptions: DataOptions = {
     measurement: 'dbwb',
     pointRadius: 5,
     relHumType: 'percent',
+    time: {
+        start: 0,
+        now: 0,
+        end: 0,
+    },
 };

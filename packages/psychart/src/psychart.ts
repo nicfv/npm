@@ -2,7 +2,7 @@ import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import { SMath } from 'smath';
 import { PsychartOptions, Datum, Point, Region, RegionName, DataOptions } from './types';
-import { deepCopy, defaultPsychartOptions, setDefaults } from './defaults';
+import { deepCopy, defaultDataOptions, defaultPsychartOptions, setDefaults } from './defaults';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -208,15 +208,7 @@ export class Psychart {
     /**
      * The last states plotted on Psychart for each series.
      */
-    private lastState: { [index: number]: PsyState } = {};
-    /**
-     * The timestamp of which Psychart was initialized. For plotting, this represents the origin.
-     */
-    private readonly startTime: number;
-    /**
-     * The timestamp that's used as the final time for plotting. By default, this is 1 hour after `startTime`
-     */
-    private readonly endTime: number;
+    private lastState: { [legend: string]: PsyState } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
@@ -262,9 +254,6 @@ export class Psychart {
         if (this.config.dpMax > this.config.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
         }
-        // Set the starting and ending timestamps
-        this.startTime = Date.now();
-        this.endTime = this.startTime + this.config.timeSpan;
         // Set the chart's viewport size.
         this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
         this.base.setAttribute('width', this.config.size.x + 'px');
@@ -575,26 +564,25 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    public plot(state: Datum, id = 0, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+    public plot(state: Datum, config: Partial<DataOptions>): void {
         // Skip series that are missing a measurement point.
-        if (typeof state.db !== 'number' || typeof state.other !== 'number') {
+        if (!Number.isFinite(state.db) || !Number.isFinite(state.other)) {
             return;
         }
-        // Grab the corresponding data options, throwing an error if the ID is invalid.
-        const options: DataOptions = this.config.series[id];
-        if (!options) {
-            throw new Error('There is no data series with id ' + id + '.');
-        }
+        // Set default data options.
+        const options: DataOptions = setDefaults(config, defaultDataOptions);
         // Skip series that are disabled.
         if (options.enabled === false) {
             return;
         }
+        // Determine whether this is time-dependent.
+        const timeSeries: boolean = !!options.time.now || !!options.time.end || !!options.time.start;
         // Check for invalid timestamps.
-        if (!Number.isFinite(time)) {
+        if (!Number.isFinite(options.time.now)) {
             throw new Error('Data timestamp is invalid for series ' + options.legend + '.');
-        } else if (!Number.isFinite(startTime)) {
+        } else if (!Number.isFinite(options.time.start)) {
             throw new Error('Start timestamp is invalid for series ' + options.legend + '.');
-        } else if (!Number.isFinite(endTime)) {
+        } else if (!Number.isFinite(options.time.end)) {
             throw new Error('End timestamp is invalid for series ' + options.legend + '.');
         }
         // Divide by 100 if relHumType is set to 'percent'
@@ -604,14 +592,15 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin = (this.config.theme === 'dark') ? endTime : startTime,
-            tMax = (this.config.theme === 'dark') ? startTime : endTime,
-            color = Palette[options.gradient].getColor(time, tMin, tMax);
+        const tMin = (this.config.theme === 'dark') ? options.time.end : options.time.start,
+            tMax = (this.config.theme === 'dark') ? options.time.start : options.time.end,
+            tNow = options.time.now,
+            color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : options.color;
         // Determine whether to connect the states with a line
-        if (!!this.lastState[id]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[id], currentState], color, +options.line));
+        if (options.legend && !!this.lastState[options.legend]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, +options.line));
         }
-        this.lastState[id] = currentState;
+        this.lastState[options.legend] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
@@ -623,7 +612,7 @@ export class Psychart {
         this.g.points.appendChild(point);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
-            new Date(time).toLocaleString() + '\n' +
+            new Date(tNow).toLocaleString() + '\n' +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
