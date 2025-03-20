@@ -7,10 +7,17 @@
     - Psychart only takes 1 optional parameter, with all properties optional
     - Add property to configure font family
     - Configuration, layout, and styling options are combined
+    - Plotting data takes 2 parameters, one for the state, and another with all properties optional
 - Region gradients are specific to themes
 - Remove some legacy Grafana options
 - Throw error if data series ID is invalid
 - Always show graph bounds, even if they don't perfectly align with major axes
+- Allow new data series types!
+    - Solid-color data series
+    - Time-independent data series (does not show timestamp)
+    - A mix of time-dependent and time-independent data series!
+    - **Note:** To connect two data points with a line, they must have the same (non-empty) legend
+- Improve source code documentation
 
 ## 0.2.2
 
