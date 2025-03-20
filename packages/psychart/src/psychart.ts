@@ -2,7 +2,7 @@ import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import { SMath } from 'smath';
 import { PsychartOptions, Datum, Point, Region, RegionName, DataOptions } from './types';
-import { defaultPsychartOptions, setDefaults } from './defaults';
+import { deepCopy, defaultPsychartOptions, setDefaults } from './defaults';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -385,7 +385,7 @@ export class Psychart {
                     maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
                     minSpan = (this.config.theme === 'dark') ? maxRegion : minRegion,
                     maxSpan = (this.config.theme === 'dark') ? minRegion : maxRegion,
-                    data = this.deepCopy(region.data);
+                    data = deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
                     data.forEach(datum => {
@@ -565,12 +565,6 @@ export class Psychart {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
-    }
-    /**
-     * Produce a deep copy of an object.
-     */
-    private deepCopy<T>(obj: T): T {
-        return JSON.parse(JSON.stringify(obj));
     }
     /**
      * Return an array of all allowed gradient names.
