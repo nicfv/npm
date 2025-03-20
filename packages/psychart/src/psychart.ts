@@ -564,7 +564,7 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    public plot(state: Datum, config: Partial<DataOptions>): void {
+    public plot(state: Datum, config: Partial<DataOptions> = {}): void {
         // Skip series that are missing a measurement point.
         if (!Number.isFinite(state.db) || !Number.isFinite(state.other)) {
             return;
