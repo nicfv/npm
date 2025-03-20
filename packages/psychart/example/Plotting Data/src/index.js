@@ -1,16 +1,11 @@
-import { Psychart, getDefaultDataOptions } from 'psychart';
+import { defaultDataOptions, Psychart, setDefaults } from 'psychart';
 
 // Create some custom data options for tracking the
 // psychrometrics for two fictitious rooms called "R1" and "R2"
-const R1DataOptions = getDefaultDataOptions('Room R1');
-R1DataOptions.advanced = true;
-R1DataOptions.line = true;
-const R2DataOptions = getDefaultDataOptions('Room R2');
-R2DataOptions.advanced = true;
-R2DataOptions.line = true;
-// Set another gradient type for this data series to make
-// it easier to visually differentiate between the two.
-R2DataOptions.gradient = 'Sunset';
+// and set another gradient type for the second data series to
+// make it easier to visually differentiate between the two.
+const R1DataOptions = setDefaults({ advanced: true, line: true, legend: 'Room R1' }, defaultDataOptions),
+    R2DataOptions = setDefaults({ advanced: true, line: true, legend: 'Room R2', gradient: 'Sunset' }, defaultDataOptions);
 
 // Initialize Psychart.
 const ps = new Psychart({
