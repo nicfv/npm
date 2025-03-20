@@ -8,7 +8,7 @@ import { PsychartOptions, DataOptions } from './types';
  * @returns An object with all parameters that are unset as their default values.
  */
 export function setDefaults<T extends { [key: string]: any }>(optional: Partial<T>, defaults: T): T {
-    const required: T = defaults;
+    const required: T = JSON.parse(JSON.stringify(defaults));
     for (const key in required) {
         required[key] = optional[key] ?? defaults[key];
     }
