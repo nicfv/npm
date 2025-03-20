@@ -612,7 +612,7 @@ export class Psychart {
         this.g.points.appendChild(point);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
-            new Date(tNow).toLocaleString() + '\n' +
+            (timeSeries ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
