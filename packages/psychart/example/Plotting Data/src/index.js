@@ -1,22 +1,8 @@
-import { defaultDataOptions, Psychart, setDefaults } from 'psychart';
-
-// Create some custom data options for tracking the
-// psychrometrics for two fictitious rooms called "R1" and "R2"
-// and set another gradient type for the second data series to
-// make it easier to visually differentiate between the two.
-const R1DataOptions = setDefaults({ advanced: true, line: true, legend: 'Room R1' }, defaultDataOptions),
-    R2DataOptions = setDefaults({ advanced: true, line: true, legend: 'Room R2', gradient: 'Sunset' }, defaultDataOptions);
+import { Psychart } from 'psychart';
 
 // Initialize Psychart.
 const ps = new Psychart({
-    // Set custom data options for series 1 (R1) and 2 (R2).
-    // Series ID#s can be set to any numeric value and
-    // do not need to be 0- or 1-indexed.
-    series: {
-        1: R1DataOptions,
-        2: R2DataOptions,
-    },
-    // Also, let's render a few ASHRAE standard-55 psychrometric
+    // Let's render a few ASHRAE standard-55 psychrometric
     // envelopes for the current season onto our chart.
     regions: ['Summer (light work)', 'Summer (sitting)', 'Summer (walking)'],
 });
@@ -54,12 +40,40 @@ function plotData() {
     const startTime = 1700000000000,
         endTime = 1700005000000;
     for (const state of R1Data) {
-        // `measurement: 'dbwb'` shows that the auxiliary measurement type is wet bulb
-        // `1` represents the series ID# which is defined in our `customPsyOptions`
-        ps.plot({ db: state[1], other: state[2], measurement: 'dbwb' }, 1, state[0], startTime, endTime);
+        // Extract the timestamp from the data table.
+        const timeStamp = state[0];
+        // Plot data onto Psychart.
+        ps.plot(
+            {
+                db: state[1],
+                other: state[2],
+                measurement: 'dbwb', // Shows the two measurement types are dry bulb and wet bulb
+            },
+            {
+                advanced: true,
+                line: true,
+                legend: 'Room R1',
+                time: { start: startTime, end: endTime, now: timeStamp },
+            }
+        );
     }
     for (const state of R2Data) {
-        // Notice that the measurement type and ID# are different for this data series.
-        ps.plot({ db: state[1], other: state[2], measurement: 'dbdp' }, 2, state[0], startTime, endTime);
+        // Extract the timestamp from the data table.
+        const timeStamp = state[0];
+        // Plot data onto Psychart.
+        ps.plot(
+            {
+                db: state[1],
+                other: state[2],
+                measurement: 'dbdp' // Shows the two measurement types are dry bulb and dew point
+            },
+            {
+                advanced: true,
+                line: true,
+                legend: 'Room R2',
+                time: { start: startTime, end: endTime, now: timeStamp },
+                gradient: 'Sunset', // Set a non-default gradient type to make it easier to visually differentiate between the two data series
+            }
+        );
     }
 }
