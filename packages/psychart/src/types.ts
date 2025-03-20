@@ -1,9 +1,21 @@
 import { Color, PaletteName } from 'viridis';
 
+/**
+ * Color theme for Psychart.
+ */
+export type Theme = 'light' | 'dark';
+/**
+ * Which two measurement types for a datum were taken.
+ */
 export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
+/**
+ * A human-readable name for a psychrometric envelope.
+ */
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
-export type DataSeries = { [index: number]: DataOptions };
 
+/**
+ * An (x,y) cartesian coordinate pair.
+ */
 export interface Point {
     /**
      * The x-coordinate (horizontal)
@@ -15,17 +27,9 @@ export interface Point {
     y: number;
 }
 
-export interface Layout {
-    /**
-     * The outer size of Psychart, in pixels.
-     */
-    readonly size: Point;
-    /**
-     * The padding in pixels.
-     */
-    readonly padding: Point;
-}
-
+/**
+ * This data object fixes the psychrometric state.
+ */
 export interface Datum {
     /**
      * Dry Bulb
@@ -44,6 +48,9 @@ export interface Datum {
     readonly measurement: Measurement;
 }
 
+/**
+ * Contains data to render a psychrometric envelope.
+ */
 export interface Region {
     /**
      * The text to display on mouse hover
@@ -55,23 +62,57 @@ export interface Region {
     readonly data: Datum[];
 }
 
-export interface StyleOptions {
-    /**
-     * Determines whether or not the user is using a dark theme.
-     */
-    readonly darkTheme: boolean;
+/**
+ * Color settings for Psychart.
+ */
+export interface Colors {
     /**
      * The font color.
      */
-    readonly fontColor: Color;
+    readonly font: Color;
     /**
      * The axis color.
      */
-    readonly lineColor: Color;
+    readonly axis: Color;
     /**
-     * The font size, in pixels.
+     * Defines the palette name used for region coloring.
      */
-    readonly fontSize: number;
+    readonly regionGradient: PaletteName;
+}
+
+/**
+ * Configuration options for Psychart.
+ */
+export interface PsychartOptions {
+    /**
+     * The outer size of Psychart, in pixels.
+     */
+    readonly size: Point;
+    /**
+     * The padding in pixels.
+     */
+    readonly padding: Point;
+    /**
+     * Determines whether or not the user is using a dark theme.
+     */
+    readonly theme: Theme;
+    /**
+     * The default color settings for all Psychart themes.
+     */
+    readonly colors: { [K in Theme]: Colors };
+    /**
+     * Details for the font used in Psychart.
+     */
+    readonly font: {
+        /**
+         * The font size, in pixels.
+         */
+        readonly size: number;
+        /**
+         * The name of the font.
+         */
+        readonly family: string;
+    };
     /**
      * The chart resolution, in units.
      */
@@ -93,13 +134,6 @@ export interface StyleOptions {
          */
         readonly relHum: number;
     };
-    /**
-     * The default time span (ms) between the first and last plotted point.
-     */
-    readonly timeSpan: number;
-}
-
-export interface PsyOptions {
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
      */
@@ -131,21 +165,25 @@ export interface PsyOptions {
     /**
      * Determine where to show units.
      */
-    readonly showUnits: 'tooltip' | 'axis' | 'both';
+    readonly showUnits: {
+        /**
+         * Show units on the tooltips.
+         */
+        readonly tooltip: boolean;
+        /**
+         * Show units on the axes.
+         */
+        readonly axis: boolean;
+    }
     /**
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
-    /**
-     * The number of data series to render.
-     */
-    readonly count: number;
-    /**
-     * The data series information.
-     */
-    readonly series: DataSeries;
 }
 
+/**
+ * Configuration settings for plotting data.
+ */
 export interface DataOptions {
     /**
      * Add a label to this data series.
@@ -155,14 +193,6 @@ export interface DataOptions {
      * The type of measurements that were taken.
      */
     readonly measurement: Measurement;
-    /**
-     * The name of the dry bulb series.
-     */
-    readonly dryBulb: string;
-    /**
-     * The name of the wet bulb, dew point, or relative humidity series, depending on `measurement`.
-     */
-    readonly other: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
@@ -176,9 +206,30 @@ export interface DataOptions {
      */
     readonly line: boolean;
     /**
+     * Determine the solid color for time-independent plots.
+     */
+    readonly color: Color;
+    /**
      * Determines the color gradient for time series plots.
      */
     readonly gradient: PaletteName;
+    /**
+     * Set the timespan for this time-dependent data series.
+     */
+    readonly time: {
+        /**
+         * The timestamp for the first data point.
+         */
+        readonly start: number;
+        /**
+         * The timestamp for the current data point.
+         */
+        readonly now: number;
+        /**
+         * The timestamp for the last data point.
+         */
+        readonly end: number;
+    }
     /**
      * Defines whether or not to show advanced state variables.
      */
