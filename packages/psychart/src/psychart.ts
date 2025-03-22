@@ -208,7 +208,7 @@ export class Psychart {
     /**
      * The last states plotted on Psychart for each series.
      */
-    private lastState: { [legend: string]: PsyState } = {};
+    private lastState: { [id: number]: PsyState } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
@@ -597,10 +597,10 @@ export class Psychart {
             tNow = options.time.now,
             color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : options.color;
         // Determine whether to connect the states with a line
-        if (options.legend && !!this.lastState[options.legend]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, +options.line));
+        if (Number.isFinite(options.id) && !!this.lastState[options.id]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.id], currentState], color, +options.line));
         }
-        this.lastState[options.legend] = currentState;
+        this.lastState[options.id] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');

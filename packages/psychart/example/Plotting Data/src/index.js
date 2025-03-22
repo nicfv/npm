@@ -50,6 +50,7 @@ function plotData() {
                 measurement: 'dbwb', // Shows the two measurement types are dry bulb and wet bulb
             },
             {
+                id: 0, // Need to assign an ID to connect data points
                 advanced: true,
                 line: true,
                 legend: 'Room R1',
@@ -68,6 +69,7 @@ function plotData() {
                 measurement: 'dbdp' // Shows the two measurement types are dry bulb and dew point
             },
             {
+                id: 1, // Assign another ID to differentiate data series
                 advanced: true,
                 line: true,
                 legend: 'Room R2',

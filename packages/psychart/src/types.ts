@@ -186,6 +186,11 @@ export interface PsychartOptions {
  */
 export interface DataOptions {
     /**
+     * Unique numeric ID of this data series.
+     * Must be set in order to connect data points and add a line in the legend.
+     */
+    readonly id: number;
+    /**
      * Add a label to this data series.
      */
     readonly legend: string;
