@@ -17,6 +17,7 @@
     - Time-independent data series (does not show timestamp)
     - A mix of time-dependent and time-independent data series!
     - **Note:** To connect two data points with a line, they must have the same (non-empty) ID number
+- Points on the same data series can have unique labels
 - Improve source code documentation
 
 ## 0.2.2
