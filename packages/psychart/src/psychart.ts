@@ -576,15 +576,7 @@ export class Psychart {
             return;
         }
         // Determine whether this is time-dependent.
-        const timeSeries: boolean = !!options.time.now || !!options.time.end || !!options.time.start;
-        // Check for invalid timestamps.
-        if (!Number.isFinite(options.time.now)) {
-            throw new Error('Data timestamp is invalid for series ' + options.legend + '.');
-        } else if (!Number.isFinite(options.time.start)) {
-            throw new Error('Start timestamp is invalid for series ' + options.legend + '.');
-        } else if (!Number.isFinite(options.time.end)) {
-            throw new Error('End timestamp is invalid for series ' + options.legend + '.');
-        }
+        const timeSeries: boolean = Number.isFinite(options.time.now) && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
         // Divide by 100 if relHumType is set to 'percent'
         if (state.measurement === 'dbrh' && options.relHumType === 'percent') {
             state.other /= 100;

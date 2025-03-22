@@ -78,7 +78,6 @@ export const defaultDataOptions: DataOptions = {
     id: NaN,
     legend: '',
     line: true,
-    measurement: 'dbwb',
     pointRadius: 5,
     relHumType: 'percent',
     time: {

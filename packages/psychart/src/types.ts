@@ -5,10 +5,6 @@ import { Color, PaletteName } from 'viridis';
  */
 export type Theme = 'light' | 'dark';
 /**
- * Which two measurement types for a datum were taken.
- */
-export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
-/**
  * A human-readable name for a psychrometric envelope.
  */
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
@@ -43,9 +39,9 @@ export interface Datum {
      */
     other: number;
     /**
-     * The type of measurements that were taken.
+     * The two types of measurements that were taken to fix the state.
      */
-    readonly measurement: Measurement;
+    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp';
 }
 
 /**
@@ -194,10 +190,6 @@ export interface DataOptions {
      * Add a label to this data series.
      */
     readonly legend: string;
-    /**
-     * The type of measurements that were taken.
-     */
-    readonly measurement: Measurement;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
