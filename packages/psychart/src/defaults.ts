@@ -81,8 +81,8 @@ export const defaultDataOptions: DataOptions = {
     pointRadius: 5,
     relHumType: 'percent',
     time: {
-        start: 0,
-        now: 0,
-        end: 0,
+        start: NaN,
+        now: NaN,
+        end: NaN,
     },
 };
