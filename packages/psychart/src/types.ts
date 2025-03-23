@@ -202,9 +202,9 @@ export interface DataOptions {
      */
     readonly line: boolean;
     /**
-     * Determine the solid color for time-independent plots.
+     * Determine the solid color **hex-code** for time-independent plots.
      */
-    readonly color: Color;
+    readonly color: string;
     /**
      * Determines the color gradient for time series plots.
      */

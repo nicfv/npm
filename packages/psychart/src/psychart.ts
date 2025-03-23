@@ -590,10 +590,10 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin = (this.config.theme === 'dark') ? options.time.end : options.time.start,
-            tMax = (this.config.theme === 'dark') ? options.time.start : options.time.end,
-            tNow = options.time.now,
-            color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : options.color;
+        const tMin: number = (this.config.theme === 'dark') ? options.time.end : options.time.start,
+            tMax: number = (this.config.theme === 'dark') ? options.time.start : options.time.end,
+            tNow: number = options.time.now,
+            color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Determine whether to connect the states with a line
         if (options.legend && options.line && this.lastState[options.legend]) {
             this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, 1));

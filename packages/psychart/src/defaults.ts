@@ -72,7 +72,7 @@ export const defaultPsychartOptions: PsychartOptions = {
  */
 export const defaultDataOptions: DataOptions = {
     advanced: false,
-    color: new Color(255, 0, 0),
+    color: '#FF0000',
     enabled: true,
     gradient: 'Viridis',
     legend: '',
