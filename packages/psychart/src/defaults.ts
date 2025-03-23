@@ -75,9 +75,9 @@ export const defaultDataOptions: DataOptions = {
     color: new Color(255, 0, 0),
     enabled: true,
     gradient: 'Viridis',
-    id: NaN,
     legend: '',
     line: true,
+    name: '',
     pointRadius: 5,
     relHumType: 'percent',
     time: {

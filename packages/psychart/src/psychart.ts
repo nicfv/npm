@@ -211,7 +211,7 @@ export class Psychart {
     /**
      * The last states plotted on Psychart for each series.
      */
-    private lastState: { [id: number]: PsyState } = {};
+    private lastState: { [legend: string]: PsyState } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
@@ -595,10 +595,10 @@ export class Psychart {
             tNow = options.time.now,
             color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : options.color;
         // Determine whether to connect the states with a line
-        if (Number.isFinite(options.id) && !!this.lastState[options.id]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.id], currentState], color, +options.line));
+        if (options.legend && options.line && this.lastState[options.legend]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, 1));
         }
-        this.lastState[options.id] = currentState;
+        this.lastState[options.legend] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
@@ -608,8 +608,10 @@ export class Psychart {
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         this.g.points.appendChild(point);
+        // Set up the point name to showe in the tooltip.
+        const pointName: string = (options.legend && options.name ? options.legend + ': ' + options.name : options.legend + options.name);
         // Generate the text to display on mouse hover.
-        const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
+        const tooltipString: string = (pointName ? pointName + '\n' : '') +
             (timeSeries ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +

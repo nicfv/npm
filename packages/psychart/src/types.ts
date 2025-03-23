@@ -182,14 +182,13 @@ export interface PsychartOptions {
  */
 export interface DataOptions {
     /**
-     * Unique numeric ID of this data series.
-     * Must be set in order to connect data points and add a line in the legend.
-     */
-    readonly id: number;
-    /**
      * Add a label to this data series.
      */
     readonly legend: string;
+    /**
+     * An optional unique point name to be shown in the tooltip.
+     */
+    readonly name: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
