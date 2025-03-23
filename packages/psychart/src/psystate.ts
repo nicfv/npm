@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { PsyOptions, Datum, Layout, Point } from './types';
+import { Datum, Point, PsychartOptions } from './types';
 const Psychrolib = require('psychrolib');
 
 /**
@@ -69,15 +69,15 @@ export class PsyState {
     /**
      * Compute a first-time initialization of psychrolib.
      */
-    public static initialize(layout: Layout, config: PsyOptions): void {
-        PsyState.size = layout.size;
-        PsyState.padding = layout.padding;
-        PsyState.flipXY = config.flipXY;
-        Psychrolib.SetUnitSystem(config.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
-        PsyState.atm = Psychrolib.GetStandardAtmPressure(config.altitude);
-        PsyState.dbMin = config.dbMin;
-        PsyState.dbMax = config.dbMax;
-        PsyState.hrMax = Psychrolib.GetHumRatioFromTDewPoint(config.dpMax, PsyState.atm);
+    public static initialize(options: PsychartOptions): void {
+        PsyState.size = options.size;
+        PsyState.padding = options.padding;
+        PsyState.flipXY = options.flipXY;
+        Psychrolib.SetUnitSystem(options.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
+        PsyState.atm = Psychrolib.GetStandardAtmPressure(options.altitude);
+        PsyState.dbMin = options.dbMin;
+        PsyState.dbMax = options.dbMax;
+        PsyState.hrMax = Psychrolib.GetHumRatioFromTDewPoint(options.dpMax, PsyState.atm);
     }
     /**
      * A static helper function to convert a humidity ratio into a dew point.
