@@ -27,7 +27,10 @@ export class Psychart {
     /**
      * Defines a scaling factor for humidity ratio.
      */
-    private readonly hrFactor: number;
+    private readonly scaleFactor: {
+        readonly hr: number;
+        readonly h: number;
+    };
     /**
      * Defines the base element to attach to the viewing window.
      */
@@ -208,7 +211,7 @@ export class Psychart {
     /**
      * The last states plotted on Psychart for each series.
      */
-    private lastState: { [id: number]: PsyState } = {};
+    private lastState: { [legend: string]: PsyState } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
@@ -262,10 +265,13 @@ export class Psychart {
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
         this.units.vp = (this.config.unitSystem === 'IP' ? 'Psi' : 'Pa');
-        this.units.h = (this.config.unitSystem === 'IP' ? 'Btu/lb' : 'J/kg');
+        this.units.h = (this.config.unitSystem === 'IP' ? 'Btu/lb' : 'kJ/kg');
         this.units.v = (this.config.unitSystem === 'IP' ? 'ft\u00B3/lb' : 'm\u00B3/kg');
-        // Set the humidity ratio scaling factor
-        this.hrFactor = (this.config.unitSystem === 'IP' ? 1e3 : 1e3);
+        // Set the scaling factors for different unit systems.
+        this.scaleFactor = {
+            hr: (this.config.unitSystem === 'IP' ? 1e3 : 1e3),
+            h: (this.config.unitSystem === 'IP' ? 1 : 1e-3),
+        };
         // Create new SVG groups, and append all the
         // layers into the chart.
         Object.values(this.g).forEach(group => this.base.appendChild(group));
@@ -316,7 +322,7 @@ export class Psychart {
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
                 const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }).hr,
-                    step: number = this.config.major.humRat / this.hrFactor;
+                    step: number = this.config.major.humRat / this.scaleFactor.hr;
                 Psychart.getRange(0, maxHr, step).forEach(hr => {
                     const data: PsyState[] = [],
                         dp: number = PsyState.hr2dp(this.config.dbMax, hr);
@@ -326,7 +332,7 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.hrFactor) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
@@ -584,15 +590,15 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin = (this.config.theme === 'dark') ? options.time.end : options.time.start,
-            tMax = (this.config.theme === 'dark') ? options.time.start : options.time.end,
-            tNow = options.time.now,
-            color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : options.color;
+        const tMin: number = (this.config.theme === 'dark') ? options.time.end : options.time.start,
+            tMax: number = (this.config.theme === 'dark') ? options.time.start : options.time.end,
+            tNow: number = options.time.now,
+            color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Determine whether to connect the states with a line
-        if (Number.isFinite(options.id) && !!this.lastState[options.id]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.id], currentState], color, +options.line));
+        if (options.legend && options.line && this.lastState[options.legend]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, 1));
         }
-        this.lastState[options.id] = currentState;
+        this.lastState[options.legend] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
@@ -602,17 +608,19 @@ export class Psychart {
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         this.g.points.appendChild(point);
+        // Set up the point name to showe in the tooltip.
+        const pointName: string = (options.legend && options.name ? options.legend + ': ' + options.name : options.legend + options.name);
         // Generate the text to display on mouse hover.
-        const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
+        const tooltipString: string = (pointName ? pointName + '\n' : '') +
             (timeSeries ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
             currentState.dp.toFixed(1) + this.units.temp + ' Dew Point' +
             (options.advanced ? '\n' +
-                (currentState.hr * this.hrFactor).toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
+                (currentState.hr * this.scaleFactor.hr).toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
                 currentState.vp.toFixed(1) + ' ' + this.units.vp + ' Vap. Press.\n' +
-                currentState.h.toFixed(1) + ' ' + this.units.h + ' Enthalpy\n' +
+                (currentState.h * this.scaleFactor.h).toFixed(1) + ' ' + this.units.h + ' Enthalpy\n' +
                 currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume' : '');
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
