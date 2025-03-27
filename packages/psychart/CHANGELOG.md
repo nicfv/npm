@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1
+
+- Change SI enthalpy units to `kJ/kg`
+- Replace numeric series ID with string name used for future legend
+- Update dependency versions
+- Time-independent data color codes must be input as a hex string
+
 ## 0.3.0
 
 - Remove function to generate default Psychart options, replace with a constant
