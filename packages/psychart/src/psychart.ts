@@ -596,10 +596,10 @@ export class Psychart {
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Determine whether to connect the states with a line
-        if (options.legend && options.line && this.lastState[options.legend]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, 1));
+        if (options.seriesName && options.line && this.lastState[options.seriesName]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
         }
-        this.lastState[options.legend] = currentState;
+        this.lastState[options.seriesName] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
@@ -610,7 +610,7 @@ export class Psychart {
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         this.g.points.appendChild(point);
         // Set up the point name to showe in the tooltip.
-        const pointName: string = (options.legend && options.name ? options.legend + ': ' + options.name : options.legend + options.name);
+        const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (pointName ? pointName + '\n' : '') +
             (hasTimeStamp ? new Date(tNow).toLocaleString() + '\n' : '') +

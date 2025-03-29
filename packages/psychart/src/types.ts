@@ -184,11 +184,11 @@ export interface DataOptions {
     /**
      * Add a label to this data series.
      */
-    readonly legend: string;
+    readonly seriesName: string;
     /**
      * An optional unique point name to be shown in the tooltip.
      */
-    readonly name: string;
+    readonly pointName: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
