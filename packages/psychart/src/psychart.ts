@@ -34,7 +34,7 @@ export class Psychart {
     /**
      * Defines the base element to attach to the viewing window.
      */
-    private readonly base: SVGElement = document.createElementNS(NS, 'svg');
+    private readonly base: SVGSVGElement = document.createElementNS(NS, 'svg');
     /**
      * Defines all the groups in the SVG ordered by layer.
      */
@@ -676,7 +676,7 @@ export class Psychart {
     /**
      * Return the SVG element to append on the parent.
      */
-    public getElement(): SVGElement {
+    public getElement(): SVGSVGElement {
         return this.base;
     }
 }
