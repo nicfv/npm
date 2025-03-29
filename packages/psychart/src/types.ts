@@ -89,7 +89,7 @@ export interface PsychartOptions {
      */
     readonly padding: Point;
     /**
-     * Determines whether or not the user is using a dark theme.
+     * Determines which theme is currently selected.
      */
     readonly theme: Theme;
     /**
