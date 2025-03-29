@@ -582,7 +582,8 @@ export class Psychart {
             return;
         }
         // Determine whether this is time-dependent.
-        const timeSeries: boolean = Number.isFinite(options.time.now) && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
+        const hasTimeStamp: boolean = Number.isFinite(options.time.now),
+            timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
         // Divide by 100 if relHumType is set to 'percent'
         if (state.measurement === 'dbrh' && options.relHumType === 'percent') {
             state.other /= 100;
@@ -612,7 +613,7 @@ export class Psychart {
         const pointName: string = (options.legend && options.name ? options.legend + ': ' + options.name : options.legend + options.name);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (pointName ? pointName + '\n' : '') +
-            (timeSeries ? new Date(tNow).toLocaleString() + '\n' : '') +
+            (hasTimeStamp ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
