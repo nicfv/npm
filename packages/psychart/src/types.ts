@@ -182,7 +182,7 @@ export interface PsychartOptions {
  */
 export interface DataOptions {
     /**
-     * Add a label to this data series.
+     * Adds a name to a data series. Must be set to create an entry in the legend.
      */
     readonly seriesName: string;
     /**
