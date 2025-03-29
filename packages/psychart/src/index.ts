@@ -6,5 +6,4 @@
  * ![NPM Last Update](https://img.shields.io/npm/last-update/psychart)
  */
 export * from './psychart';
-export * from './psystate';
 export * from './types';
