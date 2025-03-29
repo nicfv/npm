@@ -75,11 +75,11 @@ export const defaultDataOptions: DataOptions = {
     color: '#FF0000',
     enabled: true,
     gradient: 'Viridis',
-    legend: '',
     line: true,
-    name: '',
+    pointName: '',
     pointRadius: 5,
     relHumType: 'percent',
+    seriesName: '',
     time: {
         start: NaN,
         now: NaN,
