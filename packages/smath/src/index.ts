@@ -535,6 +535,6 @@ export namespace SMath {
      * ```
      */
     export function toHex(n: number, length: number = 0): string {
-        return n.toString(16).padStart(length, '0').toUpperCase();
+        return (n > 0 ? '' : '-') + (n > 0 ? n : -n).toString(16).padStart(length, '0').toUpperCase();
     }
 }
