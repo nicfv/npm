@@ -4,14 +4,14 @@ import { Gradient } from './Gradient';
 import { Palette, PaletteName } from './Palette';
 
 // Test color functionality
-const red_RGB: Color = new Color(255, 0, 0),
-    red_hex1: Color = Color.from('ff0000'),
-    red_hex2: Color = Color.from('#ff0000'),
-    red_hex3: Color = Color.from('FF0000'),
-    red_hex4: Color = Color.from('#FF0000'),
-    red_hex5: Color = Color.from('#FF0000FF'),
-    red_hex6: Color = Color.from('#FF000080'),
-    red_clamp: Color = new Color(300, -1, -1, 1e3);
+const red_RGB: Color = new Color(255, 16, 0),
+    red_hex1: Color = Color.from('ff1000'),
+    red_hex2: Color = Color.from('#ff1000'),
+    red_hex3: Color = Color.from('FF1000'),
+    red_hex4: Color = Color.from('#FF1000'),
+    red_hex5: Color = Color.from('#FF1000FF'),
+    red_hex6: Color = Color.from('#FF100080'),
+    red_clamp: Color = new Color(300, 16, -1, 1e3);
 T6.is(red_hex1.toString(), red_RGB.toString());
 T6.is(red_hex2.toString(), red_RGB.toString());
 T6.is(red_hex3.toString(), red_RGB.toString());
@@ -38,8 +38,8 @@ const gradient: Gradient = new Gradient([
 ]);
 T6.is(gradient.toString(), 'linear-gradient(90deg,rgba(255,0,0,100%),rgba(0,255,0,100%),rgba(0,0,255,100%))');
 T6.is(gradient.toString(45), 'linear-gradient(45deg,rgba(255,0,0,100%),rgba(0,255,0,100%),rgba(0,0,255,100%))');
-T6.is(gradient.getColor(-1).toString(), red_RGB.toString());
-T6.is(gradient.getColor(0, 10, 20).toString(), red_RGB.toString());
+T6.is(gradient.getColor(-1).toString(), 'rgba(255,0,0,100%)');
+T6.is(gradient.getColor(0, 10, 20).toString(), 'rgba(255,0,0,100%)');
 T6.is(gradient.getColor(0.25).toString(), 'rgba(127,127,0,100%)');
 T6.is(gradient.getColor(12.5, 10, 20).toString(), 'rgba(127,127,0,100%)');
 T6.is(gradient.getColor(0.5).toString(), 'rgba(0,255,0,100%)');
