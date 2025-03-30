@@ -49,6 +49,7 @@ export const defaultPsychartOptions: PsychartOptions = {
         family: 'sans-serif',
         size: 12,
     },
+    lineHeight: 1.25,
     major: {
         humRat: 10,
         relHum: 10,

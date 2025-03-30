@@ -175,6 +175,10 @@ export interface PsychartOptions {
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
+    /**
+     * The spacing factor between entries in the legend.
+     */
+    readonly lineHeight: number;
 }
 
 /**

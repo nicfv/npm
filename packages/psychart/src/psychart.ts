@@ -570,8 +570,7 @@ export class Psychart {
      * Add a line to the legend.
      */
     private addToLegend(seriesName: string, color?: Color, gradient?: PaletteName): void {
-        const lineHeight: number = 1.25;
-        this.legendHeight += this.config.font.size * lineHeight;
+        this.legendHeight += this.config.font.size * this.config.lineHeight;
         this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
         this.legend.setAttribute('height', this.legendHeight + 'px');
         if (color || true) {
@@ -584,15 +583,6 @@ export class Psychart {
             icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
             this.legend.appendChild(icon);
         }
-
-        // const pt: Point = { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 };
-        // const tst: SVGRectElement = document.createElementNS(NS, 'rect');
-        // tst.setAttribute('fill', '#0000FF');
-        // tst.setAttribute('x', pt.x.toString());
-        // tst.setAttribute('y', pt.y.toString());
-        // tst.setAttribute('width', '2');
-        // tst.setAttribute('height', '2');
-        // this.legend.appendChild(tst);
 
         this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, this.config.colors[this.config.theme].font, TextAnchor.W));
     }
