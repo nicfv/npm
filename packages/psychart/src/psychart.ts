@@ -40,6 +40,10 @@ export class Psychart {
      */
     private readonly legend: SVGSVGElement = document.createElementNS(NS, 'svg');
     /**
+     * Legend definitions, which contains linear gradients.
+     */
+    private readonly legendDefs: SVGDefsElement = document.createElementNS(NS, 'defs');
+    /**
      * The height of the legend element.
      */
     private legendHeight: number;
@@ -274,6 +278,7 @@ export class Psychart {
         this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
         this.legend.setAttribute('width', this.config.size.x + 'px');
         this.legend.setAttribute('height', this.legendHeight + 'px');
+        this.legend.appendChild(this.legendDefs);
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -573,17 +578,22 @@ export class Psychart {
         this.legendHeight += this.config.font.size * this.config.lineHeight;
         this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
         this.legend.setAttribute('height', this.legendHeight + 'px');
-        if (color || true) {
-            const icon: SVGRectElement = document.createElementNS(NS, 'rect');
-            icon.setAttribute('fill', color!.toString());
-            icon.setAttribute('x', this.config.padding.x.toString());
-            icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
-            icon.setAttribute('width', this.config.font.size.toString());
-            icon.setAttribute('height', this.config.font.size.toString());
-            icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
-            this.legend.appendChild(icon);
+        const icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        icon.setAttribute('x', this.config.padding.x.toString());
+        icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
+        icon.setAttribute('width', this.config.font.size.toString());
+        icon.setAttribute('height', this.config.font.size.toString());
+        icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
+        this.legend.appendChild(icon);
+        if (color) {
+            icon.setAttribute('fill', color.toString());
+        } else if (gradient) {
+            const uniqueGradientID: string = 'grad' + this.legendHeight;
+            this.legendDefs.appendChild(Palette[gradient].toSVG(uniqueGradientID));
+            icon.setAttribute('fill', 'url(#' + uniqueGradientID + ')');
+        } else {
+            throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-
         this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, this.config.colors[this.config.theme].font, TextAnchor.W));
     }
     /**
@@ -634,7 +644,7 @@ export class Psychart {
         }
         // Add an item in the legend, if not previously added.
         if (!this.lastState[options.seriesName]) {
-            this.addToLegend(options.seriesName, color);
+            this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
         }
         // Store the last state in order to draw a line.
         this.lastState[options.seriesName] = currentState;
