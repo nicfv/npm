@@ -2,7 +2,11 @@
 
 ## 0.3.2
 
-- TODO
+- Add a dynamically growing, display-only legend, obtained with `Psychart.getLegend()`
+- Add new `lineHeight` option for spacing within legend
+- Change parameter `legend` to `seriesName`
+- Change parameter `name` to `pointName`
+- Points can now show timestamps even if they are not part of a time-dependent series
 
 ## 0.3.1
 
