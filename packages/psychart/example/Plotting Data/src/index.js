@@ -52,7 +52,7 @@ function plotData() {
             {
                 advanced: true,
                 line: true,
-                legend: 'Room R1', // Need to assign a legend to connect data points
+                seriesName: 'Room R1', // Need to assign a series name to connect data points
                 time: { start: startTime, end: endTime, now: timeStamp },
             }
         );
@@ -70,7 +70,7 @@ function plotData() {
             {
                 advanced: true,
                 line: true,
-                legend: 'Room R2', // Assign another legend to differentiate data series
+                seriesName: 'Room R2', // Assign another series name to differentiate data series
                 time: { start: startTime, end: endTime, now: timeStamp },
                 gradient: 'Sunset', // Set a non-default gradient type to make it easier to visually differentiate between the two data series
             }
