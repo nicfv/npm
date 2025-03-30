@@ -527,14 +527,14 @@ export namespace SMath {
     /**
      * Convert any number to its hexadecimal equivalent.
      * @param n A decimal number to convert
-     * @param length The number of digits to show
+     * @param length The minimum number of digits to show
      * @returns The number `n` converted to hexadecimal
      * @example
      * ```js
      * const hex = SMath.toHex(10, 2); // '0A'
      * ```
      */
-    export function toHex(n: number, length: number): string {
+    export function toHex(n: number, length: number = 0): string {
         return n.toString(16).padStart(length, '0').toUpperCase();
     }
 }
