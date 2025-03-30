@@ -7,9 +7,9 @@ const ps = new Psychart({
     regions: ['Summer (light work)', 'Summer (sitting)', 'Summer (walking)'],
 });
 
-// Append Psychart onto the document and plot data.
+// Append Psychart and the legend onto the document and plot data.
 window.addEventListener('load', () => {
-    document.body.append(ps.getElement());
+    document.body.append(ps.getElement(), ps.getLegend());
     plotData();
 });
 
