@@ -254,3 +254,7 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
     T6.eq(frac.num, 1);
     T6.eq(frac.den, 3);
 }
+
+T6.is(SMath.toHex(240, 1), 'F0');
+T6.is(SMath.toHex(254, 2), 'FE');
+T6.is(SMath.toHex(10, 2), '0A');

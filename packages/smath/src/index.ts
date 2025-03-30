@@ -524,4 +524,17 @@ export namespace SMath {
     export function mixed(n: number, epsilon: number = 1e-6): { whole: number, num: number, den: number } {
         return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
     }
+    /**
+     * Convert any number to its hexadecimal equivalent.
+     * @param n A decimal number to convert
+     * @param length The number of digits to show
+     * @returns The number `n` converted to hexadecimal
+     * @example
+     * ```js
+     * const hex = SMath.toHex(10, 2); // '0A'
+     * ```
+     */
+    export function toHex(n: number, length: number): string {
+        return n.toString(16).padStart(length, '0').toUpperCase();
+    }
 }
