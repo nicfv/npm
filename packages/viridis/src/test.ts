@@ -9,6 +9,8 @@ const red_RGB: Color = new Color(255, 0, 0),
     red_hex2: Color = Color.from('#ff0000'),
     red_hex3: Color = Color.from('FF0000'),
     red_hex4: Color = Color.from('#FF0000'),
+    red_hex5: Color = Color.from('#FF0000FF'),
+    red_hex6: Color = Color.from('#FF000080'),
     red_clamp: Color = new Color(300, -1, -1, 1e3);
 T6.is(red_hex1.toString(), red_RGB.toString());
 T6.is(red_hex2.toString(), red_RGB.toString());
@@ -16,6 +18,8 @@ T6.is(red_hex3.toString(), red_RGB.toString());
 T6.is(red_hex4.toString(), red_RGB.toString());
 T6.is(red_RGB.getContrastingColor().toString(), 'rgba(255,255,255,100%)');
 T6.is(red_clamp.toString(), red_RGB.toString());
+T6.eq(red_hex5.alpha, 100);
+T6.eq(red_hex6.alpha, 50);
 
 // Make sure that an error is caught for an invalid color code
 let caught: boolean = false;
