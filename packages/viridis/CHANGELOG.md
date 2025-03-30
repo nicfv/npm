@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.8
+
+- Fix bug where using a hexadecimal color string would inaccurately parse the alpha channel, causing it to (almost) always be fully opaque
+- Create `Gradient.toSVG()` function which creates a `<linearGradient>` element to be appended onto `<defs>`, since SVG elements cannot use the CSS linear gradient styling methods
+- Update unit tests
+
 ## 1.1.7
 
 - This version is functionally identical to the previous, but is published as a test of the updated workflow, with a cleaned up `package.json` file
