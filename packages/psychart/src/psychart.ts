@@ -36,6 +36,14 @@ export class Psychart {
      */
     private readonly base: SVGSVGElement = document.createElementNS(NS, 'svg');
     /**
+     * Represents the legend for Psychart.
+     */
+    private readonly legend: SVGSVGElement = document.createElementNS(NS, 'svg');
+    /**
+     * The height of the legend element.
+     */
+    private legendHeight: number;
+    /**
      * Defines all the groups in the SVG ordered by layer.
      */
     private readonly g = {
@@ -261,6 +269,11 @@ export class Psychart {
         this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
         this.base.setAttribute('width', this.config.size.x + 'px');
         this.base.setAttribute('height', this.config.size.y + 'px');
+        // Set the legend's viewport size.
+        this.legendHeight = 2 * this.config.padding.y;
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
+        this.legend.setAttribute('width', this.config.size.x + 'px');
+        this.legend.setAttribute('height', this.legendHeight + 'px');
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -554,6 +567,36 @@ export class Psychart {
         tooltipBase.setAttribute('transform', 'translate(' + location.x + ',' + location.y + ')');
     }
     /**
+     * Add a line to the legend.
+     */
+    private addToLegend(seriesName: string, color?: Color, gradient?: PaletteName): void {
+        const lineHeight: number = 1.25;
+        this.legendHeight += this.config.font.size * lineHeight;
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
+        this.legend.setAttribute('height', this.legendHeight + 'px');
+        if (color || true) {
+            const icon: SVGRectElement = document.createElementNS(NS, 'rect');
+            icon.setAttribute('fill', color!.toString());
+            icon.setAttribute('x', this.config.padding.x.toString());
+            icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
+            icon.setAttribute('width', this.config.font.size.toString());
+            icon.setAttribute('height', this.config.font.size.toString());
+            icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
+            this.legend.appendChild(icon);
+        }
+
+        // const pt: Point = { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 };
+        // const tst: SVGRectElement = document.createElementNS(NS, 'rect');
+        // tst.setAttribute('fill', '#0000FF');
+        // tst.setAttribute('x', pt.x.toString());
+        // tst.setAttribute('y', pt.y.toString());
+        // tst.setAttribute('width', '2');
+        // tst.setAttribute('height', '2');
+        // this.legend.appendChild(tst);
+
+        this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, this.config.colors[this.config.theme].font, TextAnchor.W));
+    }
+    /**
      * Remove all the children from an element.
      */
     private clearChildren(element: Element): void {
@@ -599,6 +642,11 @@ export class Psychart {
         if (options.seriesName && options.line && this.lastState[options.seriesName]) {
             this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
         }
+        // Add an item in the legend, if not previously added.
+        if (!this.lastState[options.seriesName]) {
+            this.addToLegend(options.seriesName, color);
+        }
+        // Store the last state in order to draw a line.
         this.lastState[options.seriesName] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
@@ -678,6 +726,12 @@ export class Psychart {
      */
     public getElement(): SVGSVGElement {
         return this.base;
+    }
+    /**
+     * Return the SVG element representing the legend.
+     */
+    public getLegend(): SVGSVGElement {
+        return this.legend;
     }
 }
 
