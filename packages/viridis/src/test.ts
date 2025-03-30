@@ -21,6 +21,12 @@ T6.is(red_clamp.toString(), red_RGB.toString());
 T6.eq(red_hex5.alpha, 100);
 T6.eq(red_hex6.alpha, 50);
 
+// Make sure all the string representations work
+T6.is(red_hex6.toString('rgb'), 'rgb(255,16,0)');
+T6.is(red_hex6.toString('rgba'), 'rgba(255,16,0,50%)');
+T6.is(red_hex6.toString('hex'), '#FF1000');
+T6.is(red_hex6.toString('hex-transparency'), '#FF100080');
+
 // Make sure that an error is caught for an invalid color code
 let caught: boolean = false;
 try {
