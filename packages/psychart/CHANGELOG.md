@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2
+
+- TODO
+
 ## 0.3.1
 
 - Change SI enthalpy units to `kJ/kg`
