@@ -3,6 +3,7 @@
 ## 1.12.1
 
 - Add `toHex()` function to convert any number to hexadecimal
+    - Add this as an `npx` command
 
 ## 1.12.0
 
