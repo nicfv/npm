@@ -67,6 +67,6 @@ export class Color {
         if (regex === null) {
             throw new Error('Invalid hexadecimal string: ' + hex);
         }
-        return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), parseInt(regex[4] ?? 'FF', 16));
+        return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
     }
 }
