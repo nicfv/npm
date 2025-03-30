@@ -46,8 +46,20 @@ export class Color {
      * const css = red.toString(); // rgba(255,0,0,100%)
      * ```
      */
-    public toString(): string {
-        return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
+    public toString(type: 'rgb' | 'rgba' | 'hex' | 'hex' | 'hex-transparency' = 'rgba'): string {
+        switch (type) {
+            case 'rgb':
+                return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+            case 'rgba':
+                return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
+            case 'hex':
+                return '#' + SMath.toHex(this.red, 2) + SMath.toHex(this.green, 2) + SMath.toHex(this.blue, 2);
+            case 'hex-transparency':
+                const alpha255: number = SMath.clamp(SMath.round2(SMath.translate(this.alpha, 0, 100, 0, 255), 1), 0, 255);
+                return this.toString('hex') + SMath.toHex(alpha255, 2);
+            default:
+                throw new Error('Invalid color type: ' + type);
+        }
     }
     /**
      * Create a new color given a hexadecimal string.
