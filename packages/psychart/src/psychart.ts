@@ -396,8 +396,8 @@ export class Psychart {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
                     maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
-                    minSpan = (this.config.theme === 'dark') ? maxRegion : minRegion,
-                    maxSpan = (this.config.theme === 'dark') ? minRegion : maxRegion,
+                    minSpan = (this.config.flipGradients) ? maxRegion : minRegion,
+                    maxSpan = (this.config.flipGradients) ? minRegion : maxRegion,
                     data = deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -408,7 +408,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette[this.config.colors[this.config.theme].regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
+                this.drawRegion(data, Palette[this.config.colors.regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
                 regionIndex++;
             });
     }
@@ -425,7 +425,7 @@ export class Psychart {
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
-        this.g.axes.appendChild(this.createLine(data, this.config.colors[this.config.theme].axis, 1.0));
+        this.g.axes.appendChild(this.createLine(data, Color.from(this.config.colors.axis), 1.0));
     }
     /**
      * Create a line to append onto a parent element.
@@ -444,7 +444,7 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
-        const fontColor: Color = this.config.colors[this.config.theme].font,
+        const fontColor: Color = Color.from(this.config.colors.font),
             label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
         if (tooltip) {
@@ -594,7 +594,8 @@ export class Psychart {
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-        this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, this.config.colors[this.config.theme].font, TextAnchor.W));
+        const fontColor: Color = Color.from(this.config.colors.font);
+        this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W));
     }
     /**
      * Remove all the children from an element.
@@ -608,7 +609,7 @@ export class Psychart {
      * Return an array of all allowed gradient names.
      */
     public getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => name !== this.config.colors[this.config.theme].regionGradient) as PaletteName[];
+        return Object.keys(Palette).filter(name => name !== this.config.colors.regionGradient) as PaletteName[];
     }
     /**
      * Plot one psychrometric state onto the psychrometric chart.
@@ -634,8 +635,8 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin: number = (this.config.theme === 'dark') ? options.time.end : options.time.start,
-            tMax: number = (this.config.theme === 'dark') ? options.time.start : options.time.end,
+        const tMin: number = (this.config.flipGradients) ? options.time.end : options.time.start,
+            tMax: number = (this.config.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Determine whether to connect the states with a line

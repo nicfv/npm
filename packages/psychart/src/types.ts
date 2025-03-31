@@ -1,9 +1,5 @@
-import { Color, PaletteName } from 'viridis';
+import { PaletteName } from 'viridis';
 
-/**
- * Color theme for Psychart.
- */
-export type Theme = 'light' | 'dark';
 /**
  * A human-readable name for a psychrometric envelope.
  */
@@ -59,24 +55,6 @@ export interface Region {
 }
 
 /**
- * Color settings for Psychart.
- */
-export interface Colors {
-    /**
-     * The font color.
-     */
-    readonly font: Color;
-    /**
-     * The axis color.
-     */
-    readonly axis: Color;
-    /**
-     * Defines the palette name used for region coloring.
-     */
-    readonly regionGradient: PaletteName;
-}
-
-/**
  * Configuration options for Psychart.
  */
 export interface PsychartOptions {
@@ -89,13 +67,26 @@ export interface PsychartOptions {
      */
     readonly padding: Point;
     /**
-     * Determines which theme is currently selected.
+     * The default color settings for Psychart.
      */
-    readonly theme: Theme;
+    readonly colors: {
+        /**
+         * The font color as a **hex-code** string.
+         */
+        readonly font: string;
+        /**
+         * The axis color as a **hex-code** string.
+         */
+        readonly axis: string;
+        /**
+         * Defines the palette name used for region coloring.
+         */
+        readonly regionGradient: PaletteName;
+    };
     /**
-     * The default color settings for all Psychart themes.
+     * Optinally reverse gradients, making more/less saturated points appear on opposite ends.
      */
-    readonly colors: { [K in Theme]: Colors };
+    readonly flipGradients: boolean;
     /**
      * Details for the font used in Psychart.
      */

@@ -1,4 +1,3 @@
-import { Color } from 'viridis';
 import { PsychartOptions, DataOptions } from './types';
 
 /**
@@ -30,20 +29,14 @@ export function setDefaults<T extends { [key: string]: any }>(optional: Partial<
 export const defaultPsychartOptions: PsychartOptions = {
     altitude: 0,
     colors: {
-        light: {
-            axis: new Color(224, 224, 224),
-            font: new Color(32, 32, 32),
-            regionGradient: 'Purplish',
-        },
-        dark: {
-            axis: new Color(48, 48, 48),
-            font: new Color(208, 208, 208),
-            regionGradient: 'Purplish',
-        },
+        axis: '#E0E0E0', // #303030
+        font: '#202020', // #D0D0D0
+        regionGradient: 'Purplish',
     },
     dbMax: 120,
     dbMin: 20,
     dpMax: 90,
+    flipGradients: false,
     flipXY: false,
     font: {
         family: 'sans-serif',
@@ -63,7 +56,6 @@ export const defaultPsychartOptions: PsychartOptions = {
         tooltip: true,
     },
     size: { x: 800, y: 600 },
-    theme: 'light',
     unitSystem: 'IP',
     yAxis: 'dp',
 };
