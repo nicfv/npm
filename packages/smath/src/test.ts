@@ -256,6 +256,8 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
 }
 
 T6.is(SMath.toHex(240), 'F0');
+T6.is(SMath.toHex(0), '0');
+T6.is(SMath.toHex(0, 2), '00');
 T6.is(SMath.toHex(254, 2), 'FE');
 T6.is(SMath.toHex(10, 2), '0A');
 T6.is(SMath.toHex(-30, 4), '-001E');
