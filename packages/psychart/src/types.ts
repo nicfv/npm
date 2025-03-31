@@ -1,9 +1,5 @@
-import { Color, PaletteName } from 'viridis';
+import { PaletteName } from 'viridis';
 
-/**
- * Color theme for Psychart.
- */
-export type Theme = 'light' | 'dark';
 /**
  * A human-readable name for a psychrometric envelope.
  */
@@ -59,24 +55,6 @@ export interface Region {
 }
 
 /**
- * Color settings for Psychart.
- */
-export interface Colors {
-    /**
-     * The font color.
-     */
-    readonly font: Color;
-    /**
-     * The axis color.
-     */
-    readonly axis: Color;
-    /**
-     * Defines the palette name used for region coloring.
-     */
-    readonly regionGradient: PaletteName;
-}
-
-/**
  * Configuration options for Psychart.
  */
 export interface PsychartOptions {
@@ -89,13 +67,26 @@ export interface PsychartOptions {
      */
     readonly padding: Point;
     /**
-     * Determines whether or not the user is using a dark theme.
+     * The default color settings for Psychart.
      */
-    readonly theme: Theme;
+    readonly colors: {
+        /**
+         * The font color as a **hex-code** string.
+         */
+        readonly font: string;
+        /**
+         * The axis color as a **hex-code** string.
+         */
+        readonly axis: string;
+        /**
+         * Defines the palette name used for region coloring.
+         */
+        readonly regionGradient: PaletteName;
+    };
     /**
-     * The default color settings for all Psychart themes.
+     * Optinally reverse gradients, making more/less saturated points appear on opposite ends.
      */
-    readonly colors: { [K in Theme]: Colors };
+    readonly flipGradients: boolean;
     /**
      * Details for the font used in Psychart.
      */
@@ -175,6 +166,10 @@ export interface PsychartOptions {
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
+    /**
+     * The spacing factor between entries in the legend.
+     */
+    readonly lineHeight: number;
 }
 
 /**
@@ -182,13 +177,13 @@ export interface PsychartOptions {
  */
 export interface DataOptions {
     /**
-     * Add a label to this data series.
+     * Adds a name to a data series. Must be set to create an entry in the legend.
      */
-    readonly legend: string;
+    readonly seriesName: string;
     /**
      * An optional unique point name to be shown in the tooltip.
      */
-    readonly name: string;
+    readonly pointName: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */

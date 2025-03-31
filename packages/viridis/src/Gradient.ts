@@ -72,4 +72,31 @@ export class Gradient {
     public toString(deg: number = 90): string {
         return 'linear-gradient(' + deg + 'deg,' + this.colors.map(color => color.toString()).join(',') + ')';
     }
+    /**
+     * Generate an SVG linear gradient element.
+     * @param id The ID of this linear gradient, to be obtained with `url(#id)`
+     * @param deg The angle of this color gradient, in degrees clockwise from the vertical
+     * @returns A valid SVG color gradient
+     * @example
+     * ```js
+     * const linearGrad = grad.toSVG('myGrad');
+     * // Returns a <linearGradient> element to be appended onto <defs>
+     * ```
+     */
+    public toSVG(id: string, deg: number = 90): SVGLinearGradientElement {
+        const linearGradient: SVGLinearGradientElement = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+        linearGradient.setAttribute('id', id);
+        linearGradient.setAttribute('x1', '0');
+        linearGradient.setAttribute('y1', '0');
+        linearGradient.setAttribute('x2', Math.sin(deg * Math.PI / 180).toString());
+        linearGradient.setAttribute('y2', Math.cos(deg * Math.PI / 180).toString());
+        const maxColorIndex: number = this.colors.length - 1;
+        this.colors.forEach((color, i) => {
+            const colorStop: SVGStopElement = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            colorStop.setAttribute('offset', SMath.normalize(i, 0, maxColorIndex).toString());
+            colorStop.setAttribute('stop-color', color.toString());
+            linearGradient.append(colorStop);
+        });
+        return linearGradient;
+    }
 }

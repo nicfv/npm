@@ -34,7 +34,19 @@ export class Psychart {
     /**
      * Defines the base element to attach to the viewing window.
      */
-    private readonly base: SVGElement = document.createElementNS(NS, 'svg');
+    private readonly base: SVGSVGElement = document.createElementNS(NS, 'svg');
+    /**
+     * Represents the legend for Psychart.
+     */
+    private readonly legend: SVGSVGElement = document.createElementNS(NS, 'svg');
+    /**
+     * Legend definitions, which contains linear gradients.
+     */
+    private readonly legendDefs: SVGDefsElement = document.createElementNS(NS, 'defs');
+    /**
+     * The height of the legend element.
+     */
+    private legendHeight: number;
     /**
      * Defines all the groups in the SVG ordered by layer.
      */
@@ -261,6 +273,12 @@ export class Psychart {
         this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
         this.base.setAttribute('width', this.config.size.x + 'px');
         this.base.setAttribute('height', this.config.size.y + 'px');
+        // Set the legend's viewport size.
+        this.legendHeight = 2 * this.config.padding.y;
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
+        this.legend.setAttribute('width', this.config.size.x + 'px');
+        this.legend.setAttribute('height', this.legendHeight + 'px');
+        this.legend.appendChild(this.legendDefs);
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -378,8 +396,8 @@ export class Psychart {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
                     maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
-                    minSpan = (this.config.theme === 'dark') ? maxRegion : minRegion,
-                    maxSpan = (this.config.theme === 'dark') ? minRegion : maxRegion,
+                    minSpan = (this.config.flipGradients) ? maxRegion : minRegion,
+                    maxSpan = (this.config.flipGradients) ? minRegion : maxRegion,
                     data = deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -390,7 +408,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette[this.config.colors[this.config.theme].regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
+                this.drawRegion(data, Palette[this.config.colors.regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
                 regionIndex++;
             });
     }
@@ -407,7 +425,7 @@ export class Psychart {
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
-        this.g.axes.appendChild(this.createLine(data, this.config.colors[this.config.theme].axis, 1.0));
+        this.g.axes.appendChild(this.createLine(data, Color.from(this.config.colors.axis), 1.0));
     }
     /**
      * Create a line to append onto a parent element.
@@ -426,7 +444,7 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
-        const fontColor: Color = this.config.colors[this.config.theme].font,
+        const fontColor: Color = Color.from(this.config.colors.font),
             label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
         if (tooltip) {
@@ -554,6 +572,32 @@ export class Psychart {
         tooltipBase.setAttribute('transform', 'translate(' + location.x + ',' + location.y + ')');
     }
     /**
+     * Add a line to the legend.
+     */
+    private addToLegend(seriesName: string, color?: Color, gradient?: PaletteName): void {
+        this.legendHeight += this.config.font.size * this.config.lineHeight;
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
+        this.legend.setAttribute('height', this.legendHeight + 'px');
+        const icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        icon.setAttribute('x', this.config.padding.x.toString());
+        icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
+        icon.setAttribute('width', this.config.font.size.toString());
+        icon.setAttribute('height', this.config.font.size.toString());
+        icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
+        this.legend.appendChild(icon);
+        if (color) {
+            icon.setAttribute('fill', color.toString());
+        } else if (gradient) {
+            const uniqueGradientID: string = 'grad' + this.legendHeight;
+            this.legendDefs.appendChild(Palette[gradient].toSVG(uniqueGradientID));
+            icon.setAttribute('fill', 'url(#' + uniqueGradientID + ')');
+        } else {
+            throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
+        }
+        const fontColor: Color = Color.from(this.config.colors.font);
+        this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W));
+    }
+    /**
      * Remove all the children from an element.
      */
     private clearChildren(element: Element): void {
@@ -565,7 +609,7 @@ export class Psychart {
      * Return an array of all allowed gradient names.
      */
     public getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => name !== this.config.colors[this.config.theme].regionGradient) as PaletteName[];
+        return Object.keys(Palette).filter(name => name !== this.config.colors.regionGradient) as PaletteName[];
     }
     /**
      * Plot one psychrometric state onto the psychrometric chart.
@@ -582,7 +626,8 @@ export class Psychart {
             return;
         }
         // Determine whether this is time-dependent.
-        const timeSeries: boolean = Number.isFinite(options.time.now) && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
+        const hasTimeStamp: boolean = Number.isFinite(options.time.now),
+            timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
         // Divide by 100 if relHumType is set to 'percent'
         if (state.measurement === 'dbrh' && options.relHumType === 'percent') {
             state.other /= 100;
@@ -590,15 +635,20 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const tMin: number = (this.config.theme === 'dark') ? options.time.end : options.time.start,
-            tMax: number = (this.config.theme === 'dark') ? options.time.start : options.time.end,
+        const tMin: number = (this.config.flipGradients) ? options.time.end : options.time.start,
+            tMax: number = (this.config.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Determine whether to connect the states with a line
-        if (options.legend && options.line && this.lastState[options.legend]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, 1));
+        if (options.seriesName && options.line && this.lastState[options.seriesName]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
         }
-        this.lastState[options.legend] = currentState;
+        // Add an item in the legend, if not previously added.
+        if (!this.lastState[options.seriesName]) {
+            this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+        }
+        // Store the last state in order to draw a line.
+        this.lastState[options.seriesName] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
@@ -609,10 +659,10 @@ export class Psychart {
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         this.g.points.appendChild(point);
         // Set up the point name to showe in the tooltip.
-        const pointName: string = (options.legend && options.name ? options.legend + ': ' + options.name : options.legend + options.name);
+        const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (pointName ? pointName + '\n' : '') +
-            (timeSeries ? new Date(tNow).toLocaleString() + '\n' : '') +
+            (hasTimeStamp ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
@@ -675,8 +725,14 @@ export class Psychart {
     /**
      * Return the SVG element to append on the parent.
      */
-    public getElement(): SVGElement {
+    public getElement(): SVGSVGElement {
         return this.base;
+    }
+    /**
+     * Return the SVG element representing the legend.
+     */
+    public getLegend(): SVGSVGElement {
+        return this.legend;
     }
 }
 

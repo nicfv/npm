@@ -10,4 +10,6 @@ Each data series need to be assigned a unique numeric ID, which does not have to
 
 In this example, we are plotting time-series data from two rooms in a building, **R1** and **R2**. Room **R1** contains dry bulb and wet bulb sensors, and room **R2** contains dry bulb and dew point sensors, all reporting in \\\(^{\circ}\text{F}\\\), but in different time intervals. Psychart can process and render this data using the `plot()` function with appropriate arguments. We can set a unique numeric ID for each data series in order to connect points with a line.
 
-Additionally, as we are using Psychart to monitor human comfort, we can render the [ASHRAE](https://www.ashrae.org/) standard-55 envelopes that come pre-built with Psychart. These are toggled on with the `PsyOptions` object passed into the initialization of Psychart. Any number of regions can be rendered on Psychart.
+Additionally, as we are using Psychart to monitor human comfort, we can render the [ASHRAE](https://www.ashrae.org/) standard-55 envelopes that come pre-built with Psychart. These are toggled on with the `PsychartOptions` object passed into the initialization of Psychart. Any number of regions can be rendered on Psychart.
+
+We can also render a legend for Psychart. Plotted data needs the `seriesName` property to be considered as a true data series to be rendered in the legend.

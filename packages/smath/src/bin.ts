@@ -43,6 +43,7 @@ if (func.includes('help')) {
     console.log('  rdist <n> [mean] [stdev] : Generate `n` normally-distributed random floats');
     console.log('  rat <n> [eps]            : Decompose `n` into a ratio');
     console.log('  mixed <n> [eps]          : Decompose `n` into a mixed number');
+    console.log('  toHex <n> [length]       : Convert decimal `n` into hexadecimal');
     process.exit(1);
 }
 
@@ -145,6 +146,10 @@ switch (func) {
     }
     case ('mixed'): {
         console.log(SMath.mixed(nums[0], nums[1] ?? 1e-6));
+        break;
+    }
+    case ('tohex'): {
+        console.log(SMath.toHex(nums[0], nums[1] ?? 0));
         break;
     }
     case (''): {

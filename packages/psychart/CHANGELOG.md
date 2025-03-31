@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.2
+
+- Add a dynamically growing, display-only legend, obtained with `Psychart.getLegend()`
+- Add new `lineHeight` option for spacing within legend
+- Change parameter `legend` to `seriesName`
+- Change parameter `name` to `pointName`
+- Points can now show timestamps even if they are not part of a time-dependent series
+- Updates in `PsychartOptions`
+    - Remove themes (not really necessary, since you can only select one during initialization)
+    - Remove references to `Color`, instead, use hex-codes
+    - Add new `flipGradients` boolean option to flip all gradients, good for dark themes
+
 ## 0.3.1
 
 - Change SI enthalpy units to `kJ/kg`

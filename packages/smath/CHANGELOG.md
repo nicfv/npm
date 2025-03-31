@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.12.1
+
+- Add `toHex()` function to convert any number to hexadecimal
+    - Add this as an `npx` command
+
 ## 1.12.0
 
 - Add `round2()` function to round to the nearest multiple of an arbitrary base
