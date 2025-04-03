@@ -92,36 +92,18 @@ export class PsyState {
         this.db = state.db;
         switch (state.measurement) {
             case ('dbrh'): {
-                const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
                 this.rh = state.other;
-                this.wb = PSY_CALC[1];
-                this.dp = PSY_CALC[2];
-                this.hr = PSY_CALC[0];
-                this.vp = PSY_CALC[3];
-                this.h = PSY_CALC[4];
-                this.v = PSY_CALC[5];
+                [this.hr, this.wb, this.dp, this.vp, this.h, this.v] = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
                 break;
             }
             case ('dbwb'): {
-                const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
-                this.rh = PSY_CALC[2];
                 this.wb = state.other;
-                this.dp = PSY_CALC[1];
-                this.hr = PSY_CALC[0];
-                this.vp = PSY_CALC[3];
-                this.h = PSY_CALC[4];
-                this.v = PSY_CALC[5];
+                [this.hr, this.dp, this.rh, this.vp, this.h, this.v] = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
                 break;
             }
             case ('dbdp'): {
-                const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
-                this.rh = PSY_CALC[2];
-                this.wb = PSY_CALC[1];
                 this.dp = state.other;
-                this.hr = PSY_CALC[0];
-                this.vp = PSY_CALC[3];
-                this.h = PSY_CALC[4];
-                this.v = PSY_CALC[5];
+                [this.hr, this.wb, this.rh, this.vp, this.h, this.v] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
                 break;
             }
             default: {
