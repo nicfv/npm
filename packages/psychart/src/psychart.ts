@@ -113,15 +113,15 @@ export class Psychart {
         this.svg.setAttribute('width', this.config.size.x + 'px');
         this.svg.setAttribute('height', this.config.size.y + 'px');
         // Set the legend's viewport size.
-        const legendHeight = 2 * this.config.padding.y;
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + legendHeight);
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
         this.legend.setAttribute('width', this.config.size.x + 'px');
-        this.legend.setAttribute('height', legendHeight + 'px');
+        this.legend.setAttribute('height', this.getLegendHeight() + 'px');
         this.legend.appendChild(this.legendDefs);
+        this.legend.appendChild(this.createLabel('Legend', { x: 0, y: 0 }, Color.from(this.config.colors.font), TextAnchor.NW));
         this.legend.appendChild(this.legendg);
         // Attach elements to the base element.
         const legendContainer: HTMLDivElement = document.createElement('div');
-        legendContainer.setAttribute('title', 'Legend: Click to toggle data series visibility.');
+        legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
         legendContainer.style.position = 'absolute';
         legendContainer.style.left = this.config.legend.placement.x + 'px';
         legendContainer.style.top = this.config.legend.placement.y + 'px';
@@ -375,7 +375,7 @@ export class Psychart {
     private drawTooltip(text: string, location: Point, color: Color): void {
         const tooltipBase = document.createElementNS(NS, 'g'),
             labelElements: SVGTextElement[] = [],
-            padding = 10,
+            padding = this.config.font.size * 0.80,
             background = document.createElementNS(NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
         text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.config.font.size }, color.getContrastingColor(), TextAnchor.NW)));
@@ -417,8 +417,8 @@ export class Psychart {
         const g: SVGGElement = document.createElementNS(NS, 'g'),
             icon: SVGRectElement = document.createElementNS(NS, 'rect');
         g.setAttribute('cursor', 'pointer');
-        icon.setAttribute('x', this.config.padding.x.toString());
-        icon.setAttribute('y', (this.getLegendHeight() - this.config.font.size - this.config.padding.y).toString());
+        icon.setAttribute('x', (this.config.font.size / 2).toString());
+        icon.setAttribute('y', (this.getLegendHeight() - this.config.font.size * 1.5).toString());
         icon.setAttribute('width', this.config.font.size.toString());
         icon.setAttribute('height', this.config.font.size.toString());
         icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
@@ -432,7 +432,7 @@ export class Psychart {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
         const fontColor: Color = Color.from(this.config.colors.font),
-            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.getLegendHeight() - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
+            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.font.size * 1.5, y: this.getLegendHeight() - this.config.font.size }, fontColor, TextAnchor.W);
         g.addEventListener('click', () => {
             this.series[seriesName].hidden = !this.series[seriesName].hidden;
             if (this.series[seriesName].hidden) {
@@ -454,7 +454,7 @@ export class Psychart {
      * Compute the height of the legend, in pixels.
      */
     private getLegendHeight(): number {
-        return 2 * this.config.padding.y + this.legendg.children.length * this.config.font.size * this.config.lineHeight;
+        return (this.legendg.children.length + 2.5) * this.config.font.size * this.config.lineHeight;
     }
     /**
      * Remove all the children from an element.
