@@ -669,7 +669,7 @@ export class Psychart {
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         this.g.points.appendChild(point);
-        // Set up the point name to showe in the tooltip.
+        // Set up the point name to show in the tooltip.
         const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (pointName ? pointName + '\n' : '') +
