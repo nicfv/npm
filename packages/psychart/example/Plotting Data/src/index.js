@@ -76,4 +76,17 @@ function plotData() {
             }
         );
     }
+    // Plot the desired setpoint.
+    ps.plot(
+        {
+            db: 70,
+            other: 60,
+            measurement: 'dbwb'
+        },
+        {
+            pointName: 'Setpoint', // A point name will show in the tooltip but not create a legend entry
+            color: '#DF1000', // Use a hex-code to define a single color instead of using a gradient
+            pointRadius: 8, // Enlarge the point to make it visually stand out
+        }
+    );
 }

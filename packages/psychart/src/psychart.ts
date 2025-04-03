@@ -44,9 +44,9 @@ export class Psychart {
      */
     private readonly legendDefs: SVGDefsElement = document.createElementNS(NS, 'defs');
     /**
-     * The height of the legend element.
+     * The base element for adding lines in the legend.
      */
-    private legendHeight: number;
+    private readonly legendg: SVGGElement = document.createElementNS(NS, 'g');
     /**
      * Defines all the groups in the SVG ordered by layer.
      */
@@ -221,24 +221,21 @@ export class Psychart {
         },
     };
     /**
-     * The last states plotted on Psychart for each series.
+     * The data series plotted on Psychart with each of their last states and visibility toggles.
      */
-    private lastState: { [legend: string]: PsyState } = {};
+    private series: {
+        [legend: string]: {
+            lastState: PsyState,
+            hidden: boolean,
+            pointGroup: SVGGElement,
+            lineGroup: SVGGElement,
+        }
+    } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
     public static getRegionNamesAndTips(): Array<[RegionName, string]> {
         return Object.entries(this.regions).map(([name, region]) => [name as RegionName, region.tooltip]);
-    }
-    /**
-     * Generate an SVG element to use as this gradient's icon.
-     * Returns the outer HTML string to be saved in a file.
-     */
-    public static generateGradientIcon(gradient: PaletteName): string {
-        const maxColorIndex: number = Palette[gradient].colors.length - 1;
-        return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
-            Palette[gradient].colors.map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + SMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
-            '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
     }
     /**
      * Convert from Celsius to Fahrenheit.
@@ -274,11 +271,12 @@ export class Psychart {
         this.base.setAttribute('width', this.config.size.x + 'px');
         this.base.setAttribute('height', this.config.size.y + 'px');
         // Set the legend's viewport size.
-        this.legendHeight = 2 * this.config.padding.y;
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
+        const legendHeight = 2 * this.config.padding.y;
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + legendHeight);
         this.legend.setAttribute('width', this.config.size.x + 'px');
-        this.legend.setAttribute('height', this.legendHeight + 'px');
+        this.legend.setAttribute('height', legendHeight + 'px');
         this.legend.appendChild(this.legendDefs);
+        this.legend.appendChild(this.legendg);
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -575,27 +573,49 @@ export class Psychart {
      * Add a line to the legend.
      */
     private addToLegend(seriesName: string, color?: Color, gradient?: PaletteName): void {
-        this.legendHeight += this.config.font.size * this.config.lineHeight;
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
-        this.legend.setAttribute('height', this.legendHeight + 'px');
-        const icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
+        this.legend.setAttribute('height', this.getLegendHeight() + 'px');
+        const g: SVGGElement = document.createElementNS(NS, 'g'),
+            icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        g.setAttribute('cursor', 'pointer');
         icon.setAttribute('x', this.config.padding.x.toString());
-        icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
+        icon.setAttribute('y', (this.getLegendHeight() - this.config.font.size - this.config.padding.y).toString());
         icon.setAttribute('width', this.config.font.size.toString());
         icon.setAttribute('height', this.config.font.size.toString());
         icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
-        this.legend.appendChild(icon);
         if (color) {
             icon.setAttribute('fill', color.toString());
         } else if (gradient) {
-            const uniqueGradientID: string = 'grad' + this.legendHeight;
+            const uniqueGradientID: string = 'grad_' + this.legendDefs.children.length;
             this.legendDefs.appendChild(Palette[gradient].toSVG(uniqueGradientID));
             icon.setAttribute('fill', 'url(#' + uniqueGradientID + ')');
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-        const fontColor: Color = Color.from(this.config.colors.font);
-        this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W));
+        const fontColor: Color = Color.from(this.config.colors.font),
+            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.getLegendHeight() - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
+        g.addEventListener('click', () => {
+            this.series[seriesName].hidden = !this.series[seriesName].hidden;
+            if (this.series[seriesName].hidden) {
+                g.setAttribute('opacity', '0.5');
+                legendText.setAttribute('text-decoration', 'line-through');
+                this.series[seriesName].pointGroup.setAttribute('visibility', 'hidden');
+                this.series[seriesName].lineGroup.setAttribute('visibility', 'hidden');
+            } else {
+                g.removeAttribute('opacity');
+                legendText.removeAttribute('text-decoration');
+                this.series[seriesName].pointGroup.removeAttribute('visibility');
+                this.series[seriesName].lineGroup.removeAttribute('visibility');
+            }
+        });
+        g.append(icon, legendText);
+        this.legendg.appendChild(g);
+    }
+    /**
+     * Compute the height of the legend, in pixels.
+     */
+    private getLegendHeight(): number {
+        return 2 * this.config.padding.y + this.legendg.children.length * this.config.font.size * this.config.lineHeight;
     }
     /**
      * Remove all the children from an element.
@@ -621,10 +641,6 @@ export class Psychart {
         }
         // Set default data options.
         const options: DataOptions = setDefaults(config, defaultDataOptions);
-        // Skip series that are disabled.
-        if (options.enabled === false) {
-            return;
-        }
         // Determine whether this is time-dependent.
         const hasTimeStamp: boolean = Number.isFinite(options.time.now),
             timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
@@ -639,16 +655,6 @@ export class Psychart {
             tMax: number = (this.config.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
-        // Determine whether to connect the states with a line
-        if (options.seriesName && options.line && this.lastState[options.seriesName]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
-        }
-        // Add an item in the legend, if not previously added.
-        if (!this.lastState[options.seriesName]) {
-            this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
-        }
-        // Store the last state in order to draw a line.
-        this.lastState[options.seriesName] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
@@ -657,8 +663,33 @@ export class Psychart {
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
-        this.g.points.appendChild(point);
-        // Set up the point name to showe in the tooltip.
+        // Options for data series:
+        if (options.seriesName) {
+            // Add an item in the legend, if not previously added.
+            if (!this.series[options.seriesName]) {
+                this.series[options.seriesName] = {
+                    lastState: currentState,
+                    hidden: false,
+                    pointGroup: document.createElementNS(NS, 'g'),
+                    lineGroup: document.createElementNS(NS, 'g'),
+                }
+                // Add the series-level group elements onto the main groups.
+                this.g.points.appendChild(this.series[options.seriesName].pointGroup);
+                this.g.trends.appendChild(this.series[options.seriesName].lineGroup);
+                this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+            } else if (options.line) {
+                // Determine whether to connect the states with a line
+                this.series[options.seriesName].lineGroup.appendChild(this.createLine([this.series[options.seriesName].lastState, currentState], color, 1));
+            }
+            // Store the last state in order to draw a line.
+            this.series[options.seriesName].lastState = currentState;
+            // Plot the new data point onto the series group element.
+            this.series[options.seriesName].pointGroup.appendChild(point);
+        } else {
+            // Plot the new data point onto the base group element.
+            this.g.points.appendChild(point);
+        }
+        // Set up the point name to show in the tooltip.
         const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
         // Generate the text to display on mouse hover.
         const tooltipString: string = (pointName ? pointName + '\n' : '') +
@@ -712,9 +743,11 @@ export class Psychart {
      * Clear all plotted data from Psychart.
      */
     public clearData(): void {
-        this.lastState = {};
+        this.series = {};
         this.clearChildren(this.g.points);
         this.clearChildren(this.g.trends);
+        this.clearChildren(this.legendDefs);
+        this.clearChildren(this.legendg);
     }
     /**
      * Clear all rendered regions from Psychart.
