@@ -13,31 +13,35 @@ export class PsyState {
     /**
      * Relative Humidity
      */
-    public readonly rh: number = 0;
+    public readonly rh: number;
     /**
      * Wet Bulb
      */
-    public readonly wb: number = 0;
+    public readonly wb: number;
     /**
      * Dew Point
      */
-    public readonly dp: number = 0;
+    public readonly dp: number;
     /**
      * Humidity Ratio
      */
-    public readonly hr: number = 0;
+    public readonly hr: number;
     /**
      * Vapor Pressure
      */
-    public readonly vp: number = 0;
+    public readonly vp: number;
     /**
      * Moist Air Enthalpy
      */
-    public readonly h: number = 0;
+    public readonly h: number;
     /**
      * Moist Air Volume
      */
-    public readonly v: number = 0;
+    public readonly v: number;
+    /**
+     * Degree of Saturation
+     */
+    public readonly s: number;
     /**
      * Standard Atmospheric Air Pressure
      */
@@ -93,17 +97,17 @@ export class PsyState {
         switch (state.measurement) {
             case ('dbrh'): {
                 this.rh = state.other;
-                [this.hr, this.wb, this.dp, this.vp, this.h, this.v] = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
+                [this.hr, this.wb, this.dp, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
                 break;
             }
             case ('dbwb'): {
                 this.wb = state.other;
-                [this.hr, this.dp, this.rh, this.vp, this.h, this.v] = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
+                [this.hr, this.dp, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
                 break;
             }
             case ('dbdp'): {
                 this.dp = state.other;
-                [this.hr, this.wb, this.rh, this.vp, this.h, this.v] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
+                [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
                 break;
             }
             default: {
