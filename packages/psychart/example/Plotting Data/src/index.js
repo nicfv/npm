@@ -9,7 +9,7 @@ const ps = new Psychart({
 
 // Append Psychart and the legend onto the document and plot data.
 window.addEventListener('load', () => {
-    document.body.append(ps.getElement(), ps.getLegend());
+    document.body.append(ps.getElement());
     plotData();
 });
 
