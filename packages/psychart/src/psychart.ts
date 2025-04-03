@@ -85,13 +85,13 @@ export class Psychart {
      * Get a range of numbers used for an axis.
      */
     private static getRange(min: number, max: number, step: number): number[] {
-        const stepMin: number = SMath.round2(min + step * 0.49, step),
-            stepMax: number = SMath.round2(max - step * 0.49, step),
-            range: number[] = [];
+        const stepMin: number = SMath.round2(min + step * 1.1, step),
+            stepMax: number = SMath.round2(max - step * 1.1, step),
+            range: Array<number> = [];
         for (let i = stepMin; i <= stepMax; i += step) {
             range.push(i);
         }
-        return range;
+        return [min, ...range, max];
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
@@ -140,24 +140,6 @@ export class Psychart {
             this.drawAxis(data);
             this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
-        // Draw min and max dry bulb vertical axes.
-        this.drawAxis([
-            new PsyState({ db: this.config.dbMin, other: 0, measurement: 'dbrh' }),
-            new PsyState({ db: this.config.dbMin, other: 1, measurement: 'dbrh' }),
-        ]);
-        this.drawAxis([
-            new PsyState({ db: this.config.dbMax, other: 0, measurement: 'dbrh' }),
-            new PsyState({ db: this.config.dbMax, other: 1, measurement: 'dbrh' }),
-        ]);
-        // Draw min and max dew point horizontal axes.
-        this.drawAxis([
-            new PsyState({ db: this.config.dbMin, other: 0, measurement: 'dbrh' }),
-            new PsyState({ db: this.config.dbMax, other: 0, measurement: 'dbrh' }),
-        ]);
-        this.drawAxis([
-            new PsyState({ db: this.config.dpMax, other: this.config.dpMax, measurement: 'dbdp' }),
-            new PsyState({ db: this.config.dbMax, other: this.config.dpMax, measurement: 'dbdp' }),
-        ]);
         switch (this.config.yAxis) {
             case ('dp'): {
                 // Draw constant dew point horizontal lines.
