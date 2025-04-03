@@ -123,7 +123,7 @@ export class PsyState {
             return {
                 x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
                 y: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.size.y - PsyState.padding.y, PsyState.padding.y), PsyState.padding.y, PsyState.size.y - PsyState.padding.y)
-            }
+            };
         } else {
             return {
                 x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
