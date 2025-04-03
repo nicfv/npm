@@ -599,9 +599,13 @@ export class Psychart {
             if (this.series[seriesName].hidden) {
                 g.setAttribute('opacity', '0.5');
                 legendText.setAttribute('text-decoration', 'line-through');
+                this.series[seriesName].pointGroup.setAttribute('visibility', 'hidden');
+                this.series[seriesName].lineGroup.setAttribute('visibility', 'hidden');
             } else {
                 g.removeAttribute('opacity');
                 legendText.removeAttribute('text-decoration');
+                this.series[seriesName].pointGroup.removeAttribute('visibility' );
+                this.series[seriesName].lineGroup.removeAttribute('visibility' );
             }
         });
         g.append(icon, legendText);
