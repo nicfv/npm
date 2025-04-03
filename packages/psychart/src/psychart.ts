@@ -221,9 +221,9 @@ export class Psychart {
         },
     };
     /**
-     * The last states plotted on Psychart for each series.
+     * The data series plotted on Psychart with each of their last states and visibility toggles.
      */
-    private lastState: { [legend: string]: PsyState } = {};
+    private series: { [legend: string]: { lastState: PsyState, hidden: boolean } } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
@@ -587,10 +587,9 @@ export class Psychart {
         }
         const fontColor: Color = Color.from(this.config.colors.font),
             legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
-        let hidden: boolean = false;
         g.addEventListener('click', () => {
-            hidden = !hidden;
-            if (hidden) {
+            this.series[seriesName].hidden = !this.series[seriesName].hidden;
+            if (this.series[seriesName].hidden) {
                 g.setAttribute('opacity', '0.5');
                 legendText.setAttribute('text-decoration', 'line-through');
             } else {
@@ -641,16 +640,19 @@ export class Psychart {
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Options for data series:
         if (options.seriesName) {
-            // Determine whether to connect the states with a line
-            if (options.line && this.lastState[options.seriesName]) {
-                this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
-            }
             // Add an item in the legend, if not previously added.
-            if (!this.lastState[options.seriesName]) {
+            if (!this.series[options.seriesName]) {
+                this.series[options.seriesName] = {
+                    lastState: currentState,
+                    hidden: false,
+                }
                 this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+            } else if (options.line) {
+                // Determine whether to connect the states with a line
+                this.g.trends.appendChild(this.createLine([this.series[options.seriesName].lastState, currentState], color, 1));
             }
             // Store the last state in order to draw a line.
-            this.lastState[options.seriesName] = currentState;
+            this.series[options.seriesName].lastState = currentState;
         }
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
@@ -715,7 +717,7 @@ export class Psychart {
      * Clear all plotted data from Psychart.
      */
     public clearData(): void {
-        this.lastState = {};
+        this.series = {};
         this.clearChildren(this.g.points);
         this.clearChildren(this.g.trends);
     }
