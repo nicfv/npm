@@ -12,6 +12,7 @@
 - Adjust element positioning in the legend for a better appearance
 - Various updates in documentation and code organization improvements
 - Update examples to reflect changes
+- Update main README file
 
 ## 0.3.3
 
