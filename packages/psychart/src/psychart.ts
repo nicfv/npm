@@ -644,7 +644,7 @@ export class Psychart {
             this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
         }
         // Add an item in the legend, if not previously added.
-        if (!this.lastState[options.seriesName]) {
+        if (options.seriesName && !this.lastState[options.seriesName]) {
             this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
         }
         // Store the last state in order to draw a line.
