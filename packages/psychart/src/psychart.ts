@@ -711,7 +711,7 @@ export class Psychart {
     /**
      * Draw a shaded region on Psychart.
      */
-    public drawRegion(states: Datum[], color: Color, tooltip?: string): void {
+    private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
         // Add the first state to the data set
         const data: PsyState[] = [new PsyState(states[0])];
         for (let i = 1; i < states.length; i++) {
@@ -749,12 +749,6 @@ export class Psychart {
         this.clearChildren(this.g.trends);
         this.clearChildren(this.legendDefs);
         this.clearChildren(this.legendg);
-    }
-    /**
-     * Clear all rendered regions from Psychart.
-     */
-    public clearRegions(): void {
-        this.clearChildren(this.g.regions);
     }
     /**
      * Return the SVG element to append on the parent.
