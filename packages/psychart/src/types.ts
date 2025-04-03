@@ -157,7 +157,7 @@ export interface PsychartOptions {
      */
     readonly legend: {
         /**
-         * The absolute position of the top-left of the legend, relative to Psychart's internal `padding`.
+         * The absolute position of the top-left of the legend, relative to the top-left of Psychart.
          */
         readonly placement: Point;
         /**
