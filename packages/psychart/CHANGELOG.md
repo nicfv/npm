@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.3
+
+- The elements in the legend are now clickable, which toggles their visibility on Psychart
+- Update plotting data example to show a point not part of a data series
+- Remove `enabled` data options property, since you can hide data by clicking on the legend
+- Fixed bug where clearing data would not clear the legend
+
 ## 0.3.2
 
 - Add a dynamically growing, display-only legend, obtained with `Psychart.getLegend()`
