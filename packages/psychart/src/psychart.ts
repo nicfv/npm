@@ -663,7 +663,6 @@ export class Psychart {
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
-        this.g.points.appendChild(point);
         // Options for data series:
         if (options.seriesName) {
             // Add an item in the legend, if not previously added.
@@ -684,6 +683,11 @@ export class Psychart {
             }
             // Store the last state in order to draw a line.
             this.series[options.seriesName].lastState = currentState;
+            // Plot the new data point onto the series group element.
+            this.series[options.seriesName].pointGroup.appendChild(point);
+        } else {
+            // Plot the new data point onto the base group element.
+            this.g.points.appendChild(point);
         }
         // Set up the point name to show in the tooltip.
         const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
