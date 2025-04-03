@@ -702,7 +702,8 @@ export class Psychart {
                 (currentState.hr * this.scaleFactor.hr).toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
                 currentState.vp.toFixed(1) + ' ' + this.units.vp + ' Vap. Press.\n' +
                 (currentState.h * this.scaleFactor.h).toFixed(1) + ' ' + this.units.h + ' Enthalpy\n' +
-                currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume' : '');
+                currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume\n' +
+                (currentState.s * 100).toFixed() + '% Saturation' : '');
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
