@@ -44,9 +44,9 @@ export class Psychart {
      */
     private readonly legendDefs: SVGDefsElement = document.createElementNS(NS, 'defs');
     /**
-     * The height of the legend element.
+     * The base element for adding lines in the legend.
      */
-    private legendHeight: number;
+    private readonly legendg: SVGGElement = document.createElementNS(NS, 'g');
     /**
      * Defines all the groups in the SVG ordered by layer.
      */
@@ -264,11 +264,12 @@ export class Psychart {
         this.base.setAttribute('width', this.config.size.x + 'px');
         this.base.setAttribute('height', this.config.size.y + 'px');
         // Set the legend's viewport size.
-        this.legendHeight = 2 * this.config.padding.y;
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
+        const legendHeight = 2 * this.config.padding.y;
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + legendHeight);
         this.legend.setAttribute('width', this.config.size.x + 'px');
-        this.legend.setAttribute('height', this.legendHeight + 'px');
+        this.legend.setAttribute('height', legendHeight + 'px');
         this.legend.appendChild(this.legendDefs);
+        this.legend.appendChild(this.legendg);
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -565,28 +566,27 @@ export class Psychart {
      * Add a line to the legend.
      */
     private addToLegend(seriesName: string, color?: Color, gradient?: PaletteName): void {
-        this.legendHeight += this.config.font.size * this.config.lineHeight;
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
-        this.legend.setAttribute('height', this.legendHeight + 'px');
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
+        this.legend.setAttribute('height', this.getLegendHeight() + 'px');
         const g: SVGGElement = document.createElementNS(NS, 'g'),
             icon: SVGRectElement = document.createElementNS(NS, 'rect');
         g.setAttribute('cursor', 'pointer');
         icon.setAttribute('x', this.config.padding.x.toString());
-        icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
+        icon.setAttribute('y', (this.getLegendHeight() - this.config.font.size - this.config.padding.y).toString());
         icon.setAttribute('width', this.config.font.size.toString());
         icon.setAttribute('height', this.config.font.size.toString());
         icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
         if (color) {
             icon.setAttribute('fill', color.toString());
         } else if (gradient) {
-            const uniqueGradientID: string = 'grad' + this.legendHeight;
+            const uniqueGradientID: string = 'grad_' + this.legendDefs.children.length;
             this.legendDefs.appendChild(Palette[gradient].toSVG(uniqueGradientID));
             icon.setAttribute('fill', 'url(#' + uniqueGradientID + ')');
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
         const fontColor: Color = Color.from(this.config.colors.font),
-            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
+            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.getLegendHeight() - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
         g.addEventListener('click', () => {
             this.series[seriesName].hidden = !this.series[seriesName].hidden;
             if (this.series[seriesName].hidden) {
@@ -598,7 +598,13 @@ export class Psychart {
             }
         });
         g.append(icon, legendText);
-        this.legend.appendChild(g);
+        this.legendg.appendChild(g);
+    }
+    /**
+     * Compute the height of the legend, in pixels.
+     */
+    private getLegendHeight(): number {
+        return 2 * this.config.padding.y + this.legendg.children.length * this.config.font.size * this.config.lineHeight;
     }
     /**
      * Remove all the children from an element.
@@ -720,6 +726,8 @@ export class Psychart {
         this.series = {};
         this.clearChildren(this.g.points);
         this.clearChildren(this.g.trends);
+        this.clearChildren(this.legendDefs);
+        this.clearChildren(this.legendg);
     }
     /**
      * Clear all rendered regions from Psychart.
