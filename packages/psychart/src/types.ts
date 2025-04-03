@@ -41,20 +41,6 @@ export interface Datum {
 }
 
 /**
- * Contains data to render a psychrometric envelope.
- */
-export interface Region {
-    /**
-     * The text to display on mouse hover
-     */
-    readonly tooltip: string;
-    /**
-     * The data that represents the boundary of this region
-     */
-    readonly data: Datum[];
-}
-
-/**
  * Configuration options for Psychart.
  */
 export interface PsychartOptions {

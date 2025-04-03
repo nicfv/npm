@@ -1,7 +1,7 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import { SMath } from 'smath';
-import { PsychartOptions, Datum, Point, Region, RegionName, DataOptions } from './types';
+import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types';
 import { deepCopy, defaultDataOptions, defaultPsychartOptions, regions, setDefaults } from './defaults';
 
 const NS = 'http://www.w3.org/2000/svg';

@@ -1,4 +1,4 @@
-import { PsychartOptions, DataOptions, RegionName, Region } from './types';
+import { PsychartOptions, DataOptions, RegionName, Datum } from './types';
 
 /**
  * Produce a deep copy of an object.
@@ -83,7 +83,7 @@ export const defaultDataOptions: DataOptions = {
  * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
  * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
  */
-export const regions: { [K in RegionName]: Region } = {
+export const regions: { [K in RegionName]: { tooltip: string, data: Array<Datum> } } = {
     'Summer (sitting)': {
         tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
         data: [
