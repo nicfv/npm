@@ -42,6 +42,10 @@ export const defaultPsychartOptions: PsychartOptions = {
         family: 'sans-serif',
         size: 12,
     },
+    legend: {
+        placement: { x: NaN, y: NaN },
+        size: { x: NaN, y: NaN },
+    },
     lineHeight: 1.25,
     major: {
         humRat: 10,

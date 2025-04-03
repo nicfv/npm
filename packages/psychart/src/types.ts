@@ -153,6 +153,19 @@ export interface PsychartOptions {
      */
     readonly regions: RegionName[];
     /**
+     * If this is set, it will render the legend on top of Psychart.
+     */
+    readonly legend: {
+        /**
+         * The absolute position of the top-left of the legend, relative to Psychart's internal `padding`.
+         */
+        readonly placement: Point;
+        /**
+         * The size of the legend, in pixels. The scrollbar will be visible in the event of overflow.
+         */
+        readonly size: Point;
+    };
+    /**
      * The spacing factor between entries in the legend.
      */
     readonly lineHeight: number;
