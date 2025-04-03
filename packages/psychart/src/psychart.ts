@@ -80,18 +80,6 @@ export class Psychart {
         return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
     }
     /**
-     * Helper function to return the default set of options for Psychart.
-     */
-    public static getDefaultPsychartOptions(): PsychartOptions {
-        return deepCopy(defaultPsychartOptions);
-    }
-    /**
-     * Helper function to return the default set of data options.
-     */
-    public static getDefaultDataOptions(): DataOptions {
-        return deepCopy(defaultDataOptions);
-    }
-    /**
      * Convert from Celsius to Fahrenheit.
      */
     private static CtoF(C: number): number {
