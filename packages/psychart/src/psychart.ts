@@ -32,9 +32,9 @@ export class Psychart {
         readonly h: number;
     };
     /**
-     * Defines the base element to attach to the viewing window.
+     * This is the base SVG where Psychart is rendered.
      */
-    private readonly base: SVGSVGElement = document.createElementNS(NS, 'svg');
+    private readonly svg: SVGSVGElement = document.createElementNS(NS, 'svg');
     /**
      * Represents the legend for Psychart.
      */
@@ -105,9 +105,9 @@ export class Psychart {
             throw new Error('Dew point maximum is greater than dry bulb range!');
         }
         // Set the chart's viewport size.
-        this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
-        this.base.setAttribute('width', this.config.size.x + 'px');
-        this.base.setAttribute('height', this.config.size.y + 'px');
+        this.svg.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
+        this.svg.setAttribute('width', this.config.size.x + 'px');
+        this.svg.setAttribute('height', this.config.size.y + 'px');
         // Set the legend's viewport size.
         const legendHeight = 2 * this.config.padding.y;
         this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + legendHeight);
@@ -128,7 +128,7 @@ export class Psychart {
         };
         // Create new SVG groups, and append all the
         // layers into the chart.
-        Object.values(this.g).forEach(group => this.base.appendChild(group));
+        Object.values(this.g).forEach(group => this.svg.appendChild(group));
         // Draw constant dry bulb vertical lines.
         Psychart.getRange(this.config.dbMin, this.config.dbMax, this.config.major.temp).forEach(db => {
             const data: PsyState[] = [];
@@ -574,7 +574,7 @@ export class Psychart {
      * Return the SVG element to append on the parent.
      */
     public getElement(): SVGSVGElement {
-        return this.base;
+        return this.svg;
     }
     /**
      * Return the SVG element representing the legend.
