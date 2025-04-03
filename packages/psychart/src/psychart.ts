@@ -568,13 +568,14 @@ export class Psychart {
         this.legendHeight += this.config.font.size * this.config.lineHeight;
         this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.legendHeight);
         this.legend.setAttribute('height', this.legendHeight + 'px');
-        const icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        const g: SVGGElement = document.createElementNS(NS, 'g'),
+            icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        g.setAttribute('cursor', 'pointer');
         icon.setAttribute('x', this.config.padding.x.toString());
         icon.setAttribute('y', (this.legendHeight - this.config.font.size - this.config.padding.y).toString());
         icon.setAttribute('width', this.config.font.size.toString());
         icon.setAttribute('height', this.config.font.size.toString());
         icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
-        this.legend.appendChild(icon);
         if (color) {
             icon.setAttribute('fill', color.toString());
         } else if (gradient) {
@@ -585,20 +586,20 @@ export class Psychart {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
         const fontColor: Color = Color.from(this.config.colors.font),
-            fadedColor: Color = new Color(fontColor.red, fontColor.green, fontColor.blue, 50),
             legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
         let hidden: boolean = false;
-        legendText.addEventListener('click', () => {
+        g.addEventListener('click', () => {
             hidden = !hidden;
             if (hidden) {
+                g.setAttribute('opacity', '0.5');
                 legendText.setAttribute('text-decoration', 'line-through');
-                legendText.setAttribute('fill', fadedColor.toString());
             } else {
+                g.removeAttribute('opacity');
                 legendText.removeAttribute('text-decoration');
-                legendText.setAttribute('fill', fontColor.toString());
             }
         });
-        this.legend.appendChild(legendText);
+        g.append(icon, legendText);
+        this.legend.appendChild(g);
     }
     /**
      * Remove all the children from an element.
