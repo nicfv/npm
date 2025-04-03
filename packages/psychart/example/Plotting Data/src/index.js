@@ -9,7 +9,7 @@ const ps = new Psychart({
 
 // Append Psychart and the legend onto the document and plot data.
 window.addEventListener('load', () => {
-    document.body.append(ps.getElement(), ps.getLegend());
+    document.body.append(ps.getElement());
     plotData();
 });
 
@@ -52,7 +52,7 @@ function plotData() {
             {
                 advanced: true,
                 line: true,
-                seriesName: 'Room R1', // Need to assign a series name to connect data points
+                seriesName: 'Room R1', // Need to assign a series name to connect data points and display in the legend
                 time: { start: startTime, end: endTime, now: timeStamp },
             }
         );

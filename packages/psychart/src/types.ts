@@ -41,20 +41,6 @@ export interface Datum {
 }
 
 /**
- * Contains data to render a psychrometric envelope.
- */
-export interface Region {
-    /**
-     * The text to display on mouse hover
-     */
-    readonly tooltip: string;
-    /**
-     * The data that represents the boundary of this region
-     */
-    readonly data: Datum[];
-}
-
-/**
  * Configuration options for Psychart.
  */
 export interface PsychartOptions {
@@ -166,6 +152,19 @@ export interface PsychartOptions {
      * Render pre-defined shaded regions.
      */
     readonly regions: RegionName[];
+    /**
+     * If this is set, it will render the legend on top of Psychart.
+     */
+    readonly legend: {
+        /**
+         * The absolute position of the top-left of the legend, relative to the top-left of Psychart.
+         */
+        readonly placement: Point;
+        /**
+         * The size of the legend, in pixels. The scrollbar will be visible in the event of overflow.
+         */
+        readonly size: Point;
+    };
     /**
      * The spacing factor between entries in the legend.
      */

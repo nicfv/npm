@@ -29,5 +29,6 @@
             "Examples/*.md",
         ],
     },
+    "readme": "README.md",
     // "treatValidationWarningsAsErrors": true,
 }

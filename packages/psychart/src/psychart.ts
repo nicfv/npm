@@ -1,8 +1,8 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import { SMath } from 'smath';
-import { PsychartOptions, Datum, Point, Region, RegionName, DataOptions } from './types';
-import { deepCopy, defaultDataOptions, defaultPsychartOptions, setDefaults } from './defaults';
+import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types';
+import { deepCopy, defaultDataOptions, defaultPsychartOptions, regions, setDefaults } from './defaults';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -34,7 +34,11 @@ export class Psychart {
     /**
      * Defines the base element to attach to the viewing window.
      */
-    private readonly base: SVGSVGElement = document.createElementNS(NS, 'svg');
+    private readonly base: HTMLDivElement = document.createElement('div');
+    /**
+     * This is the base SVG where Psychart is rendered.
+     */
+    private readonly svg: SVGSVGElement = document.createElementNS(NS, 'svg');
     /**
      * Represents the legend for Psychart.
      */
@@ -59,168 +63,6 @@ export class Psychart {
         tooltips: document.createElementNS(NS, 'g'),
     };
     /**
-     * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
-     * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
-     */
-    private static readonly regions: { [K in RegionName]: Region } = {
-        'Summer (sitting)': {
-            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
-            data: [
-                { db: 32.8, other: 0, measurement: 'dbrh' },
-                { db: 27.2, other: 1, measurement: 'dbrh' },
-                { db: 22.7, other: 1, measurement: 'dbrh' },
-                { db: 26.9, other: 0, measurement: 'dbrh' },
-            ],
-        },
-        'Summer (walking)': {
-            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 0.5 (summer clothing)',
-            data: [
-                { db: 31.2, other: 0, measurement: 'dbrh' },
-                { db: 25.8, other: 1, measurement: 'dbrh' },
-                { db: 20.3, other: 1, measurement: 'dbrh' },
-                { db: 23.2, other: 0, measurement: 'dbrh' },
-            ],
-        },
-        'Summer (light work)': {
-            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 0.5 (summer clothing)',
-            data: [
-                { db: 30.4, other: 0, measurement: 'dbrh' },
-                { db: 24.8, other: 1, measurement: 'dbrh' },
-                { db: 19.2, other: 1, measurement: 'dbrh' },
-                { db: 22.0, other: 0, measurement: 'dbrh' },
-            ],
-        },
-        'Winter (sitting)': {
-            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 1.0 (winter clothing)',
-            data: [
-                { db: 28.6, other: 0, measurement: 'dbrh' },
-                { db: 22.7, other: 1, measurement: 'dbrh' },
-                { db: 17.1, other: 1, measurement: 'dbrh' },
-                { db: 20.5, other: 0, measurement: 'dbrh' },
-            ],
-        },
-        'Winter (walking)': {
-            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 1.0 (winter clothing)',
-            data: [
-                { db: 26.8, other: 0, measurement: 'dbrh' },
-                { db: 21.5, other: 1, measurement: 'dbrh' },
-                { db: 14.5, other: 1, measurement: 'dbrh' },
-                { db: 17.2, other: 0, measurement: 'dbrh' },
-            ],
-        },
-        'Winter (light work)': {
-            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 1.0 (winter clothing)',
-            data: [
-                { db: 25.6, other: 0, measurement: 'dbrh' },
-                { db: 20.4, other: 1, measurement: 'dbrh' },
-                { db: 13.1, other: 1, measurement: 'dbrh' },
-                { db: 15.5, other: 0, measurement: 'dbrh' },
-            ],
-        },
-        'Givoni Comfort Zone': {
-            tooltip: 'Comfort Zone of the Building Bioclimatic Chart\n(based on Milne and Givoni 1979 & ASHRAE 55-2017)',
-            data: [
-                { db: 19, other: 0.20, measurement: 'dbrh' },
-                { db: 26, other: 0.20, measurement: 'dbrh' },
-                { db: 26, other: 0.50, measurement: 'dbrh' },
-                { db: 24, other: 0.80, measurement: 'dbrh' },
-                { db: 19, other: 0.80, measurement: 'dbrh' },
-            ],
-        },
-        'Data Center A4': {
-            tooltip: 'The A4 ASHRAE data center\ncomfort zone. Typically\nan IT space with low\nenvironmental requirements.',
-            data: [
-                { db: 5, other: -12, measurement: 'dbdp' },
-                { db: 22.5, other: 0.08, measurement: 'dbrh' },
-                { db: 45.0, other: 0.08, measurement: 'dbrh' },
-                { db: 45.0, other: 24, measurement: 'dbdp' },
-                { db: 25.8, other: 0.90, measurement: 'dbrh' },
-                { db: 5, other: 0.90, measurement: 'dbrh' },
-            ],
-        },
-        'Data Center A3': {
-            tooltip: 'The A3 ASHRAE data center\ncomfort zone. Typically\nan IT space with normal\nenvironmental requirements.',
-            data: [
-                { db: 5, other: -12, measurement: 'dbdp' },
-                { db: 22.5, other: 0.08, measurement: 'dbrh' },
-                { db: 40.0, other: 0.08, measurement: 'dbrh' },
-                { db: 40.0, other: 24, measurement: 'dbdp' },
-                { db: 26.7, other: 0.85, measurement: 'dbrh' },
-                { db: 5, other: 0.85, measurement: 'dbrh' },
-            ],
-        },
-        'Data Center A2': {
-            tooltip: 'The A2 ASHRAE data center\ncomfort zone. Typically\nan IT space with strict\nenvironmental requirements.',
-            data: [
-                { db: 10.0, other: -12, measurement: 'dbdp' },
-                { db: 22.5, other: 0.08, measurement: 'dbrh' },
-                { db: 35.0, other: 0.08, measurement: 'dbrh' },
-                { db: 35.0, other: 21, measurement: 'dbdp' },
-                { db: 24.7, other: 0.80, measurement: 'dbrh' },
-                { db: 10.0, other: 0.80, measurement: 'dbrh' },
-            ],
-        },
-        'Data Center A1': {
-            tooltip: 'The A1 ASHRAE data\ncenter comfort zone.\nTypically a data center with\nmission-critical operations.',
-            data: [
-                { db: 15.0, other: -12, measurement: 'dbdp' },
-                { db: 22.5, other: 0.08, measurement: 'dbrh' },
-                { db: 32.0, other: 0.08, measurement: 'dbrh' },
-                { db: 32.0, other: 17, measurement: 'dbdp' },
-                { db: 20.6, other: 0.80, measurement: 'dbrh' },
-                { db: 15.0, other: 0.80, measurement: 'dbrh' },
-            ],
-        },
-        'Data Center Recommended (low pollutants)': {
-            tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with low\nconcentration of pollutants.',
-            data: [
-                { db: 18.0, other: -9, measurement: 'dbdp' },
-                { db: 27.0, other: -9, measurement: 'dbdp' },
-                { db: 27.0, other: 15, measurement: 'dbdp' },
-                { db: 20.7, other: 0.70, measurement: 'dbrh' },
-                { db: 18.0, other: 0.70, measurement: 'dbrh' },
-            ],
-        },
-        'Data Center Recommended (high pollutants)': {
-            tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with high\nconcentration of pollutants.',
-            data: [
-                { db: 18.0, other: -9, measurement: 'dbdp' },
-                { db: 27.0, other: -9, measurement: 'dbdp' },
-                { db: 27.0, other: 15, measurement: 'dbdp' },
-                { db: 26.2, other: 0.50, measurement: 'dbrh' },
-                { db: 18.0, other: 0.50, measurement: 'dbrh' },
-            ],
-        },
-        'IBM TS4500 Ambient (cooling)': {
-            tooltip: 'The required ambient conditions\nfor the IBM TS4500 tape storage\nunit with integrated cooling.',
-            data: [
-                { db: 15, other: 0.20, measurement: 'dbrh' },
-                { db: 35, other: 0.20, measurement: 'dbrh' },
-                { db: 35, other: 0.80, measurement: 'dbrh' },
-                { db: 15, other: 0.80, measurement: 'dbrh' },
-            ],
-        },
-        'IBM TS4500 Ambient (no cooling)': {
-            tooltip: 'The required ambient conditions\nfor the IBM TS4500 tape storage\nunit without integrated cooling.',
-            data: [
-                { db: 15, other: 0.20, measurement: 'dbrh' },
-                { db: 32, other: 0.20, measurement: 'dbrh' },
-                { db: 32, other: 26, measurement: 'dbwb' },
-                { db: 28.8, other: 0.80, measurement: 'dbrh' },
-                { db: 15, other: 0.80, measurement: 'dbrh' },
-            ],
-        },
-        'IBM TS4500 Recommended': {
-            tooltip: 'The recommended ambient conditions\nfor the IBM TS4500 tape storage\nunit for optimal reliability and efficiency.',
-            data: [
-                { db: 16, other: 0.20, measurement: 'dbrh' },
-                { db: 25, other: 0.20, measurement: 'dbrh' },
-                { db: 25, other: 0.50, measurement: 'dbrh' },
-                { db: 16, other: 0.50, measurement: 'dbrh' },
-            ],
-        },
-    };
-    /**
      * The data series plotted on Psychart with each of their last states and visibility toggles.
      */
     private series: {
@@ -232,10 +74,10 @@ export class Psychart {
         }
     } = {};
     /**
-     * Return an array of region names and their corresponding tooltips.
+     * Helper function to return an array of region names and their corresponding tooltips.
      */
     public static getRegionNamesAndTips(): Array<[RegionName, string]> {
-        return Object.entries(this.regions).map(([name, region]) => [name as RegionName, region.tooltip]);
+        return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
     }
     /**
      * Convert from Celsius to Fahrenheit.
@@ -247,13 +89,13 @@ export class Psychart {
      * Get a range of numbers used for an axis.
      */
     private static getRange(min: number, max: number, step: number): number[] {
-        const stepMin: number = SMath.round2(min + step * 0.49, step),
-            stepMax: number = SMath.round2(max - step * 0.49, step),
-            range: number[] = [];
+        const stepMin: number = SMath.round2(min + step * 1.1, step),
+            stepMax: number = SMath.round2(max - step * 1.1, step),
+            range: Array<number> = [];
         for (let i = stepMin; i <= stepMax; i += step) {
             range.push(i);
         }
-        return range;
+        return [min, ...range, max];
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
@@ -267,16 +109,31 @@ export class Psychart {
             throw new Error('Dew point maximum is greater than dry bulb range!');
         }
         // Set the chart's viewport size.
-        this.base.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
-        this.base.setAttribute('width', this.config.size.x + 'px');
-        this.base.setAttribute('height', this.config.size.y + 'px');
+        this.svg.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
+        this.svg.setAttribute('width', this.config.size.x + 'px');
+        this.svg.setAttribute('height', this.config.size.y + 'px');
         // Set the legend's viewport size.
-        const legendHeight = 2 * this.config.padding.y;
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + legendHeight);
+        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
         this.legend.setAttribute('width', this.config.size.x + 'px');
-        this.legend.setAttribute('height', legendHeight + 'px');
+        this.legend.setAttribute('height', this.getLegendHeight() + 'px');
         this.legend.appendChild(this.legendDefs);
+        this.legend.appendChild(this.createLabel('Legend', { x: 0, y: 0 }, Color.from(this.config.colors.font), TextAnchor.NW));
         this.legend.appendChild(this.legendg);
+        // Attach elements to the base element.
+        const legendContainer: HTMLDivElement = document.createElement('div');
+        legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
+        legendContainer.style.position = 'absolute';
+        legendContainer.style.left = this.config.legend.placement.x + 'px';
+        legendContainer.style.top = this.config.legend.placement.y + 'px';
+        legendContainer.style.width = this.config.legend.size.x + 'px';
+        legendContainer.style.height = this.config.legend.size.y + 'px';
+        legendContainer.style.overflowX = 'hidden';
+        legendContainer.style.overflowY = 'auto';
+        legendContainer.style.border = '1px solid ' + this.config.colors.axis;
+        legendContainer.appendChild(this.legend);
+        this.base.style.position = 'relative';
+        this.base.appendChild(this.svg);
+        this.base.appendChild(legendContainer);
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -290,7 +147,7 @@ export class Psychart {
         };
         // Create new SVG groups, and append all the
         // layers into the chart.
-        Object.values(this.g).forEach(group => this.base.appendChild(group));
+        Object.values(this.g).forEach(group => this.svg.appendChild(group));
         // Draw constant dry bulb vertical lines.
         Psychart.getRange(this.config.dbMin, this.config.dbMax, this.config.major.temp).forEach(db => {
             const data: PsyState[] = [];
@@ -302,24 +159,6 @@ export class Psychart {
             this.drawAxis(data);
             this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
-        // Draw min and max dry bulb vertical axes.
-        this.drawAxis([
-            new PsyState({ db: this.config.dbMin, other: 0, measurement: 'dbrh' }),
-            new PsyState({ db: this.config.dbMin, other: 1, measurement: 'dbrh' }),
-        ]);
-        this.drawAxis([
-            new PsyState({ db: this.config.dbMax, other: 0, measurement: 'dbrh' }),
-            new PsyState({ db: this.config.dbMax, other: 1, measurement: 'dbrh' }),
-        ]);
-        // Draw min and max dew point horizontal axes.
-        this.drawAxis([
-            new PsyState({ db: this.config.dbMin, other: 0, measurement: 'dbrh' }),
-            new PsyState({ db: this.config.dbMax, other: 0, measurement: 'dbrh' }),
-        ]);
-        this.drawAxis([
-            new PsyState({ db: this.config.dpMax, other: this.config.dpMax, measurement: 'dbdp' }),
-            new PsyState({ db: this.config.dbMax, other: this.config.dpMax, measurement: 'dbdp' }),
-        ]);
         switch (this.config.yAxis) {
             case ('dp'): {
                 // Draw constant dew point horizontal lines.
@@ -388,7 +227,7 @@ export class Psychart {
         });
         // Draw any regions, if applicable
         let regionIndex = 0;
-        Object.entries(Psychart.regions)
+        Object.entries(regions)
             .filter(([name,]) => this.config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
@@ -536,7 +375,7 @@ export class Psychart {
     private drawTooltip(text: string, location: Point, color: Color): void {
         const tooltipBase = document.createElementNS(NS, 'g'),
             labelElements: SVGTextElement[] = [],
-            padding = 10,
+            padding = this.config.font.size * 0.80,
             background = document.createElementNS(NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
         text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.config.font.size }, color.getContrastingColor(), TextAnchor.NW)));
@@ -578,8 +417,8 @@ export class Psychart {
         const g: SVGGElement = document.createElementNS(NS, 'g'),
             icon: SVGRectElement = document.createElementNS(NS, 'rect');
         g.setAttribute('cursor', 'pointer');
-        icon.setAttribute('x', this.config.padding.x.toString());
-        icon.setAttribute('y', (this.getLegendHeight() - this.config.font.size - this.config.padding.y).toString());
+        icon.setAttribute('x', (this.config.font.size / 2).toString());
+        icon.setAttribute('y', (this.getLegendHeight() - this.config.font.size * 1.5).toString());
         icon.setAttribute('width', this.config.font.size.toString());
         icon.setAttribute('height', this.config.font.size.toString());
         icon.setAttribute('rx', (this.config.font.size * 0.20).toString());
@@ -593,7 +432,7 @@ export class Psychart {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
         const fontColor: Color = Color.from(this.config.colors.font),
-            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.getLegendHeight() - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
+            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.font.size * 1.5, y: this.getLegendHeight() - this.config.font.size }, fontColor, TextAnchor.W);
         g.addEventListener('click', () => {
             this.series[seriesName].hidden = !this.series[seriesName].hidden;
             if (this.series[seriesName].hidden) {
@@ -615,7 +454,7 @@ export class Psychart {
      * Compute the height of the legend, in pixels.
      */
     private getLegendHeight(): number {
-        return 2 * this.config.padding.y + this.legendg.children.length * this.config.font.size * this.config.lineHeight;
+        return (this.legendg.children.length + 2.5) * this.config.font.size * this.config.lineHeight;
     }
     /**
      * Remove all the children from an element.
@@ -624,12 +463,6 @@ export class Psychart {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
-    }
-    /**
-     * Return an array of all allowed gradient names.
-     */
-    public getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => name !== this.config.colors.regionGradient) as PaletteName[];
     }
     /**
      * Plot one psychrometric state onto the psychrometric chart.
@@ -702,7 +535,8 @@ export class Psychart {
                 (currentState.hr * this.scaleFactor.hr).toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
                 currentState.vp.toFixed(1) + ' ' + this.units.vp + ' Vap. Press.\n' +
                 (currentState.h * this.scaleFactor.h).toFixed(1) + ' ' + this.units.h + ' Enthalpy\n' +
-                currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume' : '');
+                currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume\n' +
+                (currentState.s * 100).toFixed() + '% Saturation' : '');
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
@@ -710,7 +544,7 @@ export class Psychart {
     /**
      * Draw a shaded region on Psychart.
      */
-    public drawRegion(states: Datum[], color: Color, tooltip?: string): void {
+    private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
         // Add the first state to the data set
         const data: PsyState[] = [new PsyState(states[0])];
         for (let i = 1; i < states.length; i++) {
@@ -750,22 +584,10 @@ export class Psychart {
         this.clearChildren(this.legendg);
     }
     /**
-     * Clear all rendered regions from Psychart.
-     */
-    public clearRegions(): void {
-        this.clearChildren(this.g.regions);
-    }
-    /**
      * Return the SVG element to append on the parent.
      */
-    public getElement(): SVGSVGElement {
+    public getElement(): HTMLDivElement {
         return this.base;
-    }
-    /**
-     * Return the SVG element representing the legend.
-     */
-    public getLegend(): SVGSVGElement {
-        return this.legend;
     }
 }
 

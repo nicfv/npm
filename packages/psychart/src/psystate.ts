@@ -13,31 +13,35 @@ export class PsyState {
     /**
      * Relative Humidity
      */
-    public readonly rh: number = 0;
+    public readonly rh: number;
     /**
      * Wet Bulb
      */
-    public readonly wb: number = 0;
+    public readonly wb: number;
     /**
      * Dew Point
      */
-    public readonly dp: number = 0;
+    public readonly dp: number;
     /**
      * Humidity Ratio
      */
-    public readonly hr: number = 0;
+    public readonly hr: number;
     /**
      * Vapor Pressure
      */
-    public readonly vp: number = 0;
+    public readonly vp: number;
     /**
      * Moist Air Enthalpy
      */
-    public readonly h: number = 0;
+    public readonly h: number;
     /**
      * Moist Air Volume
      */
-    public readonly v: number = 0;
+    public readonly v: number;
+    /**
+     * Degree of Saturation
+     */
+    public readonly s: number;
     /**
      * Standard Atmospheric Air Pressure
      */
@@ -92,36 +96,18 @@ export class PsyState {
         this.db = state.db;
         switch (state.measurement) {
             case ('dbrh'): {
-                const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
                 this.rh = state.other;
-                this.wb = PSY_CALC[1];
-                this.dp = PSY_CALC[2];
-                this.hr = PSY_CALC[0];
-                this.vp = PSY_CALC[3];
-                this.h = PSY_CALC[4];
-                this.v = PSY_CALC[5];
+                [this.hr, this.wb, this.dp, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
                 break;
             }
             case ('dbwb'): {
-                const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
-                this.rh = PSY_CALC[2];
                 this.wb = state.other;
-                this.dp = PSY_CALC[1];
-                this.hr = PSY_CALC[0];
-                this.vp = PSY_CALC[3];
-                this.h = PSY_CALC[4];
-                this.v = PSY_CALC[5];
+                [this.hr, this.dp, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
                 break;
             }
             case ('dbdp'): {
-                const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
-                this.rh = PSY_CALC[2];
-                this.wb = PSY_CALC[1];
                 this.dp = state.other;
-                this.hr = PSY_CALC[0];
-                this.vp = PSY_CALC[3];
-                this.h = PSY_CALC[4];
-                this.v = PSY_CALC[5];
+                [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
                 break;
             }
             default: {
@@ -137,7 +123,7 @@ export class PsyState {
             return {
                 x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
                 y: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.size.y - PsyState.padding.y, PsyState.padding.y), PsyState.padding.y, PsyState.size.y - PsyState.padding.y)
-            }
+            };
         } else {
             return {
                 x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),

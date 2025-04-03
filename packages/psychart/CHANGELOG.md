@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.0
+
+- Add Psychart options for legend `placement` and `size`
+- Add degree of saturation in data tooltips, when advanced variables are toggled on
+- The legend is now included in `Psychart.getElement()` but can effectively be removed by setting dimensions to zero
+    - The member function to obtain just the legend has been removed
+- Psychart axes are always labeled for the min/max values, and will leave necessary spacing between major axes
+- Tooltip internal padding is now dynamic, as a function of font size (larger fonts will now be totally within the tooltips)
+- Add legend title
+- Adjust element positioning in the legend for a better appearance
+- Various updates in documentation and code organization improvements
+- Update examples to reflect changes
+- Update main README file
+
 ## 0.3.3
 
 - The elements in the legend are now clickable, which toggles their visibility on Psychart
