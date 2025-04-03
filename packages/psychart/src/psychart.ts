@@ -604,8 +604,8 @@ export class Psychart {
             } else {
                 g.removeAttribute('opacity');
                 legendText.removeAttribute('text-decoration');
-                this.series[seriesName].pointGroup.removeAttribute('visibility' );
-                this.series[seriesName].lineGroup.removeAttribute('visibility' );
+                this.series[seriesName].pointGroup.removeAttribute('visibility');
+                this.series[seriesName].lineGroup.removeAttribute('visibility');
             }
         });
         g.append(icon, legendText);
