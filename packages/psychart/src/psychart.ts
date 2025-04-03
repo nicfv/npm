@@ -625,10 +625,6 @@ export class Psychart {
         }
         // Set default data options.
         const options: DataOptions = setDefaults(config, defaultDataOptions);
-        // Skip series that are disabled.
-        if (options.enabled === false) {
-            return;
-        }
         // Determine whether this is time-dependent.
         const hasTimeStamp: boolean = Number.isFinite(options.time.now),
             timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);

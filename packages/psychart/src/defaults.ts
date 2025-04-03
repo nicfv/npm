@@ -66,7 +66,6 @@ export const defaultPsychartOptions: PsychartOptions = {
 export const defaultDataOptions: DataOptions = {
     advanced: false,
     color: '#FF0000',
-    enabled: true,
     gradient: 'Viridis',
     line: true,
     pointName: '',
