@@ -43,8 +43,8 @@ export const defaultPsychartOptions: PsychartOptions = {
         size: 12,
     },
     legend: {
-        placement: { x: NaN, y: NaN },
-        size: { x: NaN, y: NaN },
+        placement: { x: 40, y: 20 },
+        size: { x: 300, y: 200 },
     },
     lineHeight: 1.25,
     major: {
