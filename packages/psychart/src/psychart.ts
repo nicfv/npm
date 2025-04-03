@@ -74,7 +74,7 @@ export class Psychart {
         }
     } = {};
     /**
-     * Return an array of region names and their corresponding tooltips.
+     * Helper function to return an array of region names and their corresponding tooltips.
      */
     public static getRegionNamesAndTips(): Array<[RegionName, string]> {
         return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
@@ -463,12 +463,6 @@ export class Psychart {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
-    }
-    /**
-     * Return an array of all allowed gradient names.
-     */
-    public getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => name !== this.config.colors.regionGradient) as PaletteName[];
     }
     /**
      * Plot one psychrometric state onto the psychrometric chart.
