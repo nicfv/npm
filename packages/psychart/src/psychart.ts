@@ -639,16 +639,19 @@ export class Psychart {
             tMax: number = (this.config.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
-        // Determine whether to connect the states with a line
-        if (options.seriesName && options.line && this.lastState[options.seriesName]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
+        // Options for data series:
+        if (options.seriesName) {
+            // Determine whether to connect the states with a line
+            if (options.line && this.lastState[options.seriesName]) {
+                this.g.trends.appendChild(this.createLine([this.lastState[options.seriesName], currentState], color, 1));
+            }
+            // Add an item in the legend, if not previously added.
+            if (!this.lastState[options.seriesName]) {
+                this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+            }
+            // Store the last state in order to draw a line.
+            this.lastState[options.seriesName] = currentState;
         }
-        // Add an item in the legend, if not previously added.
-        if (options.seriesName && !this.lastState[options.seriesName]) {
-            this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
-        }
-        // Store the last state in order to draw a line.
-        this.lastState[options.seriesName] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
