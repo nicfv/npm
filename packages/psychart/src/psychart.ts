@@ -231,16 +231,6 @@ export class Psychart {
         return Object.entries(this.regions).map(([name, region]) => [name as RegionName, region.tooltip]);
     }
     /**
-     * Generate an SVG element to use as this gradient's icon.
-     * Returns the outer HTML string to be saved in a file.
-     */
-    public static generateGradientIcon(gradient: PaletteName): string {
-        const maxColorIndex: number = Palette[gradient].colors.length - 1;
-        return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
-            Palette[gradient].colors.map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + SMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
-            '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
-    }
-    /**
      * Convert from Celsius to Fahrenheit.
      */
     private static CtoF(C: number): number {
@@ -594,8 +584,21 @@ export class Psychart {
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-        const fontColor: Color = Color.from(this.config.colors.font);
-        this.legend.appendChild(this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W));
+        const fontColor: Color = Color.from(this.config.colors.font),
+            fadedColor: Color = new Color(fontColor.red, fontColor.green, fontColor.blue, 50),
+            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.config.padding.x + this.config.font.size, y: this.legendHeight - this.config.padding.y - this.config.font.size / 2 }, fontColor, TextAnchor.W);
+        let hidden: boolean = false;
+        legendText.addEventListener('click', () => {
+            hidden = !hidden;
+            if (hidden) {
+                legendText.setAttribute('text-decoration', 'line-through');
+                legendText.setAttribute('fill', fadedColor.toString());
+            } else {
+                legendText.removeAttribute('text-decoration');
+                legendText.setAttribute('fill', fontColor.toString());
+            }
+        });
+        this.legend.appendChild(legendText);
     }
     /**
      * Remove all the children from an element.
