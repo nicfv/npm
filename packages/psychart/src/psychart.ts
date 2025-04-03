@@ -223,7 +223,14 @@ export class Psychart {
     /**
      * The data series plotted on Psychart with each of their last states and visibility toggles.
      */
-    private series: { [legend: string]: { lastState: PsyState, hidden: boolean } } = {};
+    private series: {
+        [legend: string]: {
+            lastState: PsyState,
+            hidden: boolean,
+            pointGroup: SVGGElement,
+            lineGroup: SVGGElement,
+        }
+    } = {};
     /**
      * Return an array of region names and their corresponding tooltips.
      */
@@ -651,11 +658,16 @@ export class Psychart {
                 this.series[options.seriesName] = {
                     lastState: currentState,
                     hidden: false,
+                    pointGroup: document.createElementNS(NS, 'g'),
+                    lineGroup: document.createElementNS(NS, 'g'),
                 }
+                // Add the series-level group elements onto the main groups.
+                this.g.points.appendChild(this.series[options.seriesName].pointGroup);
+                this.g.trends.appendChild(this.series[options.seriesName].lineGroup);
                 this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
             } else if (options.line) {
                 // Determine whether to connect the states with a line
-                this.g.trends.appendChild(this.createLine([this.series[options.seriesName].lastState, currentState], color, 1));
+                this.series[options.seriesName].lineGroup.appendChild(this.createLine([this.series[options.seriesName].lastState, currentState], color, 1));
             }
             // Store the last state in order to draw a line.
             this.series[options.seriesName].lastState = currentState;
