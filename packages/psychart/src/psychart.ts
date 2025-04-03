@@ -655,6 +655,15 @@ export class Psychart {
             tMax: number = (this.config.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
+        // Define a 0-length path element and assign its attributes.
+        const point = document.createElementNS(NS, 'path');
+        point.setAttribute('fill', 'none');
+        point.setAttribute('stroke', color.toString());
+        point.setAttribute('stroke-width', +options.pointRadius + 'px');
+        point.setAttribute('stroke-linecap', 'round');
+        point.setAttribute('vector-effect', 'non-scaling-stroke');
+        point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
+        this.g.points.appendChild(point);
         // Options for data series:
         if (options.seriesName) {
             // Add an item in the legend, if not previously added.
@@ -676,15 +685,6 @@ export class Psychart {
             // Store the last state in order to draw a line.
             this.series[options.seriesName].lastState = currentState;
         }
-        // Define a 0-length path element and assign its attributes.
-        const point = document.createElementNS(NS, 'path');
-        point.setAttribute('fill', 'none');
-        point.setAttribute('stroke', color.toString());
-        point.setAttribute('stroke-width', +options.pointRadius + 'px');
-        point.setAttribute('stroke-linecap', 'round');
-        point.setAttribute('vector-effect', 'non-scaling-stroke');
-        point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
-        this.g.points.appendChild(point);
         // Set up the point name to show in the tooltip.
         const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
         // Generate the text to display on mouse hover.
