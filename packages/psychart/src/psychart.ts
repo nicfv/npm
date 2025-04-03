@@ -406,7 +406,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette[this.config.colors.regionGradient].getColor(regionIndex, minSpan, maxSpan).toString('hex-transparency'), region.tooltip);
+                this.drawRegion(data, Palette[this.config.colors.regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
                 regionIndex++;
             });
     }
@@ -711,9 +711,7 @@ export class Psychart {
     /**
      * Draw a shaded region on Psychart.
      */
-    public drawRegion(states: Datum[], colorHex: string, tooltip?: string): void {
-        // Generate the color from the hex code.
-        const color: Color = Color.from(colorHex);
+    public drawRegion(states: Datum[], color: Color, tooltip?: string): void {
         // Add the first state to the data set
         const data: PsyState[] = [new PsyState(states[0])];
         for (let i = 1; i < states.length; i++) {
