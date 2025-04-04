@@ -10,4 +10,4 @@ npm i -D t6
 
 T6 contains a simple, lightweight assertion testing framework for JavaScript and TypeScript projects. If any one of the T6 tests fail, it will throw an exception and halt program execution. Exceptions can be caught using the standard `try ... catch` block.
 
-T6 exports one namespace, `T6`, that includes several different test types, all of which can be simply derived from `T6.isTrue(...)`. Each test type throws a unique exception message if failed. Custom exception messages are optional, but always recommended for clarity to explain why a test may have failed.
+Import the entire T6 testing suite into your script using `import * as T6 from 'T6';`. This includes several different test types, all of which can be simply derived from `T6.isTrue(...)`. Each test type throws a unique exception message if failed. Custom exception messages are optional, but always recommended for clarity to explain why a test may have failed.
