@@ -1,4 +1,4 @@
-import { T6 } from 't6';
+import * as T6 from 't6';
 
 // Oops! There was a logic
 // error in returns8()!
