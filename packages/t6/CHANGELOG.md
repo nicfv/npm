@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- Remove namespace, to satisfy eslint
+- Update examples and docs
+
 ## 1.1.9
 
 - Add a helper `getTestNumber()` function for debugging purposes.
