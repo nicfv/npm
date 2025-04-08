@@ -1,6 +1,6 @@
 {
   "name": "psychart",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "View air conditions on a psychrometric chart",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",

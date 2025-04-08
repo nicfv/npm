@@ -52,7 +52,7 @@ function plotData() {
             {
                 advanced: true,
                 line: true,
-                seriesName: 'Room R1', // Need to assign a series name to connect data points and display in the legend
+                name: 'Room R1', // Need to assign a series name to connect data points and display in the legend
                 time: { start: startTime, end: endTime, now: timeStamp },
             }
         );
@@ -70,7 +70,7 @@ function plotData() {
             {
                 advanced: true,
                 line: true,
-                seriesName: 'Room R2', // Assign another series name to differentiate data series
+                name: 'Room R2', // Assign another series name to differentiate data series
                 time: { start: startTime, end: endTime, now: timeStamp },
                 gradient: 'Sunset', // Set a non-default gradient type to make it easier to visually differentiate between the two data series
             }
@@ -84,7 +84,8 @@ function plotData() {
             measurement: 'dbwb'
         },
         {
-            pointName: 'Setpoint', // A point name will show in the tooltip but not create a legend entry
+            name: 'Setpoint',
+            legend: false, // Show in the tooltip but not create a legend entry
             color: '#DF1000', // Use a hex-code to define a single color instead of using a gradient
             pointRadius: 8, // Enlarge the point to make it visually stand out
         }

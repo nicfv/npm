@@ -157,16 +157,16 @@ export interface PsychartOptions {
      */
     readonly legend: {
         /**
-         * The absolute position of the top-left of the legend, relative to the top-left of Psychart.
+         * The margin between the top-left of the legend and the top-left of Psychart, in pixels.
          */
-        readonly placement: Point;
+        readonly margin: Point;
         /**
          * The size of the legend, in pixels. The scrollbar will be visible in the event of overflow.
          */
         readonly size: Point;
     };
     /**
-     * The spacing factor between entries in the legend.
+     * The spacing factor between entries in the legend, where 2.0 indicates double-spacing, for example.
      */
     readonly lineHeight: number;
 }
@@ -176,13 +176,13 @@ export interface PsychartOptions {
  */
 export interface DataOptions {
     /**
-     * Adds a name to a data series. Must be set to create an entry in the legend.
+     * Adds a name to a point or data series to be shown in the tooltip. Must be set to create an entry in the legend.
      */
-    readonly seriesName: string;
+    readonly name: string;
     /**
-     * An optional unique point name to be shown in the tooltip.
+     * Optionally show this point in the legend.
      */
-    readonly pointName: string;
+    readonly legend: boolean;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */

@@ -123,8 +123,8 @@ export class Psychart {
         const legendContainer: HTMLDivElement = document.createElement('div');
         legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
         legendContainer.style.position = 'absolute';
-        legendContainer.style.left = this.config.legend.placement.x + 'px';
-        legendContainer.style.top = this.config.legend.placement.y + 'px';
+        legendContainer.style.left = (this.config.flipXY ? (this.config.size.x - this.config.legend.size.x - this.config.legend.margin.x) : this.config.legend.margin.x) + 'px';
+        legendContainer.style.top = (this.config.flipXY ? (this.config.size.y - this.config.legend.size.y - this.config.legend.margin.y) : this.config.legend.margin.y) + 'px';
         legendContainer.style.width = this.config.legend.size.x + 'px';
         legendContainer.style.height = this.config.legend.size.y + 'px';
         legendContainer.style.overflowX = 'hidden';
@@ -497,35 +497,35 @@ export class Psychart {
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         // Options for data series:
-        if (options.seriesName) {
+        if (options.name) {
             // Add an item in the legend, if not previously added.
-            if (!this.series[options.seriesName]) {
-                this.series[options.seriesName] = {
+            if (!this.series[options.name]) {
+                this.series[options.name] = {
                     lastState: currentState,
                     hidden: false,
                     pointGroup: document.createElementNS(NS, 'g'),
                     lineGroup: document.createElementNS(NS, 'g'),
                 }
                 // Add the series-level group elements onto the main groups.
-                this.g.points.appendChild(this.series[options.seriesName].pointGroup);
-                this.g.trends.appendChild(this.series[options.seriesName].lineGroup);
-                this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+                this.g.points.appendChild(this.series[options.name].pointGroup);
+                this.g.trends.appendChild(this.series[options.name].lineGroup);
+                if (options.legend) {
+                    this.addToLegend(options.name, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+                }
             } else if (options.line) {
                 // Determine whether to connect the states with a line
-                this.series[options.seriesName].lineGroup.appendChild(this.createLine([this.series[options.seriesName].lastState, currentState], color, 1));
+                this.series[options.name].lineGroup.appendChild(this.createLine([this.series[options.name].lastState, currentState], color, 1));
             }
             // Store the last state in order to draw a line.
-            this.series[options.seriesName].lastState = currentState;
+            this.series[options.name].lastState = currentState;
             // Plot the new data point onto the series group element.
-            this.series[options.seriesName].pointGroup.appendChild(point);
+            this.series[options.name].pointGroup.appendChild(point);
         } else {
             // Plot the new data point onto the base group element.
             this.g.points.appendChild(point);
         }
-        // Set up the point name to show in the tooltip.
-        const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
         // Generate the text to display on mouse hover.
-        const tooltipString: string = (pointName ? pointName + '\n' : '') +
+        const tooltipString: string = (options.name ? options.name + '\n' : '') +
             (hasTimeStamp ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
@@ -584,7 +584,7 @@ export class Psychart {
         this.clearChildren(this.legendg);
     }
     /**
-     * Return the SVG element to append on the parent.
+     * Return the HTML element to append on the parent.
      */
     public getElement(): HTMLDivElement {
         return this.base;
