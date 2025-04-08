@@ -584,7 +584,7 @@ export class Psychart {
         this.clearChildren(this.legendg);
     }
     /**
-     * Return the SVG element to append on the parent.
+     * Return the HTML element to append on the parent.
      */
     public getElement(): HTMLDivElement {
         return this.base;
