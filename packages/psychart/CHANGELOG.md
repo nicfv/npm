@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.1
+
+- Change legend `placement` to `margin`, as legend will now auto-place itself depending on whether or not `flipXY` is toggled on/off
+- Remove extraneous `pointName` and `seriesName` properties and add a single `name` property
+- Added new `legend` boolean property which can be used to optionally hide or show point in the legend
+- Various documentation updates for clarity
+
 ## 0.4.0
 
 - Add Psychart options for legend `placement` and `size`
