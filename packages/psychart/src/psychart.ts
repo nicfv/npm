@@ -542,6 +542,12 @@ export class Psychart {
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
     }
     /**
+     * Draw a straight line between 2 points on Psychart.
+     */
+    public drawLine(start: Datum, end: Datum, color: string): void {
+        this.g.trends.appendChild(this.createLine([new PsyState(start), new PsyState(end)], Color.from(color), 1));
+    }
+    /**
      * Draw a shaded region on Psychart.
      */
     private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
