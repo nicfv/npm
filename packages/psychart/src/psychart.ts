@@ -272,6 +272,7 @@ export class Psychart {
         line.setAttribute('fill', 'none');
         line.setAttribute('stroke', color.toString());
         line.setAttribute('stroke-width', weight + 'px');
+        line.setAttribute('stroke-linecap', 'round');
         line.setAttribute('vector-effect', 'non-scaling-stroke');
         // Convert the array of psychrometric states into an array of (x,y) points.
         this.setPathData(line, data, false);
@@ -540,6 +541,23 @@ export class Psychart {
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
+    }
+    /**
+     * Draw a line between 2 arbitrary points on Psychart.
+     */
+    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1): void {
+        const data: PsyState[] = [new PsyState(start)];
+        // Check if iso-relative humidity (curved line)
+        if (start.measurement === 'dbrh' && end.measurement === 'dbrh' && SMath.approx(start.other, end.other)) {
+            const mindb: number = Math.min(start.db, end.db),
+                maxdb: number = Math.max(start.db, end.db);
+            // Calculate several psychrometric states with a dry bulb step of `resolution`
+            for (let db = mindb; db < maxdb; db += this.config.resolution) {
+                data.push(new PsyState({ db: db, other: start.other, measurement: 'dbrh' }));
+            }
+        }
+        data.push(new PsyState(end));
+        this.g.trends.appendChild(this.createLine(data, Color.from(colorHex), weight));
     }
     /**
      * Draw a shaded region on Psychart.

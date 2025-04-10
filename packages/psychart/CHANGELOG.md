@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2
+
+- Expose a `drawLine()` function to draw a line between 2 arbitary points on Psychart
+
 ## 0.4.1
 
 - Change legend `placement` to `margin`, as legend will now auto-place itself depending on whether or not `flipXY` is toggled on/off
