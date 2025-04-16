@@ -250,21 +250,26 @@ export class Psychart {
             });
     }
     /**
-     * Interpolate between two psychrometric states.
+     * Interpolate between "corner" psychrometric states.
      */
-    private interpolate(start: PsyState, end: PsyState): PsyState[] {
-        const data: PsyState[] = [start];
-        // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
-        if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
-            // Determine the dry bulb range
-            const minDb: number = SMath.clamp(Math.min(start.db, end.db), this.config.dbMin, this.config.dbMax);
-            const maxDb: number = SMath.clamp(Math.max(start.db, end.db), this.config.dbMin, this.config.dbMax);
-            // Compute several intermediate states with a step of `resolution`
-            for (let db: number = minDb; db <= maxDb; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
-                // Stop generating if dew point exceeds maximum
-                if (data[data.length - 1].dp > this.config.dpMax) {
-                    break;
+    private interpolate(states: PsyState[]): PsyState[] {
+        const data: PsyState[] = [states[0]];
+        for (let i = 1; i < states.length; i++) {
+            // Determine the start and end states.
+            const start: PsyState = states[i];
+            const end: PsyState = states[i - 1];
+            // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
+            if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
+                // Determine the dry bulb range
+                const minDb: number = SMath.clamp(Math.min(start.db, end.db), this.config.dbMin, this.config.dbMax);
+                const maxDb: number = SMath.clamp(Math.max(start.db, end.db), this.config.dbMin, this.config.dbMax);
+                // Compute several intermediate states with a step of `resolution`
+                for (let db: number = minDb; db <= maxDb; db += this.config.resolution) {
+                    data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
+                    // Stop generating if dew point exceeds maximum
+                    if (data[data.length - 1].dp > this.config.dpMax) {
+                        break;
+                    }
                 }
             }
         }
