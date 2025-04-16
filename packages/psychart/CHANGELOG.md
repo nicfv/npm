@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.3
+
+- **Hotfix:** Allow `relHumType` parameter in `drawLine()` to opt between `float` (0.0-1.0) and `percent` (0-100%)
+    - **Note:** `drawLine()` will be integrated into `plot()` in a future update and use the same data options (`plot()` will have the ability to draw arbitrary lines)
+
 ## 0.4.2
 
 - Expose a `drawLine()` function to draw a line between 2 arbitary points on Psychart
