@@ -260,17 +260,18 @@ export class Psychart {
             const end: PsyState = states[i - 1];
             // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
             if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
-                // Determine the dry bulb range
-                const minDb: number = SMath.clamp(Math.min(start.db, end.db), this.config.dbMin, this.config.dbMax);
-                const maxDb: number = SMath.clamp(Math.max(start.db, end.db), this.config.dbMin, this.config.dbMax);
+                // Determine the number of intermediate values to generate
+                const nPoints: number = (Math.abs(end.db - start.db) / this.config.resolution) | 0;
                 // Compute several intermediate states with a step of `resolution`
-                for (let db: number = minDb; db <= maxDb; db += this.config.resolution) {
+                SMath.linspace(start.db, end.db, nPoints).forEach(db => {
                     data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
                     // Stop generating if dew point exceeds maximum
                     if (data[data.length - 1].dp > this.config.dpMax) {
-                        break;
+                        return;
                     }
-                }
+                });
+            } else {
+                data.push(start);
             }
         }
         return data;
@@ -287,8 +288,8 @@ export class Psychart {
     /**
      * Draw an axis line given an array of psychrometric states.
      */
-    private drawAxis(data: PsyState[]): void {
-        this.g.axes.appendChild(this.createLine(data, Color.from(this.config.colors.axis), 1.0));
+    private drawAxis(states: PsyState[]): void {
+        this.g.axes.appendChild(this.createLine(this.interpolate(states), Color.from(this.config.colors.axis), 1.0));
     }
     /**
      * Create a line to append onto a parent element.
@@ -569,47 +570,13 @@ export class Psychart {
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
     }
     /**
-     * Draw a line between 2 arbitrary points on Psychart.
-     */
-    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1): void {
-        const data: PsyState[] = [new PsyState(start)];
-        // Check if iso-relative humidity (curved line)
-        if (start.measurement === 'dbrh' && end.measurement === 'dbrh' && SMath.approx(start.other, end.other)) {
-            const mindb: number = Math.min(start.db, end.db),
-                maxdb: number = Math.max(start.db, end.db);
-            // Calculate several psychrometric states with a dry bulb step of `resolution`
-            for (let db = mindb; db < maxdb; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: start.other, measurement: 'dbrh' }));
-            }
-        }
-        data.push(new PsyState(end));
-        this.g.trends.appendChild(this.createLine(data, Color.from(colorHex), weight));
-    }
-    /**
      * Draw a shaded region on Psychart.
      */
-    private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
-        // Add the first state to the data set
-        const data: PsyState[] = [new PsyState(states[0])];
-        for (let i = 1; i < states.length; i++) {
-            const lastDatum = states[i - 1],
-                currentDatum = states[i];
-            // Check if iso-relative humidity (curved line)
-            if (lastDatum.measurement === 'dbrh' && currentDatum.measurement === 'dbrh' && SMath.approx(lastDatum.other, currentDatum.other)) {
-                const range = Math.abs(currentDatum.db - lastDatum.db);
-                // Calculate several psychrometric states with a dry bulb step of `resolution`
-                for (let i = 0; i < range; i += this.config.resolution) {
-                    const db = SMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
-                    data.push(new PsyState({ db: db, other: lastDatum.other, measurement: 'dbrh' }));
-                }
-            }
-            // Assume iso-dry bulb, wet bulb, or dew point (straight line)
-            data.push(new PsyState(currentDatum));
-        }
+    private drawRegion(data: Datum[], color: Color, tooltip?: string): void {
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
-        this.setPathData(region, data, true);
+        this.setPathData(region, this.interpolate(data.map(datum => new PsyState(datum))), true);
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (!!tooltip) {
