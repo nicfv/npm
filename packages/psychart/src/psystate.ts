@@ -92,7 +92,7 @@ export class PsyState {
     /**
      * Initialize a new psychrometric state.
      */
-    constructor(state: Datum) {
+    constructor(public readonly state: Datum) {
         this.db = state.db;
         switch (state.measurement) {
             case ('dbrh'): {
