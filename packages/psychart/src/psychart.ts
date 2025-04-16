@@ -571,7 +571,16 @@ export class Psychart {
     /**
      * Draw a line between 2 arbitrary points on Psychart.
      */
-    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1): void {
+    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1, relHumType: DataOptions['relHumType']): void {
+        // Hotfix: Adjust RH type
+        if (relHumType === 'percent') {
+            if (start.measurement === 'dbrh') {
+                start.other /= 100;
+            }
+            if (end.measurement === 'dbrh') {
+                end.other /= 100;
+            }
+        }
         const data: PsyState[] = [new PsyState(start)];
         // Check if iso-relative humidity (curved line)
         if (start.measurement === 'dbrh' && end.measurement === 'dbrh' && SMath.approx(start.other, end.other)) {
