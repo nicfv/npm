@@ -571,7 +571,7 @@ export class Psychart {
     /**
      * Draw a line between 2 arbitrary points on Psychart.
      */
-    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1, relHumType: DataOptions['relHumType']): void {
+    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1, relHumType: DataOptions['relHumType'] = 'percent'): void {
         // Hotfix: Adjust RH type
         if (relHumType === 'percent') {
             if (start.measurement === 'dbrh') {
