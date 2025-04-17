@@ -268,9 +268,10 @@ export class Psychart {
                 // Determine the dry bulb range
                 const startDb: number = crop ? SMath.clamp(start.db, this.config.dbMin, this.config.dbMax) : start.db;
                 const endDb: number = crop ? SMath.clamp(end.db, this.config.dbMin, this.config.dbMax) : end.db;
-                const reverse: number = startDb > endDb ? -1 : 1;
+                const nPoints: number = Math.abs((startDb - endDb) / this.config.resolution) | 0;
+                const dbRange: number[] = SMath.linspace(startDb, endDb, nPoints);
                 // Compute several intermediate states with a step of `resolution`
-                for (let db: number = startDb; (db * reverse) <= (endDb * reverse); db += (this.config.resolution * reverse)) {
+                for (const db of dbRange) {
                     data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
                     // Stop generating if dew point exceeds maximum
                     if (crop && data[data.length - 1].dp > this.config.dpMax) {
