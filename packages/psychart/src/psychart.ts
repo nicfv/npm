@@ -621,27 +621,10 @@ export class Psychart {
      * Draw a shaded region on Psychart.
      */
     private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
-        // Add the first state to the data set
-        const data: PsyState[] = [new PsyState(states[0])];
-        for (let i = 1; i < states.length; i++) {
-            const lastDatum = states[i - 1],
-                currentDatum = states[i];
-            // Check if iso-relative humidity (curved line)
-            if (lastDatum.measurement === 'dbrh' && currentDatum.measurement === 'dbrh' && SMath.approx(lastDatum.other, currentDatum.other)) {
-                const range = Math.abs(currentDatum.db - lastDatum.db);
-                // Calculate several psychrometric states with a dry bulb step of `resolution`
-                for (let i = 0; i < range; i += this.config.resolution) {
-                    const db = SMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
-                    data.push(new PsyState({ db: db, other: lastDatum.other, measurement: 'dbrh' }));
-                }
-            }
-            // Assume iso-dry bulb, wet bulb, or dew point (straight line)
-            data.push(new PsyState(currentDatum));
-        }
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
-        this.setPathData(region, data, true);
+        this.setPathData(region, this.interpolate(states.map(state => new PsyState(state)), false), true);
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (!!tooltip) {
