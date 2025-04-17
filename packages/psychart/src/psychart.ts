@@ -465,13 +465,15 @@ export class Psychart {
             if (this.series[seriesName].hidden) {
                 g.setAttribute('opacity', '0.5');
                 legendText.setAttribute('text-decoration', 'line-through');
-                this.series[seriesName].pointGroup.setAttribute('visibility', 'hidden');
-                this.series[seriesName].lineGroup.setAttribute('visibility', 'hidden');
+                // Remove elements of this series from Psychart
+                this.g.points.removeChild(this.series[seriesName].pointGroup);
+                this.g.trends.removeChild(this.series[seriesName].lineGroup);
             } else {
                 g.removeAttribute('opacity');
                 legendText.removeAttribute('text-decoration');
-                this.series[seriesName].pointGroup.removeAttribute('visibility');
-                this.series[seriesName].lineGroup.removeAttribute('visibility');
+                // Re-add elements of this series to Psychart
+                this.g.points.appendChild(this.series[seriesName].pointGroup);
+                this.g.trends.appendChild(this.series[seriesName].lineGroup);
             }
         });
         g.append(icon, legendText);
