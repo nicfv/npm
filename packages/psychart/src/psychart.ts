@@ -620,11 +620,13 @@ export class Psychart {
     /**
      * Draw a shaded region on Psychart.
      */
-    private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
+    private drawRegion(data: Datum[], color: Color, tooltip?: string): void {
+        // Interpolate to get a set of psychrometric states that make the border of the region
+        const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum)), false);
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
-        this.setPathData(region, this.interpolate(states.map(state => new PsyState(state)), false), true);
+        this.setPathData(region, states, true);
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (!!tooltip) {
