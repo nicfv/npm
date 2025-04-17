@@ -252,7 +252,12 @@ export class Psychart {
     /**
      * Interpolate between "corner" psychrometric states.
      */
-    private interpolate(states: PsyState[]): PsyState[] {
+    private interpolate(states: PsyState[], crop: boolean): PsyState[] {
+        // Cannot interpolate with only 1 point!
+        if (states.length < 2) {
+            return states;
+        }
+        // Create array containing interpolated points, starting with the first state.
         const data: PsyState[] = [states[0]];
         for (let i = 1; i < states.length; i++) {
             // Determine the start and end states.
@@ -261,16 +266,20 @@ export class Psychart {
             // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
             if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
                 // Determine the dry bulb range
-                const minDb: number = SMath.clamp(Math.min(start.db, end.db), this.config.dbMin, this.config.dbMax);
-                const maxDb: number = SMath.clamp(Math.max(start.db, end.db), this.config.dbMin, this.config.dbMax);
+                const minDb_noCrop: number = Math.min(start.db, end.db);
+                const maxDb_noCrop: number = Math.max(start.db, end.db);
+                const minDb: number = crop ? SMath.clamp(minDb_noCrop, this.config.dbMin, this.config.dbMax) : minDb_noCrop;
+                const maxDb: number = crop ? SMath.clamp(maxDb_noCrop, this.config.dbMin, this.config.dbMax) : maxDb_noCrop;
                 // Compute several intermediate states with a step of `resolution`
                 for (let db: number = minDb; db <= maxDb; db += this.config.resolution) {
                     data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
                     // Stop generating if dew point exceeds maximum
-                    if (data[data.length - 1].dp > this.config.dpMax) {
+                    if (crop && data[data.length - 1].dp > this.config.dpMax) {
                         break;
                     }
                 }
+            } else {
+                data.push(end);
             }
         }
         return data;
@@ -597,32 +606,6 @@ export class Psychart {
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
-    }
-    /**
-     * Draw a line between 2 arbitrary points on Psychart.
-     */
-    public drawLine(start: Datum, end: Datum, colorHex: string, weight: number = 1, relHumType: DataOptions['relHumType'] = 'percent'): void {
-        // Hotfix: Adjust RH type
-        if (relHumType === 'percent') {
-            if (start.measurement === 'dbrh') {
-                start.other /= 100;
-            }
-            if (end.measurement === 'dbrh') {
-                end.other /= 100;
-            }
-        }
-        const data: PsyState[] = [new PsyState(start)];
-        // Check if iso-relative humidity (curved line)
-        if (start.measurement === 'dbrh' && end.measurement === 'dbrh' && SMath.approx(start.other, end.other)) {
-            const mindb: number = Math.min(start.db, end.db),
-                maxdb: number = Math.max(start.db, end.db);
-            // Calculate several psychrometric states with a dry bulb step of `resolution`
-            for (let db = mindb; db < maxdb; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: start.other, measurement: 'dbrh' }));
-            }
-        }
-        data.push(new PsyState(end));
-        this.g.trends.appendChild(this.createLine(data, Color.from(colorHex), weight));
     }
     /**
      * Draw a shaded region on Psychart.
