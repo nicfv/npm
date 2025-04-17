@@ -157,7 +157,7 @@ export class Psychart {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         switch (this.config.yAxis) {
             case ('dp'): {
@@ -170,7 +170,7 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+                    this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
                 });
                 break;
             }
@@ -187,7 +187,7 @@ export class Psychart {
                     data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
@@ -204,7 +204,7 @@ export class Psychart {
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         // Draw constant relative humidity lines.
         Psychart.getRange(0, 100, this.config.major.relHum).forEach(rh => {
@@ -215,7 +215,7 @@ export class Psychart {
                 data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
-                    preferredAnchor = this.config.flipXY ? TextAnchor.W : TextAnchor.S;
+                    preferredAnchor = TextAnchor.S;
                     break;
                 }
             }
@@ -322,21 +322,27 @@ export class Psychart {
             switch (anchor) {
                 case (TextAnchor.E): {
                     anchor = TextAnchor.N;
+                    break;
                 }
                 case (TextAnchor.N): {
                     anchor = TextAnchor.E;
+                    break;
                 }
                 case (TextAnchor.NW): {
                     anchor = TextAnchor.SE;
+                    break;
                 }
                 case (TextAnchor.SE): {
                     anchor = TextAnchor.NW;
+                    break;
                 }
                 case (TextAnchor.S): {
                     anchor = TextAnchor.W;
+                    break;
                 }
                 case (TextAnchor.W): {
                     anchor = TextAnchor.S;
+                    break;
                 }
             }
         }
