@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.4
+
+- Completely remove SVG elements from Psychart when visibility toggled off in the legend; this should fix any residual issues where hidden points may show a tooltip when hovered over
+
 ## 0.4.3
 
 - **Hotfix:** Allow `relHumType` parameter in `drawLine()` to opt between `float` (0.0-1.0) and `percent` (0-100%)
