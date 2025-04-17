@@ -261,8 +261,8 @@ export class Psychart {
         const data: PsyState[] = [states[0]];
         for (let i = 1; i < states.length; i++) {
             // Determine the start and end states.
-            const start: PsyState = states[i];
-            const end: PsyState = states[i - 1];
+            const start: PsyState = states[i - 1];
+            const end: PsyState = states[i];
             // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
             if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
                 // Determine the dry bulb range
@@ -557,6 +557,8 @@ export class Psychart {
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
+        // Determine whether to draw a line from another point.
+        let lineFrom: PsyState | null = null;
         // Options for data series:
         if (options.name) {
             // Add an item in the legend, if not previously added.
@@ -573,9 +575,9 @@ export class Psychart {
                 if (options.legend) {
                     this.addToLegend(options.name, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
                 }
-            } else if (options.line) {
+            } else if (options.line === true) {
                 // Determine whether to connect the states with a line
-                this.series[options.name].lineGroup.appendChild(this.createLine([this.series[options.name].lastState, currentState], color, 1));
+                lineFrom = this.series[options.name].lastState;
             }
             // Store the last state in order to draw a line.
             this.series[options.name].lastState = currentState;
@@ -584,6 +586,19 @@ export class Psychart {
         } else {
             // Plot the new data point onto the base group element.
             this.g.points.appendChild(point);
+        }
+        // Check for arbitrary origin point to draw a line.
+        if (typeof options.line === 'object') {
+            lineFrom = new PsyState(options.line);
+        }
+        // Draw a line.
+        if (lineFrom) {
+            const line: SVGPathElement = this.createLine(this.interpolate([lineFrom, currentState], true), color, options.pointRadius / 2);
+            if (options.name) {
+                this.series[options.name].lineGroup.appendChild(line);
+            } else {
+                this.g.trends.appendChild(line);
+            }
         }
         // Generate the text to display on mouse hover.
         const tooltipString: string = (options.name ? options.name + '\n' : '') +
