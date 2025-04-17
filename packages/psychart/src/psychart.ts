@@ -397,6 +397,34 @@ export class Psychart {
         return label;
     }
     /**
+     * Flip the text anchor if the x and y coordinates are flipped.
+     */
+    private flipAnchor(anchor: TextAnchor): TextAnchor {
+        if (this.config.flipXY) {
+            switch (anchor) {
+                case (TextAnchor.E): {
+                    return TextAnchor.N;
+                }
+                case (TextAnchor.N): {
+                    return TextAnchor.E;
+                }
+                case (TextAnchor.NW): {
+                    return TextAnchor.SE;
+                }
+                case (TextAnchor.SE): {
+                    return TextAnchor.NW;
+                }
+                case (TextAnchor.S): {
+                    return TextAnchor.W;
+                }
+                case (TextAnchor.W): {
+                    return TextAnchor.S;
+                }
+            }
+        }
+        return anchor;
+    }
+    /**
      * Create a tooltip element.
      */
     private drawTooltip(text: string, location: Point, color: Color): void {
