@@ -266,12 +266,11 @@ export class Psychart {
             // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
             if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
                 // Determine the dry bulb range
-                const minDb_noCrop: number = Math.min(start.db, end.db);
-                const maxDb_noCrop: number = Math.max(start.db, end.db);
-                const minDb: number = crop ? SMath.clamp(minDb_noCrop, this.config.dbMin, this.config.dbMax) : minDb_noCrop;
-                const maxDb: number = crop ? SMath.clamp(maxDb_noCrop, this.config.dbMin, this.config.dbMax) : maxDb_noCrop;
+                const startDb: number = crop ? SMath.clamp(start.db, this.config.dbMin, this.config.dbMax) : start.db;
+                const endDb: number = crop ? SMath.clamp(end.db, this.config.dbMin, this.config.dbMax) : end.db;
+                const reverse: number = startDb > endDb ? -1 : 1;
                 // Compute several intermediate states with a step of `resolution`
-                for (let db: number = minDb; db <= maxDb; db += this.config.resolution) {
+                for (let db: number = startDb; (db * reverse) <= (endDb * reverse); db += (this.config.resolution * reverse)) {
                     data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
                     // Stop generating if dew point exceeds maximum
                     if (crop && data[data.length - 1].dp > this.config.dpMax) {
