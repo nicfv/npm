@@ -317,6 +317,29 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
+        // Determine if anchor needs to be mirrored
+        if (this.config.flipXY) {
+            switch (anchor) {
+                case (TextAnchor.E): {
+                    anchor = TextAnchor.N;
+                }
+                case (TextAnchor.N): {
+                    anchor = TextAnchor.E;
+                }
+                case (TextAnchor.NW): {
+                    anchor = TextAnchor.SE;
+                }
+                case (TextAnchor.SE): {
+                    anchor = TextAnchor.NW;
+                }
+                case (TextAnchor.S): {
+                    anchor = TextAnchor.W;
+                }
+                case (TextAnchor.W): {
+                    anchor = TextAnchor.S;
+                }
+            }
+        }
         const fontColor: Color = Color.from(this.config.colors.font),
             label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
@@ -404,34 +427,6 @@ export class Psychart {
         }
         label.textContent = text;
         return label;
-    }
-    /**
-     * Flip the text anchor if the x and y coordinates are flipped.
-     */
-    private flipAnchor(anchor: TextAnchor): TextAnchor {
-        if (this.config.flipXY) {
-            switch (anchor) {
-                case (TextAnchor.E): {
-                    return TextAnchor.N;
-                }
-                case (TextAnchor.N): {
-                    return TextAnchor.E;
-                }
-                case (TextAnchor.NW): {
-                    return TextAnchor.SE;
-                }
-                case (TextAnchor.SE): {
-                    return TextAnchor.NW;
-                }
-                case (TextAnchor.S): {
-                    return TextAnchor.W;
-                }
-                case (TextAnchor.W): {
-                    return TextAnchor.S;
-                }
-            }
-        }
-        return anchor;
     }
     /**
      * Create a tooltip element.
