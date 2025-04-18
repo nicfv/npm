@@ -11,6 +11,14 @@ const NS = 'http://www.w3.org/2000/svg';
  */
 export class Psychart {
     /**
+     * ID counter that counts up every time Psychart is initialized.
+     */
+    private static id_count: number = 0;
+    /**
+     * The unique serial ID of this instance of Psychart.
+     */
+    private readonly id: number;
+    /**
      * Psychart full configuration.
      */
     private readonly config: PsychartOptions;
@@ -101,6 +109,9 @@ export class Psychart {
      * Construct a new instance of `Psychart` given various configuration properties.
      */
     constructor(options: Partial<PsychartOptions> = {}) {
+        // Set the unique ID of Psychart
+        this.id = ++Psychart.id_count;
+        // Set the configuration options
         this.config = setDefaults(options, defaultPsychartOptions);
         // Compute a first-time initialization of psychrolib
         PsyState.initialize(this.config);
@@ -490,7 +501,7 @@ export class Psychart {
         if (color) {
             icon.setAttribute('fill', color.toString());
         } else if (gradient) {
-            const uniqueGradientID: string = 'grad_' + this.legendDefs.children.length;
+            const uniqueGradientID: string = 'psy_' + this.id + '_grad_' + this.legendDefs.children.length;
             this.legendDefs.appendChild(Palette[gradient].toSVG(uniqueGradientID));
             icon.setAttribute('fill', 'url(#' + uniqueGradientID + ')');
         } else {
