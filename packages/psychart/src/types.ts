@@ -192,9 +192,9 @@ export interface DataOptions {
      */
     readonly pointRadius: number;
     /**
-     * Determines whether or not to connect points with a line.
+     * Determines whether or not to connect points with a line. If a `Datum` is provided, will draw a line from that point.
      */
-    readonly line: boolean;
+    readonly line: boolean | Datum;
     /**
      * Determine the solid color **hex-code** for time-independent plots.
      */
