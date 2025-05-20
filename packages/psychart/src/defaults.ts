@@ -43,6 +43,7 @@ export const defaultPsychartOptions: PsychartOptions = {
         size: 12,
     },
     legend: {
+        title: 'Legend',
         margin: { x: 40, y: 20 },
         size: { x: 300, y: 200 },
     },
