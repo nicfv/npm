@@ -187,14 +187,12 @@ export class Psychart {
                 // Draw constant humidity ratio horizontal lines.
                 const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }, this.config).hr,
                     step: number = this.config.major.humRat / this.scaleFactor.hr;
-                console.log(maxHr, step);
                 Psychart.getRange(0, maxHr, step).forEach(hr => {
                     const data: PsyState[] = [];
                     // The right point is at the maximum dry bulb temperature
                     data.push(new PsyState({ db: this.config.dbMax, other: hr, measurement: 'dbhr' }, this.config));
                     // The left point is on the saturation line
                     const dp: number = data[data.length - 1].dp;
-                    console.log(hr, dp);
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.config));
                     // Draw the axis and the label
                     this.drawAxis(data);
