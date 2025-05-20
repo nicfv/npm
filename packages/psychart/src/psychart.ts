@@ -121,28 +121,32 @@ export class Psychart {
         this.svg.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
         this.svg.setAttribute('width', this.config.size.x + 'px');
         this.svg.setAttribute('height', this.config.size.y + 'px');
-        // Set the legend's viewport size.
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
-        this.legend.setAttribute('width', this.config.size.x + 'px');
-        this.legend.setAttribute('height', this.getLegendHeight() + 'px');
-        this.legend.appendChild(this.legendDefs);
-        this.legend.appendChild(this.createLabel('Legend', { x: 0, y: 0 }, Color.from(this.config.colors.font), TextAnchor.NW));
-        this.legend.appendChild(this.legendg);
-        // Attach elements to the base element.
-        const legendContainer: HTMLDivElement = document.createElement('div');
-        legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
-        legendContainer.style.position = 'absolute';
-        legendContainer.style.left = (this.config.flipXY ? (this.config.size.x - this.config.legend.size.x - this.config.legend.margin.x) : this.config.legend.margin.x) + 'px';
-        legendContainer.style.top = (this.config.flipXY ? (this.config.size.y - this.config.legend.size.y - this.config.legend.margin.y) : this.config.legend.margin.y) + 'px';
-        legendContainer.style.width = this.config.legend.size.x + 'px';
-        legendContainer.style.height = this.config.legend.size.y + 'px';
-        legendContainer.style.overflowX = 'hidden';
-        legendContainer.style.overflowY = 'auto';
-        legendContainer.style.border = '1px solid ' + this.config.colors.axis;
-        legendContainer.appendChild(this.legend);
+        // Set base styling, and append the chart.
         this.base.style.position = 'relative';
         this.base.appendChild(this.svg);
-        this.base.appendChild(legendContainer);
+        // If set, generate the legend.
+        if (typeof this.config.legend === 'object') {
+            // Set the legend's viewport size.
+            this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
+            this.legend.setAttribute('width', this.config.size.x + 'px');
+            this.legend.setAttribute('height', this.getLegendHeight() + 'px');
+            this.legend.appendChild(this.legendDefs);
+            this.legend.appendChild(this.createLabel(this.config.legend.title, { x: 0, y: 0 }, Color.from(this.config.colors.font), TextAnchor.NW));
+            this.legend.appendChild(this.legendg);
+            // Attach elements to the base element.
+            const legendContainer: HTMLDivElement = document.createElement('div');
+            legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
+            legendContainer.style.position = 'absolute';
+            legendContainer.style.left = (this.config.flipXY ? (this.config.size.x - this.config.legend.size.x - this.config.legend.margin.x) : this.config.legend.margin.x) + 'px';
+            legendContainer.style.top = (this.config.flipXY ? (this.config.size.y - this.config.legend.size.y - this.config.legend.margin.y) : this.config.legend.margin.y) + 'px';
+            legendContainer.style.width = this.config.legend.size.x + 'px';
+            legendContainer.style.height = this.config.legend.size.y + 'px';
+            legendContainer.style.overflowX = 'hidden';
+            legendContainer.style.overflowY = 'auto';
+            legendContainer.style.border = '1px solid ' + this.config.colors.axis;
+            legendContainer.appendChild(this.legend);
+            this.base.appendChild(legendContainer);
+        }
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
