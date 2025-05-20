@@ -113,8 +113,6 @@ export class Psychart {
         this.id = ++Psychart.id_count;
         // Set the configuration options
         this.config = setDefaults(options, defaultPsychartOptions);
-        // Compute a first-time initialization of psychrolib
-        PsyState.initialize(this.config);
         // Check to make sure that dpMax is less than dbMax
         if (this.config.dpMax > this.config.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
@@ -163,9 +161,9 @@ export class Psychart {
         Psychart.getRange(this.config.dbMin, this.config.dbMax, this.config.major.temp).forEach(db => {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
-            data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }));
+            data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }, this.config));
             // The upper point is on the saturation line (rh = 100%)
-            data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
+            data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }, this.config));
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
@@ -176,9 +174,9 @@ export class Psychart {
                 Psychart.getRange(0, this.config.dpMax, this.config.major.temp).forEach(dp => {
                     const data: PsyState[] = [];
                     // The left point is on the saturation line (db = dp)
-                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
+                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.config));
                     // The right point is at the maximum dry bulb temperature
-                    data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
+                    data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }, this.config));
                     // Draw the axis and the label
                     this.drawAxis(data);
                     this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
@@ -187,18 +185,20 @@ export class Psychart {
             }
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
-                const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }).hr,
+                const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }, this.config).hr,
                     step: number = this.config.major.humRat / this.scaleFactor.hr;
+                console.log(maxHr, step);
                 Psychart.getRange(0, maxHr, step).forEach(hr => {
-                    const data: PsyState[] = [],
-                        dp: number = PsyState.hr2dp(this.config.dbMax, hr);
-                    // The left point is on the saturation line
-                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
+                    const data: PsyState[] = [];
                     // The right point is at the maximum dry bulb temperature
-                    data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
+                    data.push(new PsyState({ db: this.config.dbMax, other: hr, measurement: 'dbhr' }, this.config));
+                    // The left point is on the saturation line
+                    const dp: number = data[data.length - 1].dp;
+                    console.log(hr, dp);
+                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.config));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
@@ -211,7 +211,7 @@ export class Psychart {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
             for (let db = wb; db <= this.config.dbMax; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }));
+                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }, this.config));
             }
             // Draw the axis and the label
             this.drawAxis(data);
@@ -223,7 +223,7 @@ export class Psychart {
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
             for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
+                data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }, this.config));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
                     preferredAnchor = TextAnchor.S;
@@ -283,7 +283,7 @@ export class Psychart {
                 const dbRange: number[] = SMath.linspace(startDb, endDb, nPoints);
                 // Compute several intermediate states with a step of `resolution`
                 for (const db of dbRange) {
-                    data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }));
+                    data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }, this.config));
                     // Stop generating if dew point exceeds maximum
                     if (crop && data[data.length - 1].dp > this.config.dpMax) {
                         break;
@@ -559,7 +559,7 @@ export class Psychart {
         if (state.measurement === 'dbrh' && options.relHumType === 'percent') {
             state.other /= 100;
         }
-        const currentState = new PsyState(state),
+        const currentState = new PsyState(state, this.config),
             location = currentState.toXY();
         // Compute the current color to plot
         const tMin: number = (this.config.flipGradients) ? options.time.end : options.time.start,
@@ -606,7 +606,7 @@ export class Psychart {
         }
         // Check for arbitrary origin point to draw a line.
         if (typeof options.line === 'object') {
-            lineFrom = new PsyState(options.line);
+            lineFrom = new PsyState(options.line, this.config);
         }
         // Draw a line.
         if (lineFrom) {
@@ -639,7 +639,7 @@ export class Psychart {
      */
     private drawRegion(data: Datum[], color: Color, tooltip?: string): void {
         // Interpolate to get a set of psychrometric states that make the border of the region
-        const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum)), false);
+        const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum, this.config)), false);
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
