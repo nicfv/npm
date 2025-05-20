@@ -7,6 +7,7 @@ const ps = new Psychart({
     dpMax: 40, // [deg C]
     flipXY: true,
     yAxis: 'hr', // Humidity Ratio
+    legend: false,
 });
 
 window.addEventListener('load', () => {
