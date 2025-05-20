@@ -90,4 +90,18 @@ function plotData() {
             pointRadius: 8, // Enlarge the point to make it visually stand out
         }
     );
+    // Draw a warning line on the 70F wetbulb line, from 70-80F dry bulb.
+    ps.plot(
+        {
+            db: 80,
+            other: 70,
+            measurement: 'dbwb'
+        },
+        {
+            name: 'Warning',
+            legend: false,
+            color: 'FBAB10',
+            line: { db: 70, other: 70, measurement: 'dbwb' } // Draw a line between 2 arbitary points.
+        }
+    );
 }
