@@ -196,7 +196,7 @@ export class Psychart {
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.config));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(SMath.round2(hr * this.scaleFactor.hr, 1) + (this.config.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
