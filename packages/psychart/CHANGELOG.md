@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0
+
+- Add option to configure legend title
+- The `legend` parameter now accepts `false`, which will skip generating and rendering the legend entirely
+    - Previously, this could be worked around by setting the size to zero, but the element would still be generated and rendered
+- Allow dry bulb and humidity ratio `dbhr` measurement type!
+    - Humidity ratio units are inputted as unit mass water per unit mass air (e.g. grams water per grams air)
+- The `plot()` function can now handle drawing a line between 2 arbitrary points by inputting a Datum in the `line` data option property
+- Completely remove static members from `Psystate`
+    - This fixes a bug where multiple Psycharts on the same HTML page would be forced to share some of the same properties (e.g. unit system, graph bounds, etc.)
+- Fix a bug where legend icons would be rendered incorrectly when multiple instances of Psychart were rendered to the same HTML page
+- Code cleanup in `Psychart.ts` source file
+- Improvements to some documentation
+
 ## 0.4.4
 
 - Completely remove SVG elements from Psychart when visibility toggled off in the legend; this should fix any residual issues where hidden points may show a tooltip when hovered over
