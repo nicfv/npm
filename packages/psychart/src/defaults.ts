@@ -43,7 +43,8 @@ export const defaultPsychartOptions: PsychartOptions = {
         size: 12,
     },
     legend: {
-        placement: { x: 40, y: 20 },
+        title: 'Legend',
+        margin: { x: 40, y: 20 },
         size: { x: 300, y: 200 },
     },
     lineHeight: 1.25,
@@ -71,11 +72,11 @@ export const defaultDataOptions: DataOptions = {
     advanced: false,
     color: '#FF0000',
     gradient: 'Viridis',
+    legend: true,
     line: true,
-    pointName: '',
+    name: '',
     pointRadius: 5,
     relHumType: 'percent',
-    seriesName: '',
     time: {
         start: NaN,
         now: NaN,

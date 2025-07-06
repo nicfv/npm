@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.5.0
+
+- Add option to configure legend title
+- The `legend` parameter now accepts `false`, which will skip generating and rendering the legend entirely
+    - Previously, this could be worked around by setting the size to zero, but the element would still be generated and rendered
+- Allow dry bulb and humidity ratio `dbhr` measurement type!
+    - Humidity ratio units are inputted as unit mass water per unit mass air (e.g. grams water per grams air)
+- The `plot()` function can now handle drawing a line between 2 arbitrary points by inputting a Datum in the `line` data option property
+- Completely remove static members from `Psystate`
+    - This fixes a bug where multiple Psycharts on the same HTML page would be forced to share some of the same properties (e.g. unit system, graph bounds, etc.)
+- Fix a bug where legend icons would be rendered incorrectly when multiple instances of Psychart were rendered to the same HTML page
+- Code cleanup in `Psychart.ts` source file
+- Improvements to some documentation
+
+## 0.4.4
+
+- Completely remove SVG elements from Psychart when visibility toggled off in the legend; this should fix any residual issues where hidden points may show a tooltip when hovered over
+
+## 0.4.3
+
+- **Hotfix:** Allow `relHumType` parameter in `drawLine()` to opt between `float` (0.0-1.0) and `percent` (0-100%)
+    - **Note:** `drawLine()` will be integrated into `plot()` in a future update and use the same data options (`plot()` will have the ability to draw arbitrary lines)
+
+## 0.4.2
+
+- Expose a `drawLine()` function to draw a line between 2 arbitary points on Psychart
+
+## 0.4.1
+
+- Change legend `placement` to `margin`, as legend will now auto-place itself depending on whether or not `flipXY` is toggled on/off
+- Remove extraneous `pointName` and `seriesName` properties and add a single `name` property
+- Added new `legend` boolean property which can be used to optionally hide or show point in the legend
+- Various documentation updates for clarity
+
 ## 0.4.0
 
 - Add Psychart options for legend `placement` and `size`
