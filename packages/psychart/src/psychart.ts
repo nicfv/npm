@@ -11,6 +11,14 @@ const NS = 'http://www.w3.org/2000/svg';
  */
 export class Psychart {
     /**
+     * ID counter that counts up every time Psychart is initialized.
+     */
+    private static id_count: number = 0;
+    /**
+     * The unique serial ID of this instance of Psychart.
+     */
+    private readonly id: number;
+    /**
      * Psychart full configuration.
      */
     private readonly config: PsychartOptions;
@@ -101,9 +109,10 @@ export class Psychart {
      * Construct a new instance of `Psychart` given various configuration properties.
      */
     constructor(options: Partial<PsychartOptions> = {}) {
+        // Set the unique ID of Psychart
+        this.id = ++Psychart.id_count;
+        // Set the configuration options
         this.config = setDefaults(options, defaultPsychartOptions);
-        // Compute a first-time initialization of psychrolib
-        PsyState.initialize(this.config);
         // Check to make sure that dpMax is less than dbMax
         if (this.config.dpMax > this.config.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
@@ -112,28 +121,32 @@ export class Psychart {
         this.svg.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.config.size.y);
         this.svg.setAttribute('width', this.config.size.x + 'px');
         this.svg.setAttribute('height', this.config.size.y + 'px');
-        // Set the legend's viewport size.
-        this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
-        this.legend.setAttribute('width', this.config.size.x + 'px');
-        this.legend.setAttribute('height', this.getLegendHeight() + 'px');
-        this.legend.appendChild(this.legendDefs);
-        this.legend.appendChild(this.createLabel('Legend', { x: 0, y: 0 }, Color.from(this.config.colors.font), TextAnchor.NW));
-        this.legend.appendChild(this.legendg);
-        // Attach elements to the base element.
-        const legendContainer: HTMLDivElement = document.createElement('div');
-        legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
-        legendContainer.style.position = 'absolute';
-        legendContainer.style.left = this.config.legend.placement.x + 'px';
-        legendContainer.style.top = this.config.legend.placement.y + 'px';
-        legendContainer.style.width = this.config.legend.size.x + 'px';
-        legendContainer.style.height = this.config.legend.size.y + 'px';
-        legendContainer.style.overflowX = 'hidden';
-        legendContainer.style.overflowY = 'auto';
-        legendContainer.style.border = '1px solid ' + this.config.colors.axis;
-        legendContainer.appendChild(this.legend);
+        // Set base styling, and append the chart.
         this.base.style.position = 'relative';
         this.base.appendChild(this.svg);
-        this.base.appendChild(legendContainer);
+        // If set, generate the legend.
+        if (typeof this.config.legend === 'object') {
+            // Set the legend's viewport size.
+            this.legend.setAttribute('viewBox', '0 0 ' + this.config.size.x + ' ' + this.getLegendHeight());
+            this.legend.setAttribute('width', this.config.size.x + 'px');
+            this.legend.setAttribute('height', this.getLegendHeight() + 'px');
+            this.legend.appendChild(this.legendDefs);
+            this.legend.appendChild(this.createLabel(this.config.legend.title, { x: 0, y: 0 }, Color.from(this.config.colors.font), TextAnchor.NW));
+            this.legend.appendChild(this.legendg);
+            // Attach elements to the base element.
+            const legendContainer: HTMLDivElement = document.createElement('div');
+            legendContainer.setAttribute('title', 'Click to toggle data series visibility.');
+            legendContainer.style.position = 'absolute';
+            legendContainer.style.left = (this.config.flipXY ? (this.config.size.x - this.config.legend.size.x - this.config.legend.margin.x) : this.config.legend.margin.x) + 'px';
+            legendContainer.style.top = (this.config.flipXY ? (this.config.size.y - this.config.legend.size.y - this.config.legend.margin.y) : this.config.legend.margin.y) + 'px';
+            legendContainer.style.width = this.config.legend.size.x + 'px';
+            legendContainer.style.height = this.config.legend.size.y + 'px';
+            legendContainer.style.overflowX = 'hidden';
+            legendContainer.style.overflowY = 'auto';
+            legendContainer.style.border = '1px solid ' + this.config.colors.axis;
+            legendContainer.appendChild(this.legend);
+            this.base.appendChild(legendContainer);
+        }
         // Sets the displayed units based on the unit system.
         this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
         this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/klba' : 'gw/kga');
@@ -152,12 +165,12 @@ export class Psychart {
         Psychart.getRange(this.config.dbMin, this.config.dbMax, this.config.major.temp).forEach(db => {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
-            data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }));
+            data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }, this.config));
             // The upper point is on the saturation line (rh = 100%)
-            data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
+            data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }, this.config));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(db + (this.config.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 'Dry Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         switch (this.config.yAxis) {
             case ('dp'): {
@@ -165,29 +178,29 @@ export class Psychart {
                 Psychart.getRange(0, this.config.dpMax, this.config.major.temp).forEach(dp => {
                     const data: PsyState[] = [];
                     // The left point is on the saturation line (db = dp)
-                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
+                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.config));
                     // The right point is at the maximum dry bulb temperature
-                    data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
+                    data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }, this.config));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+                    this.drawLabel(dp + (this.config.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 'Dew Point' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
                 });
                 break;
             }
             case ('hr'): {
                 // Draw constant humidity ratio horizontal lines.
-                const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }).hr,
+                const maxHr: number = new PsyState({ db: this.config.dbMax, measurement: 'dbdp', other: this.config.dpMax }, this.config).hr,
                     step: number = this.config.major.humRat / this.scaleFactor.hr;
                 Psychart.getRange(0, maxHr, step).forEach(hr => {
-                    const data: PsyState[] = [],
-                        dp: number = PsyState.hr2dp(this.config.dbMax, hr);
-                    // The left point is on the saturation line
-                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
+                    const data: PsyState[] = [];
                     // The right point is at the maximum dry bulb temperature
-                    data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
+                    data.push(new PsyState({ db: this.config.dbMax, other: hr, measurement: 'dbhr' }, this.config));
+                    // The left point is on the saturation line
+                    const dp: number = data[data.length - 1].dp;
+                    data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.config));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(Math.round(hr * this.scaleFactor.hr) + (this.config.showUnits.axis ? this.units.hr : ''), data[1], this.config.flipXY ? TextAnchor.S : TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(SMath.round2(hr * this.scaleFactor.hr, 1) + (this.config.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 'Humidity Ratio' + (this.config.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
@@ -200,11 +213,11 @@ export class Psychart {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
             for (let db = wb; db <= this.config.dbMax; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }));
+                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }, this.config));
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], this.config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(wb + (this.config.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 'Wet Bulb' + (this.config.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         // Draw constant relative humidity lines.
         Psychart.getRange(0, 100, this.config.major.relHum).forEach(rh => {
@@ -212,10 +225,10 @@ export class Psychart {
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
             for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.config.resolution) {
-                data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
+                data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }, this.config));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
-                    preferredAnchor = this.config.flipXY ? TextAnchor.W : TextAnchor.S;
+                    preferredAnchor = TextAnchor.S;
                     break;
                 }
             }
@@ -250,6 +263,41 @@ export class Psychart {
             });
     }
     /**
+     * Interpolate between "corner" psychrometric states.
+     */
+    private interpolate(states: PsyState[], crop: boolean): PsyState[] {
+        // Cannot interpolate with only 1 point!
+        if (states.length < 2) {
+            return states;
+        }
+        // Create array containing interpolated points, starting with the first state.
+        const data: PsyState[] = [states[0]];
+        for (let i = 1; i < states.length; i++) {
+            // Determine the start and end states.
+            const start: PsyState = states[i - 1];
+            const end: PsyState = states[i];
+            // Check if iso-rh, iso-wb, or iso-dp curved or straight lines
+            if (start.state.measurement === end.state.measurement && SMath.approx(start.state.other, end.state.other)) {
+                // Determine the dry bulb range
+                const startDb: number = crop ? SMath.clamp(start.db, this.config.dbMin, this.config.dbMax) : start.db;
+                const endDb: number = crop ? SMath.clamp(end.db, this.config.dbMin, this.config.dbMax) : end.db;
+                const nPoints: number = Math.abs((startDb - endDb) / this.config.resolution) | 0;
+                const dbRange: number[] = SMath.linspace(startDb, endDb, nPoints);
+                // Compute several intermediate states with a step of `resolution`
+                for (const db of dbRange) {
+                    data.push(new PsyState({ db: db, other: start.state.other, measurement: start.state.measurement }, this.config));
+                    // Stop generating if dew point exceeds maximum
+                    if (crop && data[data.length - 1].dp > this.config.dpMax) {
+                        break;
+                    }
+                }
+            } else {
+                data.push(end);
+            }
+        }
+        return data;
+    }
+    /**
      * Generate SVG path data from an array of psychrometric states.
      */
     private setPathData(path: SVGPathElement, psystates: PsyState[], closePath: boolean): void {
@@ -272,6 +320,7 @@ export class Psychart {
         line.setAttribute('fill', 'none');
         line.setAttribute('stroke', color.toString());
         line.setAttribute('stroke-width', weight + 'px');
+        line.setAttribute('stroke-linecap', 'round');
         line.setAttribute('vector-effect', 'non-scaling-stroke');
         // Convert the array of psychrometric states into an array of (x,y) points.
         this.setPathData(line, data, false);
@@ -281,6 +330,35 @@ export class Psychart {
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
+        // Determine if anchor needs to be mirrored
+        if (this.config.flipXY) {
+            switch (anchor) {
+                case (TextAnchor.E): {
+                    anchor = TextAnchor.N;
+                    break;
+                }
+                case (TextAnchor.N): {
+                    anchor = TextAnchor.E;
+                    break;
+                }
+                case (TextAnchor.NW): {
+                    anchor = TextAnchor.SE;
+                    break;
+                }
+                case (TextAnchor.SE): {
+                    anchor = TextAnchor.NW;
+                    break;
+                }
+                case (TextAnchor.S): {
+                    anchor = TextAnchor.W;
+                    break;
+                }
+                case (TextAnchor.W): {
+                    anchor = TextAnchor.S;
+                    break;
+                }
+            }
+        }
         const fontColor: Color = Color.from(this.config.colors.font),
             label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
@@ -425,7 +503,7 @@ export class Psychart {
         if (color) {
             icon.setAttribute('fill', color.toString());
         } else if (gradient) {
-            const uniqueGradientID: string = 'grad_' + this.legendDefs.children.length;
+            const uniqueGradientID: string = 'psy_' + this.id + '_grad_' + this.legendDefs.children.length;
             this.legendDefs.appendChild(Palette[gradient].toSVG(uniqueGradientID));
             icon.setAttribute('fill', 'url(#' + uniqueGradientID + ')');
         } else {
@@ -438,13 +516,15 @@ export class Psychart {
             if (this.series[seriesName].hidden) {
                 g.setAttribute('opacity', '0.5');
                 legendText.setAttribute('text-decoration', 'line-through');
-                this.series[seriesName].pointGroup.setAttribute('visibility', 'hidden');
-                this.series[seriesName].lineGroup.setAttribute('visibility', 'hidden');
+                // Remove elements of this series from Psychart
+                this.g.points.removeChild(this.series[seriesName].pointGroup);
+                this.g.trends.removeChild(this.series[seriesName].lineGroup);
             } else {
                 g.removeAttribute('opacity');
                 legendText.removeAttribute('text-decoration');
-                this.series[seriesName].pointGroup.removeAttribute('visibility');
-                this.series[seriesName].lineGroup.removeAttribute('visibility');
+                // Re-add elements of this series to Psychart
+                this.g.points.appendChild(this.series[seriesName].pointGroup);
+                this.g.trends.appendChild(this.series[seriesName].lineGroup);
             }
         });
         g.append(icon, legendText);
@@ -481,7 +561,7 @@ export class Psychart {
         if (state.measurement === 'dbrh' && options.relHumType === 'percent') {
             state.other /= 100;
         }
-        const currentState = new PsyState(state),
+        const currentState = new PsyState(state, this.config),
             location = currentState.toXY();
         // Compute the current color to plot
         const tMin: number = (this.config.flipGradients) ? options.time.end : options.time.start,
@@ -496,36 +576,51 @@ export class Psychart {
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
+        // Determine whether to draw a line from another point.
+        let lineFrom: PsyState | null = null;
         // Options for data series:
-        if (options.seriesName) {
+        if (options.name) {
             // Add an item in the legend, if not previously added.
-            if (!this.series[options.seriesName]) {
-                this.series[options.seriesName] = {
+            if (!this.series[options.name]) {
+                this.series[options.name] = {
                     lastState: currentState,
                     hidden: false,
                     pointGroup: document.createElementNS(NS, 'g'),
                     lineGroup: document.createElementNS(NS, 'g'),
                 }
                 // Add the series-level group elements onto the main groups.
-                this.g.points.appendChild(this.series[options.seriesName].pointGroup);
-                this.g.trends.appendChild(this.series[options.seriesName].lineGroup);
-                this.addToLegend(options.seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
-            } else if (options.line) {
+                this.g.points.appendChild(this.series[options.name].pointGroup);
+                this.g.trends.appendChild(this.series[options.name].lineGroup);
+                if (options.legend) {
+                    this.addToLegend(options.name, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+                }
+            } else if (options.line === true) {
                 // Determine whether to connect the states with a line
-                this.series[options.seriesName].lineGroup.appendChild(this.createLine([this.series[options.seriesName].lastState, currentState], color, 1));
+                lineFrom = this.series[options.name].lastState;
             }
             // Store the last state in order to draw a line.
-            this.series[options.seriesName].lastState = currentState;
+            this.series[options.name].lastState = currentState;
             // Plot the new data point onto the series group element.
-            this.series[options.seriesName].pointGroup.appendChild(point);
+            this.series[options.name].pointGroup.appendChild(point);
         } else {
             // Plot the new data point onto the base group element.
             this.g.points.appendChild(point);
         }
-        // Set up the point name to show in the tooltip.
-        const pointName: string = (options.seriesName && options.pointName ? options.seriesName + ': ' + options.pointName : options.seriesName + options.pointName);
+        // Check for arbitrary origin point to draw a line.
+        if (typeof options.line === 'object') {
+            lineFrom = new PsyState(options.line, this.config);
+        }
+        // Draw a line.
+        if (lineFrom) {
+            const line: SVGPathElement = this.createLine(this.interpolate([lineFrom, currentState], true), color, options.pointRadius / 2);
+            if (options.name) {
+                this.series[options.name].lineGroup.appendChild(line);
+            } else {
+                this.g.trends.appendChild(line);
+            }
+        }
         // Generate the text to display on mouse hover.
-        const tooltipString: string = (pointName ? pointName + '\n' : '') +
+        const tooltipString: string = (options.name ? options.name + '\n' : '') +
             (hasTimeStamp ? new Date(tNow).toLocaleString() + '\n' : '') +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
             (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
@@ -544,28 +639,13 @@ export class Psychart {
     /**
      * Draw a shaded region on Psychart.
      */
-    private drawRegion(states: Datum[], color: Color, tooltip?: string): void {
-        // Add the first state to the data set
-        const data: PsyState[] = [new PsyState(states[0])];
-        for (let i = 1; i < states.length; i++) {
-            const lastDatum = states[i - 1],
-                currentDatum = states[i];
-            // Check if iso-relative humidity (curved line)
-            if (lastDatum.measurement === 'dbrh' && currentDatum.measurement === 'dbrh' && SMath.approx(lastDatum.other, currentDatum.other)) {
-                const range = Math.abs(currentDatum.db - lastDatum.db);
-                // Calculate several psychrometric states with a dry bulb step of `resolution`
-                for (let i = 0; i < range; i += this.config.resolution) {
-                    const db = SMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
-                    data.push(new PsyState({ db: db, other: lastDatum.other, measurement: 'dbrh' }));
-                }
-            }
-            // Assume iso-dry bulb, wet bulb, or dew point (straight line)
-            data.push(new PsyState(currentDatum));
-        }
+    private drawRegion(data: Datum[], color: Color, tooltip?: string): void {
+        // Interpolate to get a set of psychrometric states that make the border of the region
+        const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum, this.config)), false);
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
-        this.setPathData(region, data, true);
+        this.setPathData(region, states, true);
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (!!tooltip) {
@@ -584,7 +664,7 @@ export class Psychart {
         this.clearChildren(this.legendg);
     }
     /**
-     * Return the SVG element to append on the parent.
+     * Return the HTML element to append on the parent.
      */
     public getElement(): HTMLDivElement {
         return this.base;

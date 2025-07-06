@@ -24,20 +24,21 @@ export interface Point {
  */
 export interface Datum {
     /**
-     * Dry Bulb
+     * Dry Bulb (db)
      */
     db: number;
     /**
      * One of these values, depending on `measurement`
-     * - Relative Humidity
-     * - Wet Bulb
-     * - Dew Point
+     * - Relative Humidity (rh)
+     * - Wet Bulb (wb)
+     * - Dew Point (dp)
+     * - Humidity Ratio (hr)
      */
     other: number;
     /**
      * The two types of measurements that were taken to fix the state.
      */
-    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp';
+    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp' | 'dbhr';
 }
 
 /**
@@ -153,20 +154,24 @@ export interface PsychartOptions {
      */
     readonly regions: RegionName[];
     /**
-     * If this is set, it will render the legend on top of Psychart.
+     * Styling options for the legend. If set to `false`, will not render a legend on Psychart.
      */
-    readonly legend: {
+    readonly legend: false | {
         /**
-         * The absolute position of the top-left of the legend, relative to the top-left of Psychart.
+         * The title of the legend.
          */
-        readonly placement: Point;
+        readonly title: string;
+        /**
+         * The margin between the top-left of the legend and the top-left of Psychart, in pixels.
+         */
+        readonly margin: Point;
         /**
          * The size of the legend, in pixels. The scrollbar will be visible in the event of overflow.
          */
         readonly size: Point;
     };
     /**
-     * The spacing factor between entries in the legend.
+     * The spacing factor between entries in the legend, where 2.0 indicates double-spacing, for example.
      */
     readonly lineHeight: number;
 }
@@ -176,13 +181,13 @@ export interface PsychartOptions {
  */
 export interface DataOptions {
     /**
-     * Adds a name to a data series. Must be set to create an entry in the legend.
+     * Adds a name to a point or data series to be shown in the tooltip. Must be set to create an entry in the legend.
      */
-    readonly seriesName: string;
+    readonly name: string;
     /**
-     * An optional unique point name to be shown in the tooltip.
+     * Optionally show this point in the legend.
      */
-    readonly pointName: string;
+    readonly legend: boolean;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
@@ -192,9 +197,9 @@ export interface DataOptions {
      */
     readonly pointRadius: number;
     /**
-     * Determines whether or not to connect points with a line.
+     * Determines whether or not to connect points with a line. If a `Datum` is provided, will draw a line from that point.
      */
-    readonly line: boolean;
+    readonly line: boolean | Datum;
     /**
      * Determine the solid color **hex-code** for time-independent plots.
      */

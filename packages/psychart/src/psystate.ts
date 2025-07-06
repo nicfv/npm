@@ -45,69 +45,41 @@ export class PsyState {
     /**
      * Standard Atmospheric Air Pressure
      */
-    private static atm: number;
-    /**
-     * Minimum Dry Bulb
-     */
-    private static dbMin: number;
-    /**
-     * Maximum Dry Bulb
-     */
-    private static dbMax: number;
+    private readonly atm: number;
     /**
      * Maximum Humidity Ratio
      */
-    private static hrMax: number;
-    /**
-     * Psychart panel size
-     */
-    private static size: Point;
-    /**
-     * Psychart panel padding
-     */
-    private static padding: Point;
-    /**
-     * Render a Mollier diagram instead
-     */
-    private static flipXY: boolean;
-    /**
-     * Compute a first-time initialization of psychrolib.
-     */
-    public static initialize(options: PsychartOptions): void {
-        PsyState.size = options.size;
-        PsyState.padding = options.padding;
-        PsyState.flipXY = options.flipXY;
-        Psychrolib.SetUnitSystem(options.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
-        PsyState.atm = Psychrolib.GetStandardAtmPressure(options.altitude);
-        PsyState.dbMin = options.dbMin;
-        PsyState.dbMax = options.dbMax;
-        PsyState.hrMax = Psychrolib.GetHumRatioFromTDewPoint(options.dpMax, PsyState.atm);
-    }
-    /**
-     * A static helper function to convert a humidity ratio into a dew point.
-     */
-    public static hr2dp(db: number, hr: number): number {
-        return Psychrolib.GetTDewPointFromHumRatio(db, hr, PsyState.atm);
-    }
+    private readonly hrMax: number;
     /**
      * Initialize a new psychrometric state.
      */
-    constructor(state: Datum) {
+    constructor(public readonly state: Datum, private readonly options: PsychartOptions) {
+        Psychrolib.SetUnitSystem(options.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
+        this.atm = Psychrolib.GetStandardAtmPressure(options.altitude);
+        this.hrMax = Psychrolib.GetHumRatioFromTDewPoint(options.dpMax, this.atm);
         this.db = state.db;
         switch (state.measurement) {
             case ('dbrh'): {
                 this.rh = state.other;
-                [this.hr, this.wb, this.dp, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
+                [this.hr, this.wb, this.dp, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, this.atm);
                 break;
             }
             case ('dbwb'): {
                 this.wb = state.other;
-                [this.hr, this.dp, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
+                [this.hr, this.dp, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, this.atm);
                 break;
             }
             case ('dbdp'): {
                 this.dp = state.other;
-                [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
+                [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, this.atm);
+                break;
+            }
+            case ('dbhr'): {
+                this.dp = Psychrolib.GetTDewPointFromHumRatio(state.db, state.other, this.atm);
+                [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, this.dp, this.atm);
+                if (!SMath.approx(this.hr, state.other) && SMath.error(this.hr, state.other) > 0.01) {
+                    throw new Error('Error in psychrolib computation. Expected: ' + state.other + ', Found: ' + this.hr);
+                }
                 break;
             }
             default: {
@@ -119,15 +91,15 @@ export class PsyState {
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
     public toXY(): Point {
-        if (PsyState.flipXY) {
+        if (this.options.flipXY) {
             return {
-                x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
-                y: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.size.y - PsyState.padding.y, PsyState.padding.y), PsyState.padding.y, PsyState.size.y - PsyState.padding.y)
+                x: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, this.options.padding.x, this.options.size.x - this.options.padding.x), this.options.padding.x, this.options.size.x - this.options.padding.x),
+                y: SMath.clamp(SMath.translate(this.db, this.options.dbMin, this.options.dbMax, this.options.size.y - this.options.padding.y, this.options.padding.y), this.options.padding.y, this.options.size.y - this.options.padding.y)
             };
         } else {
             return {
-                x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
-                y: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.size.y - PsyState.padding.y, PsyState.padding.y), PsyState.padding.y, PsyState.size.y - PsyState.padding.y)
+                x: SMath.clamp(SMath.translate(this.db, this.options.dbMin, this.options.dbMax, this.options.padding.x, this.options.size.x - this.options.padding.x), this.options.padding.x, this.options.size.x - this.options.padding.x),
+                y: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, this.options.size.y - this.options.padding.y, this.options.padding.y), this.options.padding.y, this.options.size.y - this.options.padding.y)
             };
         }
     }

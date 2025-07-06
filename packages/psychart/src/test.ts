@@ -19,17 +19,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
     caught = false;
     try {
-        new PsyState({ db: 70, other: 0.60, measurement: 'dbrh' });
-    } catch (e) {
-        caught = true;
-    }
-    T6.isTrue(caught, 'Uncaught PsyState not initialized.');
-
-    PsyState.initialize(defaultPsychartOptions);
-
-    caught = false;
-    try {
-        new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' });
+        new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' }, defaultPsychartOptions);
     } catch (e) {
         caught = true;
     }
@@ -37,7 +27,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
     caught = false;
     try {
-        new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' });
+        new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' }, defaultPsychartOptions);
     } catch (e) {
         caught = true;
     }
@@ -45,14 +35,14 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
     caught = false;
     try {
-        new PsyState({ db: 70, other: 80, measurement: 'dbwb' });
+        new PsyState({ db: 70, other: 80, measurement: 'dbwb' }, defaultPsychartOptions);
     } catch (e) {
         caught = true;
     }
     T6.isTrue(caught, 'Uncaught wb > db.');
 
     // We will not be testing the accuracy of psychrolib, but will make sure that PsyState computes.
-    const ps1: PsyState = new PsyState({ db: 70, other: 0.50, measurement: 'dbrh' });
+    const ps1: PsyState = new PsyState({ db: 70, other: 0.50, measurement: 'dbrh' }, defaultPsychartOptions);
     T6.eq(ps1.db, 70);
     T6.eq(ps1.rh, 0.50);
     // Just make sure that values are greater than zero.
