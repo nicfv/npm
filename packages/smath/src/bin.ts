@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { SMath } from '.';
+import * as SMath from '.';
 
 const func: string = (process.argv[2] ?? '').toLowerCase(),
     nums: Array<number> = process.argv.slice(3).map((arg, i) => {
@@ -155,6 +155,7 @@ switch (func) {
     case (''): {
         console.error('Missing argument. Use with "help" for a list of commands.');
         process.exit(1);
+        break;
     }
     default: {
         console.error('Unknown argument "' + func + '". Use with "help" for a list of commands.');
