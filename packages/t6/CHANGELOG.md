@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- Rearrange code as per `eslint` standards. The import statement has changed.
+
 ## 1.1.9
 
 - Add a helper `getTestNumber()` function for debugging purposes.
