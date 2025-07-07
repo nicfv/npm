@@ -1,4 +1,4 @@
-import { T6 } from 't6';
+import * as T6 from 't6';
 
 // This function always returns true.
 function alwaysReturnsTrue() {

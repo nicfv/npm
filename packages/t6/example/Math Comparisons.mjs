@@ -1,4 +1,4 @@
-import { T6 } from 't6';
+import * as T6 from 't6';
 
 // 5 is greater than 4
 T6.gt(5, 4);
