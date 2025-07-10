@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0
+
+- Update source code per `eslint` standards.
+    - Import `psychrolib` as a module
+- Update dependency versions
+
 ## 0.5.0
 
 - Add option to configure legend title
