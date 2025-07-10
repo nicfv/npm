@@ -31,8 +31,8 @@ T6.is(red_hex6.toString('hex-transparency'), '#FF100080');
 let caught: boolean = false;
 try {
     Color.from('#INVALID');
-} catch (e) {
-    caught = !!e;
+} catch {
+    caught = true;
 }
 T6.isTrue(caught);
 
