@@ -1,6 +1,6 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types';
 import { deepCopy, defaultDataOptions, defaultPsychartOptions, regions, setDefaults } from './defaults';
 

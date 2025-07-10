@@ -1,4 +1,4 @@
-import { T6 } from 't6';
+import * as T6 from 't6';
 import { defaultPsychartOptions, regions, setDefaults } from './defaults';
 import { Psychart } from './psychart';
 import { PsyState } from './psystate';
