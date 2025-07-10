@@ -1,5 +1,5 @@
 import { Color } from './Color';
-import { T6 } from 't6';
+import * as T6 from 't6';
 import { Gradient } from './Gradient';
 import { Palette, PaletteName } from './Palette';
 
@@ -32,7 +32,7 @@ let caught: boolean = false;
 try {
     Color.from('#INVALID');
 } catch (e) {
-    caught = true;
+    caught = !!e;
 }
 T6.isTrue(caught);
 

@@ -1,4 +1,4 @@
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 import { Color } from './Color';
 /**
  * Represents a linear, uniform color gradient.

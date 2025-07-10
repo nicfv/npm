@@ -1,4 +1,4 @@
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 
 /**
  * Structure for storing colors based on RGBa values.
@@ -48,17 +48,22 @@ export class Color {
      */
     public toString(type: 'rgb' | 'rgba' | 'hex' | 'hex' | 'hex-transparency' = 'rgba'): string {
         switch (type) {
-            case 'rgb':
+            case 'rgb': {
                 return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
-            case 'rgba':
+            }
+            case 'rgba': {
                 return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
-            case 'hex':
+            }
+            case 'hex': {
                 return '#' + SMath.toHex(this.red, 2) + SMath.toHex(this.green, 2) + SMath.toHex(this.blue, 2);
-            case 'hex-transparency':
+            }
+            case 'hex-transparency': {
                 const alpha255: number = SMath.clamp(SMath.round2(SMath.translate(this.alpha, 0, 100, 0, 255), 1), 0, 255);
                 return this.toString('hex') + SMath.toHex(alpha255, 2);
-            default:
+            }
+            default: {
                 throw new Error('Invalid color type: ' + type);
+            }
         }
     }
     /**
