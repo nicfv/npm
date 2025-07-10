@@ -1,4 +1,4 @@
-import * as SMath from './index';
+import * as SMath from '.';
 import * as T6 from 't6';
 
 T6.isTrue(SMath.approx(0.1 + 0.2, 0.3));
