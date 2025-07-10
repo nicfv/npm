@@ -15,7 +15,7 @@ export function deepCopy<T>(obj: T): T {
  * @param defaults An object with all parameters default.
  * @returns An object with all parameters that are unset as their default values.
  */
-export function setDefaults<T extends { [key: string]: any }>(optional: Partial<T>, defaults: T): T {
+export function setDefaults<T extends object>(optional: Partial<T>, defaults: T): T {
     const required: T = deepCopy(defaults);
     for (const key in required) {
         required[key] = optional[key] ?? defaults[key];
