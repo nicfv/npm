@@ -1,4 +1,4 @@
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 import { Datum, F, Summary, VariableType } from './types';
 
 /**
