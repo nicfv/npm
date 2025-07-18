@@ -1,3 +1,5 @@
+import { AlreadyExistsError } from './types';
+
 /**
  * Represents a physical base dimension.
  */
@@ -28,7 +30,7 @@ export class Dimension {
      */
     constructor(private readonly name: string, private readonly symbol: string) {
         if (Dimension.dictionary[name]) {
-            throw new Error('Dimension "' + name + '" already exists.');
+            throw new AlreadyExistsError('Dimension', name);
         } else {
             Dimension.dictionary[name] = this;
         }
