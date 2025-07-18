@@ -29,7 +29,7 @@ export class Dimension {
      * @param symbol The mathematic symbol for this `Dimension`
      */
     constructor(private readonly name: string, private readonly symbol: string) {
-        if (!Dimension.get(name)) {
+        if (Dimension.get(name)) {
             throw new AlreadyExistsError('Dimension', name);
         } else {
             Dimension.dictionary[name] = this;
