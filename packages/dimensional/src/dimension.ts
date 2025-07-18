@@ -27,7 +27,9 @@ export class Dimension {
      * @param symbol The mathematic symbol for this `Dimension`
      */
     constructor(private readonly name: string, private readonly symbol: string) {
-        if (!Dimension.dictionary[name]) {
+        if (Dimension.dictionary[name]) {
+            throw new Error('Dimension "' + name + '" already exists.');
+        } else {
             Dimension.dictionary[name] = this;
         }
     }
