@@ -15,4 +15,4 @@ new Attribute('acceleration', 'a', { 'velocity': 1, 'time': -1 });
 
 console.log(Dimension.get('mass')?.toString(), Dimension.getNames());
 console.log(Attribute.get('acceleration')?.getBaseDimensions());
-console.log(Attribute.get('acceleration')?.toString('Dimensions-LaTeX'));
+console.log(Attribute.get('acceleration')?.toString('base-dimensions'));
