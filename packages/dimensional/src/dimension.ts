@@ -40,7 +40,7 @@ export class Dimension {
      * @param type The type of string to return
      * @returns A string representation of this `Dimension`
      */
-    public toString(type: 'plain' | 'LaTeX' = 'plain'): string {
+    public toString(type: 'plain' | 'symbol' = 'plain'): string {
         if (type === 'plain') {
             return this.name;
         } else {

@@ -82,15 +82,15 @@ export class Attribute {
             }
         }
     }
-    public toString(type: 'plain' | 'LaTeX' | 'Dimensions-LaTeX' = 'plain'): string {
+    public toString(type: 'plain' | 'symbol' | 'base-dimensions' = 'plain'): string {
         switch (type) {
             case ('plain'): {
                 return this.name;
             }
-            case ('LaTeX'): {
+            case ('symbol'): {
                 return this.symbol;
             }
-            case ('Dimensions-LaTeX'): {
+            case ('base-dimensions'): {
                 let numerator: string = '',
                     denominator: string = '';
                 for (const dimensionName in this.num) {
@@ -102,7 +102,7 @@ export class Attribute {
                     if (numerator) {
                         numerator += '\\cdot';
                     }
-                    numerator += factor(dimension.toString('LaTeX'), exponent);
+                    numerator += factor(dimension.toString('symbol'), exponent);
                 }
                 for (const dimensionName in this.den) {
                     const dimension = Dimension.get(dimensionName),
@@ -113,7 +113,7 @@ export class Attribute {
                     if (denominator) {
                         denominator += '\\cdot';
                     }
-                    denominator += factor(dimension.toString('LaTeX'), exponent);
+                    denominator += factor(dimension.toString('symbol'), exponent);
                 }
                 if (denominator) {
                     return '\\frac{' + (numerator || '1') + '}{' + denominator + '}';
