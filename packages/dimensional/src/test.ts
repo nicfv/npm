@@ -34,4 +34,4 @@ const c = new Compound<hiscore>([
         [hiscore1, 4],
         [hiscore2, -1],
     ]);
-console.log(c.LaTeX(getSym), d.LaTeX(getSym), (c.over(d)).LaTeX(getSym));
+console.log(c.LaTeX(getSym), d.LaTeX(getSym), (c.over(d)).LaTeX(getSym), c.is(c), c.is(d));

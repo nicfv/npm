@@ -80,6 +80,15 @@ export class Compound<C extends object> {
         return this.times(dividend.pow(-1));
     }
     /**
+     * Determine if this compound is made up of the same factors as another.
+     * @param other Another compound to compare to
+     * @returns Whether or not this compound matches another
+     */
+    public is(other: Compound<C>): boolean {
+        const quotient: Compound<C> = this.over(other);
+        return quotient.num.size === 0 && quotient.den.size === 0;
+    }
+    /**
      * Pretty-print this compound as a LaTeX formula.
      * @param toLaTeX The function to convert `C` to a LaTeX string
      * @returns The compound written as a LaTeX formula
