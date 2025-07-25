@@ -13,28 +13,28 @@ export interface MathSymbol {
 /**
  * Represents a compound number.
  */
-export class Compound<C extends MathSymbol> {
+export class Compound<T extends MathSymbol> {
     /**
      * Terms and their exponents
      */
-    private readonly factors: Map<C, number>;
+    private readonly factors: Map<T, number>;
     /**
      * Terms in the numerator
      */
-    private readonly num: Map<C, number>;
+    private readonly num: Map<T, number>;
     /**
      * Terms in the denominator
      */
-    private readonly den: Map<C, number>;
+    private readonly den: Map<T, number>;
     /**
      * Create a new compound.
      * @param termsAndExponents An array of terms in this compound and their exponents
      */
-    constructor(termsAndExponents: Array<[C, number]>) {
+    constructor(termsAndExponents: Array<[T, number]>) {
         this.factors = new Map(termsAndExponents);
         this.num = new Map();
         this.den = new Map();
-        this.factors.forEach((exponent: number, factor: C) => {
+        this.factors.forEach((exponent: number, factor: T) => {
             if (exponent > 0) {
                 this.num.set(factor, exponent);
             } else if (exponent < 0) {
@@ -46,7 +46,7 @@ export class Compound<C extends MathSymbol> {
      * Get all nonzero terms in this compound.
      * @returns An array of all terms
      */
-    public getTerms(): Array<C> {
+    public getTerms(): Array<T> {
         return [...this.factors.keys()];
     }
     /**
@@ -54,7 +54,7 @@ export class Compound<C extends MathSymbol> {
      * @param factor The factor to search for
      * @returns The exponent on `factor`
      */
-    public getExponent(factor: C): number {
+    public getExponent(factor: T): number {
         return this.factors.get(factor) ?? 0;
     }
     /**
@@ -62,34 +62,34 @@ export class Compound<C extends MathSymbol> {
      * @param other Another term or compound of similar terms
      * @returns The product of two compounds
      */
-    public times(other: C | Compound<C>): Compound<C> {
+    public times(other: T | Compound<T>): Compound<T> {
         if (!(other instanceof Compound)) {
             other = new Compound([[other, 1]]);
         }
-        const product: Map<C, number> = new Map(this.factors.entries());
-        other.getTerms().forEach((term: C) => {
+        const product: Map<T, number> = new Map(this.factors.entries());
+        other.getTerms().forEach((term: T) => {
             product.set(term, (product.get(term) ?? 0) + other.getExponent(term));
         });
-        return new Compound<C>([...product.entries()]);
+        return new Compound<T>([...product.entries()]);
     }
     /**
      * Raise this compound to an exponent.
      * @param exponent The exponent to raise this compound by
      * @returns The power of this compound and exponent
      */
-    public pow(exponent: number): Compound<C> {
-        const power: Map<C, number> = new Map(this.factors.entries());
-        power.forEach((currentExponent: number, factor: C) => {
+    public pow(exponent: number): Compound<T> {
+        const power: Map<T, number> = new Map(this.factors.entries());
+        power.forEach((currentExponent: number, factor: T) => {
             power.set(factor, currentExponent * exponent);
         });
-        return new Compound<C>([...power.entries()]);
+        return new Compound<T>([...power.entries()]);
     }
     /**
      * Divide this compound by another.
      * @param dividend The compound to divide by
      * @returns The quotient of two compounds
      */
-    public over(dividend: C | Compound<C>): Compound<C> {
+    public over(dividend: T | Compound<T>): Compound<T> {
         if (!(dividend instanceof Compound)) {
             dividend = new Compound([[dividend, 1]]);
         }
@@ -100,8 +100,8 @@ export class Compound<C extends MathSymbol> {
      * @param other Another compound to compare to
      * @returns Whether or not this compound matches another
      */
-    public is(other: Compound<C>): boolean {
-        const quotient: Compound<C> = this.over(other);
+    public is(other: Compound<T>): boolean {
+        const quotient: Compound<T> = this.over(other);
         return quotient.num.size === 0 && quotient.den.size === 0;
     }
     /**
@@ -111,13 +111,13 @@ export class Compound<C extends MathSymbol> {
     public toString(): string {
         let strNum: string = '',
             strDen: string = '';
-        this.num.forEach((exponent: number, factor: C) => {
+        this.num.forEach((exponent: number, factor: T) => {
             if (strNum) {
                 strNum += ' \\cdot ';
             }
             strNum += Compound.strFactor(factor.LaTeX, exponent);
         });
-        this.den.forEach((exponent: number, factor: C) => {
+        this.den.forEach((exponent: number, factor: T) => {
             if (strDen) {
                 strDen += ' \\cdot ';
             }
