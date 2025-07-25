@@ -1,7 +1,7 @@
 import * as T6 from 't6';
 // import { Dimension } from './dimension';
 // import { Attribute } from './attribute';
-import { Compound } from './compound';
+import { Compound, MathSymbol } from './compound';
 
 T6.isTrue(true);
 
@@ -18,12 +18,10 @@ T6.isTrue(true);
 // console.log(Attribute.get('acceleration')?.getBaseDimensions());
 // console.log(Attribute.get('acceleration')?.toString('base-dimensions'));
 
-type hiscore = { name: string, score: number, sym: string };
+type hiscore = { name: string, score: number } & MathSymbol;
 
-const hiscore1: hiscore = { name: 'asdf', score: 12, sym: 'A' },
-    hiscore2: hiscore = { name: 'fdsa', score: 21, sym: 'B' };
-
-function getSym(x: hiscore) { return x.sym; }
+const hiscore1: hiscore = { name: 'asdf', score: 12, LaTeX: 'A' },
+    hiscore2: hiscore = { name: 'fdsa', score: 21, LaTeX: 'B' };
 
 const c = new Compound<hiscore>([
     [hiscore1, 2],
@@ -34,4 +32,5 @@ const c = new Compound<hiscore>([
         [hiscore1, 4],
         [hiscore2, -1],
     ]);
-console.log(c.LaTeX(getSym), d.LaTeX(getSym), (c.over(d)).LaTeX(getSym), c.is(c), c.is(d));
+console.log(c.toString(), d.toString(), (c.over(d)).toString(), c.is(c), c.is(d));
+console.log(d.times(hiscore2).toString());

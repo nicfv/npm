@@ -1,9 +1,19 @@
 import * as SMath from 'smath';
 
 /**
+ * Represents a mathematical symbol.
+ */
+export interface MathSymbol {
+    /**
+     * The LaTeX code for this `MathSymbol`
+     */
+    readonly LaTeX: string;
+}
+
+/**
  * Represents a compound number.
  */
-export class Compound<C extends object> {
+export class Compound<C extends MathSymbol> {
     /**
      * Terms and their exponents
      */
@@ -49,10 +59,13 @@ export class Compound<C extends object> {
     }
     /**
      * Multiply this compound by another.
-     * @param other Another compound of similar terms
+     * @param other Another term or compound of similar terms
      * @returns The product of two compounds
      */
-    public times(other: Compound<C>): Compound<C> {
+    public times(other: C | Compound<C>): Compound<C> {
+        if (!(other instanceof Compound)) {
+            other = new Compound([[other, 1]]);
+        }
         const product: Map<C, number> = new Map(this.factors.entries());
         other.getTerms().forEach((term: C) => {
             product.set(term, (product.get(term) ?? 0) + other.getExponent(term));
@@ -76,7 +89,10 @@ export class Compound<C extends object> {
      * @param dividend The compound to divide by
      * @returns The quotient of two compounds
      */
-    public over(dividend: Compound<C>): Compound<C> {
+    public over(dividend: C | Compound<C>): Compound<C> {
+        if (!(dividend instanceof Compound)) {
+            dividend = new Compound([[dividend, 1]]);
+        }
         return this.times(dividend.pow(-1));
     }
     /**
@@ -90,23 +106,22 @@ export class Compound<C extends object> {
     }
     /**
      * Pretty-print this compound as a LaTeX formula.
-     * @param toLaTeX The function to convert `C` to a LaTeX string
      * @returns The compound written as a LaTeX formula
      */
-    public LaTeX(toLaTeX: (factor: C) => string): string {
+    public toString(): string {
         let strNum: string = '',
             strDen: string = '';
         this.num.forEach((exponent: number, factor: C) => {
             if (strNum) {
                 strNum += ' \\cdot ';
             }
-            strNum += Compound.strFactor(toLaTeX(factor), exponent);
+            strNum += Compound.strFactor(factor.LaTeX, exponent);
         });
         this.den.forEach((exponent: number, factor: C) => {
             if (strDen) {
                 strDen += ' \\cdot ';
             }
-            strDen += Compound.strFactor(toLaTeX(factor), exponent);
+            strDen += Compound.strFactor(factor.LaTeX, exponent);
         });
         if (strDen) {
             return '\\frac{' + (strNum || '1') + '}{' + strDen + '}';
