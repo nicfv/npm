@@ -1,82 +1,82 @@
 import * as SMath from 'smath';
 
-export interface Factors {
-    [factor: string]: number;
-}
-
 /**
  * Represents a compound number.
  */
-export class Compound {
+export class Compound<C extends object> {
+    /**
+     * Terms and their exponents
+     */
+    private readonly factors: Map<C, number>;
     /**
      * Terms in the numerator
      */
-    private readonly num: Factors;
+    private readonly num: Map<C, number>;
     /**
      * Terms in the denominator
      */
-    private readonly den: Factors;
+    private readonly den: Map<C, number>;
     /**
      * Create a new compound.
-     * @param factors Terms and their exponents
+     * @param termsAndExponents An array of terms in this compound and their exponents
      */
-    constructor(private readonly factors: Factors) {
-        this.num = {};
-        this.den = {};
-        for (const factor in factors) {
-            const exponent: number = this.getExponent(factor);
+    constructor(termsAndExponents: Array<[C, number]>) {
+        this.factors = new Map(termsAndExponents);
+        this.num = new Map();
+        this.den = new Map();
+        this.factors.forEach((exponent: number, factor: C) => {
             if (exponent > 0) {
-                this.num[factor] = exponent;
+                this.num.set(factor, exponent);
             } else if (exponent < 0) {
-                this.den[factor] = -exponent;
+                this.den.set(factor, -exponent);
             }
-        }
+        });
     }
     /**
      * Get all nonzero terms in this compound.
      * @returns An array of all terms
      */
-    public getTerms(): Array<string> {
-        return Object.keys(this.factors);
+    public getTerms(): Array<C> {
+        return [...this.factors.keys()];
     }
     /**
      * Determine the exponent on the specified factor.
      * @param factor The factor to search for
      * @returns The exponent on `factor`
      */
-    public getExponent(factor: string): number {
-        return this.factors[factor] ?? 0;
+    public getExponent(factor: C): number {
+        return this.factors.get(factor) ?? 0;
     }
     /**
      * Multiply this compound by another.
      * @param other Another compound of similar terms
      * @returns The product of two compounds
      */
-    public times(other: Compound): Compound {
-        const product: Factors = {};
-        other.getTerms().forEach((term: string) => {
-            product[term] = (product[term] ?? 0) + other.getExponent(term);
+    public times(other: Compound<C>): Compound<C> {
+        const product: Map<C, number> = new Map(this.factors.entries());
+        other.getTerms().forEach((term: C) => {
+            product.set(term, (product.get(term) ?? 0) + other.getExponent(term));
         });
-        return new Compound(product);
+        return new Compound<C>([...product.entries()]);
     }
     /**
      * Raise this compound to an exponent.
      * @param exponent The exponent to raise this compound by
      * @returns The power of this compound and exponent
      */
-    public pow(exponent: number): Compound {
-        const power: Factors = {};
-        this.getTerms().forEach((term: string) => {
-            power[term] = this.factors[term] * exponent;
+    public pow(exponent: number): Compound<C> {
+        const power: Map<C, number> = new Map(this.factors.entries());
+        power.forEach((currentExponent: number, factor: C) => {
+            power.set(factor, currentExponent * exponent);
         });
-        return new Compound(power);
+        return new Compound<C>([...power.entries()]);
     }
     /**
      * Divide this compound by another.
      * @param dividend The compound to divide by
      * @returns The quotient of two compounds
      */
-    public over(dividend: Compound): Compound {
+    public over(dividend: Compound<C>): Compound<C> {
         return this.times(dividend.pow(-1));
     }
     /**
@@ -84,8 +84,8 @@ export class Compound {
      * @param other Another compound to compare to
      * @returns Whether or not this compound matches another
      */
-    public is(other: Compound): boolean {
-        const quotient: Compound = this.over(other);
+    public is(other: Compound<C>): boolean {
+        const quotient: Compound<C> = this.over(other);
         return quotient.num.size === 0 && quotient.den.size === 0;
     }
     /**
@@ -93,23 +93,21 @@ export class Compound {
      * @param toLaTeX The function to convert `C` to a LaTeX string
      * @returns The compound written as a LaTeX formula
      */
-    public LaTeX(): string {
+    public LaTeX(toLaTeX: (factor: C) => string): string {
         let strNum: string = '',
             strDen: string = '';
-        for (const factor in this.num) {
-            const exponent: number = this.getExponent(factor);
+        this.num.forEach((exponent: number, factor: C) => {
             if (strNum) {
                 strNum += ' \\cdot ';
             }
-            strNum += Compound.strFactor(factor, exponent);
-        }
-        for (const factor in this.den) {
-            const exponent: number = this.getExponent(factor);
+            strNum += Compound.strFactor(toLaTeX(factor), exponent);
+        });
+        this.den.forEach((exponent: number, factor: C) => {
             if (strDen) {
                 strDen += ' \\cdot ';
             }
-            strDen += Compound.strFactor(factor, exponent);
-        }
+            strDen += Compound.strFactor(toLaTeX(factor), exponent);
+        });
         if (strDen) {
             return '\\frac{' + (strNum || '1') + '}{' + strDen + '}';
         }
