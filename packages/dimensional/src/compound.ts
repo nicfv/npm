@@ -28,10 +28,32 @@ export class Compound<T extends MathSymbol> {
     private readonly den: Map<T, number>;
     /**
      * Create a new compound.
-     * @param termsAndExponents An array of terms in this compound and their exponents
+     * @param terms A single factor or an array of factors in this compound and their exponents
      */
-    constructor(termsAndExponents: Array<[T, number]>) {
-        this.factors = new Map(termsAndExponents);
+    constructor(terms?: T | Array<[T, number]>) {
+        // Combine like terms
+        const final: Array<[T, number]> = [];
+        if (terms) {
+            if (Array.isArray(terms)) {
+                for (const term of terms) {
+                    let found: boolean = false;
+                    for (const f of final) {
+                        if (f[0] === term[0]) { // Check if term has already been assigned
+                            f[1] += term[1]; // Combine exponents by adding
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        final.push([...term]);
+                    }
+                }
+            } else {
+                final.push([terms, 1]);
+            }
+        }
+        // Reject anything to the power of zero
+        this.factors = new Map(final.filter(([, exponent]) => exponent !== 0));
         this.num = new Map();
         this.den = new Map();
         this.factors.forEach((exponent: number, factor: T) => {
