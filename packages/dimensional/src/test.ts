@@ -1,19 +1,23 @@
 import * as T6 from 't6';
-import { Dimension } from './dimension';
 import { Attribute } from './attribute';
-import { Compound } from './compound';
+import { Unit } from './unit';
 
 T6.isTrue(true);
 
-const length = new Dimension('L'),
-    time = new Dimension('T');
+console.log(Attribute.Acceleration.LaTeX, Attribute.Acceleration.baseDimensions.toString());
 
-const duration = new Attribute('t', time),
-    distance = new Attribute('x', length),
-    velocity = new Attribute('v', new Compound([[distance, 1], [duration, -1]])),
-    acceleration = new Attribute('a', new Compound([[velocity, 1], [duration, -1]]));
+const meter = new Unit('m', { base: Attribute.Length });
+console.log(meter.LaTeX, meter.baseAttributes.toString(), meter.baseDimensions.toString(), meter.scale);
 
-console.log(acceleration.LaTeX, acceleration.baseDimensions.toString());
+// const length = new Dimension('L'),
+//     time = new Dimension('T');
+
+// const duration = new Attribute('t', time),
+//     distance = new Attribute('x', length),
+//     velocity = new Attribute('v', new Compound([[distance, 1], [duration, -1]])),
+//     acceleration = new Attribute('a', new Compound([[velocity, 1], [duration, -1]]));
+
+// console.log(acceleration.LaTeX, acceleration.baseDimensions.toString());
 
 // new Dimension('mass', 'M');
 // new Dimension('length', 'L');

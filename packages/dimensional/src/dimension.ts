@@ -7,7 +7,7 @@ export class Dimension implements MathSymbol {
     public static readonly Mass = new Dimension('\\textbf{M}');
     public static readonly Length = new Dimension('\\textbf{L}');
     public static readonly Time = new Dimension('\\textbf{T}');
-    public static readonly Temperature = new Dimension('\\Theta');
+    public static readonly Temperature = new Dimension('\\boldsymbol{\\Theta}');
     public static readonly Current = new Dimension('\\textbf{I}');
     public static readonly LuminousIntensity = new Dimension('\\textbf{J}');
     public static readonly AmountOfSubstance = new Dimension('\\textbf{N}');
