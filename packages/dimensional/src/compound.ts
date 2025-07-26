@@ -30,7 +30,7 @@ export class Compound<T extends MathSymbol> {
      * Create a new compound.
      * @param terms A single factor or an array of factors in this compound and their exponents
      */
-    constructor(terms?: T | Array<[T, number]>) {
+    constructor(terms?: T | Array<[T, number]> | Compound<T>) {
         // Combine like terms
         const final: Array<[T, number]> = [];
         if (terms) {
@@ -47,6 +47,10 @@ export class Compound<T extends MathSymbol> {
                     if (!found) {
                         final.push([...term]);
                     }
+                }
+            } else if (terms instanceof Compound) {
+                for (const factor of terms.factors) {
+                    final.push(factor); // Basically make a deep copy
                 }
             } else {
                 final.push([terms, 1]);
@@ -88,11 +92,11 @@ export class Compound<T extends MathSymbol> {
         if (!(other instanceof Compound)) {
             other = new Compound([[other, 1]]);
         }
-        const product: Map<T, number> = new Map(this.factors.entries());
+        const product: Map<T, number> = new Map(this.factors);
         other.getTerms().forEach((term: T) => {
             product.set(term, (product.get(term) ?? 0) + other.getExponent(term));
         });
-        return new Compound<T>([...product.entries()]);
+        return new Compound<T>([...product]);
     }
     /**
      * Raise this compound to an exponent.
@@ -100,11 +104,11 @@ export class Compound<T extends MathSymbol> {
      * @returns The power of this compound and exponent
      */
     public pow(exponent: number): Compound<T> {
-        const power: Map<T, number> = new Map(this.factors.entries());
+        const power: Map<T, number> = new Map(this.factors);
         power.forEach((currentExponent: number, factor: T) => {
             power.set(factor, currentExponent * exponent);
         });
-        return new Compound<T>([...power.entries()]);
+        return new Compound<T>([...power]);
     }
     /**
      * Divide this compound by another.
