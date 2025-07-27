@@ -1,13 +1,21 @@
 import * as T6 from 't6';
 import { Attribute } from './attribute';
 import { Unit } from './unit';
+import { Compound } from './compound';
 
 T6.isTrue(true);
 
 console.log(Attribute.Acceleration.LaTeX, Attribute.Acceleration.baseDimensions.toString());
 
-const meter = new Unit('m', { base: Attribute.Length });
-console.log(meter.LaTeX, meter.baseAttributes.toString(), meter.baseDimensions.toString(), meter.scale);
+// const force = new Attribute('F', new Compound<Attribute>([[Attribute.Mass, 1], [Attribute.Acceleration, 1]]));
+
+const meter = new Unit('m', { base: Attribute.Length }),
+    second = new Unit('s', { base: Attribute.Time }),
+    gram = new Unit('g', { base: Attribute.Mass }),
+    kilogram = new Unit('kg', { unit: gram, scale: 1e3 }),
+    // centimeter = new Unit('cm', { units: new Compound<Unit>(meter), scale: 1e-2 }),
+    newton = new Unit('N', { units: new Compound([[kilogram, 1], [meter, 1], [second, -2]]) });
+console.log(newton.LaTeX, newton.baseAttributes.toString(), newton.baseDimensions.toString(), newton.scale);
 
 // const length = new Dimension('L'),
 //     time = new Dimension('T');
