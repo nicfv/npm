@@ -90,7 +90,7 @@ export class Compound<T extends MathSymbol> {
      */
     public times(other: T | Compound<T>): Compound<T> {
         if (!(other instanceof Compound)) {
-            other = new Compound([[other, 1]]);
+            other = new Compound(other);
         }
         const product: Map<T, number> = new Map(this.factors);
         other.getTerms().forEach((term: T) => {
@@ -117,9 +117,9 @@ export class Compound<T extends MathSymbol> {
      */
     public over(dividend: T | Compound<T>): Compound<T> {
         if (!(dividend instanceof Compound)) {
-            dividend = new Compound([[dividend, 1]]);
+            dividend = new Compound([[dividend, -1]]);
         }
-        return this.times(dividend.pow(-1));
+        return this.times(dividend);
     }
     /**
      * Determine if this compound is made up of the same factors as another.
@@ -141,13 +141,13 @@ export class Compound<T extends MathSymbol> {
             if (strNum) {
                 strNum += ' \\cdot ';
             }
-            strNum += Compound.strFactor(factor.LaTeX, exponent);
+            strNum += Compound.factorToString(factor.LaTeX, exponent);
         });
         this.den.forEach((exponent: number, factor: T) => {
             if (strDen) {
                 strDen += ' \\cdot ';
             }
-            strDen += Compound.strFactor(factor.LaTeX, exponent);
+            strDen += Compound.factorToString(factor.LaTeX, exponent);
         });
         if (strDen) {
             return '\\frac{' + (strNum || '1') + '}{' + strDen + '}';
@@ -160,7 +160,7 @@ export class Compound<T extends MathSymbol> {
      * @param exponent The exponent on this factor
      * @returns A LaTeX representation of a factor
      */
-    private static strFactor(LaTeX: string, exponent: number): string {
+    private static factorToString(LaTeX: string, exponent: number): string {
         const rat = SMath.rat(exponent, 0.01);
         if (rat.num === 1 && rat.den === 1) {
             return LaTeX;
