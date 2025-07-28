@@ -42,6 +42,6 @@ export class Unit implements MathSymbol {
      * @returns A properly scaled unit
      */
     public prefix(prefix: Prefix): Unit {
-        return new Unit(prefix.LaTeX + this.LaTeX, { unit: this, scale: this.scale * prefix.scale });
+        return new Unit(prefix.LaTeX + this.LaTeX, { unit: this, scale: this.scale / prefix.scale });
     }
 }
