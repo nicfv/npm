@@ -26,12 +26,14 @@ export class Unit implements MathSymbol {
             this.scale = makeup.scale;
             this.baseDimensions = new Compound(makeup.unit.baseDimensions);
         } else {
-            this.baseDimensions = new Compound();
-            for (const unit of makeup.units.getTerms()) {
-                const exponent: number = makeup.units.getExponent(unit);
-                this.baseDimensions = this.baseDimensions.times(unit.baseDimensions.pow(exponent));
-                this.scale *= (unit.scale ** exponent);
-            }
+            let dims: Compound<Dimension> = new Compound(),
+                scale: number = 1;
+            makeup.units.forEach((exponent: number, unit: Unit) => {
+                dims = dims.times(unit.baseDimensions.pow(exponent));
+                scale *= (unit.scale ** exponent);
+            });
+            this.scale = scale;
+            this.baseDimensions = dims;
         }
     }
     /**
