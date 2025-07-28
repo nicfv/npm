@@ -13,7 +13,7 @@ export class Unit implements MathSymbol {
     /**
      * The base dimensions of this unit.
      */
-    public readonly baseDimensions: Compound<Dimension>;
+    public readonly dimensions: Compound<Dimension>;
     /**
      * Define a new unit.
      * @param LaTeX The LaTeX code for this unit
@@ -21,19 +21,19 @@ export class Unit implements MathSymbol {
      */
     constructor(public readonly LaTeX: string, makeup: { base: Dimension } | { unit: Unit, scale: number } | { units: Compound<Unit> }) {
         if ('base' in makeup) {
-            this.baseDimensions = new Compound(makeup.base);
+            this.dimensions = new Compound(makeup.base);
         } else if ('unit' in makeup) {
             this.scale = makeup.scale;
-            this.baseDimensions = new Compound(makeup.unit.baseDimensions);
+            this.dimensions = new Compound(makeup.unit.dimensions);
         } else {
             let dims: Compound<Dimension> = new Compound(),
                 scale: number = 1;
             makeup.units.forEach((exponent: number, unit: Unit) => {
-                dims = dims.times(unit.baseDimensions.pow(exponent));
+                dims = dims.times(unit.dimensions.pow(exponent));
                 scale *= (unit.scale ** exponent);
             });
             this.scale = scale;
-            this.baseDimensions = dims;
+            this.dimensions = dims;
         }
     }
     /**
