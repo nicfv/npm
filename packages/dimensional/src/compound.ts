@@ -117,9 +117,9 @@ export class Compound<T extends MathSymbol> {
      */
     public over(dividend: T | Compound<T>): Compound<T> {
         if (!(dividend instanceof Compound)) {
-            dividend = new Compound([[dividend, -1]]);
+            dividend = new Compound(dividend);
         }
-        return this.times(dividend);
+        return this.times(dividend.pow(-1));
     }
     /**
      * Determine if this compound is made up of the same factors as another.
