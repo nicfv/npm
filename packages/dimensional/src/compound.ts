@@ -131,6 +131,13 @@ export class Compound<T extends MathSymbol> {
         return quotient.num.size === 0 && quotient.den.size === 0;
     }
     /**
+     * Execute a provided function for each term in the compound.
+     * @param callback The function to execute for each term in the compound
+     */
+    public forEach(callback: (exponent: number, factor: T) => void): void {
+        this.factors.forEach(callback);
+    }
+    /**
      * Pretty-print this compound as a LaTeX formula.
      * @returns The compound written as a LaTeX formula
      */
