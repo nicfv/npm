@@ -1,5 +1,6 @@
 import { Compound, MathSymbol } from './compound';
 import { Dimension } from './dimension';
+import { Prefix, prefixTable } from './prefix';
 
 export class Unit implements MathSymbol {
     public readonly scale: number = 1;
@@ -18,5 +19,8 @@ export class Unit implements MathSymbol {
                 this.scale *= (unit.scale ** exponent);
             }
         }
+    }
+    public prefix(prefix: Prefix): Unit {
+        return new Unit(prefixTable[prefix].LaTeX + this.LaTeX, { unit: this, scale: this.scale * prefixTable[prefix].scale });
     }
 }
