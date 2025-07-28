@@ -1,6 +1,6 @@
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 import { Datum, Point, PsychartOptions } from './types';
-const Psychrolib = require('psychrolib');
+import * as Psychrolib from 'psychrolib';
 
 /**
  * Represents a single air condition using several states.

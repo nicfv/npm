@@ -1,9 +1,9 @@
 /**
  * @packageDocumentation
- * ![NPM Downloads](https://img.shields.io/npm/d18m/dimensional) Dimensional analysis and unit conversions
+ * Dimensional analysis and unit conversions
+ * 
+ * ![NPM Downloads](https://img.shields.io/npm/d18m/dimensional)
+ * ![NPM Last Update](https://img.shields.io/npm/last-update/dimensional)
  */
-export * from './quantity';
-export * from './unit';
-export * from './attribute';
-export * from './dimension';
-export * from './lib';
+export const TEST = 'world';
+console.log(TEST);

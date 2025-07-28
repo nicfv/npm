@@ -1,4 +1,4 @@
-import { T6 } from 't6';
+import * as T6 from 't6';
 import { defaultPsychartOptions, regions, setDefaults } from './defaults';
 import { Psychart } from './psychart';
 import { PsyState } from './psystate';
@@ -20,7 +20,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
     caught = false;
     try {
         new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' }, defaultPsychartOptions);
-    } catch (e) {
+    } catch {
         caught = true;
     }
     T6.isTrue(caught, 'Uncaught RH was out of bounds.');
@@ -28,7 +28,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
     caught = false;
     try {
         new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' }, defaultPsychartOptions);
-    } catch (e) {
+    } catch {
         caught = true;
     }
     T6.isTrue(caught, 'Uncaught RH was out of bounds.');
@@ -36,7 +36,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
     caught = false;
     try {
         new PsyState({ db: 70, other: 80, measurement: 'dbwb' }, defaultPsychartOptions);
-    } catch (e) {
+    } catch {
         caught = true;
     }
     T6.isTrue(caught, 'Uncaught wb > db.');

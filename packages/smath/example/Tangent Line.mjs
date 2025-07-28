@@ -1,4 +1,4 @@
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 
 // Define our curve function
 function f(x) {

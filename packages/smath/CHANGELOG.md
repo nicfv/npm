@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.0
+
+- Rearrange code as per `eslint` standards. The import statement has changed.
+- Update dependency versions
+
 ## 1.12.1
 
 - Add `toHex()` function to convert any number to hexadecimal

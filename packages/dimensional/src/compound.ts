@@ -1,133 +1,176 @@
-import { SMath } from 'smath';
+import * as SMath from 'smath';
+
 /**
- * Contains all software used for the calculation of compound values.
+ * Represents a mathematical symbol.
  */
-export namespace Compound {
+export interface MathSymbol {
     /**
-     * Represents a type where every object value is a number representing exponents.
+     * The LaTeX code for this `MathSymbol`
      */
-    export type Exponents<T extends string> = { [index in T]?: number };
+    readonly LaTeX: string;
+}
+
+/**
+ * Represents a compound number.
+ */
+export class Compound<T extends MathSymbol> {
     /**
-     * Represents a compound unit or dimension.
+     * Terms and their exponents
      */
-    export abstract class Compound<T extends string, C extends Compound<T, C>> {
-        private readonly num: Exponents<T> = {};
-        private readonly den: Exponents<T> = {};
-        /**
-         * Create a new compound unit or dimension.
-         * @param exponents Contains an object of exponent values
-         * @param toLaTeX A function to convert the exponent to its representation in LaTeX
-         */
-        constructor(private readonly exponents: Exponents<T>, private readonly toLaTeX: (exponent: T) => string) {
-            for (const t in exponents) {
-                const exponent: number = this.getExponent(t);
-                if (exponent > 0) {
-                    this.num[t] = exponent;
-                } else if (exponent < 0) {
-                    this.den[t] = -exponent;
+    private readonly factors: Map<T, number>;
+    /**
+     * Terms in the numerator
+     */
+    private readonly num: Map<T, number>;
+    /**
+     * Terms in the denominator
+     */
+    private readonly den: Map<T, number>;
+    /**
+     * Create a new compound.
+     * @param terms A single factor or an array of factors in this compound and their exponents
+     */
+    constructor(terms?: T | Array<[T, number]> | Compound<T>) {
+        // Combine like terms
+        const final: Array<[T, number]> = [];
+        if (terms) {
+            if (Array.isArray(terms)) {
+                for (const term of terms) {
+                    let found: boolean = false;
+                    for (const f of final) {
+                        if (f[0] === term[0]) { // Check if term has already been assigned
+                            f[1] += term[1]; // Combine exponents by adding
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        final.push([...term]);
+                    }
                 }
-            }
-        }
-        /**
-         * Combine two compounds by applying a factor on the second compound.
-         * @param other Another compount
-         * @param factor The factor to use on the other compound
-         * @returns The combination of the two compounds
-         */
-        protected combine(other: C, factor: number): Exponents<T> {
-            const exponents_combined: Exponents<T> = {};
-            for (const t in this.exponents) {
-                exponents_combined[t] = this.getExponent(t);
-            }
-            for (const t in other.exponents) {
-                exponents_combined[t] = this.getExponent(t) + factor * other.getExponent(t);
-            }
-            return exponents_combined;
-        }
-        /**
-         * Multiply this compound by another after applying an exponent on the second compound.
-         * @param other Another compound fraction
-         * @param exponent The exponent to apply on the other compound
-         * @returns The product of the two compounds
-         */
-        public abstract mult(other: C, exponent: number): C;
-        /**
-         * Determine whether two compounds contain the same units or dimensions.
-         * @param other Another compound
-         * @returns A boolean
-         */
-        public is(other: C): boolean {
-            const dividend: Exponents<T> = this.combine(other, -1);
-            for (let t in dividend) {
-                if (!SMath.approx(dividend[t] ?? 0, 0)) {
-                    return false;
+            } else if (terms instanceof Compound) {
+                for (const factor of terms.factors) {
+                    final.push(factor); // Basically make a deep copy
                 }
-            }
-            return true;
-        }
-        /**
-         * Determine the exponent on the specified unit or dimension.
-         * @param exponent The unit or dimension to retrieve the exponent from
-         * @returns The exponent
-         */
-        public getExponent(exponent: T): number {
-            return this.exponents[exponent] ?? 0;
-        }
-        /**
-         * Generate an array of nonzero exponent units or dimensions.
-         * @returns An array of nonzero exponent units or dimensions
-         */
-        public getNonzeroExponents(): Array<T> {
-            const nonzeroExponents: Array<T> = [];
-            for (const t in this.exponents) {
-                if (this.getExponent(t)) {
-                    nonzeroExponents.push(t);
-                }
-            }
-            return nonzeroExponents;
-        }
-        /**
-         * Generate LaTeX code for an exponents object.
-         * @param expo Any exponents object
-         * @returns Partial LaTeX code
-         */
-        private prettyPrint(expo: Exponents<T>): string {
-            let str: string = '';
-            for (const t in expo) {
-                if (str.length) {
-                    str += ' \\cdot ';
-                }
-                const exponent: number = expo[t] ?? 0;
-                if (SMath.approx(exponent, 1)) {
-                    str += this.toLaTeX(t);
-                } else if (SMath.approx(exponent, 0.5)) {
-                    str += '\\sqrt{' + this.toLaTeX(t) + '}';
-                } else {
-                    str += this.toLaTeX(t) + '^{' + exponent.toString() + '}';
-                }
-            }
-            return str;
-        }
-        /**
-         * Generate valid LaTeX code representing this compound.
-         * @returns A valid LaTeX equation
-         */
-        public toString(): string {
-            let str: string = '';
-            const hasNum: boolean = Object.keys(this.num).length > 0,
-                hasDen: boolean = Object.keys(this.den).length > 0;
-            if (hasDen) {
-                str += '\\frac{';
-            }
-            if (hasNum) {
-                str += this.prettyPrint(this.num);
             } else {
-                str += '1';
+                final.push([terms, 1]);
             }
-            if (hasDen) {
-                str += '}{' + this.prettyPrint(this.den) + '}';
-            }
-            return str;
         }
+        // Reject anything to the power of zero
+        this.factors = new Map(final.filter(([, exponent]) => exponent !== 0));
+        this.num = new Map();
+        this.den = new Map();
+        this.factors.forEach((exponent: number, factor: T) => {
+            if (exponent > 0) {
+                this.num.set(factor, exponent);
+            } else if (exponent < 0) {
+                this.den.set(factor, -exponent);
+            }
+        });
+    }
+    /**
+     * Get all nonzero terms in this compound.
+     * @returns An array of all terms
+     */
+    public getTerms(): Array<T> {
+        return [...this.factors.keys()];
+    }
+    /**
+     * Determine the exponent on the specified factor.
+     * @param factor The factor to search for
+     * @returns The exponent on `factor`
+     */
+    public getExponent(factor: T): number {
+        return this.factors.get(factor) ?? 0;
+    }
+    /**
+     * Multiply this compound by another.
+     * @param other Another term or compound of similar terms
+     * @returns The product of two compounds
+     */
+    public times(other: T | Compound<T>): Compound<T> {
+        if (!(other instanceof Compound)) {
+            other = new Compound(other);
+        }
+        const product: Map<T, number> = new Map(this.factors);
+        other.getTerms().forEach((term: T) => {
+            product.set(term, (product.get(term) ?? 0) + other.getExponent(term));
+        });
+        return new Compound<T>([...product]);
+    }
+    /**
+     * Raise this compound to an exponent.
+     * @param exponent The exponent to raise this compound by
+     * @returns The power of this compound and exponent
+     */
+    public pow(exponent: number): Compound<T> {
+        const power: Map<T, number> = new Map(this.factors);
+        power.forEach((currentExponent: number, factor: T) => {
+            power.set(factor, currentExponent * exponent);
+        });
+        return new Compound<T>([...power]);
+    }
+    /**
+     * Divide this compound by another.
+     * @param dividend The compound to divide by
+     * @returns The quotient of two compounds
+     */
+    public over(dividend: T | Compound<T>): Compound<T> {
+        if (!(dividend instanceof Compound)) {
+            dividend = new Compound([[dividend, -1]]);
+        }
+        return this.times(dividend);
+    }
+    /**
+     * Determine if this compound is made up of the same factors as another.
+     * @param other Another compound to compare to
+     * @returns Whether or not this compound matches another
+     */
+    public is(other: Compound<T>): boolean {
+        const quotient: Compound<T> = this.over(other);
+        return quotient.num.size === 0 && quotient.den.size === 0;
+    }
+    /**
+     * Pretty-print this compound as a LaTeX formula.
+     * @returns The compound written as a LaTeX formula
+     */
+    public toString(): string {
+        let strNum: string = '',
+            strDen: string = '';
+        this.num.forEach((exponent: number, factor: T) => {
+            if (strNum) {
+                strNum += ' \\cdot ';
+            }
+            strNum += Compound.factorToString(factor.LaTeX, exponent);
+        });
+        this.den.forEach((exponent: number, factor: T) => {
+            if (strDen) {
+                strDen += ' \\cdot ';
+            }
+            strDen += Compound.factorToString(factor.LaTeX, exponent);
+        });
+        if (strDen) {
+            return '\\frac{' + (strNum || '1') + '}{' + strDen + '}';
+        }
+        return strNum || '1';
+    }
+    /**
+     * Render a single factor in LaTeX markup.
+     * @param LaTeX LaTeX symbol to render
+     * @param exponent The exponent on this factor
+     * @returns A LaTeX representation of a factor
+     */
+    private static factorToString(LaTeX: string, exponent: number): string {
+        const rat = SMath.rat(exponent, 0.01);
+        if (rat.num === 1 && rat.den === 1) {
+            return LaTeX;
+        }
+        if (rat.num === 1 && rat.den === 2) {
+            return '\\sqrt{' + LaTeX + '}';
+        }
+        if (rat.den === 1) {
+            return LaTeX + '^{' + rat.num + '}';
+        }
+        return LaTeX + '^\\frac{' + rat.num + '}{' + rat.den + '}';
     }
 }

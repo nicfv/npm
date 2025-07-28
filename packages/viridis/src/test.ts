@@ -1,5 +1,5 @@
 import { Color } from './Color';
-import { T6 } from 't6';
+import * as T6 from 't6';
 import { Gradient } from './Gradient';
 import { Palette, PaletteName } from './Palette';
 
@@ -31,7 +31,7 @@ T6.is(red_hex6.toString('hex-transparency'), '#FF100080');
 let caught: boolean = false;
 try {
     Color.from('#INVALID');
-} catch (e) {
+} catch {
     caught = true;
 }
 T6.isTrue(caught);

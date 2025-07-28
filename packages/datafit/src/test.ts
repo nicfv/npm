@@ -1,7 +1,7 @@
 import { fit } from './lib';
 import { Datum, Summary } from './types';
-import { SMath } from 'smath';
-import { T6 } from 't6';
+import * as SMath from 'smath';
+import * as T6 from 't6';
 
 // Define f(x)
 const a: Array<number> = [-3, 1, 0.2];

@@ -1,6 +1,6 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
-import { SMath } from 'smath';
+import * as SMath from 'smath';
 import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types';
 import { deepCopy, defaultDataOptions, defaultPsychartOptions, regions, setDefaults } from './defaults';
 
@@ -648,7 +648,7 @@ export class Psychart {
         this.setPathData(region, states, true);
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
-        if (!!tooltip) {
+        if (tooltip) {
             region.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color));
             region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }

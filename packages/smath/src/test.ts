@@ -1,5 +1,5 @@
-import { SMath } from './index';
-import { T6 } from 't6';
+import * as SMath from '.';
+import * as T6 from 't6';
 
 T6.isTrue(SMath.approx(0.1 + 0.2, 0.3));
 T6.isTrue(SMath.approx(0.3 - 0.1, 0.2));
@@ -169,10 +169,10 @@ T6.eq(SMath.lim(Math.log, 0), -Infinity);
 T6.is(SMath.lim(Math.log, -1).toString(), 'NaN');
 T6.eq(SMath.lim(x => x ** -2, 0), Infinity);
 T6.is(SMath.lim(x => x > 0 ? 1 : (x < 0 ? -1 : NaN), 0).toString(), 'NaN');
-T6.eq(SMath.lim(x => 0, 0), 0);
-T6.eq(SMath.lim(x => Infinity, 0), Infinity);
-T6.eq(SMath.lim(x => -Infinity, 0), -Infinity);
-T6.is(SMath.lim(x => NaN, 0).toString(), 'NaN');
+T6.eq(SMath.lim(() => 0, 0), 0);
+T6.eq(SMath.lim(() => Infinity, 0), Infinity);
+T6.eq(SMath.lim(() => -Infinity, 0), -Infinity);
+T6.is(SMath.lim(() => NaN, 0).toString(), 'NaN');
 T6.gt(SMath.lim(x => Math.sin(x) / x, 0), 0.99); // 1
 T6.le(SMath.lim(x => Math.sin(x) / x, 0), 1);
 T6.is(SMath.lim(x => Math.cos(x) / x, 0).toString(), 'NaN');

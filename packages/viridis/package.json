@@ -1,6 +1,6 @@
 {
   "name": "viridis",
-  "version": "1.1.8",
+  "version": "1.2.0",
   "description": "Color gradients for data visualization",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
@@ -38,9 +38,9 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "dependencies": {
-    "smath": "1.12.1"
+    "smath": "1.13.0"
   },
   "devDependencies": {
-    "t6": "1.1.8"
+    "t6": "1.2.0"
   }
 }

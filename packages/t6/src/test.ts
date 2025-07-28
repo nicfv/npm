@@ -1,4 +1,4 @@
-import { T6 } from './index';
+import * as T6 from '.';
 
 T6.isTrue(true);
 T6.isFalse(false);

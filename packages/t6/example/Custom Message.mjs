@@ -1,4 +1,4 @@
-import { T6 } from 't6';
+import * as T6 from 't6';
 
 // Here's a simulation of
 // an API to obtain the

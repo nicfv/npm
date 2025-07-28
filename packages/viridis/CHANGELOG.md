@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- Update code per `eslint` standards.
+
 ## 1.1.8
 
 - Fix bug where using a hexadecimal color string would inaccurately parse the alpha channel, causing it to (almost) always be fully opaque
