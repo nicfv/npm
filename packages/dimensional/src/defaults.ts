@@ -1,0 +1,42 @@
+import { Dimension } from './dimension';
+import { Prefix } from './prefix';
+
+export const defaults = {
+    dimensions: {
+        mass: new Dimension('\\textbf{M}'),
+        length: new Dimension('\\textbf{L}'),
+        time: new Dimension('\\textbf{T}'),
+        temperature: new Dimension('\\boldsymbol{\\Theta}'),
+        electricalCurrent: new Dimension('\\textbf{I}'),
+        luminousIntensity: new Dimension('\\textbf{J}'),
+        amountOfSubstance: new Dimension('\\textbf{N}'),
+    },
+    attributes: {},
+    units: {},
+    prefixes: {
+        quetta: new Prefix('\\text{Q}', 1e30),
+        ronna: new Prefix('\\text{R}', 1e27),
+        yotta: new Prefix('\\text{Y}', 1e24),
+        zetta: new Prefix('\\text{Z}', 1e21),
+        exa: new Prefix('\\text{E}', 1e18),
+        peta: new Prefix('\\text{P}', 1e15),
+        tera: new Prefix('\\text{T}', 1e12),
+        giga: new Prefix('\\text{G}', 1e9),
+        mega: new Prefix('\\text{M}', 1e6),
+        kilo: new Prefix('\\text{k}', 1e3),
+        hecto: new Prefix('\\text{h}', 1e2),
+        deca: new Prefix('\\text{da}', 1e1),
+        deci: new Prefix('\\text{d}', 1e-1),
+        centi: new Prefix('\\text{c}', 1e-2),
+        milli: new Prefix('\\text{m}', 1e-3),
+        micro: new Prefix('\\mu', 1e-6),
+        nano: new Prefix('\\text{n}', 1e-9),
+        pico: new Prefix('\\text{p}', 1e-12),
+        femto: new Prefix('\\text{f}', 1e-15),
+        atto: new Prefix('\\text{a}', 1e-18),
+        zepto: new Prefix('\\text{z}', 1e-21),
+        yocto: new Prefix('\\text{y}', 1e-24),
+        ronto: new Prefix('\\text{r}', 1e-27),
+        quecto: new Prefix('\\text{q}', 1e-30),
+    },
+};
