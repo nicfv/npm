@@ -13,7 +13,7 @@ const meter = new Unit('\\text{m}', { base: defaults.dimensions.length }),
     newton = new Unit('\\text{N}', { units: new Compound([[kilogram, 1], [meter, 1], [second, -2]]) }),
     kilonewton = newton.prefix(defaults.prefixes.kilo);
 
-const F1: Quantity = new Quantity(55, newton),
-    F2: Quantity = new Quantity(1, kilonewton);
+const F1: Quantity = new Quantity(5.5, kilonewton),
+    F2: Quantity = new Quantity(1.2, meter);
 
-console.log(F1.plus(F2).toString(), F2.plus(F1).toString());
+console.log(F1.over(F2).toString(), F2.over(F1).toString(), F2.pow(2).toString());

@@ -25,6 +25,22 @@ export class Quantity {
             throw new DimensionMismatch(this, other);
         }
     }
+    public minus(other: Quantity): Quantity {
+        return this.plus(new Quantity(-other.quantity, other.units));
+    }
+    public times(other: Quantity | number): Quantity {
+        if (other instanceof Quantity) {
+            return new Quantity(this.quantity * other.quantity, this.units.times(other.units));
+        } else {
+            return new Quantity(this.quantity * other, this.units);
+        }
+    }
+    public over(other: Quantity): Quantity {
+        return new Quantity(this.quantity / other.quantity, this.units.over(other.units));
+    }
+    public pow(exponent: number): Quantity {
+        return new Quantity(this.quantity ** exponent, this.units.pow(exponent));
+    }
     public toString(): string {
         return this.quantity + ' \\left[ ' + this.units.toString() + ' \\right]';
     }
@@ -32,6 +48,6 @@ export class Quantity {
 
 class DimensionMismatch extends Error {
     constructor(me: Quantity, other: Quantity) {
-        super('Dimensions on ' + me.dimensions.toString() + ' does not match dimensions on ' + other.dimensions.toString());
+        super('Dimensions on ' + me.units.toString() + ' does not match dimensions on ' + other.units.toString());
     }
 }
