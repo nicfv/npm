@@ -20,23 +20,13 @@ export abstract class Compound<T extends Compound<T>> {
      * Terms in the denominator
      */
     private readonly den: Map<T, number> = new Map();
-    /**
-     * Create a new "raw" compound with a variable to the power of one.
-     * @param LaTeX The LaTeX representation of this compound
-     */
-    constructor(LaTeX: string);
-    /**
-     * Create a compound from factors and their exponents.
-     * @param terms The factors and their exponents of this compound
-     */
-    constructor(terms: Map<T, number>);
-    constructor(x: string | Map<T, number>) {
-        if (typeof x === 'string') {
-            this.LaTeX = x;
+    constructor(LaTeX_or_factors: string | Map<T, number>) {
+        if (typeof LaTeX_or_factors === 'string') {
+            this.LaTeX = LaTeX_or_factors;
             // Factors are empty (this = this^1)
-        } else if (x instanceof Map) {
+        } else if (LaTeX_or_factors instanceof Map) {
             // Reject anything to the power of zero
-            const filtered = [...x].filter(([, exponent]) => exponent !== 0);
+            const filtered = [...LaTeX_or_factors].filter(([, exponent]) => exponent !== 0);
             this.factors = new Map(filtered);
             // Split factors into a numerator and denominator
             this.factors.forEach((exponent: number, factor: T) => {
