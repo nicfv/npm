@@ -24,19 +24,19 @@ export abstract class Compound<T extends Compound<T>> {
      * Create a new "raw" compound with a variable to the power of one.
      * @param LaTeX The LaTeX representation of this compound
      */
-    // constructor(LaTeX: string);
+    constructor(LaTeX: string);
     /**
      * Create a compound from factors and their exponents.
      * @param terms The factors and their exponents of this compound
      */
-    // constructor(terms: Array<[T, number]>);
-    constructor(x: string | Array<[T, number]>) {
+    constructor(terms: Map<T, number>);
+    constructor(x: string | Map<T, number>) {
         if (typeof x === 'string') {
             this.LaTeX = x;
             // Factors are empty (this = this^1)
-        } else if (Array.isArray(x)) {
+        } else if (x instanceof Map) {
             // Reject anything to the power of zero
-            const filtered = x.filter(([, exponent]) => exponent !== 0);
+            const filtered = [...x].filter(([, exponent]) => exponent !== 0);
             this.factors = new Map(filtered);
             // Split factors into a numerator and denominator
             this.factors.forEach((exponent: number, factor: T) => {
@@ -53,7 +53,7 @@ export abstract class Compound<T extends Compound<T>> {
      * @param compound The compound to get factors for
      * @returns The factors for this compound
      */
-    private static getFactors<T extends Compound<T>>(compound: T): Map<T, number> {
+    protected static getFactors<T extends Compound<T>>(compound: T): Map<T, number> {
         if (compound.factors.size) {
             // compound = a^A * b^B * ... * z^Z
             return new Map(compound.factors);
