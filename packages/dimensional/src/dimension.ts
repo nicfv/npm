@@ -5,9 +5,9 @@ import { Compound } from './compound';
  */
 export class Dimension extends Compound<Dimension> {
     public times(factor: Dimension): Dimension {
-        return new Dimension([...super.multiplyFactors(this, factor)]);
+        return new Dimension(super.multiplyFactors(this, factor));
     }
     public pow(exponent: number): Dimension {
-        return new Dimension([...super.raiseFactors(this, exponent)]);
+        return new Dimension(super.raiseFactors(this, exponent));
     }
 }
