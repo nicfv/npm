@@ -1,23 +1,7 @@
-import { Compound } from './compound';
-import { Dimension } from './dimension';
 import { Unit } from './unit';
 
 export class Quantity {
-    public readonly units: Compound<Unit>;
-    public readonly dimensions: Compound<Dimension>;
-    private readonly scale: number;
-    constructor(public readonly quantity: number, unit: Unit | Compound<Unit>) {
-        if (unit instanceof Unit) {
-            this.units = new Compound(unit);
-            this.dimensions = new Compound(unit.dimensions);
-            this.scale = unit.scale;
-        } else {
-            const compoundUnit: Unit = new Unit('', { units: unit });
-            this.units = unit;
-            this.dimensions = compoundUnit.dimensions;
-            this.scale = compoundUnit.scale;
-        }
-    }
+    constructor(public readonly quantity: number, public readonly units: Unit) { }
     public scaleBy(factor: number): Quantity {
         return new Quantity(this.quantity * factor, this.units);
     }
@@ -36,24 +20,14 @@ export class Quantity {
     public pow(exponent: number): Quantity {
         return new Quantity(this.quantity ** exponent, this.units.pow(exponent));
     }
-    public as(units: Unit | Compound<Unit>): Quantity {
-        if (units instanceof Unit) {
-            units = new Compound(units);
-        }
-        if (this.dimensions.is(new Unit('', { units: units }).dimensions)) {
-            const compoundUnit: Unit = new Unit('', { units: units });
-            return new Quantity(this.quantity * compoundUnit.scale / this.scale, units);
+    public as(units: Unit): Quantity {
+        if (this.units.dimensions.is(units.dimensions)) {
+            return new Quantity(this.quantity * this.units.getConversionFactor(units), units);
         } else {
-            throw new DimensionMismatch(this, units);
+            throw new Error('Dimensions on ' + this.units.toString() + ' does not match dimensions on ' + units.toString() + '!');
         }
     }
     public toString(): string {
         return this.quantity + ' \\left[ ' + this.units.toString() + ' \\right]';
-    }
-}
-
-class DimensionMismatch extends Error {
-    constructor(me: Quantity, units: Compound<Unit>) {
-        super('Dimensions on ' + me.units.toString() + ' does not match dimensions on ' + units.toString());
     }
 }
