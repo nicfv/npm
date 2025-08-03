@@ -7,6 +7,10 @@ import { Prefix } from './prefix';
  */
 export class Unit extends Compound<Unit> {
     /**
+     * The scale factor of this unit relative to the base unit of this dimension.
+     */
+    public readonly scale: number = 1;
+    /**
      * The base dimensions of this unit.
      */
     public readonly dimensions: Dimension = new Dimension();
@@ -17,7 +21,7 @@ export class Unit extends Compound<Unit> {
      * @param scale The scale factor of this unit relative to the units in `base`
      * @param hasPrefix Whether or not this unit has a prefix applied
      */
-    constructor(private readonly LaTeXsymbol: string | Map<Unit, number>, base?: Dimension | Unit, private readonly scale: number = 1, private readonly hasPrefix: boolean = false) {
+    constructor(private readonly LaTeXsymbol: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly hasPrefix: boolean = false) {
         super(LaTeXsymbol);
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {
@@ -25,6 +29,7 @@ export class Unit extends Compound<Unit> {
                 this.dimensions = new Dimension(Compound.getFactors(base));
             } else if (base instanceof Unit) {
                 // Initialize based on other unit(s)
+                this.scale = base.scale * scale;
                 this.dimensions = new Dimension(Compound.getFactors(base.dimensions));
             }
         } else if (LaTeXsymbol instanceof Map) {
@@ -42,7 +47,7 @@ export class Unit extends Compound<Unit> {
      */
     public prefix(prefix: Prefix): Unit {
         if (typeof this.LaTeXsymbol === 'string' && !this.hasPrefix) {
-            return new Unit(prefix.LaTeX + this.LaTeXsymbol, this, this.scale / prefix.scale, true);
+            return new Unit(prefix.LaTeX + this.LaTeXsymbol, this, this.scale * prefix.scale, true);
         } else {
             throw new Error('Can only add a prefix to named base units.');
         }
@@ -52,9 +57,9 @@ export class Unit extends Compound<Unit> {
      * @param other Another unit to convert to
      * @returns The conversion factor between this unit and another
      */
-    public getConversionFactor(other: Unit): number {
+    public to(other: Unit): number {
         if (this.dimensions.is(other.dimensions)) {
-            return other.scale / this.scale;
+            return this.scale / other.scale;
         } else {
             throw new Error('Dimensions on ' + this.toString() + ' does not match dimensions on ' + other.toString() + '!');
         }
