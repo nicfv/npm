@@ -21,17 +21,13 @@ export abstract class Compound<T extends Compound<T>> {
      */
     private readonly den: Map<T, number> = new Map();
     /**
-     * A method used internally to obtain the child class
-     */
-    private readonly getChild?: () => T;
-    /**
      * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
+     * @param getChild An internal method for the parent class to obtain the child class. Should return `this`
      * @param data The LaTeX representation of this compound and a method to obtain the child class, or the factors and their exponents that make up this compound
      */
-    constructor(data?: [string, () => T] | Map<T, number>) {
-        if (Array.isArray(data)) {
-            this.LaTeX = data[0];
-            this.getChild = data[1];
+    constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
+        if (typeof data === 'string') {
+            this.LaTeX = data;
             // Factors are empty (this = this^1)
         } else if (data instanceof Map) {
             // Reject "ones" and anything to the power of zero
@@ -57,7 +53,7 @@ export abstract class Compound<T extends Compound<T>> {
      * @returns The factors in this compound
      */
     private getFactors(): Map<T, number> {
-        if (this.getChild) {
+        if (this.factors.size === 0) {
             return new Map([[this.getChild(), 1]]);
         }
         return new Map(this.factors);
