@@ -7,7 +7,7 @@ export abstract class Compound<T extends Compound<T>> {
     /**
      * The LaTeX representation of this compound
      */
-    private readonly LaTeX?: string;
+    protected readonly LaTeX?: string;
     /**
      * Terms and their exponents
      */
