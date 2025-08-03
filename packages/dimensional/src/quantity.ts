@@ -21,7 +21,7 @@ export class Quantity {
         return new Quantity(this.quantity ** exponent, this.units.pow(exponent));
     }
     public as(units: Unit): Quantity {
-        return new Quantity(this.quantity * this.units.getConversionFactor(units), units);
+        return new Quantity(this.quantity * this.units.to(units), units);
     }
     public toString(): string {
         return this.quantity.toString() + ' \\left[ ' + this.units.toString() + ' \\right]';
