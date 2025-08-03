@@ -7,7 +7,7 @@ export abstract class Compound<T extends Compound<T>> {
     /**
      * The LaTeX representation of this compound
      */
-    private readonly LaTeX: string | undefined;
+    private readonly LaTeX?: string;
     /**
      * Terms and their exponents
      */
@@ -21,16 +21,21 @@ export abstract class Compound<T extends Compound<T>> {
      */
     private readonly den: Map<T, number> = new Map();
     /**
-     * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
-     * @param LaTeX_or_factors The LaTeX representation of this compound, or the factors and their exponents that make up this compound
+     * A method used internally to obtain the child class
      */
-    constructor(LaTeX_or_factors?: string | Map<T, number>) {
-        if (typeof LaTeX_or_factors === 'string') {
-            this.LaTeX = LaTeX_or_factors;
+    private readonly getChild?: () => T;
+    /**
+     * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
+     * @param data The LaTeX representation of this compound and a method to obtain the child class, or the factors and their exponents that make up this compound
+     */
+    constructor(data?: [string, () => T] | Map<T, number>) {
+        if (Array.isArray(data)) {
+            this.LaTeX = data[0];
+            this.getChild = data[1];
             // Factors are empty (this = this^1)
-        } else if (LaTeX_or_factors instanceof Map) {
+        } else if (data instanceof Map) {
             // Reject "ones" and anything to the power of zero
-            const filtered = [...LaTeX_or_factors].filter(([factor, exponent]) => (factor.LaTeX || factor.factors.size > 0) && exponent !== 0);
+            const filtered = [...data].filter(([factor, exponent]) => (factor.LaTeX || factor.factors.size > 0) && exponent !== 0);
             this.factors = new Map(filtered);
             // Split factors into a numerator and denominator
             this.factors.forEach((exponent: number, factor: T) => {
@@ -43,57 +48,44 @@ export abstract class Compound<T extends Compound<T>> {
         }
     }
     /**
-     * Get the map of factors and their exponents for a specified compound.
-     * @param compound The compound to get factors for
-     * @returns The factors for this compound
+     * Defines a method to initialize a new child of `Compound` solely with a map of factors.
+     * @param factors The factors and exponents that make up this compound
      */
-    private static getFactors<T extends Compound<T>>(compound: T): Map<T, number> {
-        if (compound.factors.size) {
-            // compound = a^A * b^B * ... * z^Z
-            return new Map(compound.factors);
-        } else {
-            // compound = a^1
-            return new Map([[compound, 1]]);
+    protected abstract fromMap(factors: Map<T, number>): T;
+    /**
+     * Return a map of factors in this compound.
+     * @returns The factors in this compound
+     */
+    private getFactors(): Map<T, number> {
+        if (this.getChild) {
+            return new Map([[this.getChild(), 1]]);
         }
-    }
-    /**
-     * Multiply this compound by another and return the map of factors.
-     * @param me This compound
-     * @param other Another compound
-     * @returns The map of factors of the product of this compound and another
-     */
-    protected multiplyFactors(me: T, other: T): Map<T, number> {
-        const product: Map<T, number> = Compound.getFactors(me);
-        [...Compound.getFactors(other)].forEach(([factor, exponent]) => {
-            product.set(factor, (product.get(factor) ?? 0) + exponent);
-        });
-        return product;
-    }
-    /**
-     * Raise this compound by an exponent and return the map of factors.
-     * @param me This compound
-     * @param exponent The exponent
-     * @returns The map of factors of the power of this compound to an exponent
-     */
-    protected raiseFactors(me: T, exponent: number): Map<T, number> {
-        const power: Map<T, number> = new Map();
-        [...Compound.getFactors(me)].forEach(([factor, currentExponent]) => {
-            power.set(factor, currentExponent * exponent);
-        });
-        return power;
+        return new Map(this.factors);
     }
     /**
      * Multiply this compound by another.
      * @param factor Another term or compound of similar terms
      * @returns The product of two compounds
      */
-    public abstract times(factor: T): T;
+    public times(factor: T): T {
+        const product: Map<T, number> = this.getFactors();
+        for (const [iFactor, iExponent] of factor.getFactors()) {
+            product.set(iFactor, (product.get(iFactor) ?? 0) + iExponent);
+        }
+        return this.fromMap(product);
+    };
     /**
      * Raise this compound to an exponent.
      * @param exponent The exponent to raise this compound by
      * @returns The power of this compound and exponent
      */
-    public abstract pow(exponent: number): T;
+    public pow(exponent: number): T {
+        const power: Map<T, number> = this.getFactors();
+        for (const [iFactor, iExponent] of power) {
+            power.set(iFactor, iExponent * exponent);
+        }
+        return this.fromMap(power);
+    };
     /**
      * Divide this compound by another.
      * @param dividend The compound to divide by
