@@ -27,10 +27,10 @@ export abstract class Compound<T extends Compound<T>> {
      */
     constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
         if (typeof data === 'string') {
-            if (data.match(/^[a-zA-Z]+$/)) {
+            if (/^[a-zA-Z]+$/.test(data)) {
                 this.LaTeX = '\\text{' + data + '}';
             } else {
-                this.LaTeX = data;
+                this.LaTeX = '{' + data + '}';
             }
             // Factors are empty (this = this^1)
         } else if (data instanceof Map) {
@@ -137,7 +137,7 @@ export abstract class Compound<T extends Compound<T>> {
      */
     private factorToString(factor: T, exponent: number): string {
         const rat = SMath.rat(exponent, 0.01),
-            facString: string = '{' + (factor.LaTeX ?? factor.toString()) + '}';
+            facString: string = factor.LaTeX ?? factor.toString();
         if (rat.num === 1 && rat.den === 1) {
             return facString;
         }
