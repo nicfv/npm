@@ -27,7 +27,11 @@ export abstract class Compound<T extends Compound<T>> {
      */
     constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
         if (typeof data === 'string') {
-            this.LaTeX = data;
+            if (data.match(/^[a-zA-Z]+$/)) {
+                this.LaTeX = '\\text{' + data + '}';
+            } else {
+                this.LaTeX = data;
+            }
             // Factors are empty (this = this^1)
         } else if (data instanceof Map) {
             // Reject "ones" and anything to the power of zero
