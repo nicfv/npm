@@ -73,9 +73,9 @@ class Defaults {
     public readonly day = new Unit('d', this.hour, 24);
     public readonly week = new Unit('wk', this.day, 7);
     public readonly year = new Unit('yr', this.day, 365.25);
-    public readonly Celsius = new Unit('{}^{\\deg}\\text{C}', this.Kelvin);
-    public readonly Rankine = new Unit('{}^{\\deg}\\text{R}', this.Kelvin, 5 / 9);
-    public readonly Fahrenheit = new Unit('{}^{\\deg}\\text{F}', this.Rankine);
+    public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.Kelvin);
+    public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.Kelvin, 5 / 9);
+    public readonly Fahrenheit = new Unit('^{\\circ}\\text{F}', this.Rankine);
     public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.81);
     public readonly Newton = new Unit('N', this.kilogram.times(this.meter).over(this.second.pow(2)));
     public readonly kiloNewton = this.Newton.prefix(this.kilo);
