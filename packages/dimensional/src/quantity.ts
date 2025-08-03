@@ -21,13 +21,9 @@ export class Quantity {
         return new Quantity(this.quantity ** exponent, this.units.pow(exponent));
     }
     public as(units: Unit): Quantity {
-        if (this.units.dimensions.is(units.dimensions)) {
-            return new Quantity(this.quantity * this.units.getConversionFactor(units), units);
-        } else {
-            throw new Error('Dimensions on ' + this.units.toString() + ' does not match dimensions on ' + units.toString() + '!');
-        }
+        return new Quantity(this.quantity * this.units.getConversionFactor(units), units);
     }
     public toString(): string {
-        return this.quantity + ' \\left[ ' + this.units.toString() + ' \\right]';
+        return this.quantity.toString() + ' \\left[ ' + this.units.toString() + ' \\right]';
     }
 }

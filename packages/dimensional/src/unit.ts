@@ -47,6 +47,18 @@ export class Unit extends Compound<Unit> {
             throw new Error('Can only add a prefix to named base units.');
         }
     }
+    /**
+     * Calculate the conversion factor between this unit and another unit.
+     * @param other Another unit to convert to
+     * @returns The conversion factor between this unit and another
+     */
+    public getConversionFactor(other: Unit): number {
+        if (this.dimensions.is(other.dimensions)) {
+            return other.scale / this.scale;
+        } else {
+            throw new Error('Dimensions on ' + this.toString() + ' does not match dimensions on ' + other.toString() + '!');
+        }
+    }
     public times(factor: Unit): Unit {
         return new Unit(super.multiplyFactors(this, factor));
     }
