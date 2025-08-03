@@ -1,39 +1,37 @@
-import { Compound, MathSymbol } from './compound';
+import { Compound } from './compound';
 import { Dimension } from './dimension';
 import { Prefix } from './prefix';
 
 /**
  * Represents a measurable unit.
  */
-export class Unit implements MathSymbol {
-    /**
-     * The scale factor of this unit relative to the base unit of this dimension.
-     */
-    public readonly scale: number = 1;
+export class Unit extends Compound<Unit> {
     /**
      * The base dimensions of this unit.
      */
-    public readonly dimensions: Compound<Dimension>;
+    public readonly dimensions: Dimension = new Dimension();
     /**
-     * Define a new unit.
-     * @param LaTeX The LaTeX code for this unit
-     * @param makeup The makeup of this unit, either a base dimension, a scale of another unit, or a compound of multiple units
+     * Define a new named unit.
+     * @param LaTeXsymbol The LaTeX code for this unit
+     * @param base The base dimension or makeup of unit(s)
+     * @param scale The scale factor of this unit relative to the units in `base`
      */
-    constructor(public readonly LaTeX: string, makeup: { base: Dimension } | { unit: Unit, scale: number } | { units: Compound<Unit> }) {
-        if ('base' in makeup) {
-            this.dimensions = new Compound(makeup.base);
-        } else if ('unit' in makeup) {
-            this.scale = makeup.scale;
-            this.dimensions = new Compound(makeup.unit.dimensions);
-        } else {
-            let dims: Compound<Dimension> = new Compound(),
-                scale: number = 1;
-            makeup.units.forEach((exponent: number, unit: Unit) => {
-                dims = dims.times(unit.dimensions.pow(exponent));
-                scale *= (unit.scale ** exponent);
-            });
-            this.scale = scale;
-            this.dimensions = dims;
+    constructor(private readonly LaTeXsymbol: string | Map<Unit, number>, base?: Dimension | Unit, private readonly scale: number = 1) {
+        super(LaTeXsymbol);
+        if (typeof LaTeXsymbol === 'string') {
+            if (base instanceof Dimension) {
+                // Initialize from base dimension(s)
+                this.dimensions = new Dimension(Compound.getFactors(base));
+            } else if (base instanceof Unit) {
+                // Initialize based on other unit(s)
+                this.dimensions = new Dimension(Compound.getFactors(base.dimensions));
+            }
+        } else if (LaTeXsymbol instanceof Map) {
+            // Create a resultant unit based on other unit(s)
+            for (const [factor, exponent] of LaTeXsymbol) {
+                this.dimensions = this.dimensions.times(factor.dimensions.pow(exponent));
+                this.scale *= (factor.scale ** exponent);
+            }
         }
     }
     /**
@@ -42,6 +40,16 @@ export class Unit implements MathSymbol {
      * @returns A properly scaled unit
      */
     public prefix(prefix: Prefix): Unit {
-        return new Unit(prefix.LaTeX + this.LaTeX, { unit: this, scale: this.scale / prefix.scale });
+        if (typeof this.LaTeXsymbol === 'string') {
+            return new Unit(prefix.LaTeX + this.LaTeXsymbol, this, this.scale / prefix.scale);
+        } else {
+            throw new Error('Can only add a prefix to named units.');
+        }
+    }
+    public times(factor: Unit): Unit {
+        return new Unit(super.multiplyFactors(this, factor));
+    }
+    public pow(exponent: number): Unit {
+        return new Unit(super.raiseFactors(this, exponent));
     }
 }
