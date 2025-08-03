@@ -28,6 +28,9 @@ class Defaults {
     public readonly yocto = new Prefix('y', 1e-24);
     public readonly ronto = new Prefix('r', 1e-27);
     public readonly quecto = new Prefix('q', 1e-30);
+    // Special
+    public readonly Dimensionless = new Dimension();
+    public readonly Unitless = new Unit();
     // Dimensions
     public readonly Mass = new Dimension('\\textbf{M}');
     public readonly Length = new Dimension('\\textbf{L}');
