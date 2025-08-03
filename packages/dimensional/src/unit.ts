@@ -26,11 +26,11 @@ export class Unit extends Compound<Unit> {
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {
                 // Initialize from base dimension(s)
-                this.dimensions = new Dimension(Compound.getFactors(base));
+                this.dimensions = new Dimension().times(base);
             } else if (base instanceof Unit) {
                 // Initialize based on other unit(s)
                 this.scale = base.scale * scale;
-                this.dimensions = new Dimension(Compound.getFactors(base.dimensions));
+                this.dimensions = new Dimension().times(base.dimensions);
             }
         } else if (LaTeXsymbol instanceof Map) {
             // Create a resultant unit based on other unit(s)

@@ -47,7 +47,7 @@ export abstract class Compound<T extends Compound<T>> {
      * @param compound The compound to get factors for
      * @returns The factors for this compound
      */
-    protected static getFactors<T extends Compound<T>>(compound: T): Map<T, number> {
+    private static getFactors<T extends Compound<T>>(compound: T): Map<T, number> {
         if (compound.factors.size) {
             // compound = a^A * b^B * ... * z^Z
             return new Map(compound.factors);
