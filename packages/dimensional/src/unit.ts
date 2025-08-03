@@ -22,7 +22,7 @@ export class Unit extends Compound<Unit> {
      * @param hasPrefix Whether or not this unit has a prefix applied
      */
     constructor(private readonly LaTeXsymbol: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly hasPrefix: boolean = false) {
-        super(typeof LaTeXsymbol === 'string' ? [LaTeXsymbol, () => this] : LaTeXsymbol);
+        super(() => this, LaTeXsymbol);
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {
                 // Initialize from base dimension(s)
