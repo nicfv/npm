@@ -24,13 +24,13 @@ export abstract class Compound<T extends Compound<T>> {
      * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
      * @param LaTeX_or_factors The LaTeX representation of this compound, or the factors and their exponents that make up this compound
      */
-    constructor(LaTeX_or_factors: string | Map<T, number>) {
+    constructor(LaTeX_or_factors?: string | Map<T, number>) {
         if (typeof LaTeX_or_factors === 'string') {
             this.LaTeX = LaTeX_or_factors;
             // Factors are empty (this = this^1)
         } else if (LaTeX_or_factors instanceof Map) {
-            // Reject anything to the power of zero
-            const filtered = [...LaTeX_or_factors].filter(([, exponent]) => exponent !== 0);
+            // Reject "ones" and anything to the power of zero
+            const filtered = [...LaTeX_or_factors].filter(([factor, exponent]) => (factor.LaTeX || factor.factors.size > 0) && exponent !== 0);
             this.factors = new Map(filtered);
             // Split factors into a numerator and denominator
             this.factors.forEach((exponent: number, factor: T) => {
