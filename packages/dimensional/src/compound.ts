@@ -20,6 +20,10 @@ export abstract class Compound<T extends Compound<T>> {
      * Terms in the denominator
      */
     private readonly den: Map<T, number> = new Map();
+    /**
+     * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
+     * @param LaTeX_or_factors The LaTeX representation of this compound, or the factors and their exponents that make up this compound
+     */
     constructor(LaTeX_or_factors: string | Map<T, number>) {
         if (typeof LaTeX_or_factors === 'string') {
             this.LaTeX = LaTeX_or_factors;
@@ -68,7 +72,7 @@ export abstract class Compound<T extends Compound<T>> {
     /**
      * Raise this compound by an exponent and return the map of factors.
      * @param me This compound
-     * @param exponent Another compound
+     * @param exponent The exponent
      * @returns The map of factors of the power of this compound to an exponent
      */
     protected raiseFactors(me: T, exponent: number): Map<T, number> {
