@@ -9,7 +9,7 @@ export class Unit extends Compound<Unit> {
     /**
      * The scale factor of this unit relative to the base unit of this dimension.
      */
-    public readonly scale: number = 1;
+    private readonly scale: number = 1;
     /**
      * The base dimensions of this unit.
      */
@@ -22,7 +22,7 @@ export class Unit extends Compound<Unit> {
      * @param hasPrefix Whether or not this unit has a prefix applied
      */
     constructor(private readonly LaTeXsymbol: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly hasPrefix: boolean = false) {
-        super(LaTeXsymbol);
+        super(typeof LaTeXsymbol === 'string' ? [LaTeXsymbol, () => this] : LaTeXsymbol);
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {
                 // Initialize from base dimension(s)
@@ -64,10 +64,7 @@ export class Unit extends Compound<Unit> {
             throw new Error('Dimensions on ' + this.toString() + ' does not match dimensions on ' + other.toString() + '!');
         }
     }
-    public times(factor: Unit): Unit {
-        return new Unit(super.multiplyFactors(this, factor));
-    }
-    public pow(exponent: number): Unit {
-        return new Unit(super.raiseFactors(this, exponent));
+    protected fromMap(factors: Map<Unit, number>): Unit {
+        return new Unit(factors);
     }
 }
