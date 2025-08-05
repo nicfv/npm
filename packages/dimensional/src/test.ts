@@ -1,59 +1,66 @@
 import * as T6 from 't6';
-import { Attribute } from './attribute';
+import { defaults } from './defaults';
+import { Dimension } from './dimension';
+import { Prefix } from './prefix';
 import { Unit } from './unit';
-import { Compound } from './compound';
 
-T6.isTrue(true);
+{
+    // Dimension
+    // .toString
+    T6.is(defaults.Dimensionless.toString(), '1');
+    T6.is(defaults.Mass.toString(), '{\\textbf{M}}');
+    T6.is(defaults.acceleration.toString(), '\\frac{{\\textbf{L}}}{{\\textbf{T}}^{2}}');
+    T6.is(defaults.Temperature.toString(), '{\\boldsymbol{\\Theta}}');
+    const customDimension = new Dimension('x').times(defaults.AmountOfSubstance).pow(2);
+    T6.is(customDimension.toString(), '\\text{x}^{2} \\cdot {\\textbf{N}}^{2}');
+    // .is
+    T6.isTrue(defaults.Dimensionless.is(new Dimension()));
+    T6.isTrue(defaults.velocity.is(defaults.Length.over(defaults.Time)));
+    T6.isTrue(defaults.force.is(defaults.Dimensionless.times(defaults.force)));
+    T6.isFalse(defaults.acceleration.is(defaults.Length.over(defaults.Time)));
+    T6.isFalse(customDimension.is(defaults.LuminousIntensity.pow(-2)));
+    T6.isFalse(new Dimension('x').is(new Dimension('x'))); // These should be considered different dimensions
+    T6.isTrue(defaults.Dimensionless.over(defaults.Length).is(defaults.Length.pow(-1)));
+}
 
-console.log(Attribute.Acceleration.LaTeX, Attribute.Acceleration.baseDimensions.toString());
-
-// const force = new Attribute('F', new Compound<Attribute>([[Attribute.Mass, 1], [Attribute.Acceleration, 1]]));
-
-const meter = new Unit('m', { base: Attribute.Length }),
-    second = new Unit('s', { base: Attribute.Time }),
-    gram = new Unit('g', { base: Attribute.Mass }),
-    kilogram = new Unit('kg', { unit: gram, scale: 1e3 }),
-    // centimeter = new Unit('cm', { units: new Compound<Unit>(meter), scale: 1e-2 }),
-    newton = new Unit('N', { units: new Compound([[kilogram, 1], [meter, 1], [second, -2]]) });
-console.log(newton.LaTeX, newton.baseAttributes.toString(), newton.baseDimensions.toString(), newton.scale);
-
-// const length = new Dimension('L'),
-//     time = new Dimension('T');
-
-// const duration = new Attribute('t', time),
-//     distance = new Attribute('x', length),
-//     velocity = new Attribute('v', new Compound([[distance, 1], [duration, -1]])),
-//     acceleration = new Attribute('a', new Compound([[velocity, 1], [duration, -1]]));
-
-// console.log(acceleration.LaTeX, acceleration.baseDimensions.toString());
-
-// new Dimension('mass', 'M');
-// new Dimension('length', 'L');
-// new Dimension('time', 'T');
-
-// new Attribute('length', 'x', 'length');
-// new Attribute('time', 't', 'time');
-// new Attribute('velocity', 'v', { 'length': 1, 'time': -1 });
-// new Attribute('acceleration', 'a', { 'velocity': 1, 'time': -1 });
-
-// console.log(Dimension.get('mass')?.toString(), Dimension.getNames());
-// console.log(Attribute.get('acceleration')?.getBaseDimensions());
-// console.log(Attribute.get('acceleration')?.toString('base-dimensions'));
-
-// type hiscore = { name: string, score: number } & MathSymbol;
-
-// const hiscore1: hiscore = { name: 'hs1', score: 32, LaTeX: 'A' },
-//     hiscore2: hiscore = { name: 'hs2', score: 21, LaTeX: 'B' };
-
-// const c = new Compound<hiscore>([
-//     [hiscore1, 2],
-//     [hiscore2, 3],
-//     [hiscore1, 1],
-// ]),
-//     d = new Compound<hiscore>([
-//         [hiscore1, 4],
-//         [hiscore2, 1],
-//         [hiscore2, -1],
-//     ]);
-// console.log(c.toString(), d.toString(), (c.over(d)).toString(), c.is(c), c.is(d));
-// console.log(d.times(hiscore2).toString());
+{
+    // Unit
+    // .toString
+    console.log(T6.getTestNumber());
+    T6.is(defaults.Kelvin.toString(), '\\text{K}');
+    T6.is(defaults.mile.toString(), '\\text{mi}');
+    T6.is(defaults.Rankine.toString(), '{^{\\circ}\\text{R}}');
+    T6.is(defaults.kilometer.toString(), '{\\text{k}\\text{m}}');
+    // .dimensions
+    T6.isTrue(defaults.Kelvin.dimensions.is(defaults.Temperature));
+    T6.isTrue(defaults.Newton.dimensions.is(defaults.force));
+    T6.isTrue(defaults.Newton.dimensions.is(defaults.Mass.times(defaults.acceleration)));
+    T6.isTrue(new Unit().dimensions.is(defaults.Dimensionless));
+    T6.isTrue(new Unit().is(defaults.Unitless));
+    T6.isTrue(new Unit('x').dimensions.is(defaults.Dimensionless)); // Unassigned base dimensions/units
+    // .prefix
+    const customKm = defaults.meter.prefix(defaults.kilo);
+    T6.is(customKm.toString(), defaults.kilometer.toString());
+    T6.isFalse(customKm.is(defaults.kilometer)); // Not seen as the same unit
+    let caught: boolean;
+    caught = false;
+    try {
+        customKm.prefix(defaults.milli);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Should not allow multiple prefixes.');
+}
+{
+    // Customization
+    const dimensionBlob = new Dimension('\\beta'),
+        customPrefix = new Prefix('\\textbf{p}_{5}', 5),
+        customInch = defaults.inch.prefix(customPrefix),
+        customUnit = customInch.over(new Unit('blob', dimensionBlob));
+    T6.is(dimensionBlob.toString(), '{\\beta}');
+    T6.is(customPrefix.LaTeX, '{\\textbf{p}_{5}}');
+    T6.is(customInch.toString(), '{{\\textbf{p}_{5}}\\text{in}}');
+    T6.is(customUnit.toString(), '\\frac{{{\\textbf{p}_{5}}\\text{in}}}{\\text{blob}}');
+    T6.is(customUnit.dimensions.toString(), '\\frac{{\\textbf{L}}}{{\\beta}}');
+    T6.isTrue(customUnit.dimensions.is(defaults.Length.over(dimensionBlob)));
+}

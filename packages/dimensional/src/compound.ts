@@ -1,153 +1,128 @@
 import * as SMath from 'smath';
 
 /**
- * Represents a mathematical symbol.
- */
-export interface MathSymbol {
-    /**
-     * The LaTeX code for this `MathSymbol`
-     */
-    readonly LaTeX: string;
-}
-
-/**
  * Represents a compound number.
  */
-export class Compound<T extends MathSymbol> {
+export abstract class Compound<T extends Compound<T>> {
+    /**
+     * The LaTeX representation of this compound
+     */
+    protected readonly LaTeX?: string;
     /**
      * Terms and their exponents
      */
-    private readonly factors: Map<T, number>;
+    private readonly factors: Map<T, number> = new Map();
     /**
      * Terms in the numerator
      */
-    private readonly num: Map<T, number>;
+    private readonly num: Map<T, number> = new Map();
     /**
      * Terms in the denominator
      */
-    private readonly den: Map<T, number>;
+    private readonly den: Map<T, number> = new Map();
     /**
-     * Create a new compound.
-     * @param terms A single factor or an array of factors in this compound and their exponents
+     * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
+     * @param getChild An internal method for the parent class to obtain the child class. Should return `this`
+     * @param data The LaTeX representation of this compound and a method to obtain the child class, or the factors and their exponents that make up this compound
      */
-    constructor(terms?: T | Array<[T, number]> | Compound<T>) {
-        // Combine like terms
-        const final: Array<[T, number]> = [];
-        if (terms) {
-            if (Array.isArray(terms)) {
-                for (const term of terms) {
-                    let found: boolean = false;
-                    for (const f of final) {
-                        if (f[0] === term[0]) { // Check if term has already been assigned
-                            f[1] += term[1]; // Combine exponents by adding
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        final.push([...term]);
-                    }
-                }
-            } else if (terms instanceof Compound) {
-                for (const factor of terms.factors) {
-                    final.push(factor); // Basically make a deep copy
-                }
+    constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
+        if (typeof data === 'string') {
+            if (/^[a-zA-Z]+$/.test(data)) {
+                this.LaTeX = '\\text{' + data + '}';
             } else {
-                final.push([terms, 1]);
+                this.LaTeX = '{' + data + '}';
             }
+            // Factors are empty (this = this^1)
+        } else if (data instanceof Map) {
+            // Reject "ones" and anything to the power of zero
+            const filtered = [...data].filter(([factor, exponent]) => (factor.LaTeX || factor.factors.size > 0) && exponent !== 0);
+            this.factors = new Map(filtered);
+            // Split factors into a numerator and denominator
+            this.factors.forEach((exponent: number, factor: T) => {
+                if (exponent > 0) {
+                    this.num.set(factor, exponent);
+                } else if (exponent < 0) {
+                    this.den.set(factor, -exponent);
+                }
+            });
         }
-        // Reject anything to the power of zero
-        this.factors = new Map(final.filter(([, exponent]) => exponent !== 0));
-        this.num = new Map();
-        this.den = new Map();
-        this.factors.forEach((exponent: number, factor: T) => {
-            if (exponent > 0) {
-                this.num.set(factor, exponent);
-            } else if (exponent < 0) {
-                this.den.set(factor, -exponent);
-            }
-        });
     }
     /**
-     * Get all nonzero terms in this compound.
-     * @returns An array of all terms
+     * Defines a method to initialize a new child of `Compound` solely with a map of factors.
+     * @param factors The factors and exponents that make up this compound
      */
-    public getTerms(): Array<T> {
-        return [...this.factors.keys()];
-    }
+    protected abstract fromMap(factors: Map<T, number>): T;
     /**
-     * Determine the exponent on the specified factor.
-     * @param factor The factor to search for
-     * @returns The exponent on `factor`
+     * Return a map of factors in this compound.
+     * @returns The factors in this compound
      */
-    public getExponent(factor: T): number {
-        return this.factors.get(factor) ?? 0;
+    private getFactors(): Map<T, number> {
+        if (this.factors.size === 0) {
+            return new Map([[this.getChild(), 1]]);
+        }
+        return new Map(this.factors);
     }
     /**
      * Multiply this compound by another.
-     * @param other Another term or compound of similar terms
+     * @param factor Another term or compound of similar terms
      * @returns The product of two compounds
      */
-    public times(other: T | Compound<T>): Compound<T> {
-        if (!(other instanceof Compound)) {
-            other = new Compound(other);
+    public times(factor: T): T {
+        const product: Map<T, number> = this.getFactors();
+        for (const [iFactor, iExponent] of factor.getFactors()) {
+            product.set(iFactor, (product.get(iFactor) ?? 0) + iExponent);
         }
-        const product: Map<T, number> = new Map(this.factors);
-        other.getTerms().forEach((term: T) => {
-            product.set(term, (product.get(term) ?? 0) + other.getExponent(term));
-        });
-        return new Compound<T>([...product]);
-    }
+        return this.fromMap(product);
+    };
     /**
      * Raise this compound to an exponent.
      * @param exponent The exponent to raise this compound by
      * @returns The power of this compound and exponent
      */
-    public pow(exponent: number): Compound<T> {
-        const power: Map<T, number> = new Map(this.factors);
-        power.forEach((currentExponent: number, factor: T) => {
-            power.set(factor, currentExponent * exponent);
-        });
-        return new Compound<T>([...power]);
-    }
+    public pow(exponent: number): T {
+        const power: Map<T, number> = this.getFactors();
+        for (const [iFactor, iExponent] of power) {
+            power.set(iFactor, iExponent * exponent);
+        }
+        return this.fromMap(power);
+    };
     /**
      * Divide this compound by another.
      * @param dividend The compound to divide by
      * @returns The quotient of two compounds
      */
-    public over(dividend: T | Compound<T>): Compound<T> {
-        if (!(dividend instanceof Compound)) {
-            dividend = new Compound([[dividend, -1]]);
-        }
-        return this.times(dividend);
+    public over(dividend: T): T {
+        return this.times(dividend.pow(-1));
     }
     /**
      * Determine if this compound is made up of the same factors as another.
      * @param other Another compound to compare to
      * @returns Whether or not this compound matches another
      */
-    public is(other: Compound<T>): boolean {
-        const quotient: Compound<T> = this.over(other);
-        return quotient.num.size === 0 && quotient.den.size === 0;
+    public is(other: T): boolean {
+        return this.over(other).factors.size === 0;
     }
     /**
      * Pretty-print this compound as a LaTeX formula.
      * @returns The compound written as a LaTeX formula
      */
     public toString(): string {
+        if (this.LaTeX) {
+            return this.LaTeX;
+        }
         let strNum: string = '',
             strDen: string = '';
         this.num.forEach((exponent: number, factor: T) => {
             if (strNum) {
                 strNum += ' \\cdot ';
             }
-            strNum += Compound.factorToString(factor.LaTeX, exponent);
+            strNum += this.factorToString(factor, exponent);
         });
         this.den.forEach((exponent: number, factor: T) => {
             if (strDen) {
                 strDen += ' \\cdot ';
             }
-            strDen += Compound.factorToString(factor.LaTeX, exponent);
+            strDen += this.factorToString(factor, exponent);
         });
         if (strDen) {
             return '\\frac{' + (strNum || '1') + '}{' + strDen + '}';
@@ -156,21 +131,22 @@ export class Compound<T extends MathSymbol> {
     }
     /**
      * Render a single factor in LaTeX markup.
-     * @param LaTeX LaTeX symbol to render
+     * @param factor The factor to render
      * @param exponent The exponent on this factor
      * @returns A LaTeX representation of a factor
      */
-    private static factorToString(LaTeX: string, exponent: number): string {
-        const rat = SMath.rat(exponent, 0.01);
+    private factorToString(factor: T, exponent: number): string {
+        const rat = SMath.rat(exponent, 0.01),
+            facString: string = factor.LaTeX ?? factor.toString();
         if (rat.num === 1 && rat.den === 1) {
-            return LaTeX;
+            return facString;
         }
         if (rat.num === 1 && rat.den === 2) {
-            return '\\sqrt{' + LaTeX + '}';
+            return '\\sqrt{' + facString + '}';
         }
         if (rat.den === 1) {
-            return LaTeX + '^{' + rat.num + '}';
+            return facString + '^{' + rat.num + '}';
         }
-        return LaTeX + '^\\frac{' + rat.num + '}{' + rat.den + '}';
+        return facString + '^\\frac{' + rat.num + '}{' + rat.den + '}';
     }
 }

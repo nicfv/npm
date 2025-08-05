@@ -1,29 +1,70 @@
-import { Attribute } from './attribute';
-import { Compound, MathSymbol } from './compound';
+import { Compound } from './compound';
 import { Dimension } from './dimension';
+import { Prefix } from './prefix';
 
-export class Unit implements MathSymbol {
-    public readonly scale: number = 1;
-    public readonly baseAttributes: Compound<Attribute>;
-    public readonly baseDimensions: Compound<Dimension>;
-    constructor(public readonly LaTeX: string, makeup: { base: Attribute } | { unit: Unit, scale: number } | { units: Compound<Unit> }) {
-        if ('base' in makeup) {
-            this.baseAttributes = new Compound(makeup.base);
-            this.baseDimensions = new Compound(makeup.base.baseDimensions);
-        } else if ('unit' in makeup) {
-            this.scale = makeup.scale;
-            console.log(LaTeX, this.scale, makeup.scale);
-            this.baseAttributes = new Compound(makeup.unit.baseAttributes);
-            this.baseDimensions = new Compound(makeup.unit.baseDimensions);
-        } else {
-            this.baseAttributes = new Compound();
-            this.baseDimensions = new Compound();
-            for (const unit of makeup.units.getTerms()) {
-                const exponent: number = makeup.units.getExponent(unit);
-                this.baseAttributes = this.baseAttributes.times(unit.baseAttributes.pow(exponent));
-                this.baseDimensions = this.baseDimensions.times(unit.baseDimensions.pow(exponent));
-                this.scale *= (unit.scale ** exponent);
+/**
+ * Represents a measurable unit.
+ */
+export class Unit extends Compound<Unit> {
+    /**
+     * The scale factor of this unit relative to the base unit of this dimension.
+     */
+    private readonly scale: number = 1;
+    /**
+     * The base dimensions of this unit.
+     */
+    public readonly dimensions: Dimension = new Dimension();
+    /**
+     * Define a new named unit.
+     * @param LaTeXsymbol The LaTeX code for this unit
+     * @param base The base dimension or makeup of unit(s)
+     * @param scale The scale factor of this unit relative to the units in `base`
+     * @param hasPrefix Whether or not this unit has a prefix applied
+     */
+    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly hasPrefix: boolean = false) {
+        super(() => this, LaTeXsymbol);
+        if (typeof LaTeXsymbol === 'string') {
+            if (base instanceof Dimension) {
+                // Initialize from base dimension(s)
+                this.dimensions = new Dimension().times(base);
+            } else if (base instanceof Unit) {
+                // Initialize based on other unit(s)
+                this.scale = base.scale * scale;
+                this.dimensions = new Dimension().times(base.dimensions);
+            }
+        } else if (LaTeXsymbol instanceof Map) {
+            // Create a resultant unit based on other unit(s)
+            for (const [factor, exponent] of LaTeXsymbol) {
+                this.dimensions = this.dimensions.times(factor.dimensions.pow(exponent));
+                this.scale *= (factor.scale ** exponent);
             }
         }
+    }
+    /**
+     * Scale this unit by applying a prefix.
+     * @param prefix The prefix to apply
+     * @returns A properly scaled unit
+     */
+    public prefix(prefix: Prefix): Unit {
+        if (typeof this.LaTeX === 'string' && !this.hasPrefix) {
+            return new Unit(prefix.LaTeX + this.LaTeX, this, this.scale * prefix.scale, true);
+        } else {
+            throw new Error('Can only add a prefix to named base units.');
+        }
+    }
+    /**
+     * Calculate the conversion factor between this unit and another unit.
+     * @param other Another unit to convert to
+     * @returns The conversion factor between this unit and another
+     */
+    public to(other: Unit): number {
+        if (this.dimensions.is(other.dimensions)) {
+            return this.scale / other.scale;
+        } else {
+            throw new Error('Dimensions on ' + this.toString() + ' does not match dimensions on ' + other.toString() + '!');
+        }
+    }
+    protected fromMap(factors: Map<Unit, number>): Unit {
+        return new Unit(factors);
     }
 }
