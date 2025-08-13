@@ -1,7 +1,7 @@
 import * as T6 from 't6';
-import { defaultPsychartOptions, regions, setDefaults } from './defaults';
-import { Psychart } from './psychart';
-import { PsyState } from './psystate';
+import { Psychart } from '.';
+import { defaultPsychartOptions, regions, setDefaults } from './psychart/defaults';
+import { PsyState } from './psychart/psystate';
 
 {
     const template = { a: 'alpha', b: 'bravo' },
