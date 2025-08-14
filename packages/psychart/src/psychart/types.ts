@@ -1,5 +1,5 @@
 import { PaletteName } from 'viridis';
-import { Point } from '../types';
+import { ChartOptions, Point } from '../types';
 export { Point };
 
 /**
@@ -32,11 +32,7 @@ export interface Datum {
 /**
  * Configuration options for Psychart.
  */
-export interface PsychartOptions {
-    /**
-     * The outer size of Psychart, in pixels.
-     */
-    readonly size: Point;
+export interface PsychartOptions extends ChartOptions {
     /**
      * The padding in pixels.
      */
