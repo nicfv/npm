@@ -39,7 +39,7 @@ export abstract class Chart<T extends object> {
         // Create the base elements
         this.base = document.createElement('div');
         this.svg = document.createElementNS(this.NS, 'svg');
-        this.base.append(this.svg);
+        this.base.appendChild(this.svg);
     }
     /**
      * Produce a deep copy of an object.
