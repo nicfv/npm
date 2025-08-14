@@ -1,7 +1,9 @@
+import { ChartOptions } from './types';
+
 /**
  * Represents a generic SVG chart to be inherited by another class.
  */
-export abstract class Chart<T extends object> {
+export abstract class Chart<T extends ChartOptions> {
     /**
      * Initialization counter for any chart
      */
@@ -40,13 +42,17 @@ export abstract class Chart<T extends object> {
         this.base = document.createElement('div');
         this.svg = document.createElementNS(this.NS, 'svg');
         this.base.appendChild(this.svg);
+        // Set the size of the SVG element.
+        this.svg.setAttribute('viewBox', '0 0 ' + this.options.size.x + ' ' + this.options.size.y);
+        this.svg.setAttribute('width', this.options.size.x + 'px');
+        this.svg.setAttribute('height', this.options.size.y + 'px');
     }
     /**
      * Produce a deep copy of an object.
      * @param obj Any object
      * @returns A deep copy of an object.
      */
-    protected static deepCopy<Z extends object>(obj: Z): Z {
+    protected static deepCopy<Z>(obj: Z): Z {
         return JSON.parse(JSON.stringify(obj));
     }
     /**
@@ -55,7 +61,7 @@ export abstract class Chart<T extends object> {
      * @param defaults An object with all parameters default.
      * @returns An object with all parameters that are unset as their default values.
      */
-    protected static setDefaults<Z extends object>(options: Partial<Z>, defaults: Z): Z {
+    protected static setDefaults<Z>(options: Partial<Z>, defaults: Z): Z {
         const required: Z = Chart.deepCopy(defaults);
         for (const key in defaults) {
             required[key] = options[key] ?? defaults[key];
