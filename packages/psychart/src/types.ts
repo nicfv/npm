@@ -11,3 +11,13 @@ export interface Point {
      */
     readonly y: number;
 }
+
+/**
+ * Represents a set of options for this chart.
+ */
+export interface ChartOptions {
+    /**
+     * The outer size of this chart, in pixels.
+     */
+    readonly size: Point;
+}
