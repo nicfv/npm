@@ -56,8 +56,8 @@ export class Psychart extends Chart<PsychartOptions> {
         [legend: string]: {
             lastState: PsyState,
             hidden: boolean,
-            pointGroup: SVGGElement,
-            lineGroup: SVGGElement,
+            readonly pointGroup: SVGGElement,
+            readonly lineGroup: SVGGElement,
         }
     } = {};
     /**
