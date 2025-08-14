@@ -18,5 +18,5 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         unit: 'ft',
         step: 10,
         max: 100,
-    }
+    },
 };
