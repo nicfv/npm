@@ -97,9 +97,8 @@ export class Psychart extends Chart<PsychartOptions> {
         this.svg.setAttribute('viewBox', '0 0 ' + this.options.size.x + ' ' + this.options.size.y);
         this.svg.setAttribute('width', this.options.size.x + 'px');
         this.svg.setAttribute('height', this.options.size.y + 'px');
-        // Set base styling, and append the chart.
+        // Set base styling.
         this.base.style.position = 'relative';
-        this.base.appendChild(this.svg);
         // If set, generate the legend.
         if (typeof this.options.legend === 'object') {
             // Set the legend's viewport size.
