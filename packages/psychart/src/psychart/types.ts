@@ -12,11 +12,11 @@ export interface Point {
     /**
      * The x-coordinate (horizontal)
      */
-    x: number;
+    readonly x: number;
     /**
      * The y-coordinate (vertical)
      */
-    y: number;
+    readonly y: number;
 }
 
 /**

@@ -450,17 +450,19 @@ export class Psychart extends Chart<PsychartOptions> {
         background.setAttribute('rx', (padding / 2) + 'px');
         background.setAttribute('stroke-width', '1px');
         // Adjust the position if out-of-bounds
+        let dx: number = 0,
+            dy: number = 0;
         if (location.x + padding + maxWidth > this.options.size.x) {
-            location.x -= (maxWidth + padding);
+            dx = -(maxWidth + padding);
         } else {
-            location.x += padding;
+            dx = padding;
         }
         if (location.y + padding + maxHeight > this.options.size.y) {
-            location.y -= (maxHeight + padding);
+            dy = -(maxHeight + padding);
         } else {
-            location.y += padding;
+            dy = padding;
         }
-        tooltipBase.setAttribute('transform', 'translate(' + location.x + ',' + location.y + ')');
+        tooltipBase.setAttribute('transform', 'translate(' + (location.x + dx) + ',' + (location.y + dy) + ')');
     }
     /**
      * Add a line to the legend.
