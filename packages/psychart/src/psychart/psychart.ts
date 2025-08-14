@@ -1,9 +1,10 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import * as SMath from 'smath';
-import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types';
+import { PsychartOptions, Datum, RegionName, DataOptions } from './types';
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
+import { Point } from '../types';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
