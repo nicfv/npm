@@ -4,25 +4,24 @@
 export abstract class Chart<T> {
     protected readonly NS = 'http://www.w3.org/2000/svg';
     protected readonly options: T;
-    private readonly base: SVGSVGElement;
+    protected readonly base: HTMLDivElement;
+    protected readonly svg: SVGSVGElement;
     /**
      * Create a new instance of this chart.
      * @param options Supply some options to customize this chart.
+     * @param defaults Supply all default options for this chart.
      */
-    constructor(options: Partial<T>) {
-        this.options = this.setDefaults(options, this.getDefaults());
-        this.base = document.createElementNS(this.NS, 'svg');
+    constructor(options: Partial<T>, defaults: T) {
+        this.options = Chart.setDefaults(options, defaults);
+        this.base = document.createElement('div');
+        this.svg = document.createElementNS(this.NS, 'svg');
     }
-    /**
-     * Get a set of default options for this chart.
-     */
-    protected abstract getDefaults(): T;
     /**
      * Produce a deep copy of an object.
      * @param obj Any object
      * @returns A deep copy of an object.
      */
-    protected deepCopy<Z>(obj: Z): Z {
+    protected static deepCopy<Z>(obj: Z): Z {
         return JSON.parse(JSON.stringify(obj));
     }
     /**
@@ -31,18 +30,18 @@ export abstract class Chart<T> {
      * @param defaults An object with all parameters default.
      * @returns An object with all parameters that are unset as their default values.
      */
-    protected setDefaults<Z>(options: Partial<Z>, defaults: Z): Z {
-        const required: Z = this.deepCopy(defaults);
+    protected static setDefaults<Z>(options: Partial<Z>, defaults: Z): Z {
+        const required: Z = Chart.deepCopy(defaults);
         for (const key in defaults) {
             required[key] = options[key] ?? defaults[key];
         }
         return required;
     }
     /**
-     * Return the base `<svg>` element for this chart.
+     * Return the base `<div>` element for this chart.
      * @returns The base element.
      */
-    public getElement(): SVGSVGElement {
+    public getElement(): HTMLDivElement {
         return this.base;
     }
 }
