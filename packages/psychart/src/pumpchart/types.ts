@@ -1,7 +1,10 @@
+import { Point } from '../types';
+export { Point };
+
 /**
  * Details about a chart axis.
  */
-export interface Axis {
+interface Axis {
     /**
      * The units of this axis.
      */
@@ -16,7 +19,18 @@ export interface Axis {
     readonly max: number;
 }
 
+/**
+ * Configuration options for Pumpchart.
+ */
 export interface PumpchartOptions {
+    /**
+     * The outer size of Pumpchart, in pixels.
+     */
+    readonly size: Point;
+    /**
+     * The padding of Pumpchart, in pixels.
+     */
+    readonly padding: Point;
     /**
      * The flow rate (x-axis)
      */
