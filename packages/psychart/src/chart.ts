@@ -2,9 +2,21 @@
  * Represents a generic SVG chart to be inherited by another class.
  */
 export abstract class Chart<T> {
+    /**
+     * SVG Namespace URI
+     */
     protected readonly NS = 'http://www.w3.org/2000/svg';
+    /**
+     * Options for this chart
+     */
     protected readonly options: T;
+    /**
+     * Base `<div>` element
+     */
     protected readonly base: HTMLDivElement;
+    /**
+     * The `<svg>` element used for rendering
+     */
     protected readonly svg: SVGSVGElement;
     /**
      * Create a new instance of this chart.
