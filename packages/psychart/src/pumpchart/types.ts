@@ -1,4 +1,4 @@
-import { Point } from '../types';
+import { ChartOptions, Point } from '../types';
 export { Point };
 
 /**
@@ -22,11 +22,7 @@ interface Axis {
 /**
  * Configuration options for Pumpchart.
  */
-export interface PumpchartOptions {
-    /**
-     * The outer size of Pumpchart, in pixels.
-     */
-    readonly size: Point;
+export interface PumpchartOptions extends ChartOptions {
     /**
      * The padding of Pumpchart, in pixels.
      */
