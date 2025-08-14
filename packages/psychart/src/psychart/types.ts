@@ -1,23 +1,10 @@
 import { PaletteName } from 'viridis';
+import { Point } from '../types';
 
 /**
  * A human-readable name for a psychrometric envelope.
  */
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
-
-/**
- * An (x,y) cartesian coordinate pair.
- */
-export interface Point {
-    /**
-     * The x-coordinate (horizontal)
-     */
-    readonly x: number;
-    /**
-     * The y-coordinate (vertical)
-     */
-    readonly y: number;
-}
 
 /**
  * This data object fixes the psychrometric state.
