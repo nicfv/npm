@@ -1,7 +1,15 @@
 /**
  * Represents a generic SVG chart to be inherited by another class.
  */
-export abstract class Chart<T> {
+export abstract class Chart<T extends object> {
+    /**
+     * Initialization counter for any chart
+     */
+    private static id_count: number = 0;
+    /**
+     * Unique numeric identifier for this chart
+     */
+    protected readonly id: number;
     /**
      * SVG Namespace URI
      */
@@ -24,16 +32,21 @@ export abstract class Chart<T> {
      * @param defaults Supply all default options for this chart.
      */
     constructor(options: Partial<T>, defaults: T) {
+        // Set the unique ID for this chart
+        this.id = Chart.id_count++;
+        // Set the default options
         this.options = Chart.setDefaults(options, defaults);
+        // Create the base elements
         this.base = document.createElement('div');
         this.svg = document.createElementNS(this.NS, 'svg');
+        this.base.append(this.svg);
     }
     /**
      * Produce a deep copy of an object.
      * @param obj Any object
      * @returns A deep copy of an object.
      */
-    protected static deepCopy<Z>(obj: Z): Z {
+    protected static deepCopy<Z extends object>(obj: Z): Z {
         return JSON.parse(JSON.stringify(obj));
     }
     /**
@@ -42,7 +55,7 @@ export abstract class Chart<T> {
      * @param defaults An object with all parameters default.
      * @returns An object with all parameters that are unset as their default values.
      */
-    protected static setDefaults<Z>(options: Partial<Z>, defaults: Z): Z {
+    protected static setDefaults<Z extends object>(options: Partial<Z>, defaults: Z): Z {
         const required: Z = Chart.deepCopy(defaults);
         for (const key in defaults) {
             required[key] = options[key] ?? defaults[key];
@@ -50,7 +63,7 @@ export abstract class Chart<T> {
         return required;
     }
     /**
-     * Return the base `<div>` element for this chart.
+     * Return the base `<div>` element for this chart to append on the parent.
      * @returns The base element.
      */
     public getElement(): HTMLDivElement {
