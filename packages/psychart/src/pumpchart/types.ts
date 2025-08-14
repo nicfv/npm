@@ -20,6 +20,20 @@ interface Axis {
 }
 
 /**
+ * Represents a single point in time.
+ */
+export interface State {
+    /**
+     * Flow rate (e.g. gpm)
+     */
+    readonly flow: number;
+    /**
+     * Head pressure (e.g. ft)
+     */
+    readonly head: number;
+}
+
+/**
  * Configuration options for Pumpchart.
  */
 export interface PumpchartOptions extends ChartOptions {
