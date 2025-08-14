@@ -93,10 +93,6 @@ export class Psychart extends Chart<PsychartOptions> {
         if (this.options.dpMax > this.options.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
         }
-        // Set the chart's viewport size.
-        this.svg.setAttribute('viewBox', '0 0 ' + this.options.size.x + ' ' + this.options.size.y);
-        this.svg.setAttribute('width', this.options.size.x + 'px');
-        this.svg.setAttribute('height', this.options.size.y + 'px');
         // Set base styling.
         this.base.style.position = 'relative';
         // If set, generate the legend.
