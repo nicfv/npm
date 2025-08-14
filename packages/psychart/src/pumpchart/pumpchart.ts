@@ -5,14 +5,6 @@ import { Point, PumpchartOptions, State } from './types';
 
 export class Pumpchart extends Chart<PumpchartOptions> {
     /**
-     * Represents (0 gpm, 0 ft)
-     */
-    private readonly origin: Point;
-    /**
-     * Represents (max gpm, max ft)
-     */
-    private readonly farCorner: Point;
-    /**
      * Layers of the SVG as groups.
      */
     private readonly g = {
@@ -24,15 +16,6 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
-        // Set up frame of reference.
-        this.origin = {
-            x: this.options.padding.x,
-            y: this.options.size.y - this.options.padding.y,
-        };
-        this.farCorner = {
-            x: this.options.size.x - this.options.padding.x,
-            y: this.options.padding.y,
-        };
         // Create the axes.
         const xFlowAxis = this.createPath([
             { flow: 0, head: 0 },
@@ -57,8 +40,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private state2xy(state: State): Point {
         return {
-            x: SMath.translate(state.flow, 0, this.options.flow.max, this.origin.x, this.farCorner.x),
-            y: SMath.translate(state.head, 0, this.options.head.max, this.origin.y, this.farCorner.y),
+            x: SMath.translate(state.flow, 0, this.options.flow.max, this.options.padding.x, this.options.size.x - this.options.padding.x),
+            y: SMath.translate(state.head, 0, this.options.head.max, this.options.size.y - this.options.padding.y, this.options.padding.y),
         };
     }
     /**
