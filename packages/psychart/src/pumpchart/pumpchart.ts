@@ -3,6 +3,9 @@ import { Chart } from '../chart';
 import { defaultPumpchartOptions } from './defaults';
 import { Point, PumpchartOptions, State } from './types';
 
+/**
+ * Show a pump's relationship between flow rate and pressure at different operating conditions.
+ */
 export class Pumpchart extends Chart<PumpchartOptions> {
     /**
      * Layers of the SVG as groups.
