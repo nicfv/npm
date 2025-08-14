@@ -1,5 +1,6 @@
 import { PaletteName } from 'viridis';
 import { Point } from '../types';
+export { Point };
 
 /**
  * A human-readable name for a psychrometric envelope.
