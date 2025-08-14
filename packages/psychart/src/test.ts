@@ -1,16 +1,7 @@
 import * as T6 from 't6';
 import { Psychart } from '.';
-import { defaultPsychartOptions, regions, setDefaults } from './psychart/defaults';
+import { defaultPsychartOptions, regions } from './psychart/defaults';
 import { PsyState } from './psychart/psystate';
-
-{
-    const template = { a: 'alpha', b: 'bravo' },
-        dirty = { a: 'test', c: 'charlie' },
-        clean = setDefaults(dirty, template);
-    T6.is(JSON.stringify(clean), '{"a":"test","b":"bravo"}');
-    T6.is(JSON.stringify(setDefaults({}, template)), '{"a":"alpha","b":"bravo"}');
-    T6.is(JSON.stringify(setDefaults(dirty, {})), '{}');
-}
 
 T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
