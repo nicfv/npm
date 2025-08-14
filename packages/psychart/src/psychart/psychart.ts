@@ -5,8 +5,6 @@ import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types'
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
 
-const NS = 'http://www.w3.org/2000/svg';
-
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
  */
@@ -31,25 +29,25 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Represents the legend for Psychart.
      */
-    private readonly legend: SVGSVGElement = document.createElementNS(NS, 'svg');
+    private readonly legend: SVGSVGElement = document.createElementNS(this.NS, 'svg');
     /**
      * Legend definitions, which contains linear gradients.
      */
-    private readonly legendDefs: SVGDefsElement = document.createElementNS(NS, 'defs');
+    private readonly legendDefs: SVGDefsElement = document.createElementNS(this.NS, 'defs');
     /**
      * The base element for adding lines in the legend.
      */
-    private readonly legendg: SVGGElement = document.createElementNS(NS, 'g');
+    private readonly legendg: SVGGElement = document.createElementNS(this.NS, 'g');
     /**
      * Defines all the groups in the SVG ordered by layer.
      */
     private readonly g = {
-        regions: document.createElementNS(NS, 'g'),
-        axes: document.createElementNS(NS, 'g'),
-        text: document.createElementNS(NS, 'g'),
-        trends: document.createElementNS(NS, 'g'),
-        points: document.createElementNS(NS, 'g'),
-        tooltips: document.createElementNS(NS, 'g'),
+        regions: document.createElementNS(this.NS, 'g'),
+        axes: document.createElementNS(this.NS, 'g'),
+        text: document.createElementNS(this.NS, 'g'),
+        trends: document.createElementNS(this.NS, 'g'),
+        points: document.createElementNS(this.NS, 'g'),
+        tooltips: document.createElementNS(this.NS, 'g'),
     };
     /**
      * The data series plotted on Psychart with each of their last states and visibility toggles.
@@ -294,7 +292,7 @@ export class Psychart extends Chart<PsychartOptions> {
      * Create a line to append onto a parent element.
      */
     private createLine(data: PsyState[], color: Color, weight: number): SVGPathElement {
-        const line = document.createElementNS(NS, 'path');
+        const line = document.createElementNS(this.NS, 'path');
         line.setAttribute('fill', 'none');
         line.setAttribute('stroke', color.toString());
         line.setAttribute('stroke-width', weight + 'px');
@@ -349,7 +347,7 @@ export class Psychart extends Chart<PsychartOptions> {
      * Create a label to append onto a parent element.
      */
     private createLabel(text: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
-        const label = document.createElementNS(NS, 'text');
+        const label = document.createElementNS(this.NS, 'text');
         label.setAttribute('fill', color.toString());
         label.setAttribute('font-family', this.options.font.family);
         label.setAttribute('font-size', this.options.font.size + 'px');
@@ -429,10 +427,10 @@ export class Psychart extends Chart<PsychartOptions> {
      * Create a tooltip element.
      */
     private drawTooltip(text: string, location: Point, color: Color): void {
-        const tooltipBase = document.createElementNS(NS, 'g'),
+        const tooltipBase = document.createElementNS(this.NS, 'g'),
             labelElements: SVGTextElement[] = [],
             padding = this.options.font.size * 0.80,
-            background = document.createElementNS(NS, 'rect');
+            background = document.createElementNS(this.NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
         text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.options.font.size }, color.getContrastingColor(), TextAnchor.NW)));
         // Append the elements onto the window
@@ -470,8 +468,8 @@ export class Psychart extends Chart<PsychartOptions> {
     private addToLegend(seriesName: string, color?: Color, gradient?: PaletteName): void {
         this.legend.setAttribute('viewBox', '0 0 ' + this.options.size.x + ' ' + this.getLegendHeight());
         this.legend.setAttribute('height', this.getLegendHeight() + 'px');
-        const g: SVGGElement = document.createElementNS(NS, 'g'),
-            icon: SVGRectElement = document.createElementNS(NS, 'rect');
+        const g: SVGGElement = document.createElementNS(this.NS, 'g'),
+            icon: SVGRectElement = document.createElementNS(this.NS, 'rect');
         g.setAttribute('cursor', 'pointer');
         icon.setAttribute('x', (this.options.font.size / 2).toString());
         icon.setAttribute('y', (this.getLegendHeight() - this.options.font.size * 1.5).toString());
@@ -547,7 +545,7 @@ export class Psychart extends Chart<PsychartOptions> {
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
         // Define a 0-length path element and assign its attributes.
-        const point = document.createElementNS(NS, 'path');
+        const point = document.createElementNS(this.NS, 'path');
         point.setAttribute('fill', 'none');
         point.setAttribute('stroke', color.toString());
         point.setAttribute('stroke-width', +options.pointRadius + 'px');
@@ -563,8 +561,8 @@ export class Psychart extends Chart<PsychartOptions> {
                 this.series[options.name] = {
                     lastState: currentState,
                     hidden: false,
-                    pointGroup: document.createElementNS(NS, 'g'),
-                    lineGroup: document.createElementNS(NS, 'g'),
+                    pointGroup: document.createElementNS(this.NS, 'g'),
+                    lineGroup: document.createElementNS(this.NS, 'g'),
                 }
                 // Add the series-level group elements onto the main groups.
                 this.g.points.appendChild(this.series[options.name].pointGroup);
@@ -621,7 +619,7 @@ export class Psychart extends Chart<PsychartOptions> {
         // Interpolate to get a set of psychrometric states that make the border of the region
         const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum, this.options)), false);
         // Create the SVG element to render the shaded region
-        const region = document.createElementNS(NS, 'path');
+        const region = document.createElementNS(this.NS, 'path');
         region.setAttribute('fill', color.toString());
         this.setPathData(region, states, true);
         this.g.regions.appendChild(region);
