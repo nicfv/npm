@@ -7,3 +7,5 @@
  */
 export * from './psychart/psychart';
 export * from './psychart/types';
+export * from './pumpchart/pumpchart';
+export * from './pumpchart/types';
