@@ -28,10 +28,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             { flow: 0, head: 0 },
             { flow: 0, head: this.options.head.max },
         ]);
-        xFlowAxis.setAttribute('stroke', '#666');
-        yHeadAxis.setAttribute('stroke', '#666');
-        xFlowAxis.setAttribute('stroke-width', '2px');
-        yHeadAxis.setAttribute('stroke-width', '2px');
+        xFlowAxis.setAttribute('stroke', this.options.axisColor);
+        yHeadAxis.setAttribute('stroke', this.options.axisColor);
+        xFlowAxis.setAttribute('stroke-width', (this.options.axisWidth * 2) + 'px');
+        yHeadAxis.setAttribute('stroke-width', (this.options.axisWidth * 2) + 'px');
         xFlowAxis.setAttribute('stroke-linecap', 'round');
         yHeadAxis.setAttribute('stroke-linecap', 'round');
         this.g.axes.append(xFlowAxis, yHeadAxis);
@@ -41,8 +41,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
                 { flow: flow, head: 0 },
                 { flow: flow, head: this.options.head.max },
             ], false);
-            isoFlowLine.setAttribute('stroke', '#666');
-            isoFlowLine.setAttribute('stroke-width', '1px');
+            isoFlowLine.setAttribute('stroke', this.options.axisColor);
+            isoFlowLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoFlowLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoFlowLine);
         }

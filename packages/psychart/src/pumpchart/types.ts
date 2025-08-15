@@ -49,4 +49,12 @@ export interface PumpchartOptions extends ChartOptions {
      * The head pressure (y-axis)
      */
     readonly head: Axis;
+    /**
+     * The axis color (hexadecimal)
+     */
+    readonly axisColor: string;
+    /**
+     * The axis thickness, in pixels
+     */
+    readonly axisWidth: number;
 }

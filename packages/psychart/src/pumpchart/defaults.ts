@@ -19,4 +19,6 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         step: 10,
         max: 100,
     },
+    axisColor: '#666666',
+    axisWidth: 1,
 };
