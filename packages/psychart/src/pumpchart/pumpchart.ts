@@ -14,6 +14,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         axes: document.createElementNS(this.NS, 'g'),
         curves: document.createElementNS(this.NS, 'g'),
         data: document.createElementNS(this.NS, 'g'),
+        text: document.createElementNS(this.NS, 'g'),
     };
     constructor(options: Partial<PumpchartOptions> = {}) {
         super(options, defaultPumpchartOptions);
@@ -45,6 +46,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoFlowLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoFlowLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoFlowLine);
+            const label = this.createText(flow + this.options.flow.unit, { flow: flow, head: 0 }, 'N');
+            // TODO
+            this.g.text.appendChild(label);
         }
         for (let head = 0; head < this.options.head.max; head += this.options.head.step) {
             // Draw iso-head horizontal lines
@@ -56,6 +60,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoHeadLine.setAttribute('stroke-width', '1px');
             isoHeadLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoHeadLine);
+            const label = this.createText(head + this.options.head.unit, { flow: 0, head: head }, 'E');
+            // TODO
+            this.g.text.appendChild(label);
         }
     }
     /**
@@ -82,5 +89,26 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             return xy.x + ',' + xy.y;
         }).join(' ') + (closePath ? ' z' : ''));
         return path;
+    }
+    private createText(content: string, state: State, anchor: 'N' | 'E'): SVGTextElement {
+        const text: SVGTextElement = document.createElementNS(this.NS, 'text');
+        const pt: Point = this.state2xy(state);
+        text.textContent = content;
+        text.setAttribute('x', pt.x + 'px');
+        text.setAttribute('y', pt.y + 'px');
+        switch (anchor) {
+            case ('E'): {
+                // TODO
+                break;
+            }
+            case ('N'): {
+                // TODO
+                break;
+            }
+            default: {
+                throw new Error('Invalid anchor ' + anchor);
+            }
+        }
+        return text;
     }
 }
