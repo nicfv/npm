@@ -35,6 +35,28 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         xFlowAxis.setAttribute('stroke-linecap', 'round');
         yHeadAxis.setAttribute('stroke-linecap', 'round');
         this.g.axes.append(xFlowAxis, yHeadAxis);
+        for (let flow = 0; flow < this.options.flow.max; flow += this.options.flow.step) {
+            // Draw iso-flow vertical lines
+            const isoFlowLine = this.createPath([
+                { flow: flow, head: 0 },
+                { flow: flow, head: this.options.head.max },
+            ], false);
+            isoFlowLine.setAttribute('stroke', '#666');
+            isoFlowLine.setAttribute('stroke-width', '1px');
+            isoFlowLine.setAttribute('stroke-linecap', 'round');
+            this.g.axes.appendChild(isoFlowLine);
+        }
+        for (let head = 0; head < this.options.head.max; head += this.options.head.step) {
+            // Draw iso-head horizontal lines
+            const isoHeadLine = this.createPath([
+                { flow: 0, head: head },
+                { flow: this.options.flow.max, head: head },
+            ], false);
+            isoHeadLine.setAttribute('stroke', '#666');
+            isoHeadLine.setAttribute('stroke-width', '1px');
+            isoHeadLine.setAttribute('stroke-linecap', 'round');
+            this.g.axes.appendChild(isoHeadLine);
+        }
     }
     /**
      * Convert a state to an (x,y) coordinate.
