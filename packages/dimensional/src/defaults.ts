@@ -77,12 +77,22 @@ class Units {
     public readonly kilometer = this.meter.prefix(prefixes.kilo);
     public readonly centimeter = this.meter.prefix(prefixes.centi);
     public readonly millimeter = this.meter.prefix(prefixes.milli);
-    public readonly foot = new Unit('ft', this.meter, 1 / 3.28);
+    public readonly foot = new Unit('ft', this.meter, 1 / 3.28084);
     public readonly inch = new Unit('in', this.foot, 1 / 12);
     public readonly yard = new Unit('yd', this.foot, 3);
     public readonly mile = new Unit('mi', this.foot, 5280);
+    // Volume
+    public readonly liter = new Unit('L', this.centimeter.pow(3), 1000);
+    public readonly milliliter = this.liter.prefix(prefixes.milli);
+    public readonly gal = new Unit('gal', this.liter, 3.7854);
+    public readonly quart = new Unit('qt', this.gal, 1 / 4);
+    public readonly pint = new Unit('pt', this.quart, 1 / 2);
+    public readonly cup = new Unit('cup', this.pint, 1 / 2);
+    public readonly fluidOunce = new Unit('fl oz', this.cup, 1 / 8);
+    public readonly tablespoon = new Unit('Tbsp', this.fluidOunce, 1 / 2);
+    public readonly teaspoon = new Unit('tsp', this.fluidOunce, 1 / 3);
     // Mass
-    public readonly pound = new Unit('lb', this.kilogram, 1 / 2.2);
+    public readonly pound = new Unit('lb', this.kilogram, 1 / 2.204623);
     public readonly ounce = new Unit('oz', this.pound, 1 / 16);
     // Time
     public readonly minute = new Unit('min', this.second, 60);
