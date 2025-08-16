@@ -96,7 +96,7 @@ class Units {
     public readonly cup = new Unit('cup', this.pint, 1 / 2);
     public readonly fluidOunce = new Unit('fl oz', this.cup, 1 / 8);
     public readonly tablespoon = new Unit('Tbsp', this.fluidOunce, 1 / 2);
-    public readonly teaspoon = new Unit('tsp', this.fluidOunce, 1 / 3);
+    public readonly teaspoon = new Unit('tsp', this.tablespoon, 1 / 3);
     public readonly barrel = new Unit('bbl', this.gallon, 42);
     // Time
     public readonly minute = new Unit('min', this.second, 60);
