@@ -73,7 +73,6 @@ class Units {
     public readonly mole = new Unit('mol', dimensions.AmountOfSubstance);
     // ==== Derived Units ==== //
     // Length
-    public readonly kilogram = this.gram.prefix(prefixes.kilo);
     public readonly kilometer = this.meter.prefix(prefixes.kilo);
     public readonly centimeter = this.meter.prefix(prefixes.centi);
     public readonly millimeter = this.meter.prefix(prefixes.milli);
@@ -84,16 +83,18 @@ class Units {
     // Volume
     public readonly liter = new Unit('L', this.centimeter.pow(3), 1000);
     public readonly milliliter = this.liter.prefix(prefixes.milli);
-    public readonly gal = new Unit('gal', this.liter, 3.7854);
-    public readonly quart = new Unit('qt', this.gal, 1 / 4);
+    public readonly gallon = new Unit('gal', this.liter, 3.7854);
+    public readonly quart = new Unit('qt', this.gallon, 1 / 4);
     public readonly pint = new Unit('pt', this.quart, 1 / 2);
     public readonly cup = new Unit('cup', this.pint, 1 / 2);
     public readonly fluidOunce = new Unit('fl oz', this.cup, 1 / 8);
     public readonly tablespoon = new Unit('Tbsp', this.fluidOunce, 1 / 2);
     public readonly teaspoon = new Unit('tsp', this.fluidOunce, 1 / 3);
+    public readonly barrel = new Unit('bbl', this.gallon, 42);
     // Mass
-    public readonly pound = new Unit('lb', this.kilogram, 1 / 2.204623);
-    public readonly ounce = new Unit('oz', this.pound, 1 / 16);
+    public readonly kilogram = this.gram.prefix(prefixes.kilo);
+    public readonly poundMass = new Unit('\\text{lb}_{m}', this.kilogram, 1 / 2.204623);
+    public readonly ounce = new Unit('oz', this.poundMass, 1 / 16);
     // Time
     public readonly minute = new Unit('min', this.second, 60);
     public readonly hour = new Unit('hr', this.minute, 60);
@@ -117,6 +118,9 @@ class Units {
     public readonly kiloPascal = this.pascal.prefix(prefixes.kilo);
     public readonly atmosphere = new Unit('atm', this.pascal, 101325);
     public readonly bar = new Unit('bar', this.pascal, 1e5);
+    public readonly millibar = this.bar.prefix(prefixes.milli);
+    public readonly millimetersOfMercury = new Unit('mmHg', this.bar, 133.322, false);
+    public readonly inchesOfMercury = new Unit('inHg', this.millimetersOfMercury, this.millimeter.to(this.inch));
     // Electrical
     public readonly coulomb = new Unit('C', this.ampere.times(this.second));
     public readonly volt = new Unit('V', this.Joule.over(this.coulomb));
