@@ -3,7 +3,7 @@ import { Prefix } from './prefix';
 import { Unit } from './unit';
 
 class Defaults {
-    // Prefixes
+    // ==== Prefixes ==== //
     public readonly quetta = new Prefix('Q', 1e30);
     public readonly ronna = new Prefix('R', 1e27);
     public readonly yotta = new Prefix('Y', 1e24);
@@ -28,10 +28,10 @@ class Defaults {
     public readonly yocto = new Prefix('y', 1e-24);
     public readonly ronto = new Prefix('r', 1e-27);
     public readonly quecto = new Prefix('q', 1e-30);
-    // Special
+    // ==== Special ==== //
     public readonly Dimensionless = new Dimension();
     public readonly Unitless = new Unit();
-    // Dimensions
+    // ==== Dimensions ==== //
     public readonly Mass = new Dimension('\\textbf{M}');
     public readonly Length = new Dimension('\\textbf{L}');
     public readonly Time = new Dimension('\\textbf{T}');
@@ -39,7 +39,7 @@ class Defaults {
     public readonly ElectricalCurrent = new Dimension('\\textbf{I}');
     public readonly LuminousIntensity = new Dimension('\\textbf{J}');
     public readonly AmountOfSubstance = new Dimension('\\textbf{N}');
-    // Attributes
+    // ==== Attributes ==== //
     public readonly area = this.Length.pow(2);
     public readonly volume = this.Length.pow(3);
     public readonly velocity = this.Length.over(this.Time);
@@ -49,7 +49,7 @@ class Defaults {
     public readonly pressure = this.force.over(this.area);
     public readonly charge = this.ElectricalCurrent.times(this.Time);
     public readonly voltage = this.energy.over(this.charge);
-    // Base Units
+    // ==== Base Units ==== //
     public readonly gram = new Unit('g', this.Mass);
     public readonly meter = new Unit('m', this.Length);
     public readonly second = new Unit('s', this.Time);
@@ -57,7 +57,7 @@ class Defaults {
     public readonly ampere = new Unit('A', this.ElectricalCurrent);
     public readonly candela = new Unit('cd', this.LuminousIntensity);
     public readonly mole = new Unit('mol', this.AmountOfSubstance);
-    // Units
+    // ==== Derived Units ==== //
     public readonly kilogram = this.gram.prefix(this.kilo);
     public readonly kilometer = this.meter.prefix(this.kilo);
     public readonly centimeter = this.meter.prefix(this.centi);
