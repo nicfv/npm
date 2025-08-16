@@ -49,16 +49,30 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
         caught = true;
     }
     T6.isTrue(caught, 'Should not allow multiple prefixes.');
-}
-
-{
-    // Conversion Factors
-    let f: number;
+    // .to
+    let f: number,
+        g: number;
     f = units.foot.to(units.inch);
     T6.eq(f, 12);
-    f = units.Gs.to(units.foot.over(units.second.pow(2)));
-    T6.isTrue(SMath.approx(f, 32.17, 0.01));
-    // TODO
+    f = units.Rankine.to(units.Rankine);
+    T6.eq(f, 1);
+    f = units.slug.to(units.poundMass);
+    g = units.Gs.to(units.foot.over(units.second.pow(2)));
+    T6.isTrue(SMath.approx(f, g));
+    T6.ge(f, 32.17);
+    T6.lt(f, 32.18);
+    f = units.wattHour.to(units.Joule);
+    T6.eq(f, 3600);
+    f = units.inch.to(units.millimeter);
+    g = units.inchesOfMercury.to(units.millimetersOfMercury);
+    T6.isTrue(SMath.approx(f, g));
+    caught = false;
+    try {
+        units.poundForce.to(units.poundMass);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Can only convert between like dimensions.');
 }
 
 {
@@ -80,6 +94,13 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     const mph = new Quantity(55, units.mile.over(units.hour)),
         mps = mph.as(units.meter.over(units.second));
     T6.eq(mph.quantity, 55);
-    T6.isTrue(SMath.approx(mps.quantity, 24.5, 0.1));
-    // TODO
+    T6.ge(mps.quantity, 24.5);
+    T6.lt(mps.quantity, 24.6);
+    T6.is(mph.toString(), '55 \\left[ \\frac{\\text{mi}}{\\text{hr}} \\right]');
+    T6.is(mps.units.toString(), '\\frac{\\text{m}}{\\text{s}}');
+    const Wh = new Quantity(25, units.wattHour),
+        Wh2 = Wh.as(units.watt.times(units.hour));
+    T6.eq(Wh.quantity, 25);
+    T6.eq(Wh.quantity, Wh2.quantity);
+    T6.isFalse(Wh.units.is(Wh2.units));
 }
