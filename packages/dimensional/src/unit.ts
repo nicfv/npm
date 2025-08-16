@@ -19,9 +19,9 @@ export class Unit extends Compound<Unit> {
      * @param LaTeXsymbol The LaTeX code for this unit
      * @param base The base dimension or makeup of unit(s)
      * @param scale The scale factor of this unit relative to the units in `base`
-     * @param hasPrefix Whether or not this unit has a prefix applied
+     * @param allowPrefix Whether or not this unit can have a prefix applied
      */
-    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly hasPrefix: boolean = false) {
+    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly allowPrefix: boolean = false) {
         super(() => this, LaTeXsymbol);
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {
@@ -46,7 +46,7 @@ export class Unit extends Compound<Unit> {
      * @returns A properly scaled unit
      */
     public prefix(prefix: Prefix): Unit {
-        if (typeof this.LaTeX === 'string' && !this.hasPrefix) {
+        if (typeof this.LaTeX === 'string' && !this.allowPrefix) {
             return new Unit(prefix.LaTeX + this.LaTeX, this, this.scale * prefix.scale, true);
         } else {
             throw new Error('Can only add a prefix to named base units.');
