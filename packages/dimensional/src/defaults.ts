@@ -79,6 +79,13 @@ class Defaults {
     public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.81);
     public readonly Newton = new Unit('N', this.kilogram.times(this.meter).over(this.second.pow(2)));
     public readonly kiloNewton = this.Newton.prefix(this.kilo);
+    public readonly Joule = new Unit('J', this.Newton.times(this.meter));
+    public readonly kiloJoule = this.Joule.prefix(this.kilo);
+    // Pressure
+    public readonly pascal = new Unit('Pa', this.Newton.over(this.meter.pow(2)));
+    public readonly kiloPascal = this.pascal.prefix(this.kilo);
+    public readonly atmosphere = new Unit('atm', this.pascal, 101325);
+    public readonly bar = new Unit('bar', this.pascal, 1e5);
 }
 
 export const defaults = new Defaults();
