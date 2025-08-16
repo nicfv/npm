@@ -91,16 +91,20 @@ class Units {
     public readonly tablespoon = new Unit('Tbsp', this.fluidOunce, 1 / 2);
     public readonly teaspoon = new Unit('tsp', this.fluidOunce, 1 / 3);
     public readonly barrel = new Unit('bbl', this.gallon, 42);
-    // Mass
-    public readonly kilogram = this.gram.prefix(prefixes.kilo);
-    public readonly poundMass = new Unit('\\text{lb}_{m}', this.kilogram, 1 / 2.204623);
-    public readonly ounce = new Unit('oz', this.poundMass, 1 / 16);
     // Time
     public readonly minute = new Unit('min', this.second, 60);
     public readonly hour = new Unit('hr', this.minute, 60);
     public readonly day = new Unit('d', this.hour, 24);
     public readonly week = new Unit('wk', this.day, 7);
     public readonly year = new Unit('yr', this.day, 365.25);
+    // Acceleration
+    public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.80665);
+    // Mass
+    public readonly kilogram = this.gram.prefix(prefixes.kilo);
+    public readonly tonne = new Unit('t', this.kilogram, 1000);
+    public readonly poundMass = new Unit('\\text{lb}_{m}', this.kilogram, 1 / 2.204623);
+    public readonly ounce = new Unit('oz', this.poundMass, 1 / 16);
+    public readonly slug = new Unit('slug', this.poundMass, this.Gs.to(this.foot.over(this.second.pow(2))));
     // Temperature
     public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.kelvin);
     public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.kelvin, 5 / 9);
@@ -120,13 +124,11 @@ class Units {
     public readonly bar = new Unit('bar', this.pascal, 1e5);
     public readonly millibar = this.bar.prefix(prefixes.milli);
     public readonly millimetersOfMercury = new Unit('mmHg', this.bar, 133.322, false);
-    public readonly inchesOfMercury = new Unit('inHg', this.millimetersOfMercury, this.millimeter.to(this.inch));
+    public readonly inchesOfMercury = new Unit('inHg', this.millimetersOfMercury, this.inch.to(this.millimeter));
     // Electrical
     public readonly coulomb = new Unit('C', this.ampere.times(this.second));
     public readonly volt = new Unit('V', this.Joule.over(this.coulomb));
     public readonly ohm = new Unit('\\Omega', this.volt.over(this.ampere));
-    // Other
-    public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.81);
 }
 /**
  * Contains a set of default base and derived units.
