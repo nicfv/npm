@@ -1,5 +1,6 @@
 import * as T6 from 't6';
-import { prefixes, dimensions, units, Prefix, Dimension, Unit } from '.';
+import * as SMath from 'smath';
+import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '.';
 
 {
     // Dimension
@@ -34,9 +35,11 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit } from '.';
     T6.isTrue(new Unit().dimensions.is(dimensions.Dimensionless));
     T6.isTrue(new Unit().is(units.Unitless));
     T6.isTrue(new Unit('x').dimensions.is(dimensions.Dimensionless)); // Unassigned base dimensions/units
+    T6.isFalse(units.poundForce.dimensions.is(units.poundMass.dimensions));
     // .prefix
     const customKm = units.meter.prefix(prefixes.kilo);
     T6.is(customKm.toString(), units.kilometer.toString());
+    T6.isTrue(customKm.dimensions.is(dimensions.Length));
     T6.isFalse(customKm.is(units.kilometer)); // Not seen as the same unit
     let caught: boolean;
     caught = false;
@@ -47,6 +50,17 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit } from '.';
     }
     T6.isTrue(caught, 'Should not allow multiple prefixes.');
 }
+
+{
+    // Conversion Factors
+    let f: number;
+    f = units.foot.to(units.inch);
+    T6.eq(f, 12);
+    f = units.Gs.to(units.foot.over(units.second.pow(2)));
+    T6.isTrue(SMath.approx(f, 32.17, 0.01));
+    // TODO
+}
+
 {
     // Customization
     const dimensionBlob = new Dimension('\\beta'),
@@ -59,4 +73,13 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit } from '.';
     T6.is(customUnit.toString(), '\\frac{{{\\textbf{p}_{5}}\\text{in}}}{\\text{blob}}');
     T6.is(customUnit.dimensions.toString(), '\\frac{{\\textbf{L}}}{{\\beta}}');
     T6.isTrue(customUnit.dimensions.is(dimensions.Length.over(dimensionBlob)));
+}
+
+{
+    // Quantity
+    const mph = new Quantity(55, units.mile.over(units.hour)),
+        mps = mph.as(units.meter.over(units.second));
+    T6.eq(mph.quantity, 55);
+    T6.isTrue(SMath.approx(mps.quantity, 24.5, 0.1));
+    // TODO
 }
