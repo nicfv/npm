@@ -54,8 +54,8 @@ class Defaults {
     public readonly meter = new Unit('m', this.Length);
     public readonly second = new Unit('s', this.Time);
     public readonly Kelvin = new Unit('K', this.Temperature);
-    public readonly Ampere = new Unit('A', this.ElectricalCurrent);
-    // Luminous intensity?
+    public readonly ampere = new Unit('A', this.ElectricalCurrent);
+    public readonly candela = new Unit('cd', this.LuminousIntensity);
     public readonly mole = new Unit('mol', this.AmountOfSubstance);
     // Units
     public readonly kilogram = this.gram.prefix(this.kilo);
