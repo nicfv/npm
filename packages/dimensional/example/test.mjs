@@ -1,2 +1,3 @@
-import { TEST } from 'dimensional';
-console.log('Hello, ' + TEST + '!');
+import { dimensions } from 'dimensional';
+
+console.log(dimensions.AmountOfSubstance.toString());
