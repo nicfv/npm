@@ -51,9 +51,16 @@ class Dimensions {
     public readonly acceleration = this.velocity.over(this.Time);
     public readonly force = this.Mass.times(this.acceleration);
     public readonly energy = this.force.times(this.Length);
+    public readonly power = this.energy.over(this.Time);
     public readonly pressure = this.force.over(this.area);
+    public readonly frequency = this.Time.pow(-1);
     public readonly charge = this.ElectricalCurrent.times(this.Time);
     public readonly voltage = this.energy.over(this.charge);
+    public readonly resistance = this.voltage.over(this.ElectricalCurrent);
+    public readonly conductance = this.resistance.pow(-1);
+    public readonly capacitance = this.charge.over(this.voltage);
+    public readonly inductance = this.voltage.times(this.Time).over(this.ElectricalCurrent);
+    public readonly illuminance = this.LuminousIntensity.over(this.area);
 }
 /**
  * Contains a set of default base and derived dimensions.
@@ -97,6 +104,7 @@ class Units {
     public readonly day = new Unit('d', this.hour, 24);
     public readonly week = new Unit('wk', this.day, 7);
     public readonly year = new Unit('yr', this.day, 365.25);
+    public readonly hertz = new Unit('Hz', this.second.pow(-1));
     // Acceleration
     public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.80665);
     // Mass
