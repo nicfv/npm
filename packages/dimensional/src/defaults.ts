@@ -148,10 +148,13 @@ class Units {
     public readonly millibar = this.bar.prefix(prefixes.milli);
     public readonly millimetersOfMercury = new Unit('mmHg', this.bar, 133.322, false);
     public readonly inchesOfMercury = new Unit('inHg', this.millimetersOfMercury, this.inch.to(this.millimeter));
+    public readonly poundsPerSquareInch = new Unit('psi', this.poundForce.over(this.inch.pow(2)));
+    public readonly poundsPerSquareFoot = new Unit('psi', this.poundForce.over(this.foot.pow(2)));
     // Electrical
     public readonly coulomb = new Unit('C', this.ampere.times(this.second));
     public readonly volt = new Unit('V', this.Joule.over(this.coulomb));
     public readonly ohm = new Unit('\\Omega', this.volt.over(this.ampere));
+    public readonly milliVolt = this.volt.prefix(prefixes.milli);
     public readonly milliOhm = this.ohm.prefix(prefixes.milli);
     public readonly milliAmp = this.ampere.prefix(prefixes.milli);
     public readonly siemens = new Unit('\\mho', this.ohm.pow(-1));
