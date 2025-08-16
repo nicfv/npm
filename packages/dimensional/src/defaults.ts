@@ -104,7 +104,9 @@ class Units {
     public readonly tonne = new Unit('t', this.kilogram, 1000);
     public readonly poundMass = new Unit('\\text{lb}_{m}', this.kilogram, 1 / 2.204623);
     public readonly ounce = new Unit('oz', this.poundMass, 1 / 16);
-    public readonly slug = new Unit('slug', this.poundMass, this.Gs.to(this.foot.over(this.second.pow(2))));
+    public readonly slug = new Unit('sl', this.poundMass, this.Gs.to(this.foot.over(this.second.pow(2))));
+    public readonly shortTon = new Unit('ton', this.poundMass, 2000);
+    public readonly solarMass = new Unit('\\text{M}_{\\odot}', this.kilogram, 1.988416e30);
     // Temperature
     public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.kelvin);
     public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.kelvin, 5 / 9);
@@ -112,11 +114,24 @@ class Units {
     // Force
     public readonly Newton = new Unit('N', this.kilogram.times(this.meter).over(this.second.pow(2)));
     public readonly kiloNewton = this.Newton.prefix(prefixes.kilo);
-    // Energy
+    public readonly poundForce = new Unit('\\text{lb}_{f}', this.slug.times(this.foot.over(this.second.pow(2))));
+    public readonly kip = new Unit('kip', this.poundForce, 1000);
+    public readonly dyne = new Unit('dyn', this.Newton, 1e-5);
+    // Energy/Torque
     public readonly Joule = new Unit('J', this.Newton.times(this.meter));
     public readonly kiloJoule = this.Joule.prefix(prefixes.kilo);
+    public readonly calorie = new Unit('cal', this.Joule, 4.184);
+    public readonly foodCalorie = new Unit('Cal', this.calorie, 1000);
+    public readonly electronVolt = new Unit('eV', this.Joule, 1.602176634e-19);
+    public readonly BritishThermalUnit = new Unit('BTU', this.Joule, 1055.056);
     // Power
     public readonly watt = new Unit('W', this.Joule.over(this.second));
+    public readonly kiloWatt = this.watt.prefix(prefixes.kilo);
+    public readonly horsepower = new Unit('hp', this.watt, 745.6999);
+    public readonly tonOfRefrigeration = new Unit('TR', this.BritishThermalUnit.over(this.hour), 12000);
+    // Energy (2)
+    public readonly wattHour = new Unit('Wh', this.watt.times(this.hour));
+    public readonly kiloWattHour = this.wattHour.prefix(prefixes.kilo);
     // Pressure
     public readonly pascal = new Unit('Pa', this.Newton.over(this.meter.pow(2)));
     public readonly kiloPascal = this.pascal.prefix(prefixes.kilo);
