@@ -58,27 +58,32 @@ class Defaults {
     public readonly candela = new Unit('cd', this.LuminousIntensity);
     public readonly mole = new Unit('mol', this.AmountOfSubstance);
     // ==== Derived Units ==== //
+    // Length
     public readonly kilogram = this.gram.prefix(this.kilo);
     public readonly kilometer = this.meter.prefix(this.kilo);
     public readonly centimeter = this.meter.prefix(this.centi);
     public readonly millimeter = this.meter.prefix(this.milli);
-    public readonly pound = new Unit('lb', this.kilogram, 1 / 2.2);
-    public readonly ounce = new Unit('oz', this.pound, 1 / 16);
     public readonly foot = new Unit('ft', this.meter, 1 / 3.28);
     public readonly inch = new Unit('in', this.foot, 1 / 12);
     public readonly yard = new Unit('yd', this.foot, 3);
     public readonly mile = new Unit('mi', this.foot, 5280);
+    // Mass
+    public readonly pound = new Unit('lb', this.kilogram, 1 / 2.2);
+    public readonly ounce = new Unit('oz', this.pound, 1 / 16);
+    // Time
     public readonly minute = new Unit('min', this.second, 60);
     public readonly hour = new Unit('hr', this.minute, 60);
     public readonly day = new Unit('d', this.hour, 24);
     public readonly week = new Unit('wk', this.day, 7);
     public readonly year = new Unit('yr', this.day, 365.25);
+    // Temperature
     public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.kelvin);
     public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.kelvin, 5 / 9);
     public readonly Fahrenheit = new Unit('^{\\circ}\\text{F}', this.Rankine);
-    public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.81);
+    // Force
     public readonly Newton = new Unit('N', this.kilogram.times(this.meter).over(this.second.pow(2)));
     public readonly kiloNewton = this.Newton.prefix(this.kilo);
+    // Energy
     public readonly Joule = new Unit('J', this.Newton.times(this.meter));
     public readonly kiloJoule = this.Joule.prefix(this.kilo);
     // Pressure
@@ -86,6 +91,8 @@ class Defaults {
     public readonly kiloPascal = this.pascal.prefix(this.kilo);
     public readonly atmosphere = new Unit('atm', this.pascal, 101325);
     public readonly bar = new Unit('bar', this.pascal, 1e5);
+    // Other
+    public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.81);
 }
 
 export const defaults = new Defaults();
