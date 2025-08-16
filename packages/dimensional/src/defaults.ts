@@ -89,7 +89,6 @@ class Units {
     public readonly mile = new Unit('mi', this.foot, 5280);
     // Volume
     public readonly liter = new Unit('L', this.centimeter.pow(3), 1000);
-    public readonly milliliter = this.liter.prefix(prefixes.milli);
     public readonly gallon = new Unit('gal', this.liter, 3.7854);
     public readonly quart = new Unit('qt', this.gallon, 1 / 4);
     public readonly pint = new Unit('pt', this.quart, 1 / 2);
@@ -114,38 +113,26 @@ class Units {
     public readonly ounce = new Unit('oz', this.poundMass, 1 / 16);
     public readonly slug = new Unit('sl', this.poundMass, this.Gs.to(this.foot.over(this.second.pow(2))));
     public readonly shortTon = new Unit('ton', this.poundMass, 2000);
-    public readonly solarMass = new Unit('\\text{M}_{\\odot}', this.kilogram, 1.988416e30);
     // Temperature
     public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.kelvin);
     public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.kelvin, 5 / 9);
     public readonly Fahrenheit = new Unit('^{\\circ}\\text{F}', this.Rankine);
     // Force
     public readonly Newton = new Unit('N', this.kilogram.times(this.meter).over(this.second.pow(2)));
-    public readonly kiloNewton = this.Newton.prefix(prefixes.kilo);
     public readonly poundForce = new Unit('\\text{lb}_{f}', this.slug.times(this.foot.over(this.second.pow(2))));
-    public readonly kip = new Unit('kip', this.poundForce, 1000);
-    public readonly dyne = new Unit('dyn', this.Newton, 1e-5);
     // Energy/Torque
     public readonly Joule = new Unit('J', this.Newton.times(this.meter));
-    public readonly kiloJoule = this.Joule.prefix(prefixes.kilo);
     public readonly calorie = new Unit('cal', this.Joule, 4.184);
     public readonly foodCalorie = new Unit('Cal', this.calorie, 1000);
-    public readonly electronVolt = new Unit('eV', this.Joule, 1.602176634e-19);
     public readonly BritishThermalUnit = new Unit('BTU', this.Joule, 1055.056);
     // Power
     public readonly watt = new Unit('W', this.Joule.over(this.second));
-    public readonly kiloWatt = this.watt.prefix(prefixes.kilo);
     public readonly horsepower = new Unit('hp', this.watt, 745.6999);
     public readonly tonOfRefrigeration = new Unit('TR', this.BritishThermalUnit.over(this.hour), 12000);
-    // Energy (2)
-    public readonly wattHour = new Unit('Wh', this.watt.times(this.hour));
-    public readonly kiloWattHour = this.wattHour.prefix(prefixes.kilo);
     // Pressure
     public readonly pascal = new Unit('Pa', this.Newton.over(this.meter.pow(2)));
-    public readonly kiloPascal = this.pascal.prefix(prefixes.kilo);
     public readonly atmosphere = new Unit('atm', this.pascal, 101325);
     public readonly bar = new Unit('bar', this.pascal, 1e5);
-    public readonly millibar = this.bar.prefix(prefixes.milli);
     public readonly millimetersOfMercury = new Unit('mmHg', this.bar, 133.322, false);
     public readonly inchesOfMercury = new Unit('inHg', this.millimetersOfMercury, this.inch.to(this.millimeter));
     public readonly poundsPerSquareInch = new Unit('psi', this.poundForce.over(this.inch.pow(2)));
@@ -154,13 +141,9 @@ class Units {
     public readonly coulomb = new Unit('C', this.ampere.times(this.second));
     public readonly volt = new Unit('V', this.Joule.over(this.coulomb));
     public readonly ohm = new Unit('\\Omega', this.volt.over(this.ampere));
-    public readonly milliVolt = this.volt.prefix(prefixes.milli);
-    public readonly milliOhm = this.ohm.prefix(prefixes.milli);
-    public readonly milliAmp = this.ampere.prefix(prefixes.milli);
     public readonly siemens = new Unit('\\mho', this.ohm.pow(-1));
     public readonly farad = new Unit('F', this.coulomb.over(this.volt));
     public readonly henry = new Unit('H', this.second.pow(2).over(this.farad));
-    public readonly tesla = new Unit('T', this.Newton.times(this.second).over(this.coulomb.times(this.meter)));
 }
 /**
  * Contains a set of default base and derived units.
