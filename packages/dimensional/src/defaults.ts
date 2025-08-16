@@ -60,7 +60,7 @@ class Dimensions {
     public readonly conductance = this.resistance.pow(-1);
     public readonly capacitance = this.charge.over(this.voltage);
     public readonly inductance = this.voltage.times(this.Time).over(this.ElectricalCurrent);
-    public readonly illuminance = this.LuminousIntensity.over(this.area);
+    public readonly luminance = this.LuminousIntensity.over(this.area);
 }
 /**
  * Contains a set of default base and derived dimensions.
