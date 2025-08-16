@@ -53,7 +53,7 @@ class Defaults {
     public readonly gram = new Unit('g', this.Mass);
     public readonly meter = new Unit('m', this.Length);
     public readonly second = new Unit('s', this.Time);
-    public readonly Kelvin = new Unit('K', this.Temperature);
+    public readonly kelvin = new Unit('K', this.Temperature);
     public readonly ampere = new Unit('A', this.ElectricalCurrent);
     public readonly candela = new Unit('cd', this.LuminousIntensity);
     public readonly mole = new Unit('mol', this.AmountOfSubstance);
@@ -73,8 +73,8 @@ class Defaults {
     public readonly day = new Unit('d', this.hour, 24);
     public readonly week = new Unit('wk', this.day, 7);
     public readonly year = new Unit('yr', this.day, 365.25);
-    public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.Kelvin);
-    public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.Kelvin, 5 / 9);
+    public readonly Celsius = new Unit('^{\\circ}\\text{C}', this.kelvin);
+    public readonly Rankine = new Unit('^{\\circ}\\text{R}', this.kelvin, 5 / 9);
     public readonly Fahrenheit = new Unit('^{\\circ}\\text{F}', this.Rankine);
     public readonly Gs = new Unit('G', this.meter.over(this.second.pow(2)), 9.81);
     public readonly Newton = new Unit('N', this.kilogram.times(this.meter).over(this.second.pow(2)));

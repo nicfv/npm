@@ -27,12 +27,12 @@ import { Unit } from './unit';
     // Unit
     // .toString
     console.log(T6.getTestNumber());
-    T6.is(defaults.Kelvin.toString(), '\\text{K}');
+    T6.is(defaults.kelvin.toString(), '\\text{K}');
     T6.is(defaults.mile.toString(), '\\text{mi}');
     T6.is(defaults.Rankine.toString(), '{^{\\circ}\\text{R}}');
     T6.is(defaults.kilometer.toString(), '{\\text{k}\\text{m}}');
     // .dimensions
-    T6.isTrue(defaults.Kelvin.dimensions.is(defaults.Temperature));
+    T6.isTrue(defaults.kelvin.dimensions.is(defaults.Temperature));
     T6.isTrue(defaults.Newton.dimensions.is(defaults.force));
     T6.isTrue(defaults.Newton.dimensions.is(defaults.Mass.times(defaults.acceleration)));
     T6.isTrue(new Unit().dimensions.is(defaults.Dimensionless));
