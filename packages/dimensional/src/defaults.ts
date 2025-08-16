@@ -152,6 +152,12 @@ class Units {
     public readonly coulomb = new Unit('C', this.ampere.times(this.second));
     public readonly volt = new Unit('V', this.Joule.over(this.coulomb));
     public readonly ohm = new Unit('\\Omega', this.volt.over(this.ampere));
+    public readonly milliOhm = this.ohm.prefix(prefixes.milli);
+    public readonly milliAmp = this.ampere.prefix(prefixes.milli);
+    public readonly siemens = new Unit('\\mho', this.ohm.pow(-1));
+    public readonly farad = new Unit('F', this.coulomb.over(this.volt));
+    public readonly henry = new Unit('H', this.second.pow(2).over(this.farad));
+    public readonly tesla = new Unit('T', this.Newton.times(this.second).over(this.coulomb.times(this.meter)));
 }
 /**
  * Contains a set of default base and derived units.
