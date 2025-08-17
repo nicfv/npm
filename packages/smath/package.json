@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/",
   "bin": "dist/bin.js",
