@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Follow `eslint` styling rules.
+
 ## 1.2.0
 
 - Update code per `eslint` standards.

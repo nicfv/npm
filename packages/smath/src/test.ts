@@ -100,8 +100,8 @@ T6.eq(SMath.median([5, 1, 2, 3]), 2.5);
 T6.eq(SMath.median([10, 2, 30, 4]), 7);
 T6.eq(SMath.median([10, 2, 30, 4, 5]), 5);
 
-const ds1: Array<number> = [1, 2, 3, 4],
-    ds2: Array<number> = [-3, 0, 1, 1, 2];
+const ds1: number[] = [1, 2, 3, 4],
+    ds2: number[] = [-3, 0, 1, 1, 2];
 
 T6.eq(SMath.varp(ds1), 1.25);
 T6.gt(SMath.varp(ds2), 2.95); // 2.96
@@ -134,11 +134,11 @@ for (let i = 0; i < 100; i++) {
 }
 
 {
-    const tolerance: number = 0.5,
-        normMean: number = -1,
-        normStdev: number = 3,
-        normDist1: Array<number> = SMath.linspace(0, 0, 1000).map(() => SMath.rnorm(normMean, normStdev)),
-        normDist2: Array<number> = SMath.rdist(1000, normMean, normStdev),
+    const tolerance = 0.5,
+        normMean = -1,
+        normStdev = 3,
+        normDist1: number[] = SMath.linspace(0, 0, 1000).map(() => SMath.rnorm(normMean, normStdev)),
+        normDist2: number[] = SMath.rdist(1000, normMean, normStdev),
         normMeanCalc1: number = SMath.avg(normDist1),
         normStdevCalc1: number = SMath.stdevp(normDist1),
         normMeanCalc2: number = SMath.avg(normDist2),

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.1
+
+- Follow `eslint` styling rules
+- Update dependencies
+
 ## 1.13.0
 
 - Rearrange code as per `eslint` standards. The import statement has changed.
