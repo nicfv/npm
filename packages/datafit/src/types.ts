@@ -1,7 +1,7 @@
 /**
  * Declares whether this is a single- or multi-variable problem.
  */
-export type VariableType = number | Array<number>;
+export type VariableType = number | number[];
 /**
  * Represents a mathematical function y = f(x) with unknown parameters.
  * @example
@@ -18,7 +18,7 @@ export type VariableType = number | Array<number>;
  * }
  * ```
  */
-export type F<T extends VariableType> = (x: T, ...params: Array<number>) => number;
+export type F<T extends VariableType> = (x: T, ...params: number[]) => number;
 /**
  * Stores a data point. For multivariable points, the `x`
  * coordinate contains an array of all the free variables.
@@ -44,7 +44,7 @@ export interface Summary<T extends VariableType> {
     /**
      * Contains the set of best-fit parameters for the function `f(x)`
      */
-    readonly params: Array<number>;
+    readonly params: number[];
     /**
      * This is the residual sum of squared errors.
      */
