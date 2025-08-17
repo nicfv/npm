@@ -13,7 +13,7 @@ export class Psychart {
     /**
      * ID counter that counts up every time Psychart is initialized.
      */
-    private static id_count: number = 0;
+    private static id_count = 0;
     /**
      * The unique serial ID of this instance of Psychart.
      */
@@ -73,18 +73,19 @@ export class Psychart {
     /**
      * The data series plotted on Psychart with each of their last states and visibility toggles.
      */
-    private series: {
-        [legend: string]: {
+    private series: Record<
+        string, // Legend
+        {
             lastState: PsyState,
             hidden: boolean,
             pointGroup: SVGGElement,
             lineGroup: SVGGElement,
         }
-    } = {};
+    > = {};
     /**
      * Helper function to return an array of region names and their corresponding tooltips.
      */
-    public static getRegionNamesAndTips(): Array<[RegionName, string]> {
+    public static getRegionNamesAndTips(): [RegionName, string][] {
         return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
     }
     /**
@@ -99,7 +100,7 @@ export class Psychart {
     private static getRange(min: number, max: number, step: number): number[] {
         const stepMin: number = SMath.round2(min + step * 1.1, step),
             stepMax: number = SMath.round2(max - step * 1.1, step),
-            range: Array<number> = [];
+            range: number[] = [];
         for (let i = stepMin; i <= stepMax; i += step) {
             range.push(i);
         }

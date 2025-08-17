@@ -14,7 +14,7 @@ export type PaletteName = 'Viridis' | 'Inferno' | 'Magma' | 'Plasma' | 'Grayscal
  * - Loading Colors: https://loading.io/color/feature/
  * - Carto Colors: https://carto.com/carto-colors/
  */
-export const Palette: { [name in PaletteName]: Gradient } = {
+export const Palette: Record<PaletteName, Gradient> = {
     // https://waldyrious.net/viridis-palette-generator/
     Viridis: new Gradient([
         Color.from('#fde725'),

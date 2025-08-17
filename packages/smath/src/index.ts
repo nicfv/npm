@@ -17,7 +17,7 @@
  *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
  * ```
  */
-export function approx(a: number, b: number, epsilon: number = 1e-6): boolean {
+export function approx(a: number, b: number, epsilon = 1e-6): boolean {
     return a - b < epsilon && b - a < epsilon;
 }
 /**
@@ -101,8 +101,8 @@ export function translate(n: number, min1: number, max1: number, min2: number, m
  * // [ 1, 1.8, 2.6, 3.4, 4.2, 5 ]
  * ```
  */
-export function linspace(min: number, max: number, count: number): Array<number> {
-    const space: Array<number> = [];
+export function linspace(min: number, max: number, count: number): number[] {
+    const space: number[] = [];
     for (let i = 0; i < count; i++) {
         space[i] = translate(i, 0, count - 1, min, max);
     }
@@ -120,7 +120,7 @@ export function linspace(min: number, max: number, count: number): Array<number>
  * // [ 1, 3.2, 10, 31.6, 100 ]
  * ```
  */
-export function logspace(min: number, max: number, count: number): Array<number> {
+export function logspace(min: number, max: number, count: number): number[] {
     return linspace(min, max, count).map(n => 10 ** n);
 }
 /**
@@ -152,15 +152,15 @@ export function factorial(n: number): number {
  * const y = SMath.factors(12); // [ 2, 2, 3 ]
  * ```
  */
-export function factors(n: number): Array<number> {
+export function factors(n: number): number[] {
     if (n < 0 || (n | 0) !== n) {
         throw new Error('Input must be a positive integer!');
     }
     if (n <= 3) {
         return [n];
     }
-    const f: Array<number> = [];
-    let i: number = 2;
+    const f: number[] = [];
+    let i = 2;
     while (n > 1 && i <= n) {
         if ((n / i) === ((n / i) | 0)) {
             n /= i;
@@ -213,7 +213,7 @@ export function error(experimental: number, actual: number): number {
  * const y = SMath.sum([1, 2, 3]); // 6
  * ```
  */
-export function sum(data: Array<number>): number {
+export function sum(data: number[]): number {
     return data.reduce((a, b) => a + b, 0);
 }
 /**
@@ -226,7 +226,7 @@ export function sum(data: Array<number>): number {
  * const y = SMath.prod([2, 2, 3, 5]); // 60
  * ```
  */
-export function prod(data: Array<number>): number {
+export function prod(data: number[]): number {
     return data.reduce((a, b) => a * b, 1);
 }
 /**
@@ -238,7 +238,7 @@ export function prod(data: Array<number>): number {
  * const y = SMath.avg([1, 2, 4, 4]); // 2.75
  * ```
  */
-export function avg(data: Array<number>): number {
+export function avg(data: number[]): number {
     return sum(data) / data.length;
 }
 /**
@@ -250,7 +250,7 @@ export function avg(data: Array<number>): number {
  * const y = SMath.median([2, 5, 3, 1]); // 2.5
  * ```
  */
-export function median(data: Array<number>): number {
+export function median(data: number[]): number {
     data.sort((a, b) => a - b);
     if (data.length % 2) {
         return data[(data.length - 1) / 2];
@@ -266,9 +266,9 @@ export function median(data: Array<number>): number {
  * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
  * ```
  */
-export function varp(data: Array<number>): number {
+export function varp(data: number[]): number {
     const mean: number = avg(data),
-        squares: Array<number> = data.map(x => (x - mean) ** 2);
+        squares: number[] = data.map(x => (x - mean) ** 2);
     return sum(squares) / data.length;
 }
 /**
@@ -280,9 +280,9 @@ export function varp(data: Array<number>): number {
  * const y = SMath.vars([1, 2, 4, 4]); // 2.25
  * ```
  */
-export function vars(data: Array<number>): number {
+export function vars(data: number[]): number {
     const mean: number = avg(data),
-        squares: Array<number> = data.map(x => (x - mean) ** 2);
+        squares: number[] = data.map(x => (x - mean) ** 2);
     return sum(squares) / (data.length - 1);
 }
 /**
@@ -294,7 +294,7 @@ export function vars(data: Array<number>): number {
  * const y = SMath.stdevp([1, 2, 3, 4]); // 1.118...
  * ```
  */
-export function stdevp(data: Array<number>): number {
+export function stdevp(data: number[]): number {
     return Math.sqrt(varp(data));
 }
 /**
@@ -306,7 +306,7 @@ export function stdevp(data: Array<number>): number {
  * const y = SMath.stdevs([1, 2, 3, 4]); // 1.29...
  * ```
  */
-export function stdevs(data: Array<number>): number {
+export function stdevs(data: number[]): number {
     return Math.sqrt(vars(data));
 }
 /**
@@ -349,7 +349,7 @@ export function rint(min: number, max: number): number {
  * const y = SMath.rnorm(2, 3); // 1.627...
  * ```
  */
-export function rnorm(mean: number = 0, stdev: number = 1): number {
+export function rnorm(mean = 0, stdev = 1): number {
     return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
 }
 /**
@@ -363,8 +363,8 @@ export function rnorm(mean: number = 0, stdev: number = 1): number {
  * const dataset = SMath.rdist(3); // [ 1.051..., -0.779..., -2.254... ]
  * ```
  */
-export function rdist(count: number, mean: number = 0, stdev: number = 1): Array<number> {
-    const distribution: Array<number> = [];
+export function rdist(count: number, mean = 0, stdev = 1): number[] {
+    const distribution: number[] = [];
     for (let i = 0; i < count; i++) {
         distribution[i] = rnorm(mean, stdev);
     }
@@ -379,8 +379,8 @@ export function rdist(count: number, mean: number = 0, stdev: number = 1): Array
  * const shuffled = SMath.shuffle(['a', 'b', 'c']); // [ 'c', 'a', 'b' ]
  * ```
  */
-export function shuffle<T>(stack: Array<T>): Array<T> {
-    const rawData: Array<{ index: number, value: T }> = []
+export function shuffle<T>(stack: T[]): T[] {
+    const rawData: { index: number, value: T }[] = []
     for (const item of stack) {
         rawData.push({ index: Math.random(), value: item });
     }
@@ -399,7 +399,7 @@ export function shuffle<T>(stack: Array<T>): Array<T> {
  * const y = SMath.lim(Math.log, 0); // -Infinity
  * ```
  */
-export function lim(f: (x: number) => number, x: number, h: number = 1e-3, discontinuity_cutoff: number = 1): number {
+export function lim(f: (x: number) => number, x: number, h = 1e-3, discontinuity_cutoff = 1): number {
     const center: number = f(x),
         left1: number = f(x - h),
         left2: number = f(x - h / 2),
@@ -462,7 +462,7 @@ export function lim(f: (x: number) => number, x: number, h: number = 1e-3, disco
  * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
  * ```
  */
-export function differentiate(f: (x: number) => number, x: number, h: number = 1e-3): number {
+export function differentiate(f: (x: number) => number, x: number, h = 1e-3): number {
     return (f(x + h) - f(x - h)) / (2 * h);
 }
 /**
@@ -477,7 +477,7 @@ export function differentiate(f: (x: number) => number, x: number, h: number = 1
  * const y = SMath.integrate(x => 3 * x ** 2, 1, 2); // 7
  * ```
  */
-export function integrate(f: (x: number) => number, a: number, b: number, Ndx: number = 1e3): number {
+export function integrate(f: (x: number) => number, a: number, b: number, Ndx = 1e3): number {
     return ((b - a) / Ndx) * sum(linspace(a, b, Ndx).map(x => f(x)));
 }
 /**
@@ -491,9 +491,9 @@ export function integrate(f: (x: number) => number, a: number, b: number, Ndx: n
  * const frac = SMath.rat(0.625); // { num: 5, den: 8 }
  * ```
  */
-export function rat(n: number, epsilon: number = 1e-6): { num: number, den: number } {
-    let num: number = 0,
-        den: number = 1;
+export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
+    let num = 0,
+        den = 1;
     const sign: number = n < 0 ? -1 : 1;
     while (!approx(sign * n, num / den, epsilon)) {
         if (sign * n > num / den) {
@@ -516,7 +516,7 @@ export function rat(n: number, epsilon: number = 1e-6): { num: number, den: numb
  * const frac = SMath.mixed(-8 / 6); // { whole: -1, num: 1, den: 3 }
  * ```
  */
-export function mixed(n: number, epsilon: number = 1e-6): { whole: number, num: number, den: number } {
+export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, den: number } {
     return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
 }
 /**
@@ -529,6 +529,6 @@ export function mixed(n: number, epsilon: number = 1e-6): { whole: number, num: 
  * const hex = SMath.toHex(10, 2); // '0A'
  * ```
  */
-export function toHex(n: number, length: number = 0): string {
+export function toHex(n: number, length = 0): string {
     return (n < 0 ? '-' : '') + (n < 0 ? -n : n).toString(16).padStart(length, '0').toUpperCase();
 }

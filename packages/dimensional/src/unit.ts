@@ -21,7 +21,7 @@ export class Unit extends Compound<Unit> {
      * @param scale The scale factor of this unit relative to the units in `base`
      * @param allowPrefix Whether or not this unit can have a prefix applied
      */
-    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale: number = 1, private readonly allowPrefix: boolean = false) {
+    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale = 1, private readonly allowPrefix = false) {
         super(() => this, LaTeXsymbol);
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {

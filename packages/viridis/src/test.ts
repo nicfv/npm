@@ -28,7 +28,7 @@ T6.is(red_hex6.toString('hex'), '#FF1000');
 T6.is(red_hex6.toString('hex-transparency'), '#FF100080');
 
 // Make sure that an error is caught for an invalid color code
-let caught: boolean = false;
+let caught = false;
 try {
     Color.from('#INVALID');
 } catch {
