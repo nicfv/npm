@@ -91,6 +91,7 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
 
 {
     // Quantity
+    // .as
     const mph = new Quantity(55, units.mile.over(units.hour)),
         mps = mph.as(units.meter.over(units.second));
     T6.eq(mph.quantity, 55);
@@ -103,6 +104,27 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     T6.eq(psi.quantity, 25);
     T6.eq(psi.quantity, psi2.quantity);
     T6.isFalse(psi.units.is(psi2.units));
+    let caught: boolean;
+    caught = false;
+    try {
+        psi.as(units.Joule.over(units.Celsius));
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Bad unit conversion.');
+    // .plus
+    const lps: Quantity = new Quantity(2, units.liter.over(units.second)),
+        cfm: Quantity = lps.as(units.foot.pow(3).over(units.minute)),
+        combo: Quantity = lps.plus(cfm);
+    T6.eq(combo.quantity, 4);
+    T6.is(combo.toString(), '4 \\left[ \\frac{\\text{L}}{\\text{s}} \\right]');
+    // .minus
+    const combo2: Quantity = lps.minus(cfm);
+    T6.eq(combo2.quantity, 0);
+    T6.is(combo2.toString(), '0 \\left[ \\frac{\\text{L}}{\\text{s}} \\right]');
+    T6.eq(combo2.as(cfm.units).quantity, 0);
+    T6.is(combo2.as(cfm.units).toString(), '0 \\left[ \\frac{\\text{ft}^{3}}{\\text{min}} \\right]');
+    // TODO
 }
 
 {
