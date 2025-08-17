@@ -2,7 +2,8 @@
 
 ## 1.13.1
 
-- Follow `eslint` styling rules.
+- Follow `eslint` styling rules
+- Update dependencies
 
 ## 1.13.0
 
