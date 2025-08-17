@@ -52,7 +52,7 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "24.0.13",
-    "t6": "1.2.0"
+    "@types/node": "24.3.0",
+    "t6": "1.2.1"
   }
 }
