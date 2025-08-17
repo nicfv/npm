@@ -61,7 +61,7 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     T6.isTrue(SMath.approx(f, g));
     T6.ge(f, 32.17);
     T6.lt(f, 32.18);
-    f = units.wattHour.to(units.Joule);
+    f = units.watt.times(units.hour).to(units.Joule);
     T6.eq(f, 3600);
     f = units.inch.to(units.millimeter);
     g = units.inchesOfMercury.to(units.millimetersOfMercury);
@@ -98,9 +98,23 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     T6.lt(mps.quantity, 24.6);
     T6.is(mph.toString(), '55 \\left[ \\frac{\\text{mi}}{\\text{hr}} \\right]');
     T6.is(mps.units.toString(), '\\frac{\\text{m}}{\\text{s}}');
-    const Wh = new Quantity(25, units.wattHour),
-        Wh2 = Wh.as(units.watt.times(units.hour));
-    T6.eq(Wh.quantity, 25);
-    T6.eq(Wh.quantity, Wh2.quantity);
-    T6.isFalse(Wh.units.is(Wh2.units));
+    const psi = new Quantity(25, units.poundsPerSquareInch),
+        psi2 = psi.as(units.poundForce.over(units.inch.pow(2)));
+    T6.eq(psi.quantity, 25);
+    T6.eq(psi.quantity, psi2.quantity);
+    T6.isFalse(psi.units.is(psi2.units));
+}
+
+{
+    // Customization 2
+    const footballField: Unit = new Unit('fbf', units.yard, 100),
+        height: Quantity = new Quantity(5, units.foot).plus(new Quantity(9, units.inch)),
+        height2: Quantity = height.as(footballField);
+    T6.eq(height.quantity, 5.75);
+    T6.isTrue(height.units.is(units.foot));
+    T6.is(height.toString(), '5.75 \\left[ \\text{ft} \\right]');
+    T6.ge(height2.quantity, 0.019); // 0.0191666666667
+    T6.lt(height2.quantity, 0.020);
+    T6.isTrue(height2.units.is(footballField));
+    T6.is(height2.units.toString(), '\\text{fbf}');
 }
