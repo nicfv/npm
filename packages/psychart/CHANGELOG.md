@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.6.1
+
+- Follow `eslint` styling rules
+
 ## 0.6.0
 
-- Update source code per `eslint` standards.
+- Update source code per `eslint` standards
     - Import `psychrolib` as a module
 - Update dependency versions
 
