@@ -19,6 +19,7 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     T6.isFalse(customDimension.is(dimensions.LuminousIntensity.pow(-2)));
     T6.isFalse(new Dimension('x').is(new Dimension('x'))); // These should be considered different dimensions
     T6.isTrue(dimensions.Dimensionless.over(dimensions.Length).is(dimensions.Length.pow(-1)));
+    T6.isTrue(dimensions.charge.times(dimensions.area).is(dimensions.area.times(dimensions.charge)));
 }
 
 {
@@ -124,7 +125,45 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     T6.is(combo2.toString(), '0 \\left[ \\frac{\\text{L}}{\\text{s}} \\right]');
     T6.eq(combo2.as(cfm.units).quantity, 0);
     T6.is(combo2.as(cfm.units).toString(), '0 \\left[ \\frac{\\text{ft}^{3}}{\\text{min}} \\right]');
-    // TODO
+    // .pow
+    const x1: Quantity = new Quantity(2, units.foot),
+        a1: Quantity = x1.pow(2),
+        a2: Quantity = a1.as(units.inch.pow(2));
+    T6.eq(a1.quantity, 4);
+    T6.is(a1.toString(), '4 \\left[ \\text{ft}^{2} \\right]');
+    T6.isFalse(a1.units.is(x1.units));
+    T6.isFalse(a1.units.is(a2.units));
+    T6.eq(a2.quantity, 144 * 4);
+    T6.is(a2.toString(), '576 \\left[ \\text{in}^{2} \\right]');
+    T6.eq(a2.pow(1 / 2).quantity, 12 * 2);
+    // .scaleBy
+    const x2: Quantity = x1.scaleBy(3),
+        x3: Quantity = x2.as(units.centimeter);
+    T6.eq(x2.quantity, 6);
+    T6.ge(x3.quantity, 182);
+    T6.lt(x3.quantity, 183);
+    T6.eq(x2.scaleBy(-1).quantity, -6);
+    T6.eq(x3.scaleBy(0).quantity, 0);
+    // .times
+    const weight: Quantity = new Quantity(40, units.poundForce),
+        height: Quantity = new Quantity(2.5, units.foot),
+        energy: Quantity = weight.times(height),
+        energySI: Quantity = energy.as(units.Joule);
+    T6.eq(energy.quantity, 100);
+    T6.isTrue(energy.units.is(units.foot.times(units.poundForce)));
+    T6.ge(energySI.quantity, 135.5);
+    T6.lt(energySI.quantity, 135.6);
+    // .over
+    const distance: Quantity = new Quantity(3.1, units.mile),
+        duration: Quantity = new Quantity(22, units.minute).plus(new Quantity(15, units.second));
+    T6.eq(duration.quantity, 22.25);
+    T6.isTrue(duration.units.is(units.minute));
+    const mileTime: Quantity = duration.over(distance),
+        speedMPH: Quantity = distance.over(duration).as(units.mile.over(units.hour));
+    T6.ge(mileTime.quantity, 7.1);
+    T6.lt(mileTime.quantity, 7.2);
+    T6.ge(speedMPH.quantity, 8.3);
+    T6.lt(speedMPH.quantity, 8.4);
 }
 
 {
