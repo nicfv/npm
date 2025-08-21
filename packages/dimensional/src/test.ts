@@ -1,6 +1,7 @@
 import * as T6 from 't6';
 import * as SMath from 'smath';
 import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '.';
+import { AmountOfSubstance } from './defaults/dimensions';
 
 {
     // Dimension
@@ -18,6 +19,7 @@ import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '
     T6.isFalse(dimensions.acceleration.is(dimensions.Length.over(dimensions.Time)));
     T6.isFalse(customDimension.is(dimensions.LuminousIntensity.pow(-2)));
     T6.isFalse(new Dimension('x').is(new Dimension('x'))); // These should be considered different dimensions
+    T6.isTrue(new Dimension(new Map([[dimensions.AmountOfSubstance, 1]])).is(AmountOfSubstance));
     T6.isTrue(dimensions.Dimensionless.over(dimensions.Length).is(dimensions.Length.pow(-1)));
     T6.isTrue(dimensions.charge.times(dimensions.area).is(dimensions.area.times(dimensions.charge)));
 }
