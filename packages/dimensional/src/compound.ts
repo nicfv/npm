@@ -26,7 +26,7 @@ export abstract class Compound<T extends Compound<T>> {
      * @param data The LaTeX representation of this compound and a method to obtain the child class, or the factors and their exponents that make up this compound
      */
     constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
-        if (typeof data === 'string') {
+        if (typeof data === 'string' && data.length > 0) {
             if (/^[a-zA-Z]+$/.test(data)) {
                 this.LaTeX = '\\text{' + data + '}';
             } else {
