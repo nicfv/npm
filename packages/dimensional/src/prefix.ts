@@ -8,9 +8,7 @@ export class Prefix {
      * @param scale The scale of this prefix, relative to the base unit
      */
     constructor(public readonly LaTeX: string, public readonly scale: number) {
-        if (LaTeX === '') {
-            this.LaTeX = '';
-        } else if (/^[a-zA-Z]+$/.test(LaTeX)) {
+        if (/^[a-zA-Z]+$/.test(LaTeX)) {
             this.LaTeX = '\\text{' + LaTeX + '}';
         } else {
             this.LaTeX = '{' + LaTeX + '}';
