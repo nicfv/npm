@@ -12,7 +12,6 @@ export const mega = new Prefix('M', 1e6);
 export const kilo = new Prefix('k', 1e3);
 export const hecto = new Prefix('h', 1e2);
 export const deca = new Prefix('da', 1e1);
-export const one = new Prefix('', 1);
 export const deci = new Prefix('d', 1e-1);
 export const centi = new Prefix('c', 1e-2);
 export const milli = new Prefix('m', 1e-3);
