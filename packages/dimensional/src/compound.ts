@@ -137,7 +137,7 @@ export abstract class Compound<T extends Compound<T>> {
      */
     private factorToString(factor: T, exponent: number): string {
         const rat = SMath.rat(exponent, 0.01),
-            facString: string = factor.LaTeX ?? factor.toString();
+            facString: string = factor.toString();
         if (rat.num === 1 && rat.den === 1) {
             return facString;
         }
