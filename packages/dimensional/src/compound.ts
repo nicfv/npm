@@ -45,6 +45,14 @@ export abstract class Compound<T extends Compound<T>> {
                     this.den.set(factor, -exponent);
                 }
             });
+            // Set LaTeX code, if this = this^1
+            if (this.num.size === 1 && this.den.size === 0) {
+                const N1: T = [...this.num.keys()][0];
+                // Make sure that the exponent is 1 and N1 is "raw"
+                if (this.num.get(N1) === 1 && N1.LaTeX) {
+                    this.LaTeX = N1.LaTeX;
+                }
+            }
         }
     }
     /**
