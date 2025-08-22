@@ -20,9 +20,8 @@ export class Unit extends Compound<Unit> {
      * @param base The base dimension or makeup of unit(s)
      * @param scale The scale factor of this unit relative to the units in `base`
      * @param allowPrefix Whether or not this unit can have a prefix applied
-     * @param prefix The prefix of this unit, used for magnitude scaling
      */
-    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale = 1, private readonly allowPrefix = true, public readonly prefix?: Prefix) {
+    constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale = 1, private readonly allowPrefix = true) {
         super(() => this, LaTeXsymbol);
         if (typeof LaTeXsymbol === 'string') {
             if (base instanceof Dimension) {
@@ -46,7 +45,7 @@ export class Unit extends Compound<Unit> {
      * @param prefix The prefix to apply
      * @returns A properly scaled unit
      */
-    public pre(prefix: Prefix): Unit {
+    public prefix(prefix: Prefix): Unit {
         if (typeof this.LaTeX === 'string' && this.allowPrefix) {
             return new Unit(prefix.LaTeX + this.LaTeX, this, this.scale * prefix.scale, false);
         } else {

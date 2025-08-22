@@ -13,9 +13,9 @@ export const candela = new Unit('cd', dimensions.LuminousIntensity);
 export const mole = new Unit('mol', dimensions.AmountOfSubstance);
 // ==== Derived Units ==== //
 // Length
-export const kilometer = meter.pre(prefixes.kilo);
-export const centimeter = meter.pre(prefixes.centi);
-export const millimeter = meter.pre(prefixes.milli);
+export const kilometer = meter.prefix(prefixes.kilo);
+export const centimeter = meter.prefix(prefixes.centi);
+export const millimeter = meter.prefix(prefixes.milli);
 export const foot = new Unit('ft', meter, 1 / 3.28084);
 export const inch = new Unit('in', foot, 1 / 12);
 export const yard = new Unit('yd', foot, 3);
@@ -40,7 +40,7 @@ export const hertz = new Unit('Hz', second.pow(-1));
 // Acceleration
 export const Gs = new Unit('G', meter.over(second.pow(2)), 9.80665);
 // Mass
-export const kilogram = gram.pre(prefixes.kilo);
+export const kilogram = gram.prefix(prefixes.kilo);
 export const tonne = new Unit('t', kilogram, 1000);
 export const poundMass = new Unit('\\text{lb}_{m}', kilogram, 1 / 2.204623);
 export const ounce = new Unit('oz', poundMass, 1 / 16);
