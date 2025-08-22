@@ -1,3 +1,5 @@
 import { dimensions } from 'dimensional';
 
-console.log(dimensions.AmountOfSubstance.toString());
+Object.entries(dimensions).forEach(([key, val]) => {
+    console.log(key + ' \\\\\\(' + val.toString() + '\\\\\\)');
+});
