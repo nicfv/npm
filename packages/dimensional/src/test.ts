@@ -40,32 +40,34 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.isTrue(new Unit().is(units.Unitless));
     T6.isTrue(new Unit('x').dimensions.is(dimensions.Dimensionless)); // Unassigned base dimensions/units
     T6.isFalse(units.poundForce.dimensions.is(units.poundMass.dimensions));
-    // .prefix
-    const customKm = units.meter.prefix(prefixes.kilo);
+    // .prefix/.pre
+    const customKm = units.meter.pre(prefixes.kilo);
     T6.is(customKm.toString(), units.kilometer.toString());
     T6.isTrue(customKm.dimensions.is(dimensions.Length));
     T6.isFalse(customKm.is(units.meter));
     T6.isFalse(customKm.is(units.kilometer)); // Not seen as the same unit [1a0cffd]
     T6.eq(customKm.to(units.kilometer), 1);
     T6.eq(customKm.to(units.meter), 1000);
+    T6.isTrue(customKm.prefix === units.kilometer.prefix);
+    T6.isTrue(units.meter.prefix === undefined);
     let caught: boolean;
     caught = false;
     try {
-        customKm.prefix(prefixes.centi);
+        customKm.pre(prefixes.centi);
     } catch {
         caught = true;
     }
     T6.isTrue(caught, 'Cannot apply a prefix to this unit.');
     caught = false;
     try {
-        (units.Celsius.over(units.minute)).prefix(prefixes.tera);
+        (units.Celsius.over(units.minute)).pre(prefixes.tera);
     } catch {
         caught = true;
     }
     T6.isTrue(caught, 'Cannot apply a prefix to this unit.');
     caught = false;
     try {
-        units.millimetersOfMercury.prefix(prefixes.atto);
+        units.millimetersOfMercury.pre(prefixes.atto);
     } catch {
         caught = true;
     }
@@ -100,7 +102,7 @@ import { AmountOfSubstance } from './defaults/dimensions';
     // Customization
     const dimensionBlob = new Dimension('\\beta'),
         customPrefix = new Prefix('\\textbf{p}_{5}', 5),
-        customInch = units.inch.prefix(customPrefix),
+        customInch = units.inch.pre(customPrefix),
         customUnit = customInch.over(new Unit('blob', dimensionBlob));
     T6.is(dimensionBlob.toString(), '{\\beta}');
     T6.is(customPrefix.LaTeX, '{\\textbf{p}_{5}}');
