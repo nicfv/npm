@@ -1,0 +1,26 @@
+import { Prefix } from '../prefix';
+
+export const quetta = new Prefix('Q', 1e30);
+export const ronna = new Prefix('R', 1e27);
+export const yotta = new Prefix('Y', 1e24);
+export const zetta = new Prefix('Z', 1e21);
+export const exa = new Prefix('E', 1e18);
+export const peta = new Prefix('P', 1e15);
+export const tera = new Prefix('T', 1e12);
+export const giga = new Prefix('G', 1e9);
+export const mega = new Prefix('M', 1e6);
+export const kilo = new Prefix('k', 1e3);
+export const hecto = new Prefix('h', 1e2);
+export const deca = new Prefix('da', 1e1);
+export const deci = new Prefix('d', 1e-1);
+export const centi = new Prefix('c', 1e-2);
+export const milli = new Prefix('m', 1e-3);
+export const micro = new Prefix('\\mu', 1e-6);
+export const nano = new Prefix('n', 1e-9);
+export const pico = new Prefix('p', 1e-12);
+export const femto = new Prefix('f', 1e-15);
+export const atto = new Prefix('a', 1e-18);
+export const zepto = new Prefix('z', 1e-21);
+export const yocto = new Prefix('y', 1e-24);
+export const ronto = new Prefix('r', 1e-27);
+export const quecto = new Prefix('q', 1e-30);

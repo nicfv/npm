@@ -107,7 +107,7 @@ for exampledir in */ ; do
         echo 'npx webpack --mode development # or --mode production'
         echo '# firefox index.html'
         echo '```'
-        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
+        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>'
     } > "../../Examples/${example}.md"
     cd ..
 done
