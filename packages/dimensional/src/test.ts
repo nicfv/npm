@@ -31,6 +31,7 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.is(units.mile.toString(), '\\text{mi}');
     T6.is(units.Rankine.toString(), '{^{\\circ}\\text{R}}');
     T6.is(units.kilometer.toString(), '{\\text{k}\\text{m}}');
+    T6.is(units.ohm.toString(), units.ohm.over(new Unit()).toString());
     // .dimensions
     T6.isTrue(units.kelvin.dimensions.is(dimensions.Temperature));
     T6.isTrue(units.Newton.dimensions.is(dimensions.force));
@@ -43,15 +44,32 @@ import { AmountOfSubstance } from './defaults/dimensions';
     const customKm = units.meter.prefix(prefixes.kilo);
     T6.is(customKm.toString(), units.kilometer.toString());
     T6.isTrue(customKm.dimensions.is(dimensions.Length));
-    T6.isFalse(customKm.is(units.kilometer)); // Not seen as the same unit
+    T6.isFalse(customKm.is(units.meter));
+    T6.isFalse(customKm.is(units.kilometer)); // Not seen as the same unit [1a0cffd]
+    T6.eq(customKm.to(units.kilometer), 1);
+    T6.eq(customKm.to(units.meter), 1000);
     let caught: boolean;
     caught = false;
     try {
-        customKm.prefix(prefixes.milli);
+        customKm.prefix(prefixes.centi);
     } catch {
         caught = true;
     }
-    T6.isTrue(caught, 'Should not allow multiple prefixes.');
+    T6.isTrue(caught, 'Cannot apply a prefix to this unit.');
+    caught = false;
+    try {
+        (units.Celsius.over(units.minute)).prefix(prefixes.tera);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Cannot apply a prefix to this unit.');
+    caught = false;
+    try {
+        units.millimetersOfMercury.prefix(prefixes.atto);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Cannot apply a prefix to this unit.');
     // .to
     let f: number,
         g: number;
