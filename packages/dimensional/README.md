@@ -97,21 +97,26 @@ $$24 \left[ \text{V} \right]$$
 Quantities of any unit can be converted to another quantity of any other unit in that same dimension.
 
 $$5.75 \left[ \text{ft} \right] = 175.2... \left[ {\text{c}\text{m}} \right]$$
+$${\textbf{L}} = {\textbf{L}}$$
 
 Quantities with the same dimensions can be added to or subtracted from and the dimensions will remain the same. Units will automatically be converted to the first argument's units.
 
 $$5 \left[ \text{ft} \right] + 9 \left[ \text{in} \right] = 5.75 \left[ \text{ft} \right]$$
+$${\textbf{L}} + {\textbf{L}} = {\textbf{L}}$$
 
 Any two quantities can be multiplied or divided, and the corresponding units and dimensions will be multiplied or divided.
 
 $$1 \left[ \text{mi} \right] \div 8 \left[ \text{min} \right] = 0.125 \left[ \frac{\text{mi}}{\text{min}} \right]$$
+$${\textbf{L}} \div {\textbf{T}} = \frac{{\textbf{L}}}{{\textbf{T}}}$$
 
 Quantities can also be scaled by a constant factor, which does not affect units or dimensions.
 
 $$4 \left[ \text{oz} \right] \times 3 = 12 \left[ \text{oz} \right]$$
+$${\textbf{M}} \times 1 = {\textbf{M}}$$
 
 Quantities can be raised to a power, which effectively raises the units and dimensions by that power as well.
 
 $$\left(2 \left[ {\text{c}\text{m}} \right]\right)^{2} = 4 \left[ {\text{c}\text{m}}^{2} \right]$$
+$$({\textbf{L}})^{2} = {\textbf{L}}^{2}$$
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
