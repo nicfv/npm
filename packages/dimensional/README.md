@@ -4,9 +4,9 @@ Dimensional is the ultimate tool for any chemist's, physicist's, or engineer's t
 
 `Dimensional` contains 3 main features:
 
-1. Dimensional analysis
-1. Quantity mathematics
-1. Unit conversions
+1. [Dimensional analysis](#dimensions)
+1. [Unit conversions](#units)
+1. [Quantity mathematics](#quantities)
 
 ## Data Structure
 
