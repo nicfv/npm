@@ -20,6 +20,9 @@
     "packageOptions": {
         "alwaysCreateEntryPointModule": false,
         "disableSources": true,
+        "excludeExternals": true,
+        "excludePrivate": true,
+        "excludeProtected": true,
         "includeVersion": true,
         "entryPoints": [
             "src/index.ts",
