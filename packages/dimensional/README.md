@@ -8,6 +8,8 @@ Dimensional is the ultimate tool for any chemist's, physicist's, or engineer's t
 1. [Unit conversions](#units)
 1. [Quantity mathematics](#quantities)
 
+All of these features are [extensible](#extensibility) and output into a LaTeX-friendly format.
+
 ## Data Structure
 
 Physical **quantities** contain a numerical value, which is "scaled" by a **unit**. The unit in turn measures a **dimension** or compound of dimensions. The structure of data is outlined below. A quantity contains both a numerical value, and a unit. The unit then contains its respective [base dimensions](#base-dimensions).
