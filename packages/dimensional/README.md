@@ -119,4 +119,10 @@ Quantities can be raised to a power, which effectively raises the units and dime
 $$\left(2 \left[ {\text{c}\text{m}} \right]\right)^{2} = 4 \left[ {\text{c}\text{m}}^{2} \right]$$
 $$({\textbf{L}})^{2} = {\textbf{L}}^{2}$$
 
+## Extensibility
+
+`Dimensional` comes pre-packaged with several standard dimensions, units, and prefixes, but it is completely customizable! This package allows you to define totally custom dimensions, units, and conversions, using all the same basic rules for physical dimensions!
+
+Take a look at the examples to learn how to use and extend this package!
+
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
