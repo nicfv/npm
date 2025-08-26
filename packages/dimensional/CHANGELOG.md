@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0
+## 1.0.1
 
 - Major overhaul of entire project
 - Removal of attributes (class)
