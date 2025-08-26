@@ -88,4 +88,30 @@ Unit prefixes provide a convenient way to express very large or very small quant
 
 All base units can have a prefix to change the magnitude, even if they are not in the SI system. For example, in the volume dimension, 1,000 gallons can be expressed as one \\\({\text{k}\text{gal}}\\\).
 
+## Quantities
+
+Lastly, a quantity is a property that can be measured and are described by both a numerical value and a unit.
+
+$$24 \left[ \text{V} \right]$$
+
+Quantities of any unit can be converted to another quantity of any other unit in that same dimension.
+
+$$5.75 \left[ \text{ft} \right] = 175.2... \left[ {\text{c}\text{m}} \right]$$
+
+Quantities with the same dimensions can be added to or subtracted from and the dimensions will remain the same. Units will automatically be converted to the first argument's units.
+
+$$5 \left[ \text{ft} \right] + 9 \left[ \text{in} \right] = 5.75 \left[ \text{ft} \right]$$
+
+Any two quantities can be multiplied or divided, and the corresponding units and dimensions will be multiplied or divided.
+
+$$1 \left[ \text{mi} \right] \div 8 \left[ \text{min} \right] = 0.125 \left[ \frac{\text{mi}}{\text{min}} \right]$$
+
+Quantities can also be scaled by a constant factor, which does not affect units or dimensions.
+
+$$4 \left[ \text{oz} \right] \times 3 = 12 \left[ \text{oz} \right]$$
+
+Quantities can be raised to a power, which effectively raises the units and dimensions by that power as well.
+
+$$\left(2 \left[ {\text{c}\text{m}} \right]\right)^{2} = 4 \left[ {\text{c}\text{m}}^{2} \right]$$
+
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
