@@ -24,9 +24,9 @@ For example, the speedometer on your vehicle is a readout of a physical *quantit
     - Unit(s) = \\\(\frac{\text{mi}}{\text{hr}}\\\)
         - Dimension(s) = \\\(\frac{{\textbf{L}}}{{\textbf{T}}}\\\)
 
-## Base Dimensions
+## Dimensions
 
-Base dimensions refer to the quality being measured. The physical base dimensions are as follows:
+Base dimensions refer to the fundamental, independent quality being measured. The physical base dimensions are as follows:
 
 - Mass \\\({\textbf{M}}\\\)
 - Length \\\({\textbf{L}}\\\)
@@ -37,7 +37,7 @@ Base dimensions refer to the quality being measured. The physical base dimension
 - Amount Of Substance \\\({\textbf{N}}\\\)
 - Dimensionless \\\(1\\\)
 
-The base dimensions above can be combined to form other measurable qualities, like speed, from the example above. In physics, compounds of dimensions are referred to as **attributes** or **properties**. Here are a few attributes that come pre-packaged in `Dimensional` by default:
+The base dimensions are the building blocks that can be combined to form other measurable qualities, like speed (velocity), from the example above. In physics, compounds of dimensions are referred to as **attributes** or **properties**. Here are a few attributes that come pre-packaged in `Dimensional` by default:
 
 - Area \\\({\textbf{L}}^{2}\\\)
 - Volume \\\({\textbf{L}}^{3}\\\)
@@ -47,5 +47,45 @@ The base dimensions above can be combined to form other measurable qualities, li
 - ...and many others
 
 ## Units
+
+A unit is a standard measurement of a base or derived dimension. The examples below are some examples of length units that come pre-packaged in `Dimensional` by default:
+
+- meter \\\(\text{m}\\\)
+- foot \\\(\text{ft}\\\)
+- inch \\\(\text{in}\\\)
+- yard \\\(\text{yd}\\\)
+- mile \\\(\text{mi}\\\)
+
+Each one of these units represents a particular "scaling" factor for a numerical quantity.
+
+Units can also be combined in the same way as dimensions to form other measurements. For example, a common measurement of speed (velocity) in the United States is \\\(\frac{\text{mi}}{\text{hr}}\\\) or miles over hours.
+
+Units can also be converted into other units of like dimensions.
+
+## Prefixes
+
+Units can be further adjusted using prefixes to increase or decrease their magnitude. Units can only have one prefix at a time. Here are a few examples that come pre-packaged in `Dimensional` by default:
+
+- giga \\\(\text{G} = 10^{9}\\\)
+- mega \\\(\text{M} = 10^{6}\\\)
+- kilo \\\(\text{k} = 10^{3}\\\)
+- hecto \\\(\text{h} = 100\\\)
+- deca \\\(\text{da} = 10\\\)
+- deci \\\(\text{d} = 0.1\\\)
+- centi \\\(\text{c} = 0.01\\\)
+- milli \\\(\text{m} = 10^{-3}\\\)
+- micro \\\({\mu} = 10^{-6}\\\)
+- nano \\\(\text{n} = 10^{-9}\\\)
+
+And here are some default units that use some of these prefixes to scale the base unit:
+
+- kilometer \\\({\text{k}\text{m}}\\\)
+- centimeter \\\({\text{c}\text{m}}\\\)
+- millimeter \\\({\text{m}\text{m}}\\\)
+- kilogram \\\({\text{k}\text{g}}\\\)
+
+Unit prefixes provide a convenient way to express very large or very small quantities where a unit of that scale/magnitude might not exist. For example, \\\(1 \left[ {\text{k}\text{m}} \right] = 1000 \left[ \text{m} \right]\\\)
+
+All base units can have a prefix to change the magnitude, even if they are not in the SI system. For example, in the volume dimension, 1,000 gallons can be expressed as one \\\({\text{k}\text{gal}}\\\).
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
