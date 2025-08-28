@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.10
+
+- Follow `eslint` styling rules
+
 ## 1.4.9
 
 - Update dependency versions

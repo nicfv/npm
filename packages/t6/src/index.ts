@@ -8,7 +8,7 @@
 /**
  * Increments for every test run.
  */
-let i: number = 0;
+let i = 0;
 /**
  * Return the number of the test that last completed.
  * @returns The current test number.

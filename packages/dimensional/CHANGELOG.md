@@ -1,10 +1,12 @@
 # Changelog
 
-## Unpublished (0.4.1)
+## 1.0.1
 
-- Update typescript dependency version to 5.5.4
-- Rebuild package and documentation in monorepo style
-- Replace testing framework dependency
+- Major overhaul of entire project
+- Removal of attributes (class)
+- Add several built-in default units and dimensions
+- Easily customizable
+- Improved documentation and examples
 
 ## 0.4.1
 

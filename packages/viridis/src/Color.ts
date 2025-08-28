@@ -15,7 +15,7 @@ export class Color {
      * const red = new Color(255, 0, 0);
      * ```
      */
-    constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha: number = 100) {
+    constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha = 100) {
         this.red = SMath.clamp(red, 0, 255) | 0;
         this.green = SMath.clamp(green, 0, 255) | 0;
         this.blue = SMath.clamp(blue, 0, 255) | 0;

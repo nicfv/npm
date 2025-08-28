@@ -11,22 +11,22 @@ export abstract class Compound<T extends Compound<T>> {
     /**
      * Terms and their exponents
      */
-    private readonly factors: Map<T, number> = new Map();
+    private readonly factors: Map<T, number> = new Map<T, number>();
     /**
      * Terms in the numerator
      */
-    private readonly num: Map<T, number> = new Map();
+    private readonly num: Map<T, number> = new Map<T, number>();
     /**
      * Terms in the denominator
      */
-    private readonly den: Map<T, number> = new Map();
+    private readonly den: Map<T, number> = new Map<T, number>();
     /**
      * Either create a new "raw" compound with a variable to the power of one, or initialize a compound from factors and their exponents.
      * @param getChild An internal method for the parent class to obtain the child class. Should return `this`
      * @param data The LaTeX representation of this compound and a method to obtain the child class, or the factors and their exponents that make up this compound
      */
     constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
-        if (typeof data === 'string') {
+        if (typeof data === 'string' && data.length > 0) {
             if (/^[a-zA-Z]+$/.test(data)) {
                 this.LaTeX = '\\text{' + data + '}';
             } else {
@@ -110,8 +110,8 @@ export abstract class Compound<T extends Compound<T>> {
         if (this.LaTeX) {
             return this.LaTeX;
         }
-        let strNum: string = '',
-            strDen: string = '';
+        let strNum = '',
+            strDen = '';
         this.num.forEach((exponent: number, factor: T) => {
             if (strNum) {
                 strNum += ' \\cdot ';
@@ -137,7 +137,7 @@ export abstract class Compound<T extends Compound<T>> {
      */
     private factorToString(factor: T, exponent: number): string {
         const rat = SMath.rat(exponent, 0.01),
-            facString: string = factor.LaTeX ?? factor.toString();
+            facString: string = factor.toString();
         if (rat.num === 1 && rat.den === 1) {
             return facString;
         }

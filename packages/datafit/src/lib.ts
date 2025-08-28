@@ -26,7 +26,7 @@ import { Datum, F, Summary, VariableType } from './types';
  * const summary = fit(f, data);
  * ```
  */
-export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, params_initial: Array<number> = [], iterations: number = 1e3, maxDeviation: number = 1): Summary<T> {
+export function fit<T extends VariableType>(f: F<T>, data: Datum<T>[], params_initial: number[] = [], iterations = 1e3, maxDeviation = 1): Summary<T> {
     const N_params: number = f.length - 1;
     if (params_initial.length === 0) {
         params_initial.length = N_params;
@@ -38,10 +38,10 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
     if (maxDeviation <= 0) {
         throw new Error('Standard deviation should be a positive value.');
     }
-    let params: Array<number> = params_initial,
+    let params: number[] = params_initial,
         error: number = err(f, params, data);
     for (let i = 0; i < iterations; i++) {
-        const params_i: Array<number> = mutate(params, SMath.translate(i, 0, iterations, maxDeviation, 0)),
+        const params_i: number[] = mutate(params, SMath.translate(i, 0, iterations, maxDeviation, 0)),
             error_i: number = err(f, params_i, data);
         if (error_i < error) {
             params = params_i;
@@ -62,8 +62,8 @@ export function fit<T extends VariableType>(f: F<T>, data: Array<Datum<T>>, para
  * @param data The entire dataset, as an array of points.
  * @returns The sum of squared errors.
  */
-function err<T extends VariableType>(f: F<T>, params: Array<number>, data: Array<Datum<T>>): number {
-    let sum: number = 0;
+function err<T extends VariableType>(f: F<T>, params: number[], data: Datum<T>[]): number {
+    let sum = 0;
     data.forEach(point => sum += (point.y - f(point.x, ...params)) ** 2);
     return sum;
 }
@@ -73,6 +73,6 @@ function err<T extends VariableType>(f: F<T>, params: Array<number>, data: Array
  * @param deviation The standard relative amount to deviate in any direction.
  * @returns A mutated set of parameters.
  */
-function mutate(params: Array<number>, deviation: number): Array<number> {
+function mutate(params: number[], deviation: number): number[] {
     return params.map(c => SMath.rnorm(c, deviation * Math.max(1, Math.abs(c))));
 }
