@@ -52,18 +52,19 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * The data series plotted on Psychart with each of their last states and visibility toggles.
      */
-    private series: {
-        [legend: string]: {
+    private series: Record<
+        string, // Legend
+        {
             lastState: PsyState,
             hidden: boolean,
             readonly pointGroup: SVGGElement,
             readonly lineGroup: SVGGElement,
         }
-    } = {};
+    > = {};
     /**
      * Helper function to return an array of region names and their corresponding tooltips.
      */
-    public static getRegionNamesAndTips(): Array<[RegionName, string]> {
+    public static getRegionNamesAndTips(): [RegionName, string][] {
         return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
     }
     /**
@@ -78,7 +79,7 @@ export class Psychart extends Chart<PsychartOptions> {
     private static getRange(min: number, max: number, step: number): number[] {
         const stepMin: number = SMath.round2(min + step * 1.1, step),
             stepMax: number = SMath.round2(max - step * 1.1, step),
-            range: Array<number> = [];
+            range: number[] = [];
         for (let i = stepMin; i <= stepMax; i += step) {
             range.push(i);
         }

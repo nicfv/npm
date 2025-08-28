@@ -17,7 +17,7 @@ export class Gradient {
      * ]);
      * ```
      */
-    constructor(public readonly colors: Array<Color>) {
+    constructor(public readonly colors: Color[]) {
         if (colors.length < 1) {
             throw new Error('Must include at least 1 color to create a gradient.');
         }
@@ -37,7 +37,7 @@ export class Gradient {
      * // Returns interpolated color (127.5, 0, 127.5)
      * ```
      */
-    public getColor(x: number, min: number = 0, max: number = 1): Color {
+    public getColor(x: number, min = 0, max = 1): Color {
         x = SMath.normalize(x, min, max);
         if (this.colors.length === 1) {
             return this.colors[0];
@@ -69,7 +69,7 @@ export class Gradient {
      * // linear-gradient(180deg,rgba(255,0,0,100%),rgba(0,0,255,100%))
      * ```
      */
-    public toString(deg: number = 90): string {
+    public toString(deg = 90): string {
         return 'linear-gradient(' + deg + 'deg,' + this.colors.map(color => color.toString()).join(',') + ')';
     }
     /**
@@ -83,7 +83,7 @@ export class Gradient {
      * // Returns a <linearGradient> element to be appended onto <defs>
      * ```
      */
-    public toSVG(id: string, deg: number = 90): SVGLinearGradientElement {
+    public toSVG(id: string, deg = 90): SVGLinearGradientElement {
         const linearGradient: SVGLinearGradientElement = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
         linearGradient.setAttribute('id', id);
         linearGradient.setAttribute('x1', '0');

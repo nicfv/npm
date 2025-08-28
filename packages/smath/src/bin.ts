@@ -3,7 +3,7 @@
 import * as SMath from '.';
 
 const func: string = (process.argv[2] ?? '').toLowerCase(),
-    nums: Array<number> = process.argv.slice(3).map((arg, i) => {
+    nums: number[] = process.argv.slice(3).map((arg, i) => {
         const num: number = Number.parseFloat(arg);
         if (Number.isFinite(num)) {
             return num;
