@@ -7,7 +7,7 @@ export abstract class Chart<T extends ChartOptions> {
     /**
      * Initialization counter for any chart
      */
-    private static id_count: number = 0;
+    private static id_count = 0;
     /**
      * Unique numeric identifier for this chart
      */

@@ -446,8 +446,8 @@ export class Psychart extends Chart<PsychartOptions> {
         background.setAttribute('rx', (padding / 2) + 'px');
         background.setAttribute('stroke-width', '1px');
         // Adjust the position if out-of-bounds
-        let dx: number = 0,
-            dy: number = 0;
+        let dx = 0,
+            dy = 0;
         if (location.x + padding + maxWidth > this.options.size.x) {
             dx = -(maxWidth + padding);
         } else {

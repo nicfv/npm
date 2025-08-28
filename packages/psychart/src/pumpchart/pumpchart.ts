@@ -82,7 +82,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param closePath Whether or not to close the path
      * @returns A `<path>` element containing the array of states
      */
-    private createPath(data: Array<State>, closePath: boolean = false): SVGPathElement {
+    private createPath(data: State[], closePath = false): SVGPathElement {
         const path: SVGPathElement = document.createElementNS(this.NS, 'path');
         path.setAttribute('d', 'M ' + data.map(pt => {
             const xy: Point = this.state2xy(pt);
