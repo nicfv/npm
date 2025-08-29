@@ -13,6 +13,7 @@ export const AmountOfSubstance = new Dimension('\\textbf{N}');
 // ==== Attributes ==== //
 export const area = Length.pow(2);
 export const volume = Length.pow(3);
+export const density = Mass.over(volume);
 export const velocity = Length.over(Time);
 export const acceleration = velocity.over(Time);
 export const force = Mass.times(acceleration);
