@@ -77,6 +77,8 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.eq(f, 12);
     f = units.Rankine.to(units.Rankine);
     T6.eq(f, 1);
+    f = units.watt.to(units.volt.times(units.ampere));
+    T6.eq(f, 1);
     f = units.slug.to(units.poundMass);
     g = units.Gs.to(units.foot.over(units.second.pow(2)));
     T6.isTrue(SMath.approx(f, g));
