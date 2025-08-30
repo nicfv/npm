@@ -21,5 +21,4 @@ $$\dim\left(\text{C}\right) = \dim\left(\frac{\text{a} \times \text{v}}{\text{m}
 
 We can also isolate \\\(x\\\) to determine its dimensionality as well:
 
-$$\dim\left(x\right) = \dim\left(\frac{\frac{\text{a} \times \text{v}}{\text{m}} + \text{C}}{\text{Q}}\right) = \dim\left(\frac{\frac{\text{a} \times \text{v}}{\text{m}}}{\text{Q}}\right)$$
-$$
+$$\dim\left(x\right) = \dim\left(\frac{\frac{\text{a} \times \text{v}}{\text{m}} + \text{C}}{\text{Q}}\right) = \dim\left(\frac{\text{C}}{\text{Q}}\right)$$
