@@ -8,8 +8,8 @@ My fictitious vehicle's fuel consumption rate is dependent on several factors:
 
 From these terms, we can conclude that the fuel consumption (\\\(Q\\\)) is directly proportional to acceleration (\\\(a\\\)) and speed (\\\(v\\\)), and inversely proportional to weight (\\\(f\\\)), plus a constant term (\\\(C\\\)). We want to know two things:
 
-1. What are the dimensions on the constant term? (\\\(\dim(C)\\\))
-1. What are the dimensions on the proportionaly constant? (\\\(\dim(x)\\\))
+1. What are the dimensions on the constant term? \\\(\dim(C)\\\)
+1. What are the dimensions on the proportionaly constant? \\\(\dim(x)\\\)
 
 Let's set up our equation and substitute in our variables:
 
