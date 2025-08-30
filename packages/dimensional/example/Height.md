@@ -1,3 +1,3 @@
-Let's start with a simple example, converting your height from US customary units to SI units. If your height is 5'9", what is that in meters?
+> [**BACK**](../README.md) | **1** | [**NEXT**](./Analysis.md) | Up next: Learn how to use `Dimensional` for dimensional analysis!
 
-> Be sure to copy and paste the output into an online LaTeX editor to view the a cleaner version of the result!
+Let's start with a simple example, converting your height from US customary units to SI units. If your height is 5'9", what is that in meters? Use `Dimensional` to define quantities of feet and inches, add them together, and convert them to meters. Be sure to copy and paste the output into an online LaTeX editor to view the a cleaner version of the result!

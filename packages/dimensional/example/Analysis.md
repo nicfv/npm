@@ -1,3 +1,5 @@
+> [**BACK**](./Height.md) | **2** | [**NEXT**](./Quirks.md) | Up next: Learn about some of the quirks of `Dimensional`, helpful for troubleshooting.
+
 My fictitious vehicle's fuel consumption rate is dependent on several factors:
 - The current **acceleration** (how far I've pushed the gas pedal)
 - The **speed** (due to increased wind resistance)

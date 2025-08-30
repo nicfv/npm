@@ -1,3 +1,5 @@
+> [**BACK**](./Quirks.md) | **4** | [**NEXT**](./Custom.md) | Up next: Learn how to create an entirely new dimension and unit system from scratch, without using any defaults.
+
 You can use `Dimensional` to determine if a complex dimension matches a default dimension and return the name of that dimension.
 
 Using the builtin JavaScript function [`Object.entries()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries) on the default `dimensions` object, we can iterate through the result until it matches with the argument.

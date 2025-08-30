@@ -1,3 +1,5 @@
+> [**BACK**](./Name%20and%20Collect.md) | **5** | You've reached the last example!
+
 In this example, we will go over writing your own dimensions, unit system, and conversions.
 
 The methods introduced in this example can be used to create entirely new dimensions and unit system, removing the need for using the builtin defaults altogether.
