@@ -125,6 +125,6 @@ $$({\textbf{L}})^{2} = {\textbf{L}}^{2}$$
 
 `Dimensional` comes pre-packaged with several standard dimensions, units, and prefixes, but it is completely customizable! This package allows you to define totally custom dimensions, units, and conversions, using all the same basic rules for physical dimensions!
 
-Ready to begin? Start with a [simple example](./Examples/Height.md) to learn how to use and extend this package!
+Ready to begin? Start with a [simple example of calculating height](./Examples/Height.md) to learn how to use this package and extend it!
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
