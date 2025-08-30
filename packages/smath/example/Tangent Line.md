@@ -1,5 +1,3 @@
-# Tangent Line
-
 The tangent line to a curve is a line that passes through a single local point on the curve, that also matches the same slope. That means, the derivative of the curve must match the slope of the tangent line.
 
 Let's assume our curve is defined by the formula below and we want to find the tangent line at \\\(x_{0}=1\\\).

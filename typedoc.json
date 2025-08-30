@@ -33,5 +33,5 @@
         ],
     },
     "readme": "README.md",
-    // "treatValidationWarningsAsErrors": true,
+    "treatWarningsAsErrors": true,
 }
