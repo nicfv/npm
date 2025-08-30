@@ -16,6 +16,15 @@ console.log('length_1 == length_2?', length_1.is(length_2));
 // It's also not the same as the built-in dimension
 console.log('length_1 == length?', length_1.is(dimensions.Length));
 
+// However, multiplying or dividing dimensions by
+// "Dimensionless" will not affect the dimension
+// > `dimensions.Dimensionless` and `new Dimension()` act the same!
+// > Same thing with `units.Unitless` and `new Unit()`
+const length_1_x_dimensionless_1 = dimensions.Dimensionless.times(length_1);
+const length_2_d_dimensionless_2 = length_2.over(new Dimension());
+console.log('length_1 * dimensionless = length_1?', length_1_x_dimensionless_1.is(length_1));
+console.log('length_2 / dimensionless = length_2?', length_2_d_dimensionless_2.is(length_2));
+
 // By adding the same prefix to the same unit, but in 2
 // distinct instances, the units are no longer identical
 const km_1 = units.meter.prefix(prefixes.kilo);
@@ -31,16 +40,3 @@ console.log('Conversion factor:', km_to_km);
 const q1 = new Quantity(5, km_1);
 const q2 = q1.as(km_2); // Convert to km_2
 console.log(q1.toString(), q2.toString());
-
-// Let's derive a dimension using
-// pre-packaged default dimensions
-const complex_dimension = dimensions.Mass.over(dimensions.Length.times(dimensions.area));
-
-// Use the JavaScript builtins `Object.entries`
-// and `.forEach` loop to iterate through each
-// default dimension to find the match.
-Object.entries(dimensions).forEach(([key, val]) => {
-    if (val.is(complex_dimension)) {
-        console.log('The unknown dimension is ' + key + '.');
-    }
-});
