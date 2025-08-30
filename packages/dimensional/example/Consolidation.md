@@ -1,4 +1,4 @@
-> [**BACK**](./Quirks.md) | **4** | [**NEXT**](./Custom.md) | Up next: Learn how to create an entirely new dimension and unit system from scratch, without using any defaults.
+> [**BACK**](./Quirks.md) | **4** | [**NEXT**](./Customization.md) | Up next: Learn how to create an entirely new dimension and unit system from scratch, without using any defaults.
 
 You can use `Dimensional` to determine if a complex dimension matches a default dimension and return the name of that dimension.
 
