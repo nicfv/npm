@@ -1,5 +1,3 @@
-# JavaScript Math Oddities
-
 Sometimes, JavaScript does weird math! Try adding `0.1 + 0.2` in your NodeJS terminal. What did you get?
 
 > Hint: It's not 0.3!
