@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2
+
+- Add default dimension for `density`
+- Add some more internal tests
+- Update some documentation, add a clear "path" to take through the examples
+- Treat source and documentation warnings as errors
+- Example titles are now automatically generated based on filename
+
 ## 1.0.1
 
 - Major overhaul of entire project
