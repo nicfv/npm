@@ -1,4 +1,5 @@
 import * as SMath from 'smath';
+import { config } from './config';
 
 /**
  * Represents a compound number.
@@ -27,7 +28,7 @@ export abstract class Compound<T extends Compound<T>> {
      */
     constructor(private readonly getChild: () => T, data?: string | Map<T, number>) {
         if (typeof data === 'string' && data.length > 0) {
-            if (/^[a-zA-Z]+$/.test(data)) {
+            if (/^[a-zA-Z]+$/.test(data) && config.convertToText) {
                 this.LaTeX = '\\text{' + data + '}';
             } else {
                 this.LaTeX = '{' + data + '}';
@@ -114,20 +115,20 @@ export abstract class Compound<T extends Compound<T>> {
             strDen = '';
         this.num.forEach((exponent: number, factor: T) => {
             if (strNum) {
-                strNum += ' \\cdot ';
+                strNum += ' ' + config.multiplySymbol + ' ';
             }
             strNum += this.factorToString(factor, exponent);
         });
         this.den.forEach((exponent: number, factor: T) => {
             if (strDen) {
-                strDen += ' \\cdot ';
+                strDen += ' ' + config.multiplySymbol + ' ';
             }
             strDen += this.factorToString(factor, exponent);
         });
         if (strDen) {
             return '\\frac{' + (strNum || '1') + '}{' + strDen + '}';
         }
-        return strNum || '1';
+        return strNum || config.scalarSymbol;
     }
     /**
      * Render a single factor in LaTeX markup.
