@@ -1,3 +1,4 @@
+import * as SMath from 'smath';
 import { config } from './config';
 import { Unit } from './unit';
 
@@ -72,6 +73,6 @@ export class Quantity {
      * @returns LaTeX code for this quantity
      */
     public toString(): string {
-        return this.quantity.toString() + ' ' + config.unitDelimiters.left + ' ' + this.units.toString() + ' ' + config.unitDelimiters.right;
+        return SMath.round2(this.quantity, 10 ** -config.decimalsShown).toString() + ' ' + config.unitDelimiters.left + ' ' + this.units.toString() + ' ' + config.unitDelimiters.right;
     }
 }
