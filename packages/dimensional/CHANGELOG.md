@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+- Add global configuration options, to change the number of decimal places displayed, for example
+
 ## 1.0.2
 
 - Add default dimension for `density`

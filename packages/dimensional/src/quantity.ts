@@ -1,3 +1,4 @@
+import { config } from './config';
 import { Unit } from './unit';
 
 /**
@@ -71,6 +72,6 @@ export class Quantity {
      * @returns LaTeX code for this quantity
      */
     public toString(): string {
-        return this.quantity.toString() + ' \\left[ ' + this.units.toString() + ' \\right]';
+        return parseFloat(this.quantity.toFixed(config.decimalsShown)).toString() + ' ' + config.unitDelimiters.left + ' ' + this.units.toString() + ' ' + config.unitDelimiters.right;
     }
 }
