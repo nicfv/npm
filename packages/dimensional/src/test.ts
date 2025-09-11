@@ -1,6 +1,6 @@
 import * as T6 from 't6';
 import * as SMath from 'smath';
-import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity } from '.';
+import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity, config } from '.';
 import { AmountOfSubstance } from './defaults/dimensions';
 
 {
@@ -200,4 +200,26 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.lt(height2.quantity, 0.020);
     T6.isTrue(height2.units.is(footballField));
     T6.is(height2.units.toString(), '\\text{fbf}');
+}
+
+{
+    // Configuration
+    config.convertToText = false;
+    config.decimalsShown = 1;
+    config.multiplySymbol = '*';
+    config.scalarSymbol = '\\pi';
+    config.unitDelimiters = {
+        left: '[',
+        right: ']',
+    };
+    const digital: Dimension = new Dimension('d');
+    const bit: Unit = new Unit('b', digital);
+    const kilobit: Unit = bit.prefix(prefixes.kilo);
+    const qkb: Quantity = new Quantity(8.88, kilobit);
+    T6.is(digital.toString(), '{d}');
+    T6.is(bit.toString(), '{b}');
+    T6.is(kilobit.toString(), '{\\text{k}{b}}');
+    T6.is(qkb.toString(), '8.9 [ {\\text{k}{b}} ]');
+    T6.is(dimensions.Dimensionless.toString(), '\\pi');
+    T6.is(units.Unitless.toString(), '\\pi');
 }

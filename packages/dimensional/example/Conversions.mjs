@@ -1,4 +1,7 @@
-import { Quantity, units } from 'dimensional';
+import { config, Quantity, units } from 'dimensional';
+
+// Display a maximum of 2 decimal points
+config.decimalsShown = 2;
 
 // ==== INPUTS ====//
 
