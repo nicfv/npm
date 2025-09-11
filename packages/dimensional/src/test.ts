@@ -31,6 +31,7 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.is(units.mile.toString(), '\\text{mi}');
     T6.is(units.Rankine.toString(), '{^{\\circ}\\text{R}}');
     T6.is(units.kilometer.toString(), '{\\text{k}\\text{m}}');
+    T6.is(units.fluidOunce.toString(), '{\\text{fl}_\\text{oz}}');
     T6.is(units.ohm.toString(), units.ohm.over(new Unit()).toString());
     // .dimensions
     T6.isTrue(units.kelvin.dimensions.is(dimensions.Temperature));
