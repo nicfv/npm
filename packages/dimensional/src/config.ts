@@ -23,6 +23,21 @@ export const config = {
      */
     decimalsShown: 3,
     /**
+     * The base-10 magnitude bounds at which numeric values are displayed in scientific notation
+     */
+    scientificNotationMagnitude: {
+        /**
+         * The minimum magnitude for standard notation\
+         * Default: `-6`
+         */
+        min: -6,
+        /**
+         * The maximum magnitude for standard notation\
+         * Default: `6`
+         */
+        max: 6,
+    },
+    /**
      * Characters in LaTeX that mark the beginning and end of a unit within a quantity
      */
     unitDelimiters: {
