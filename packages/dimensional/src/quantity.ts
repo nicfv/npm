@@ -87,6 +87,10 @@ export class Quantity {
         } else if (this.quantity === -Infinity) {
             quantityString = '-\\infty';
         }
+        // NaN
+        if (isNaN(this.quantity)) {
+            quantityString = '\\text{NaN}';
+        }
         // Unitless
         if (this.units.is(new Unit()) && !config.showUnitless) {
             return quantityString;
