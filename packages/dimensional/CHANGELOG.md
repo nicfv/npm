@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- Add configuration option `showUnitless` to optionally show/hide units for unitless quantities
+
 ## 1.2.0
 
 - Fix fluid ounce unit display issue
