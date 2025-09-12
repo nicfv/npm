@@ -75,7 +75,7 @@ export class Quantity {
     public toString(): string {
         const magnitude: number = Math.floor(Math.log10(this.quantity));
         let quantityString: string = SMath.round2(this.quantity, 10 ** -config.decimalsShown).toString();
-        if (SMath.clamp(magnitude, config.scientificNotationMagnitude.min, config.scientificNotationMagnitude.max) !== magnitude) {
+        if (!SMath.approx(this.quantity, 0, 1e-10) && magnitude !== SMath.clamp(magnitude, config.scientificNotationMagnitude.min, config.scientificNotationMagnitude.max)) {
             const scaledQuantity: number = this.quantity / (10 ** magnitude);
             quantityString = SMath.round2(scaledQuantity, 10 ** -config.decimalsShown).toString() + ' \\times 10^{' + magnitude + '}';
         }
