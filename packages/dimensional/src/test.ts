@@ -199,6 +199,8 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.is(inf_1.toString(), '\\infty \\left[ {\\Omega} \\right]');
     const inf_2 = new Quantity(-1 / 0, units.hertz);
     T6.is(inf_2.toString(), '-\\infty \\left[ \\text{Hz} \\right]');
+    const nan_1 = new Quantity(-NaN, units.year);
+    T6.is(nan_1.toString(), '\\text{NaN} \\left[ \\text{yr} \\right]');
 }
 
 {
@@ -213,6 +215,11 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.lt(height2.quantity, 0.020);
     T6.isTrue(height2.units.is(footballField));
     T6.is(height2.units.toString(), '\\text{fbf}');
+    // Unitless
+    const num = new Quantity(5, units.Unitless);
+    T6.is(num.toString(), '5 \\left[ 1 \\right]');
+    config.showUnitless = false;
+    T6.is(num.toString(), '5');
 }
 
 {

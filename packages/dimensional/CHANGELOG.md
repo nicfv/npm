@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0
+
+- Add configuration option `showUnitless` to optionally show/hide units for unitless quantities
+- Check for and display "NaN" when applicable
+
 ## 1.2.0
 
 - Fix fluid ounce unit display issue
