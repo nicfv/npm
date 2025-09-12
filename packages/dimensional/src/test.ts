@@ -199,6 +199,8 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.is(inf_1.toString(), '\\infty \\left[ {\\Omega} \\right]');
     const inf_2 = new Quantity(-1 / 0, units.hertz);
     T6.is(inf_2.toString(), '-\\infty \\left[ \\text{Hz} \\right]');
+    const nan_1 = new Quantity(-NaN, units.year);
+    T6.is(nan_1.toString(), '\\text{NaN} \\left[ \\text{yr} \\right]');
 }
 
 {
