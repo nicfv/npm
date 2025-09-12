@@ -187,6 +187,13 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.lt(mileTime.quantity, 7.2);
     T6.ge(speedMPH.quantity, 8.3);
     T6.lt(speedMPH.quantity, 8.4);
+    // Scientific Notation
+    const ft_1 = new Quantity(1, units.foot),
+        nm_1 = ft_1.as(units.meter.prefix(prefixes.nano));
+    T6.is(nm_1.toString(), '3.048 \\times 10^{8} \\left[ {\\text{n}\\text{m}} \\right]');
+    const nm_2 = new Quantity(1, units.meter.prefix(prefixes.nano)),
+        ft_2 = nm_2.as(units.foot);
+    T6.is(ft_2.toString(), '3.281 \\times 10^{-9} \\left[ \\text{ft} \\right]');
 }
 
 {
