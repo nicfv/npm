@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+- Fix fluid ounce unit display issue
+- Add configuration options for magnitude boundaries to display scientific notation
+- Infinite quantities will now be displayed with the appropriate symbol
+
 ## 1.1.0
 
 - Add global configuration options, to change the number of decimal places displayed, for example
