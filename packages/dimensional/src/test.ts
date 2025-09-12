@@ -213,6 +213,11 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.lt(height2.quantity, 0.020);
     T6.isTrue(height2.units.is(footballField));
     T6.is(height2.units.toString(), '\\text{fbf}');
+    // Unitless
+    const num = new Quantity(5, units.Unitless);
+    T6.is(num.toString(), '5 \\left[ 1 \\right]');
+    config.showUnitless = false;
+    T6.is(num.toString(), '5');
 }
 
 {

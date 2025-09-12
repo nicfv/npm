@@ -23,6 +23,11 @@ export const config = {
      */
     decimalsShown: 3,
     /**
+     * Always display the unit on a quantity, even for unitless quantities.\
+     * Default: `true`
+     */
+    showUnitless: true,
+    /**
      * The base-10 magnitude bounds at which numeric values are displayed in scientific notation
      */
     scientificNotationMagnitude: {
