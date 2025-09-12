@@ -194,6 +194,11 @@ import { AmountOfSubstance } from './defaults/dimensions';
     const nm_2 = new Quantity(1, units.meter.prefix(prefixes.nano)),
         ft_2 = nm_2.as(units.foot);
     T6.is(ft_2.toString(), '3.281 \\times 10^{-9} \\left[ \\text{ft} \\right]');
+    // Infinity
+    const inf_1 = new Quantity(1 / 0, units.ohm);
+    T6.is(inf_1.toString(), '\\infty \\left[ {\\Omega} \\right]');
+    const inf_2 = new Quantity(-1 / 0, units.hertz);
+    T6.is(inf_2.toString(), '-\\infty \\left[ \\text{Hz} \\right]');
 }
 
 {
