@@ -28,12 +28,12 @@ export const config = {
     scientificNotationMagnitude: {
         /**
          * The minimum magnitude for standard notation\
-         * Default: `-6`
+         * Default: `-6` (0.000 001)
          */
         min: -6,
         /**
          * The maximum magnitude for standard notation\
-         * Default: `6`
+         * Default: `6` (1,000,000)
          */
         max: 6,
     },
