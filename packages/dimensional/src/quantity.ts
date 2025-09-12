@@ -79,6 +79,11 @@ export class Quantity {
             const scaledQuantity: number = this.quantity / (10 ** magnitude);
             quantityString = SMath.round2(scaledQuantity, 10 ** -config.decimalsShown).toString() + ' \\times 10^{' + magnitude + '}';
         }
+        if (this.quantity === Infinity) {
+            quantityString = '\\infty';
+        } else if (this.quantity === -Infinity) {
+            quantityString = '-\\infty';
+        }
         return quantityString + ' ' + config.unitDelimiters.left + ' ' + this.units.toString() + ' ' + config.unitDelimiters.right;
     }
 }
