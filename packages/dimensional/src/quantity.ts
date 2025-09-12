@@ -1,5 +1,6 @@
 import { config } from './config';
 import { Unit } from './unit';
+import * as SMath from 'smath';
 
 /**
  * Represents a physical, measurable quantity.
@@ -72,6 +73,17 @@ export class Quantity {
      * @returns LaTeX code for this quantity
      */
     public toString(): string {
-        return parseFloat(this.quantity.toFixed(config.decimalsShown)).toString() + ' ' + config.unitDelimiters.left + ' ' + this.units.toString() + ' ' + config.unitDelimiters.right;
+        const magnitude: number = Math.floor(Math.log10(this.quantity));
+        let quantityString: string = SMath.round2(this.quantity, 10 ** -config.decimalsShown).toString();
+        if (!SMath.approx(this.quantity, 0, 1e-10) && magnitude !== SMath.clamp(magnitude, config.scientificNotationMagnitude.min, config.scientificNotationMagnitude.max)) {
+            const scaledQuantity: number = this.quantity / (10 ** magnitude);
+            quantityString = SMath.round2(scaledQuantity, 10 ** -config.decimalsShown).toString() + ' \\times 10^{' + magnitude + '}';
+        }
+        if (this.quantity === Infinity) {
+            quantityString = '\\infty';
+        } else if (this.quantity === -Infinity) {
+            quantityString = '-\\infty';
+        }
+        return quantityString + ' ' + config.unitDelimiters.left + ' ' + this.units.toString() + ' ' + config.unitDelimiters.right;
     }
 }

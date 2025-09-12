@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.2
+
+- Remove precision errors in `round2` (round to the 10th decimal place)
+
 ## 1.13.1
 
 - Follow `eslint` styling rules

@@ -31,6 +31,7 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.is(units.mile.toString(), '\\text{mi}');
     T6.is(units.Rankine.toString(), '{^{\\circ}\\text{R}}');
     T6.is(units.kilometer.toString(), '{\\text{k}\\text{m}}');
+    T6.is(units.fluidOunce.toString(), '{\\text{fl}_\\text{oz}}');
     T6.is(units.ohm.toString(), units.ohm.over(new Unit()).toString());
     // .dimensions
     T6.isTrue(units.kelvin.dimensions.is(dimensions.Temperature));
@@ -186,6 +187,18 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.lt(mileTime.quantity, 7.2);
     T6.ge(speedMPH.quantity, 8.3);
     T6.lt(speedMPH.quantity, 8.4);
+    // Scientific Notation
+    const ft_1 = new Quantity(1, units.foot),
+        nm_1 = ft_1.as(units.meter.prefix(prefixes.nano));
+    T6.is(nm_1.toString(), '3.048 \\times 10^{8} \\left[ {\\text{n}\\text{m}} \\right]');
+    const nm_2 = new Quantity(1, units.meter.prefix(prefixes.nano)),
+        ft_2 = nm_2.as(units.foot);
+    T6.is(ft_2.toString(), '3.281 \\times 10^{-9} \\left[ \\text{ft} \\right]');
+    // Infinity
+    const inf_1 = new Quantity(1 / 0, units.ohm);
+    T6.is(inf_1.toString(), '\\infty \\left[ {\\Omega} \\right]');
+    const inf_2 = new Quantity(-1 / 0, units.hertz);
+    T6.is(inf_2.toString(), '-\\infty \\left[ \\text{Hz} \\right]');
 }
 
 {

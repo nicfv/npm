@@ -68,6 +68,7 @@ T6.eq(SMath.round2(6.12, 0.2), 6.2);
 T6.eq(SMath.round2(-0.53, 0.25), -0.5);
 T6.eq(SMath.round2(Math.PI, 0.125), 3.125);
 T6.eq(SMath.round2(2.2, -1), 2);
+T6.eq(SMath.round2(2.7 + 0.35, 0.01), 3.05);
 
 T6.eq(SMath.error(9, 10), -0.1);
 T6.eq(SMath.error(11, 10), 0.1);
