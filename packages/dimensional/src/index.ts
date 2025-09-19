@@ -12,3 +12,4 @@ export * from './dimension';
 export * from './prefix';
 export * from './quantity';
 export * from './unit';
+export * from './config';

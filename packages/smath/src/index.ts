@@ -183,7 +183,9 @@ export function factors(n: number): number[] {
  * ```
  */
 export function round2(n: number, base: number): number {
-    return base ? base * Math.round(n / base) : n;
+    const rounded: number = base ? base * Math.round(n / base) : n;
+    const precision = 10; // Removes precision errors
+    return parseFloat(rounded.toFixed(precision));
 }
 /**
  * Calculate the relative normalized error or deviation from any

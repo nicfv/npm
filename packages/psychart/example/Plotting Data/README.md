@@ -1,5 +1,3 @@
-# Plotting Data
-
 In this example, we set up Psychart with the ability to render data series from multiple streams. Two variables are required to fix the state, but data streams can be in many different formats. Psychart supports the following measurement types:
 
 - Dry bulb (db) and wet bulb (wb)

@@ -26,6 +26,7 @@ for examplejs in *.mjs ; do
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
     {
+        echo "# ${example}"
         cat "${example}.md" || exit 1
         echo
         echo '## Installation'
@@ -69,6 +70,7 @@ for exampledir in */ ; do
     echo "Running example ${example}..."
     cd "${example}" && npm i && npx webpack --mode development || exit 1
     {
+        echo "# ${example}"
         cat ./*.md || exit 1
         echo
         echo '## Installation'

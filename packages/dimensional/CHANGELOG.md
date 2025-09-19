@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.3.0
+
+- Add configuration option `showUnitless` to optionally show/hide units for unitless quantities
+- Check for and display "NaN" when applicable
+
+## 1.2.0
+
+- Fix fluid ounce unit display issue
+- Add configuration options for magnitude boundaries to display scientific notation
+- Infinite quantities will now be displayed with the appropriate symbol
+
+## 1.1.0
+
+- Add global configuration options, to change the number of decimal places displayed, for example
+
+## 1.0.2
+
+- Add default dimension for `density`
+- Add some more internal tests
+- Update some documentation, add a clear "path" to take through the examples
+- Treat source and documentation warnings as errors
+- Example titles are now automatically generated based on filename
+
 ## 1.0.1
 
 - Major overhaul of entire project
