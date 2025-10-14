@@ -4,7 +4,7 @@ export { Point };
 /**
  * Details about a chart axis.
  */
-interface Axis {
+export interface Axis {
     /**
      * The units of this axis.
      */
@@ -57,4 +57,17 @@ export interface PumpchartOptions extends ChartOptions {
      * The axis thickness, in pixels
      */
     readonly axisWidth: number;
+    /**
+     * The font used in this Pumpchart
+     */
+    readonly font: {
+        /**
+         * The name of the font family
+         */
+        readonly name: string;
+        /**
+         * The size of the font, in pixels
+         */
+        readonly size: number;
+    };
 }

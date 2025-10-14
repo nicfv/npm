@@ -6,7 +6,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         y: 400,
     },
     padding: {
-        x: 20,
+        x: 40,
         y: 20,
     },
     flow: {
@@ -21,4 +21,8 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     },
     axisColor: '#666666',
     axisWidth: 1,
+    font: {
+        name: 'sans-serif',
+        size: 12,
+    },
 };

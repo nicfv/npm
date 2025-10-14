@@ -46,7 +46,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoFlowLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoFlowLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoFlowLine);
-            const label = this.createText(flow + this.options.flow.unit, { flow: flow, head: 0 }, 'N');
+            const label = this.createText(flow + this.options.flow.unit, { flow: flow, head: 0 }, TextAnchor.N);
             // TODO
             this.g.text.appendChild(label);
         }
@@ -56,11 +56,11 @@ export class Pumpchart extends Chart<PumpchartOptions> {
                 { flow: 0, head: head },
                 { flow: this.options.flow.max, head: head },
             ], false);
-            isoHeadLine.setAttribute('stroke', '#666');
-            isoHeadLine.setAttribute('stroke-width', '1px');
+            isoHeadLine.setAttribute('stroke', this.options.axisColor);
+            isoHeadLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoHeadLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoHeadLine);
-            const label = this.createText(head + this.options.head.unit, { flow: 0, head: head }, 'E');
+            const label = this.createText(head + this.options.head.unit, { flow: 0, head: head }, TextAnchor.E);
             // TODO
             this.g.text.appendChild(label);
         }
@@ -71,9 +71,13 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @returns An (x,y) coordinate on the screen
      */
     private state2xy(state: State): Point {
+        const xMin: number = this.options.padding.x;
+        const xMax: number = this.options.size.x - this.options.padding.x
+        const yMin: number = this.options.padding.y;
+        const yMax: number = this.options.size.y - this.options.padding.y;
         return {
-            x: SMath.translate(state.flow, 0, this.options.flow.max, this.options.padding.x, this.options.size.x - this.options.padding.x),
-            y: SMath.translate(state.head, 0, this.options.head.max, this.options.size.y - this.options.padding.y, this.options.padding.y),
+            x: SMath.clamp(SMath.translate(state.flow, 0, this.options.flow.max, xMin, xMax), xMin, xMax),
+            y: SMath.clamp(SMath.translate(state.head, 0, this.options.head.max, yMax, yMin), yMin, yMax),
         };
     }
     /**
@@ -90,19 +94,40 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }).join(' ') + (closePath ? ' z' : ''));
         return path;
     }
-    private createText(content: string, state: State, anchor: 'N' | 'E'): SVGTextElement {
+    private createText(content: string, state: State, anchor: TextAnchor): SVGTextElement {
         const text: SVGTextElement = document.createElementNS(this.NS, 'text');
         const pt: Point = this.state2xy(state);
         text.textContent = content;
         text.setAttribute('x', pt.x + 'px');
         text.setAttribute('y', pt.y + 'px');
+        // Set styling parameters
+        text.setAttribute('font-family', this.options.font.name);
+        text.setAttribute('font-size', this.options.font.size + 'px');
+        text.setAttribute('fill', this.options.axisColor);
+        // Center text to point
+        text.setAttribute('dominant-baseline', 'middle');
+        text.setAttribute('text-anchor', 'middle');
+        // Align text to other point
+        const fontPadding: number = this.options.font.size / 2;
         switch (anchor) {
-            case ('E'): {
-                // TODO
+            case (TextAnchor.N): {
+                text.setAttribute('y', (pt.y + fontPadding) + 'px');
+                text.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
-            case ('N'): {
-                // TODO
+            case (TextAnchor.E): {
+                text.setAttribute('x', (pt.x - fontPadding) + 'px');
+                text.setAttribute('text-anchor', 'end');
+                break;
+            }
+            case (TextAnchor.S): {
+                text.setAttribute('y', (pt.y - fontPadding) + 'px');
+                text.setAttribute('dominant-baseline', 'alphabetic');
+                break;
+            }
+            case (TextAnchor.W): {
+                text.setAttribute('x', (pt.x + fontPadding) + 'px');
+                text.setAttribute('text-anchor', 'start');
                 break;
             }
             default: {
@@ -111,4 +136,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
         return text;
     }
+}
+
+const enum TextAnchor {
+    C, N, E, S, W
 }
