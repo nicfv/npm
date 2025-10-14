@@ -10,6 +10,14 @@ Dimensional is the ultimate tool for any chemist's, physicist's, or engineer's t
 
 All of these features are [extensible](#extensibility) and output into a LaTeX-friendly format.
 
+**Try it out now** with the official dimensional analysis [calculator](https://tools.nicfv.com/dimensional/), or the code [playground](https://tools.nicfv.com/dimensional-playground/)!
+
+## Background Info
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Zbep_sU-Y9A?si=lo6jqNu8Goq4ECdw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/FlYoDHrSC2g?si=BId2Ag0ZLhFtZhmT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Data Structure
 
 Physical **quantities** contain a numerical value, which is "scaled" by a **unit**. The unit in turn measures a **dimension** or compound of dimensions. The structure of data is outlined below. A quantity contains both a numerical value, and a unit. The unit then contains its respective [base dimensions](#base-dimensions).
@@ -127,6 +135,6 @@ $$({\textbf{L}})^{2} = {\textbf{L}}^{2}$$
 
 ## Examples
 
-Ready to begin? Start with a simple example to create a [BMI calculator](./Examples/Conversions.md) to learn how to install this package and convert units! Then, step through each example to learn more and more features of this package!
+Ready to begin? Start with a simple example to create a [BMI calculator](./Examples/Conversions.md) to learn how to install this package and convert units. Then, step through each example to learn more and more features of this package, or learn hands-on with the official [dimensional playground](https://tools.nicfv.com/dimensional-playground/)!
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
