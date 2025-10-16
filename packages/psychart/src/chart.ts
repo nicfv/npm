@@ -1,4 +1,5 @@
-import { ChartOptions } from './types';
+import { Color } from 'viridis';
+import { ChartOptions, Point, TextAnchor } from './types';
 
 /**
  * Represents a generic SVG chart to be inherited by another class.
@@ -77,6 +78,75 @@ export abstract class Chart<T extends ChartOptions> {
             parent.removeChild(parent.firstChild)
         }
     }
+    /**
+     * Generate a text element to append onto a parent element.
+     * @param content The contents of the text element
+     * @param location The location of the text element, in pixels
+     * @param color The fill color of the text
+     * @param anchor How the text is anchored relative to its location
+     * @returns A `<text>` element
+     */
+    protected createLabel(content: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
+        const text: SVGTextElement = document.createElementNS(this.NS, 'text');
+        const padding: number = this.options.font.size / 2;
+        text.textContent = content;
+        text.setAttribute('fill', color.toString());
+        text.setAttribute('font-family', this.options.font.name);
+        text.setAttribute('font-size', this.options.font.size + 'px');
+        /**
+         * Shorthand to set all alignment properties for the text element
+         */
+        function setProps(xPad: 1 | 0 | -1, yPad: 1 | 0 | -1, textAnchor: 'start' | 'middle' | 'end', dominantBaseline: 'hanging' | 'middle' | 'alphabetic'): void {
+            // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
+            text.setAttribute('x', (location.x + xPad * padding) + 'px');
+            text.setAttribute('y', (location.y + yPad * padding) + 'px');
+            text.setAttribute('text-anchor', textAnchor);
+            text.setAttribute('dominant-baseline', dominantBaseline);
+        }
+        switch (anchor) {
+            case (TextAnchor.C): {
+                setProps(0, 0, 'middle', 'middle');
+                break;
+            }
+            case (TextAnchor.NW): {
+                setProps(1, 1, 'start', 'hanging');
+                break;
+            }
+            case (TextAnchor.N): {
+                setProps(0, 1, 'middle', 'hanging');
+                break;
+            }
+            case (TextAnchor.NE): {
+                setProps(-1, 1, 'end', 'hanging');
+                break;
+            }
+            case (TextAnchor.E): {
+                setProps(-1, 0, 'end', 'middle');
+                break;
+            }
+            case (TextAnchor.SE): {
+                setProps(-1, -1, 'end', 'alphabetic');
+                break;
+            }
+            case (TextAnchor.S): {
+                setProps(0, -1, 'middle', 'alphabetic');
+                break;
+            }
+            case (TextAnchor.SW): {
+                setProps(1, -1, 'start', 'alphabetic');
+                break;
+            }
+            case (TextAnchor.W): {
+                setProps(1, 0, 'start', 'middle');
+                break;
+            }
+            default: {
+                throw new Error(`Text anchor ${anchor} is invalid!`);
+            }
+        }
+        return text;
+    }
+    // protected static getTooltip(content: string, location: Point, color: Color): SVGGElement { }
     /**
      * Return the base `<div>` element for this chart to append on the parent.
      * @returns The base element.
