@@ -4,6 +4,7 @@ import * as SMath from 'smath';
 import { PsychartOptions, Datum, Point, RegionName, DataOptions } from './types';
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
+import { TextAnchor } from '../types';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
@@ -345,7 +346,7 @@ export class Psychart extends Chart<PsychartOptions> {
     private createLabel(text: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
         const label = document.createElementNS(this.NS, 'text');
         label.setAttribute('fill', color.toString());
-        label.setAttribute('font-family', this.options.font.family);
+        label.setAttribute('font-family', this.options.font.name);
         label.setAttribute('font-size', this.options.font.size + 'px');
         // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
         switch (anchor) {
@@ -629,11 +630,4 @@ export class Psychart extends Chart<PsychartOptions> {
         Chart.clearChildren(this.legendDefs);
         Chart.clearChildren(this.legendg);
     }
-}
-
-/**
- * Represents where the origin is in relation to the text.
- */
-const enum TextAnchor {
-    NW, N, NE, E, SE, S, SW, W, C
 }
