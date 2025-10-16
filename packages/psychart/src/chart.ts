@@ -69,6 +69,15 @@ export abstract class Chart<T extends ChartOptions> {
         return required;
     }
     /**
+     * Remove all the children from a parent element.
+     * @param parent Any element to clear the children of
+     */
+    protected static clearChildren(parent: Node): void {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild)
+        }
+    }
+    /**
      * Return the base `<div>` element for this chart to append on the parent.
      * @returns The base element.
      */

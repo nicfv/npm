@@ -336,7 +336,7 @@ export class Psychart extends Chart<PsychartOptions> {
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor));
-            label.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
+            label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
         }
     }
     /**
@@ -511,14 +511,6 @@ export class Psychart extends Chart<PsychartOptions> {
         return (this.legendg.children.length + 2.5) * this.options.font.size * this.options.lineHeight;
     }
     /**
-     * Remove all the children from an element.
-     */
-    private clearChildren(element: Element): void {
-        while (element.firstChild) {
-            element.removeChild(element.firstChild);
-        }
-    }
-    /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
     public plot(state: Datum, config: Partial<DataOptions> = {}): void {
@@ -608,7 +600,7 @@ export class Psychart extends Chart<PsychartOptions> {
                 (currentState.s * 100).toFixed() + '% Saturation' : '');
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
-        point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
+        point.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
     }
     /**
      * Draw a shaded region on Psychart.
@@ -624,7 +616,7 @@ export class Psychart extends Chart<PsychartOptions> {
         // Optionally render a tooltip on mouse hover
         if (tooltip) {
             region.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color));
-            region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
+            region.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
         }
     }
     /**
@@ -632,10 +624,10 @@ export class Psychart extends Chart<PsychartOptions> {
      */
     public clearData(): void {
         this.series = {};
-        this.clearChildren(this.g.points);
-        this.clearChildren(this.g.trends);
-        this.clearChildren(this.legendDefs);
-        this.clearChildren(this.legendg);
+        Chart.clearChildren(this.g.points);
+        Chart.clearChildren(this.g.trends);
+        Chart.clearChildren(this.legendDefs);
+        Chart.clearChildren(this.legendg);
     }
 }
 
