@@ -57,17 +57,4 @@ export interface PumpchartOptions extends ChartOptions {
      * The axis thickness, in pixels
      */
     readonly axisWidth: number;
-    /**
-     * The font used in this Pumpchart
-     */
-    readonly font: {
-        /**
-         * The name of the font family
-         */
-        readonly name: string;
-        /**
-         * The size of the font, in pixels
-         */
-        readonly size: number;
-    };
 }
