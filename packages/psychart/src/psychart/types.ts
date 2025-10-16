@@ -59,19 +59,6 @@ export interface PsychartOptions extends ChartOptions {
      */
     readonly flipGradients: boolean;
     /**
-     * Details for the font used in Psychart.
-     */
-    readonly font: {
-        /**
-         * The font size, in pixels.
-         */
-        readonly size: number;
-        /**
-         * The name of the font.
-         */
-        readonly family: string;
-    };
-    /**
      * The chart resolution, in units.
      */
     readonly resolution: number;
