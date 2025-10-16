@@ -16,7 +16,7 @@ export const defaultPsychartOptions: PsychartOptions = {
     flipGradients: false,
     flipXY: false,
     font: {
-        family: 'sans-serif',
+        name: 'sans-serif',
         size: 12,
     },
     legend: {
