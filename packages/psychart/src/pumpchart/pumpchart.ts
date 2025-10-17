@@ -50,11 +50,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoFlowLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoFlowLine);
             // Show axis label
-            const pt: Point = this.state2xy({ flow: flow, head: 0 });
-            const color: Color = Color.from(this.options.axisColor);
-            const label: SVGTextElement = this.createLabel(flow + this.options.flow.unit, pt, color, TextAnchor.N);
-            // TODO
-            this.g.text.appendChild(label);
+            this.drawLabel(`${flow}${this.options.flow.unit}`, { flow: flow, head: 0 }, TextAnchor.N, `Flow [${this.options.flow.unit}]`);
         }
         for (let head = 0; head < this.options.head.max; head += this.options.head.step) {
             // Draw iso-head horizontal lines
@@ -67,13 +63,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoHeadLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoHeadLine);
             // Show axis label
-            const pt: Point = this.state2xy({ flow: 0, head: head });
-            const color: Color = Color.from(this.options.axisColor);
-            const label: SVGTextElement = this.createLabel(head + this.options.head.unit, pt, color, TextAnchor.E);
-            // TODO
-            label.addEventListener('mouseover', e => this.drawTooltip('Head [' + this.options.head.unit + ']', { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
-            label.addEventListener('mouseout', () => this.hideTooltip());
-            this.g.text.appendChild(label);
+            this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
         }
     }
     /**
@@ -104,6 +94,23 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             return xy.x + ',' + xy.y;
         }).join(' ') + (closePath ? ' z' : ''));
         return path;
+    }
+    /**
+     * Draw an axis label
+     * @param content Label text content
+     * @param location Label location (state)
+     * @param color Label font color
+     * @param anchor Label text anchor
+     * @param tooltip Optional tooltip text on mouse hover
+     */
+    private drawLabel(content: string, location: State, anchor: TextAnchor, tooltip?: string): void {
+        const axisColor: Color = Color.from(this.options.axisColor);
+        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor);
+        this.g.text.appendChild(label);
+        if (tooltip) {
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, axisColor, this.g.tips));
+            label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        }
     }
     private hideTooltip(): void {
         Chart.clearChildren(this.g.tips);
