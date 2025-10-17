@@ -336,50 +336,9 @@ export class Psychart extends Chart<PsychartOptions> {
             label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
         if (tooltip) {
-            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor));
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor, this.g.tooltips));
             label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
         }
-    }
-    /**
-     * Create a tooltip element.
-     */
-    private drawTooltip(text: string, location: Point, color: Color): void {
-        const tooltipBase = document.createElementNS(this.NS, 'g'),
-            labelElements: SVGTextElement[] = [],
-            padding = this.options.font.size * 0.80,
-            background = document.createElementNS(this.NS, 'rect');
-        // Generate an array of SVGTextElement containing each line of this tooltip
-        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.options.font.size }, color.getContrastingColor(), TextAnchor.NW)));
-        // Append the elements onto the window
-        tooltipBase.appendChild(background);
-        labelElements.forEach(element => tooltipBase.appendChild(element));
-        this.g.tooltips.appendChild(tooltipBase);
-        // Compute the maximum width of any line in this tooltip and height for the background
-        const maxWidth = labelElements.map(element => element.getBBox().width).reduce((a, b) => Math.max(a, b)) + padding,
-            maxHeight = labelElements.length * this.options.font.size + padding;
-        // Define styling properties for the tooltip background
-        background.setAttribute('stroke', color.getContrastingColor().toString());
-        background.setAttribute('fill', color.toString());
-        background.setAttribute('x', '0');
-        background.setAttribute('y', '0');
-        background.setAttribute('width', maxWidth + 'px');
-        background.setAttribute('height', maxHeight + 'px');
-        background.setAttribute('rx', (padding / 2) + 'px');
-        background.setAttribute('stroke-width', '1px');
-        // Adjust the position if out-of-bounds
-        let dx = 0,
-            dy = 0;
-        if (location.x + padding + maxWidth > this.options.size.x) {
-            dx = -(maxWidth + padding);
-        } else {
-            dx = padding;
-        }
-        if (location.y + padding + maxHeight > this.options.size.y) {
-            dy = -(maxHeight + padding);
-        } else {
-            dy = padding;
-        }
-        tooltipBase.setAttribute('transform', 'translate(' + (location.x + dx) + ',' + (location.y + dy) + ')');
     }
     /**
      * Add a line to the legend.
@@ -520,7 +479,7 @@ export class Psychart extends Chart<PsychartOptions> {
                 currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume\n' +
                 (currentState.s * 100).toFixed() + '% Saturation' : '');
         // Set the behavior when the user interacts with this point
-        point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
+        point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color, this.g.tooltips));
         point.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
     }
     /**
@@ -536,7 +495,7 @@ export class Psychart extends Chart<PsychartOptions> {
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (tooltip) {
-            region.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color));
+            region.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color, this.g.tooltips));
             region.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
         }
     }
