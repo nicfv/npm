@@ -71,6 +71,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             const color: Color = Color.from(this.options.axisColor);
             const label: SVGTextElement = this.createLabel(head + this.options.head.unit, pt, color, TextAnchor.E);
             // TODO
+            label.addEventListener('mouseover', e => this.drawTooltip('Head [' + this.options.head.unit + ']', { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
+            label.addEventListener('mouseout', () => this.hideTooltip());
             this.g.text.appendChild(label);
         }
     }
@@ -103,9 +105,6 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }).join(' ') + (closePath ? ' z' : ''));
         return path;
     }
-    // private showTooltip(content: string, location: Point, color: Color): void {
-    //     //
-    // }
     private hideTooltip(): void {
         Chart.clearChildren(this.g.tips);
     }
