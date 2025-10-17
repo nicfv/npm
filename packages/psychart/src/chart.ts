@@ -146,7 +146,45 @@ export abstract class Chart<T extends ChartOptions> {
         }
         return text;
     }
-    // protected static getTooltip(content: string, location: Point, color: Color): SVGGElement { }
+    protected drawTooltip(content: string, location: Point, color: Color, parent: SVGElement): void {
+        const base: SVGGElement = document.createElementNS(this.NS, 'g');
+        const back: SVGRectElement = document.createElementNS(this.NS, 'rect');
+        const lines: SVGTextElement[] = content.split('\n').map((line: string, i: number) => this.createLabel(line, { x: 0, y: i * this.options.font.size }, color.getContrastingColor(), TextAnchor.NW));
+        // Append elements to the base
+        base.appendChild(back);
+        base.append(...lines);
+        parent.append(base);
+        // Split the text by line and compute the size of the tooltip based on maximum line width
+        const padding: number = this.options.font.size * 0.4;
+        const width: number = Math.max(...lines.map(line => line.getBBox().width)) + padding * 2;
+        const height: number = lines.length * this.options.font.size + padding * 2;
+        // Compute the colors used in this tooltip
+        const background: string = color.toString();
+        const foreground: string = color.getContrastingColor().toString();
+        // Create and define styling properties for the tooltip background
+        back.setAttribute('stroke', foreground);
+        back.setAttribute('fill', background);
+        back.setAttribute('x', '0');
+        back.setAttribute('y', '0');
+        back.setAttribute('width', width + 'px');
+        back.setAttribute('height', height + 'px');
+        back.setAttribute('rx', padding + 'px');
+        back.setAttribute('stroke-width', '1px');
+        // Adjust the position if the background is out-of-bounds
+        let dx = 0,
+            dy = 0;
+        if (location.x + width + padding > this.options.size.x) {
+            dx = -(width + padding);
+        } else {
+            dx = padding;
+        }
+        if (location.y + height + padding > this.options.size.y) {
+            dy = -(height + padding);
+        } else {
+            dy = padding;
+        }
+        base.setAttribute('transform', 'translate(' + (location.x + dx) + ',' + (location.y + dy) + ')');
+    }
     /**
      * Return the base `<div>` element for this chart to append on the parent.
      * @returns The base element.
