@@ -2,6 +2,8 @@ import * as SMath from 'smath';
 import { Chart } from '../chart';
 import { defaultPumpchartOptions } from './defaults';
 import { Point, PumpchartOptions, State } from './types';
+import { Color } from 'viridis';
+import { TextAnchor } from '../types';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -15,6 +17,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         curves: document.createElementNS(this.NS, 'g'),
         data: document.createElementNS(this.NS, 'g'),
         text: document.createElementNS(this.NS, 'g'),
+        tips: document.createElementNS(this.NS, 'g'),
     };
     constructor(options: Partial<PumpchartOptions> = {}) {
         super(options, defaultPumpchartOptions);
@@ -46,7 +49,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoFlowLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoFlowLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoFlowLine);
-            const label = this.createText(flow + this.options.flow.unit, { flow: flow, head: 0 }, TextAnchor.N);
+            // Show axis label
+            const pt: Point = this.state2xy({ flow: flow, head: 0 });
+            const color: Color = Color.from(this.options.axisColor);
+            const label: SVGTextElement = this.createLabel(flow + this.options.flow.unit, pt, color, TextAnchor.N);
             // TODO
             this.g.text.appendChild(label);
         }
@@ -60,7 +66,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             isoHeadLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoHeadLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoHeadLine);
-            const label = this.createText(head + this.options.head.unit, { flow: 0, head: head }, TextAnchor.E);
+            // Show axis label
+            const pt: Point = this.state2xy({ flow: 0, head: head });
+            const color: Color = Color.from(this.options.axisColor);
+            const label: SVGTextElement = this.createLabel(head + this.options.head.unit, pt, color, TextAnchor.E);
             // TODO
             this.g.text.appendChild(label);
         }
@@ -94,50 +103,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }).join(' ') + (closePath ? ' z' : ''));
         return path;
     }
-    private createText(content: string, state: State, anchor: TextAnchor): SVGTextElement {
-        const text: SVGTextElement = document.createElementNS(this.NS, 'text');
-        const pt: Point = this.state2xy(state);
-        text.textContent = content;
-        text.setAttribute('x', pt.x + 'px');
-        text.setAttribute('y', pt.y + 'px');
-        // Set styling parameters
-        text.setAttribute('font-family', this.options.font.name);
-        text.setAttribute('font-size', this.options.font.size + 'px');
-        text.setAttribute('fill', this.options.axisColor);
-        // Center text to point
-        text.setAttribute('dominant-baseline', 'middle');
-        text.setAttribute('text-anchor', 'middle');
-        // Align text to other point
-        const fontPadding: number = this.options.font.size / 2;
-        switch (anchor) {
-            case (TextAnchor.N): {
-                text.setAttribute('y', (pt.y + fontPadding) + 'px');
-                text.setAttribute('dominant-baseline', 'hanging');
-                break;
-            }
-            case (TextAnchor.E): {
-                text.setAttribute('x', (pt.x - fontPadding) + 'px');
-                text.setAttribute('text-anchor', 'end');
-                break;
-            }
-            case (TextAnchor.S): {
-                text.setAttribute('y', (pt.y - fontPadding) + 'px');
-                text.setAttribute('dominant-baseline', 'alphabetic');
-                break;
-            }
-            case (TextAnchor.W): {
-                text.setAttribute('x', (pt.x + fontPadding) + 'px');
-                text.setAttribute('text-anchor', 'start');
-                break;
-            }
-            default: {
-                throw new Error('Invalid anchor ' + anchor);
-            }
-        }
-        return text;
+    // private showTooltip(content: string, location: Point, color: Color): void {
+    //     //
+    // }
+    private hideTooltip(): void {
+        Chart.clearChildren(this.g.tips);
     }
-}
-
-const enum TextAnchor {
-    C, N, E, S, W
 }
