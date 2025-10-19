@@ -135,6 +135,6 @@ $$({\textbf{L}})^{2} = {\textbf{L}}^{2}$$
 
 ## Examples
 
-Ready to begin? Start with a simple example to create a [BMI calculator](./Examples/Conversions.md) to learn how to install this package and convert units. Then, step through each example to learn more and more features of this package, or learn hands-on with the official [dimensional playground](https://tools.nicfv.com/dimensional-playground/)!
+Ready to begin? Start with a simple example to create a [BMI calculator](./Examples/Unit%20Conversions.md) to learn how to install this package and convert units. Then, step through each example to learn more and more features of this package, or learn hands-on with the official [dimensional playground](https://tools.nicfv.com/dimensional-playground/)!
 
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>

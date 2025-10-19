@@ -1,4 +1,4 @@
-> [**BACK**](./Analysis.md) | **3** | [**NEXT**](./Consolidation.md) | Up next: Learn how to determine default dimension and unit names.
+> [**BACK**](./Dimensional%20Analysis.md) | **3** | [**NEXT**](./Get%20Standard%20Names.md) | Up next: Learn how to determine default dimension and unit names.
 
 This example shows some of the quirks and miscellaneous things to know about `Dimensional` and the consequenses of each.
 
