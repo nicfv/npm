@@ -22,11 +22,11 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+      - name: Update NPM
+        run: npm i -g npm@latest
       - name: Publish packages
         run: .github/workflows/run publish
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
