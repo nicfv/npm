@@ -7,7 +7,7 @@ npm -v || exit 1
 # Run tests on ci workflow
 npm start || exit 1
 
-# Check for and set npm token if publish flag is set
+# Attempt to publish each package if flag is set
 if [[ "${1}" == 'publish' ]] ; then
     # Check each directory and publish each project
     cd packages || exit 1
