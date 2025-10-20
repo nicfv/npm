@@ -2,6 +2,19 @@ import { Color } from './Color';
 import * as T6 from 't6';
 import { Gradient } from './Gradient';
 import { Palette, PaletteName } from './Palette';
+import { HSL, RGB } from './types';
+import { hsl2rgb, rgb2hsl } from './lib';
+
+
+const nicrgb: RGB = { red: 50, green: 190, blue: 10 };
+const nichsl: HSL = rgb2hsl(nicrgb);
+
+console.log(nicrgb, nichsl, hsl2rgb(nichsl));
+
+// const nic: Color = new Color(50, 190, 10);
+// console.log(nic.toString('rgb'));
+// console.log(nic.toString('hsl'));
+// console.log(nic.toString('hex'));
 
 // Test color functionality
 const red_RGB: Color = new Color(255, 16, 0),

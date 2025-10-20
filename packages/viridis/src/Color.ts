@@ -1,25 +1,42 @@
 import * as SMath from 'smath';
+import { HSL, RGB } from './types';
+import { hsl2rgb, rgb2hsl } from './lib';
 
 /**
  * Structure for storing colors based on RGBa values.
  */
 export class Color {
-    /**
-     * Define a new color from RGBa values.
-     * @param red Red channel intensity [0, 255]
-     * @param green Green channel intensity [0, 255]
-     * @param blue Blue channel intensity [0, 255]
-     * @param alpha Alpha channel transparency [0, 100]
-     * @example
-     * ```js
-     * const red = new Color(255, 0, 0);
-     * ```
-     */
-    constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha = 100) {
-        this.red = SMath.clamp(red, 0, 255) | 0;
-        this.green = SMath.clamp(green, 0, 255) | 0;
-        this.blue = SMath.clamp(blue, 0, 255) | 0;
-        this.alpha = SMath.clamp(alpha, 0, 100) | 0;
+    public readonly rgb: RGB;
+    public readonly hsl: HSL;
+    constructor(definition: RGB | HSL | string) {
+        if (typeof definition === 'string') {
+            const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(definition);
+            if (regex === null) {
+                throw new Error('Invalid hexadecimal string: ' + definition);
+            }
+            this.rgb = {
+                red: parseInt(regex[1], 16),
+                green: parseInt(regex[2], 16),
+                blue: parseInt(regex[3], 16),
+                alpha: SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100),
+            };
+            this.hsl = rgb2hsl(this.rgb);
+        } else if ('red' in definition) {
+            this.rgb = {
+                red: SMath.clamp(definition.red, 0, 255) | 0,
+                green: SMath.clamp(definition.green, 0, 255) | 0,
+                blue: SMath.clamp(definition.blue, 0, 255) | 0,
+                alpha: SMath.clamp(definition.alpha ?? 100, 0, 100) | 0,
+            };
+            this.hsl = rgb2hsl(this.rgb);
+        } else {
+            this.hsl = {
+                hue: (definition.hue % 360) | 0,
+                saturation: SMath.clamp(definition.saturation, 0, 100) | 0,
+                lightness: SMath.clamp(definition.lightness, 0, 100) | 0,
+            };
+            this.rgb = hsl2rgb(this.hsl);
+        }
     }
     /**
      * Return the most contrasting color for
@@ -46,13 +63,16 @@ export class Color {
      * const css = red.toString(); // rgba(255,0,0,100%)
      * ```
      */
-    public toString(type: 'rgb' | 'rgba' | 'hex' | 'hex' | 'hex-transparency' = 'rgba'): string {
+    public toString(type: 'rgb' | 'rgba' | 'hsl' | 'hex' | 'hex-transparency' = 'rgba'): string {
         switch (type) {
             case 'rgb': {
                 return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
             }
             case 'rgba': {
                 return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
+            }
+            case 'hsl': {
+                return 'hsl(' + this.hue + 'deg,' + this.saturation + '%,' + this.lightness + '%)';
             }
             case 'hex': {
                 return '#' + SMath.toHex(this.red, 2) + SMath.toHex(this.green, 2) + SMath.toHex(this.blue, 2);
@@ -65,25 +85,5 @@ export class Color {
                 throw new Error('Invalid color type: ' + type);
             }
         }
-    }
-    /**
-     * Create a new color given a hexadecimal string.
-     * Will throw an error if the string is invalid.
-     * - Expects 2 bits [0-F] for red, green, blue channels (6 chars total)
-     * - String can optionally start with the character '#'
-     * - Alpha channel can be included for an additional 2 bits (8 chars total)
-     * @param hex Hexadecimal string
-     * @returns A new color defined by the hexadecimal string
-     * @example
-     * ```js
-     * const red = Color.from('#ff0000');
-     * ```
-     */
-    public static from(hex: string): Color {
-        const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
-        if (regex === null) {
-            throw new Error('Invalid hexadecimal string: ' + hex);
-        }
-        return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
     }
 }
