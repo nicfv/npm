@@ -46,8 +46,7 @@ export class Color {
      * @returns Black or white
      * @example
      * ```js
-     * const contrast = red.getContrastingColor();
-     * // Returns the color white (255, 255, 255)
+     * const contrast = red.getContrastingColor(); // #FFFFFF
      * ```
      */
     public getContrastingColor(): Color {
@@ -59,10 +58,11 @@ export class Color {
     }
     /**
      * Return a string representation of this color.
+     * @param type The color encoding to use
      * @returns A valid CSS color code
      * @example
      * ```js
-     * const css = red.toString(); // rgba(255,0,0,100%)
+     * const css = red.toString(); // #FF0000
      * ```
      */
     public toString(type: 'rgb' | 'hsl' | 'hex' = 'hex'): string {
@@ -104,9 +104,9 @@ export class Color {
     /**
      * Create a new color given a hexadecimal string.
      * Will throw an error if the string is invalid.
-     * - Expects 2 bits [0-F] for red, green, blue channels (6 chars total)
+     * - Expects 2 bits [0-F] for red, green, blue channels each
      * - String can optionally start with the character '#'
-     * - Alpha channel can be included for an additional 2 bits (8 chars total)
+     * - Alpha channel can be included in the final 2 bits
      * @param hex Hexadecimal string
      * @returns A new color defined by the hexadecimal string
      * @example
@@ -121,8 +121,36 @@ export class Color {
         }
         return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
     }
-    public static hsl(hue: number, saturation: number, lightness: number): Color {
+    /**
+     * Define a new color from RGBa values.
+     * @param red Red channel intensity [0, 255]
+     * @param green Green channel intensity [0, 255]
+     * @param blue Blue channel intensity [0, 255]
+     * @param alpha Alpha channel transparency [0, 100]
+     * @returns A new color defined by color channel intensity values
+     * @example
+     * ```js
+     * const red = Color.rgb(255, 0, 0); // #FF0000
+     * ```
+     * @alias constructor
+     */
+    public static rgb(red: number, green: number, blue: number, alpha = 100): Color {
+        return new Color(red, green, blue, alpha);
+    }
+    /**
+     * 
+     * @param hue The color hue, in degrees [0, 360)
+     * @param saturation The saturation percent [0, 100]
+     * @param lightness The lightness percent [0, 100]
+     * @param alpha Alpha channel intensity [0, 100]
+     * @returns A new color defined by hue, sautration, and lightness
+     * @example
+     * ```js
+     * const red = Color.hsl(0, 100, 50); // #FF0000
+     * ```
+     */
+    public static hsl(hue: number, saturation: number, lightness: number, alpha = 100): Color {
         const rgb: RGB = hsl2rgb({ hue: hue, saturation: saturation, lightness: lightness });
-        return new Color(rgb.red, rgb.green, rgb.blue);
+        return new Color(rgb.red, rgb.green, rgb.blue, alpha);
     }
 }
