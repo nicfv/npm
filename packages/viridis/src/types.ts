@@ -1,5 +1,5 @@
 /**
- * Red-Green-Blue-ALpha Color Interface
+ * Red-Green-Blue Color Interface
  */
 export interface RGB {
     /**
@@ -14,10 +14,6 @@ export interface RGB {
      * Blue channel intensity [0-255]
      */
     readonly blue: number;
-    /**
-     * Alpha channel (transparency) [0-100]
-     */
-    readonly alpha?: number;
 }
 
 /**
