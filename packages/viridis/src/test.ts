@@ -28,6 +28,8 @@ const red_RGB: Color = new Color(255, 16, 0),
     red_hex4: Color = Color.hex('#FF1000'),
     red_hex5: Color = Color.hex('#FF1000FF'),
     red_hex6: Color = Color.hex('#FF100080'),
+    red_rgb7: Color = Color.rgb(255, 16, 0, 50),
+    red_hsl8: Color = Color.hsl(4, 100, 50, 50),
     red_clamp: Color = new Color(300, 16, -1, 1e3);
 T6.is(red_hex1.toString(), red_RGB.toString());
 T6.is(red_hex2.toString(), red_RGB.toString());
@@ -37,6 +39,8 @@ T6.is(red_RGB.getContrastingColor().toString(), '#FFFFFF');
 T6.is(red_clamp.toString(), red_RGB.toString());
 T6.eq(red_hex5.alpha, 100);
 T6.eq(red_hex6.alpha, 50);
+T6.is(red_hex6.toString(), red_rgb7.toString());
+T6.is(red_hex6.toString(), red_hsl8.toString());
 
 // Make sure all the string representations work
 T6.is(red_hex6.toString('rgb'), 'rgb(255,16,0,50%)');
