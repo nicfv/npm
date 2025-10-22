@@ -14,7 +14,7 @@ export function rgb2hsl(rgb: RGB): HSL {
     let H = 0;
     if (C !== 0) {
         if (M === r) {
-            H = ((g - b) / C) % 6;
+            H = (g - b) / C + 6;
         } else if (M === g) {
             H = (b - r) / C + 2;
         } else if (M === b) {
@@ -26,7 +26,7 @@ export function rgb2hsl(rgb: RGB): HSL {
     if (L > 0 && L < 1) {
         S = C / (1 - Math.abs(2 * L - 1));
     }
-    return { hue: H * 60, saturation: S * 100, lightness: L * 100 };
+    return { hue: (H % 6) * 60, saturation: S * 100, lightness: L * 100 };
 }
 
 /**
