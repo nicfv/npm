@@ -1,9 +1,23 @@
 import * as SMath from 'smath';
+import { HSL, RGB } from './types';
+import { hsl2rgb, rgb2hsl } from './lib';
 
 /**
  * Structure for storing colors based on RGBa values.
  */
 export class Color {
+    /**
+     * Color hue, in degrees [0, 360)
+     */
+    public readonly hue: number;
+    /**
+     * Saturation percent [0, 100]
+     */
+    public readonly saturation: number;
+    /**
+     * Lightness percent [0, 100]
+     */
+    public readonly lightness: number;
     /**
      * Define a new color from RGBa values.
      * @param red Red channel intensity [0, 255]
@@ -20,6 +34,11 @@ export class Color {
         this.green = SMath.clamp(green, 0, 255) | 0;
         this.blue = SMath.clamp(blue, 0, 255) | 0;
         this.alpha = SMath.clamp(alpha, 0, 100) | 0;
+        // Compute HSL color values
+        const hsl: HSL = rgb2hsl({ red: this.red, green: this.green, blue: this.blue });
+        this.hue = (hsl.hue % 360) | 0;
+        this.saturation = SMath.clamp(hsl.saturation, 0, 100) | 0;
+        this.lightness = SMath.clamp(hsl.lightness, 0, 100) | 0;
     }
     /**
      * Return the most contrasting color for
@@ -32,7 +51,7 @@ export class Color {
      * ```
      */
     public getContrastingColor(): Color {
-        if (this.red + this.green * 1.5 + this.blue * 0.5 > 255 * 1.5) {
+        if (this.lightness > 50) {
             return new Color(0, 0, 0);
         } else {
             return new Color(255, 255, 255);
@@ -46,25 +65,41 @@ export class Color {
      * const css = red.toString(); // rgba(255,0,0,100%)
      * ```
      */
-    public toString(type: 'rgb' | 'rgba' | 'hex' | 'hex' | 'hex-transparency' = 'rgba'): string {
+    public toString(type: 'rgb' | 'hsl' | 'hex' = 'hex'): string {
         switch (type) {
-            case 'rgb': {
-                return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+            case ('rgb'): {
+                if (this.alpha < 100) {
+                    return `rgb(${this.red},${this.green},${this.blue},${this.alpha}%)`;
+                } else {
+                    return `rgb(${this.red},${this.green},${this.blue})`;
+                }
             }
-            case 'rgba': {
-                return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
+            case ('hsl'): {
+                if (this.alpha < 100) {
+                    return `hsl(${this.hue}deg,${this.saturation}%,${this.lightness}%,${this.alpha}%)`;
+                } else {
+                    return `hsl(${this.hue}deg,${this.saturation}%,${this.lightness}%)`;
+                }
             }
-            case 'hex': {
-                return '#' + SMath.toHex(this.red, 2) + SMath.toHex(this.green, 2) + SMath.toHex(this.blue, 2);
-            }
-            case 'hex-transparency': {
-                const alpha255: number = SMath.clamp(SMath.round2(SMath.translate(this.alpha, 0, 100, 0, 255), 1), 0, 255);
-                return this.toString('hex') + SMath.toHex(alpha255, 2);
+            case ('hex'): {
+                const noTransparency = `#${SMath.toHex(this.red, 2)}${SMath.toHex(this.green, 2)}${SMath.toHex(this.blue, 2)}`;
+                if (this.alpha < 100) {
+                    const alpha255: number = SMath.clamp(SMath.translate(this.alpha, 0, 100, 0, 255) | 0, 0, 255);
+                    return noTransparency + SMath.toHex(alpha255, 2);
+                } else {
+                    return noTransparency;
+                }
             }
             default: {
                 throw new Error('Invalid color type: ' + type);
             }
         }
+    }
+    /**
+     * @deprecated Use `Color.hex('#code')` instead
+     */
+    public static from(hex: string): Color {
+        return Color.hex(hex);
     }
     /**
      * Create a new color given a hexadecimal string.
@@ -76,14 +111,18 @@ export class Color {
      * @returns A new color defined by the hexadecimal string
      * @example
      * ```js
-     * const red = Color.from('#ff0000');
+     * const red = Color.hex('#ff0000');
      * ```
      */
-    public static from(hex: string): Color {
+    public static hex(hex: string): Color {
         const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
         if (regex === null) {
             throw new Error('Invalid hexadecimal string: ' + hex);
         }
         return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
+    }
+    public static hsl(hue: number, saturation: number, lightness: number): Color {
+        const rgb: RGB = hsl2rgb({ hue: hue, saturation: saturation, lightness: lightness });
+        return new Color(rgb.red, rgb.green, rgb.blue);
     }
 }
