@@ -1,6 +1,9 @@
 import * as SMath from 'smath';
 import { HSL, RGB } from './types';
 
+/**
+ * Convert RGB to HSL
+ */
 export function rgb2hsl(rgb: RGB): HSL {
     const r: number = SMath.clamp(SMath.normalize(rgb.red, 0, 255), 0, 1);
     const g: number = SMath.clamp(SMath.normalize(rgb.green, 0, 255), 0, 1);
@@ -26,6 +29,9 @@ export function rgb2hsl(rgb: RGB): HSL {
     return { hue: H * 60, saturation: S * 100, lightness: L * 100 };
 }
 
+/**
+ * Convert HSL to RGB
+ */
 export function hsl2rgb(hsl: HSL): RGB {
     const H: number = hsl.hue % 360;
     const S: number = SMath.clamp(SMath.normalize(hsl.saturation, 0, 100), 0, 1);
