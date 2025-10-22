@@ -122,7 +122,7 @@ export class Color {
         return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
     }
     /**
-     * Define a new color from RGBa values.
+     * Define a new color from RGBa values. Alias for `new Color(...)`
      * @param red Red channel intensity [0, 255]
      * @param green Green channel intensity [0, 255]
      * @param blue Blue channel intensity [0, 255]
@@ -132,7 +132,6 @@ export class Color {
      * ```js
      * const red = Color.rgb(255, 0, 0); // #FF0000
      * ```
-     * @alias constructor
      */
     public static rgb(red: number, green: number, blue: number, alpha = 100): Color {
         return new Color(red, green, blue, alpha);
