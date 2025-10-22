@@ -54,10 +54,10 @@ export class Gradient {
             A = this.colors[n], // bucket min color
             B = this.colors[n + 1]; //bucket max color
         return new Color(
-            SMath.translate(x, a, b, A.rgb.red, B.red),
-            SMath.translate(x, a, b, A.rgb.green, B.green),
-            SMath.translate(x, a, b, A.rgb.blue, B.blue),
-            SMath.translate(x, a, b, A.rgb.alpha, B.alpha));
+            SMath.translate(x, a, b, A.red, B.red),
+            SMath.translate(x, a, b, A.green, B.green),
+            SMath.translate(x, a, b, A.blue, B.blue),
+            SMath.translate(x, a, b, A.alpha, B.alpha));
     }
     /**
      * Return a string representation of this gradient.
