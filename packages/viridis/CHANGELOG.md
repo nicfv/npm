@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+- Add `hue`, `saturation`, and `lightness` properties for `Color` class
+- Allow color initialization by HSL values using new `Color.hsl(...)` function
+- `Color.from(hex)` renamed to `Color.hex(hex)` for clarity (`from` is deprecated)
+- All color initializations allow transparency
+- `Color.toString()` now returns the hexadecimal code by default, but can be reconfigured
+    - Will automatically return the transparency if color is not opaque
+- Create new `Color.rgb(...)` function, which is an alias of `new Color(...)`
+
 ## 1.2.1
 
 - Follow `eslint` styling rules.

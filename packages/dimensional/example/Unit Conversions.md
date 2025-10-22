@@ -1,4 +1,4 @@
-> [**BACK**](../README.md) | **1** | [**NEXT**](./Analysis.md) | Up next: Learn how to use `Dimensional` for dimensional analysis!
+> [**BACK**](../README.md) | **1** | [**NEXT**](./Dimensional%20Analysis.md) | Up next: Learn how to use `Dimensional` for dimensional analysis!
 
 Let's start with a simple example, to calculate BMI where all the inputs are US customary units. BMI is your mass in kilograms divided by your height in meters, squared.
 
