@@ -104,7 +104,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param tooltip Optional tooltip text on mouse hover
      */
     private drawLabel(content: string, location: State, anchor: TextAnchor, tooltip?: string): void {
-        const axisColor: Color = Color.from(this.options.axisColor);
+        const axisColor: Color = Color.hex(this.options.axisColor);
         const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor);
         this.g.text.appendChild(label);
         if (tooltip) {
