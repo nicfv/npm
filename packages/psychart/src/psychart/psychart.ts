@@ -104,7 +104,7 @@ export class Psychart extends Chart<PsychartOptions> {
             this.legend.setAttribute('width', this.options.size.x + 'px');
             this.legend.setAttribute('height', this.getLegendHeight() + 'px');
             this.legend.appendChild(this.legendDefs);
-            this.legend.appendChild(this.createLabel(this.options.legend.title, { x: 0, y: 0 }, Color.from(this.options.colors.font), TextAnchor.NW));
+            this.legend.appendChild(this.createLabel(this.options.legend.title, { x: 0, y: 0 }, Color.hex(this.options.colors.font), TextAnchor.NW));
             this.legend.appendChild(this.legendg);
             // Attach elements to the base element.
             const legendContainer: HTMLDivElement = document.createElement('div');
@@ -283,7 +283,7 @@ export class Psychart extends Chart<PsychartOptions> {
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
-        this.g.axes.appendChild(this.createLine(data, Color.from(this.options.colors.axis), 1.0));
+        this.g.axes.appendChild(this.createLine(data, Color.hex(this.options.colors.axis), 1.0));
     }
     /**
      * Create a line to append onto a parent element.
@@ -332,7 +332,7 @@ export class Psychart extends Chart<PsychartOptions> {
                 }
             }
         }
-        const fontColor: Color = Color.from(this.options.colors.font),
+        const fontColor: Color = Color.hex(this.options.colors.font),
             label = this.createLabel(text, location.toXY(), fontColor, anchor);
         this.g.text.appendChild(label);
         if (tooltip) {
@@ -363,7 +363,7 @@ export class Psychart extends Chart<PsychartOptions> {
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-        const fontColor: Color = Color.from(this.options.colors.font),
+        const fontColor: Color = Color.hex(this.options.colors.font),
             legendText: SVGTextElement = this.createLabel(seriesName, { x: this.options.font.size * 1.5, y: this.getLegendHeight() - this.options.font.size }, fontColor, TextAnchor.W);
         g.addEventListener('click', () => {
             this.series[seriesName].hidden = !this.series[seriesName].hidden;
@@ -413,7 +413,7 @@ export class Psychart extends Chart<PsychartOptions> {
         const tMin: number = (this.options.flipGradients) ? options.time.end : options.time.start,
             tMax: number = (this.options.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
-            color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.from(options.color);
+            color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.hex(options.color);
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(this.NS, 'path');
         point.setAttribute('fill', 'none');
