@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+
+- Re-generate builtin color palettes in main README file
+- Update color representation example
+
 ## 1.3.0
 
 - Add `hue`, `saturation`, and `lightness` properties for `Color` class
