@@ -7,24 +7,18 @@ npm -v || exit 1
 # Run tests on ci workflow
 npm start || exit 1
 
-# Check for and set npm token if publish flag is set
+# Attempt to publish each package if flag is set
 if [[ "${1}" == 'publish' ]] ; then
-    if [[ -z "${NPM_TOKEN}" ]] ; then
-        echo 'Missing environment variable NPM_TOKEN'
-        exit 1
-    else
-        npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}" || exit 1
-        # Check each directory and publish each project
-        cd packages || exit 1
-        for dir in */ ; do
-            # Skip directories that are not an npm project
-            npm --silent v "${dir}" || { echo "${dir} is not an NPM project" && continue ; }
-            # Set working directory to package directory
-            cd "${dir}" || exit 1
-            # Attempt to publish the package, or show a message
-            npm publish --provenance || echo "Cannot publish ${dir}"
-            # Reset the working directory
-            cd ..
-        done
-    fi
+    # Check each directory and publish each project
+    cd packages || exit 1
+    for dir in */ ; do
+        # Skip directories that are not an npm project
+        npm --silent v "${dir}" || { echo "${dir} is not an NPM project" && continue ; }
+        # Set working directory to package directory
+        cd "${dir}" || exit 1
+        # Attempt to publish the package, or show a message
+        npm publish || echo "Cannot publish ${dir}"
+        # Reset the working directory
+        cd ..
+    done
 fi

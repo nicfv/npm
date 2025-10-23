@@ -1,9 +1,23 @@
 import * as SMath from 'smath';
+import { HSL, RGB } from './types';
+import { hsl2rgb, rgb2hsl } from './lib';
 
 /**
  * Structure for storing colors based on RGBa values.
  */
 export class Color {
+    /**
+     * Color hue, in degrees [0, 360)
+     */
+    public readonly hue: number;
+    /**
+     * Saturation percent [0, 100]
+     */
+    public readonly saturation: number;
+    /**
+     * Lightness percent [0, 100]
+     */
+    public readonly lightness: number;
     /**
      * Define a new color from RGBa values.
      * @param red Red channel intensity [0, 255]
@@ -20,6 +34,11 @@ export class Color {
         this.green = SMath.clamp(green, 0, 255) | 0;
         this.blue = SMath.clamp(blue, 0, 255) | 0;
         this.alpha = SMath.clamp(alpha, 0, 100) | 0;
+        // Compute HSL color values
+        const hsl: HSL = rgb2hsl({ red: this.red, green: this.green, blue: this.blue });
+        this.hue = (hsl.hue % 360) | 0;
+        this.saturation = SMath.clamp(hsl.saturation, 0, 100) | 0;
+        this.lightness = SMath.clamp(hsl.lightness, 0, 100) | 0;
     }
     /**
      * Return the most contrasting color for
@@ -27,12 +46,11 @@ export class Color {
      * @returns Black or white
      * @example
      * ```js
-     * const contrast = red.getContrastingColor();
-     * // Returns the color white (255, 255, 255)
+     * const contrast = red.getContrastingColor(); // #FFFFFF
      * ```
      */
     public getContrastingColor(): Color {
-        if (this.red + this.green * 1.5 + this.blue * 0.5 > 255 * 1.5) {
+        if (this.lightness > 50) {
             return new Color(0, 0, 0);
         } else {
             return new Color(255, 255, 255);
@@ -40,26 +58,37 @@ export class Color {
     }
     /**
      * Return a string representation of this color.
+     * @param type The color encoding to use
      * @returns A valid CSS color code
      * @example
      * ```js
-     * const css = red.toString(); // rgba(255,0,0,100%)
+     * const css = red.toString(); // #FF0000
      * ```
      */
-    public toString(type: 'rgb' | 'rgba' | 'hex' | 'hex' | 'hex-transparency' = 'rgba'): string {
+    public toString(type: 'rgb' | 'hsl' | 'hex' = 'hex'): string {
         switch (type) {
-            case 'rgb': {
-                return 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+            case ('rgb'): {
+                if (this.alpha < 100) {
+                    return `rgb(${this.red},${this.green},${this.blue},${this.alpha}%)`;
+                } else {
+                    return `rgb(${this.red},${this.green},${this.blue})`;
+                }
             }
-            case 'rgba': {
-                return 'rgba(' + this.red + ',' + this.green + ',' + this.blue + ',' + this.alpha + '%)';
+            case ('hsl'): {
+                if (this.alpha < 100) {
+                    return `hsl(${this.hue}deg,${this.saturation}%,${this.lightness}%,${this.alpha}%)`;
+                } else {
+                    return `hsl(${this.hue}deg,${this.saturation}%,${this.lightness}%)`;
+                }
             }
-            case 'hex': {
-                return '#' + SMath.toHex(this.red, 2) + SMath.toHex(this.green, 2) + SMath.toHex(this.blue, 2);
-            }
-            case 'hex-transparency': {
-                const alpha255: number = SMath.clamp(SMath.round2(SMath.translate(this.alpha, 0, 100, 0, 255), 1), 0, 255);
-                return this.toString('hex') + SMath.toHex(alpha255, 2);
+            case ('hex'): {
+                const noTransparency = `#${SMath.toHex(this.red, 2)}${SMath.toHex(this.green, 2)}${SMath.toHex(this.blue, 2)}`;
+                if (this.alpha < 100) {
+                    const alpha255: number = SMath.clamp(SMath.translate(this.alpha, 0, 100, 0, 255) | 0, 0, 255);
+                    return noTransparency + SMath.toHex(alpha255, 2);
+                } else {
+                    return noTransparency;
+                }
             }
             default: {
                 throw new Error('Invalid color type: ' + type);
@@ -67,23 +96,60 @@ export class Color {
         }
     }
     /**
+     * @deprecated Use `Color.hex('#code')` instead
+     */
+    public static from(hex: string): Color {
+        return Color.hex(hex);
+    }
+    /**
      * Create a new color given a hexadecimal string.
      * Will throw an error if the string is invalid.
-     * - Expects 2 bits [0-F] for red, green, blue channels (6 chars total)
+     * - Expects 2 bits [0-F] for red, green, blue channels each
      * - String can optionally start with the character '#'
-     * - Alpha channel can be included for an additional 2 bits (8 chars total)
+     * - Alpha channel can be included in the final 2 bits
      * @param hex Hexadecimal string
      * @returns A new color defined by the hexadecimal string
      * @example
      * ```js
-     * const red = Color.from('#ff0000');
+     * const red = Color.hex('#ff0000');
      * ```
      */
-    public static from(hex: string): Color {
+    public static hex(hex: string): Color {
         const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
         if (regex === null) {
             throw new Error('Invalid hexadecimal string: ' + hex);
         }
         return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
+    }
+    /**
+     * Define a new color from RGBa values. Alias for `new Color(...)`
+     * @param red Red channel intensity [0, 255]
+     * @param green Green channel intensity [0, 255]
+     * @param blue Blue channel intensity [0, 255]
+     * @param alpha Alpha channel transparency [0, 100]
+     * @returns A new color defined by color channel intensity values
+     * @example
+     * ```js
+     * const red = Color.rgb(255, 0, 0); // #FF0000
+     * ```
+     */
+    public static rgb(red: number, green: number, blue: number, alpha = 100): Color {
+        return new Color(red, green, blue, alpha);
+    }
+    /**
+     * 
+     * @param hue The color hue, in degrees [0, 360)
+     * @param saturation The saturation percent [0, 100]
+     * @param lightness The lightness percent [0, 100]
+     * @param alpha Alpha channel intensity [0, 100]
+     * @returns A new color defined by hue, sautration, and lightness
+     * @example
+     * ```js
+     * const red = Color.hsl(0, 100, 50); // #FF0000
+     * ```
+     */
+    public static hsl(hue: number, saturation: number, lightness: number, alpha = 100): Color {
+        const rgb: RGB = hsl2rgb({ hue: hue, saturation: saturation, lightness: lightness });
+        return new Color(rgb.red, rgb.green, rgb.blue, alpha);
     }
 }
