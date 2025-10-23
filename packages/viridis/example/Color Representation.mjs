@@ -4,9 +4,9 @@ import { Color } from 'viridis';
 // white, depending on which one has better contrast.
 const background = new Color(255, 0, 0),
     foreground = background.getContrastingColor(),
-    border = Color.from('#00beef');
+    border = Color.hex('#00beef');
 
 // Automatically calls the toString() member function
 console.log('Background: ' + background);
 console.log('Foreground: ' + foreground);
-console.log('Border color: ' + border);
+console.log('Border color: ' + border.toString('hsl'));
