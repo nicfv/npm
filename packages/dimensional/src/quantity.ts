@@ -73,7 +73,7 @@ export class Quantity {
      * @returns LaTeX code for this quantity
      */
     public toString(): string {
-        const magnitude: number = Math.floor(Math.log10(this.quantity));
+        const magnitude: number = Math.floor(Math.log10(Math.abs(this.quantity)));
         // Regular notation
         let quantityString: string = SMath.round2(this.quantity, 10 ** -config.decimalsShown).toString();
         // Scientific notation
