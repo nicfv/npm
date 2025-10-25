@@ -1,7 +1,7 @@
 {
   "name": "graphico",
   "version": "0.0.1",
-  "description": "Canvas 2D rendering toolkit for games or visual projects",
+  "description": "Canvas 2D rendering toolkit for games and visual projects",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
