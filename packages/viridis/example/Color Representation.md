@@ -1,1 +1,1 @@
-This example demonstrates using the `Color` class to create some basic colors. This simulates setting HTML element properties.
+This example demonstrates using the `Color` class to create some basic colors. You can use the `toString()` output to setting HTML element properties, for example. By default, it will return a hexadecimal color code, but if specified, it can return the RGB or HSL color codes.
