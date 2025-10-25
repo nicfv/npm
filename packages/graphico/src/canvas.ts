@@ -1,9 +1,25 @@
+/**
+ * Represents a canvas for drawing and animating
+ */
 export class Canvas {
+    /**
+     * Default canvas options
+     */
     private static readonly defaults: Options = {
         parent: document.body,
     };
+    /**
+     * Configuration options for this canvas
+     */
     private readonly config: Options;
+    /**
+     * Can be used to render 2D graphics onto the canvas
+     */
     public readonly graphics: CanvasRenderingContext2D;
+    /**
+     * Create a new canvas with the provided options
+     * @param options Configuration options
+     */
     constructor(options: Partial<Options>) {
         this.config = Canvas.setDefaults(options, Canvas.defaults);
         const canvas: HTMLCanvasElement = document.createElement('canvas');
