@@ -5,7 +5,4 @@
  * ![NPM Downloads](https://img.shields.io/npm/d18m/graphico)
  * ![NPM Last Update](https://img.shields.io/npm/last-update/graphico)
  */
-/**
- * Package Name
- */
-export const PKG_NAME = 'graphico';
+export * from './canvas';
