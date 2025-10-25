@@ -1,0 +1,42 @@
+{
+  "name": "graphico",
+  "version": "0.0.1",
+  "description": "Canvas 2D rendering toolkit for games and visual projects",
+  "homepage": "https://npm.nicfv.com/",
+  "bin": "",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "start": "../../.github/workflows/scripts"
+  },
+  "keywords": [
+    "graphic",
+    "graphics",
+    "canvas",
+    "game",
+    "template",
+    "draw",
+    "drawing",
+    "art",
+    "render",
+    "2D"
+  ],
+  "author": {
+    "name": "Nicolas Ventura",
+    "email": "npm@nicfv.com",
+    "url": "https://nicfv.com/"
+  },
+  "funding": {
+    "type": "paypal",
+    "url": "https://paypal.me/nicfv"
+  },
+  "repository": "github:nicfv/npm",
+  "license": "MIT",
+  "devDependencies": {
+    "t6": "1.2.1"
+  }
+}
