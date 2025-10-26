@@ -15,6 +15,11 @@ export class Canvas {
         border: 'transparent',
         showMouse: true,
         framesPerSecond: 60,
+        // onInput() { },
+        // keyboard() { },
+        // mouse() { },
+        // click() { },
+        // loop() { },
     };
     /**
      * Configuration options for this canvas
@@ -75,17 +80,20 @@ export class Canvas {
         canvas.style.border = `1px solid ${this.config.border}`;
         canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
         // Initialize main sequence
-        setInterval(() => {
-            if (!this.focused) { return; }
-            this.frame++;
-            this.log(this.frame);
-        }, 1000 / this.config.framesPerSecond);
+        if (this.config.framesPerSecond > 0) {
+            setInterval(() => {
+                if (!this.focused) { return; }
+                this.frame++;
+                this.log(this.frame);
+            }, 1000 / this.config.framesPerSecond);
+        }
         // Event listeners
         canvas.addEventListener('mousemove', e => {
             if (!this.focused) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
             this.log(e.type, this.mouseX, this.mouseY);
+            // this.config.mouse(this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
             if (!this.focused) { return; }
@@ -130,6 +138,7 @@ export class Canvas {
             this.log(e.type, this.focused);
         });
         canvas.addEventListener('contextmenu', e => e.preventDefault());
+        // Focus on the canvas
         canvas.focus();
     }
     /**
@@ -172,12 +181,15 @@ export class Canvas {
     /**
      * Set defaults for all undefined options.
      */
-    private static setDefaults<T>(options: Partial<T>, defaults: T): T {
-        const copy: T = JSON.parse(JSON.stringify(defaults));
-        for (const key in copy) {
-            copy[key] = options[key] ?? defaults[key];
+    private static setDefaults<T extends {}>(options: Partial<T>, defaults: T): T {
+        const copy: Partial<T> = {};
+        for (const key of Object.keys(defaults)) {
+            copy[key as keyof T] = options[key as keyof T] ?? defaults[key as keyof T];
+            // if (key === 'keyboard') {
+            //     console.log(key, options[key as keyof T], defaults[key as keyof T], (copy[key as keyof T] as Function)('hi'));
+            // }
         }
-        return copy;
+        return copy as T;
     }
 }
 
@@ -221,11 +233,22 @@ export interface Options {
      * The number of frames to render every second
      */
     readonly framesPerSecond: number;
-    // readonly keyboard: (key: string) => void;
+    // readonly onInput: (state: InputState) => void;
+    // readonly keyboard: (key: string, down: boolean) => void;
     // readonly mouse: (x: number, y: number) => void;
-    // readonly click: (x: number, y: number) => void;
-    // readonly loop: (keys: string[], x: number, y: number) => void;
+    // readonly click: (x: number, y: number, down: boolean) => void;
+    // readonly loop: (keys: string[], mouseButtons: number[], x: number, y: number) => void;
 }
+
+// export interface InputState {
+//     type: string;
+//     key: string | null;
+//     mouseButton: number | null;
+//     mx: number;
+//     my: number;
+//     readonly keys: string[];
+//     readonly mouseButtons: number[];
+// }
 
 /**
  * Represents an object that can be drawn on the canvas.

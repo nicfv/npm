@@ -1,21 +1,25 @@
 import { Canvas } from 'graphico';
-import { Color } from 'viridis';
 
 const canvas = new Canvas({
-    background: new Color(99, 111, 222),
-    border: new Color(0, 0, 0),
+    // debug: true,
+    background: '#aabbcc',
+    border: '#000000',
     width: 60,
     height: 40,
     scale: 10,
+    keyboard(key) { console.log(key) },
 });
-canvas.graphics.strokeStyle = '#f00000';
-canvas.graphics.lineWidth = 5;
-canvas.graphics.moveTo(10, 20);
-canvas.graphics.lineTo(30, 50);
-canvas.graphics.stroke();
 
-const img = new Image(); // Create new img element
-img.src = "data:image/gif;base64,R0lGODlhCwALAIAAAAAA3pn/ZiH5BAEAAAEALAAAAAALAAsAAAIUhA+hkcuO4lmNVindo7qyrIXiGBYAOw==";
-canvas.graphics.drawImage(img, 0, 0);
+class Obj {
+    draw(ctx) {
+        ctx.strokeStyle = '#f00000';
+        ctx.lineWidth = 5;
+        ctx.moveTo(10, 20);
+        ctx.lineTo(30, 50);
+        ctx.stroke();
+    }
+}
+
+canvas.draw(new Obj());
 
 // canvas.clear();
