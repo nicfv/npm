@@ -24,13 +24,26 @@ export class Canvas {
     /**
      * Can be used to render 2D graphics onto the canvas
      */
-    public readonly graphics: CanvasRenderingContext2D;
+    private readonly graphics: CanvasRenderingContext2D;
+    /**
+     * Whether or not the control is focused
+     */
+    private focused = false;
     /**
      * Contains a list of current keys pressed
      */
     private readonly keys: string[] = [];
+    /**
+     * Contains a list of current mouse buttons pressed
+     */
     private readonly mouseButtons: number[] = [];
+    /**
+     * Contains the mouse X-coordinate, in pixels
+     */
     private mouseX = 0;
+    /**
+     * Contains the mouse Y-coordinate, in pixels
+     */
     private mouseY = 0;
     /**
      * Create a new canvas with the provided options
@@ -63,14 +76,14 @@ export class Canvas {
         canvas.addEventListener('mousemove', e => {
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
-            this.log(this.mouseX, this.mouseY);
+            this.log(e.type, this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
             const key: string = e.key.toLowerCase();
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
             }
-            this.log('keydown', this.keys);
+            this.log(e.type, this.keys);
         });
         canvas.addEventListener('keyup', e => {
             const key: string = e.key.toLowerCase();
@@ -78,14 +91,14 @@ export class Canvas {
             if (index >= 0) {
                 this.keys.splice(index, 1);
             }
-            this.log('keyup', this.keys);
+            this.log(e.type, this.keys);
         });
         canvas.addEventListener('mousedown', e => {
             const button: number = e.button;
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
             }
-            this.log('mousedown', this.mouseButtons);
+            this.log(e.type, this.mouseButtons);
         });
         canvas.addEventListener('mouseup', e => {
             const button: number = e.button;
@@ -93,8 +106,24 @@ export class Canvas {
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
             }
-            this.log('mouseup', this.mouseButtons);
+            this.log(e.type, this.mouseButtons);
         });
+        canvas.addEventListener('focusin', e => {
+            this.focused = true;
+            this.log(e.type, this.focused);
+        });
+        canvas.addEventListener('focusout', e => {
+            this.focused = false;
+            this.log(e.type, this.focused);
+        });
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
+    }
+    /**
+     * Draw an object onto the canvas.
+     * @param drawable Any drawable object
+     */
+    public draw(drawable: Drawable): void {
+        drawable.draw(this.graphics);
     }
     /**
      * Completely clears the canvas.
@@ -162,4 +191,15 @@ export interface Options {
     // readonly mouse: (x: number, y: number) => void;
     // readonly click: (x: number, y: number) => void;
     // readonly loop: (keys: string[], x: number, y: number) => void;
+}
+
+/**
+ * Represents an object that can be drawn on the canvas.
+ */
+export interface Drawable {
+    /**
+     * Draw this object onto the canvas.
+     * @param graphics Canvas 2D rendering interface
+     */
+    draw(graphics: CanvasRenderingContext2D): void;
 }
