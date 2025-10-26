@@ -51,6 +51,12 @@ export class Canvas {
         canvas.style.border = `1px solid ${this.config.border}`;
     }
     /**
+     * Completely clears the canvas.
+     */
+    public clear(): void {
+        this.graphics.clearRect(0, 0, this.config.width, this.config.height);
+    }
+    /**
      * Set defaults for all undefined options.
      */
     private static setDefaults<T>(options: Partial<T>, defaults: T): T {
