@@ -8,6 +8,7 @@ export class Canvas {
      * Default canvas options
      */
     private static readonly defaults: Options = {
+        debug: false,
         parent: document.body,
         width: 600,
         height: 400,
@@ -29,8 +30,8 @@ export class Canvas {
      */
     private readonly keys: string[] = [];
     private readonly mouseButtons: number[] = [];
-    private mouseX: number = 0;
-    private mouseY: number = 0;
+    private mouseX = 0;
+    private mouseY = 0;
     /**
      * Create a new canvas with the provided options
      * @param options Configuration options
@@ -60,16 +61,16 @@ export class Canvas {
         canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
         // Event listeners
         canvas.addEventListener('mousemove', e => {
-            this.mouseX = Math.floor(e.offsetX / this.config.scale);
-            this.mouseY = Math.floor(e.offsetY / this.config.scale);
-            console.log(this.mouseX, this.mouseY);
+            this.mouseX = (e.offsetX / this.config.scale) | 0;
+            this.mouseY = (e.offsetY / this.config.scale) | 0;
+            this.log(this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
             const key: string = e.key.toLowerCase();
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
             }
-            console.log(this.keys);
+            this.log('keydown', this.keys);
         });
         canvas.addEventListener('keyup', e => {
             const key: string = e.key.toLowerCase();
@@ -77,14 +78,14 @@ export class Canvas {
             if (index >= 0) {
                 this.keys.splice(index, 1);
             }
-            console.log(this.keys);
+            this.log('keyup', this.keys);
         });
         canvas.addEventListener('mousedown', e => {
             const button: number = e.button;
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
             }
-            console.log(this.mouseButtons);
+            this.log('mousedown', this.mouseButtons);
         });
         canvas.addEventListener('mouseup', e => {
             const button: number = e.button;
@@ -92,7 +93,7 @@ export class Canvas {
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
             }
-            console.log(this.mouseButtons);
+            this.log('mouseup', this.mouseButtons);
         });
     }
     /**
@@ -100,6 +101,14 @@ export class Canvas {
      */
     public clear(): void {
         this.graphics.clearRect(0, 0, this.config.width, this.config.height);
+    }
+    /**
+     * Log a message to the debug console.
+     */
+    private log(...x: any[]): void {
+        if (this.config.debug) {
+            console.log(...x);
+        }
     }
     /**
      * Set defaults for all undefined options.
@@ -117,6 +126,10 @@ export class Canvas {
  * Configuration Options for Canvas
  */
 export interface Options {
+    /**
+     * Optionally print debug messages to the console
+     */
+    readonly debug: boolean;
     /**
      * Appends the canvas onto the parent element
      */
