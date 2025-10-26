@@ -1,5 +1,3 @@
-import { Color } from 'viridis';
-
 /**
  * Represents a canvas for drawing and animating
  */
@@ -16,6 +14,7 @@ export class Canvas {
         background: 'transparent',
         border: 'transparent',
         showMouse: true,
+        framesPerSecond: 60,
     };
     /**
      * Configuration options for this canvas
@@ -29,6 +28,10 @@ export class Canvas {
      * Whether or not the control is focused
      */
     private focused = false;
+    /**
+     * Frame counter, increments every frame
+     */
+    private frame = 0;
     /**
      * Contains a list of current keys pressed
      */
@@ -60,8 +63,7 @@ export class Canvas {
         }
         // Set static properties
         this.config.parent.appendChild(canvas);
-        canvas.tabIndex = 1;
-        canvas.focus();
+        canvas.tabIndex = 1; // For element focus
         canvas.style.outline = 'none';
         canvas.style.imageRendering = 'pixelated';
         // Set custom properties
@@ -72,13 +74,21 @@ export class Canvas {
         canvas.style.background = this.config.background.toString();
         canvas.style.border = `1px solid ${this.config.border}`;
         canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
+        // Initialize main sequence
+        setInterval(() => {
+            if (!this.focused) { return; }
+            this.frame++;
+            this.log(this.frame);
+        }, 1000 / this.config.framesPerSecond);
         // Event listeners
         canvas.addEventListener('mousemove', e => {
+            if (!this.focused) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
             this.log(e.type, this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
+            if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
@@ -86,6 +96,7 @@ export class Canvas {
             this.log(e.type, this.keys);
         });
         canvas.addEventListener('keyup', e => {
+            if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
             if (index >= 0) {
@@ -94,6 +105,7 @@ export class Canvas {
             this.log(e.type, this.keys);
         });
         canvas.addEventListener('mousedown', e => {
+            if (!this.focused) { return; }
             const button: number = e.button;
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
@@ -101,6 +113,7 @@ export class Canvas {
             this.log(e.type, this.mouseButtons);
         });
         canvas.addEventListener('mouseup', e => {
+            if (!this.focused) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
             if (index >= 0) {
@@ -117,6 +130,23 @@ export class Canvas {
             this.log(e.type, this.focused);
         });
         canvas.addEventListener('contextmenu', e => e.preventDefault());
+        canvas.focus();
+    }
+    /**
+     * Determine whether a key is currently pressed.
+     * @param key The key to check
+     * @returns True if `key` is down
+     */
+    public isKeyDown(key: string): boolean {
+        return this.keys.includes(key.toLowerCase());
+    }
+    /**
+     * Determine whether a mouse button is currently pressed.
+     * @param button The button ID
+     * @returns True if `button` is down
+     */
+    public isMouseButtonDown(button: number): boolean {
+        return this.mouseButtons.includes(button);
     }
     /**
      * Draw an object onto the canvas.
@@ -187,6 +217,10 @@ export interface Options {
      * Optionally show or hide the mouse when hovering over the canvas
      */
     readonly showMouse: boolean;
+    /**
+     * The number of frames to render every second
+     */
+    readonly framesPerSecond: number;
     // readonly keyboard: (key: string) => void;
     // readonly mouse: (x: number, y: number) => void;
     // readonly click: (x: number, y: number) => void;
