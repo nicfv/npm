@@ -14,6 +14,7 @@ export class Canvas {
         scale: 1,
         background: new Color(0, 0, 0, 0),
         border: new Color(0, 0, 0, 0),
+        showMouse: true,
     };
     /**
      * Configuration options for this canvas
@@ -23,6 +24,13 @@ export class Canvas {
      * Can be used to render 2D graphics onto the canvas
      */
     public readonly graphics: CanvasRenderingContext2D;
+    /**
+     * Contains a list of current keys pressed
+     */
+    private readonly keys: string[] = [];
+    private readonly mouseButtons: number[] = [];
+    private mouseX: number = 0;
+    private mouseY: number = 0;
     /**
      * Create a new canvas with the provided options
      * @param options Configuration options
@@ -49,6 +57,43 @@ export class Canvas {
         canvas.style.height = `${this.config.height * this.config.scale}px`;
         canvas.style.background = this.config.background.toString();
         canvas.style.border = `1px solid ${this.config.border}`;
+        canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
+        // Event listeners
+        canvas.addEventListener('mousemove', e => {
+            this.mouseX = Math.floor(e.offsetX / this.config.scale);
+            this.mouseY = Math.floor(e.offsetY / this.config.scale);
+            console.log(this.mouseX, this.mouseY);
+        });
+        canvas.addEventListener('keydown', e => {
+            const key: string = e.key.toLowerCase();
+            if (!this.keys.includes(key)) {
+                this.keys.push(key);
+            }
+            console.log(this.keys);
+        });
+        canvas.addEventListener('keyup', e => {
+            const key: string = e.key.toLowerCase();
+            const index: number = this.keys.indexOf(key);
+            if (index >= 0) {
+                this.keys.splice(index, 1);
+            }
+            console.log(this.keys);
+        });
+        canvas.addEventListener('mousedown', e => {
+            const button: number = e.button;
+            if (!this.mouseButtons.includes(button)) {
+                this.mouseButtons.push(button);
+            }
+            console.log(this.mouseButtons);
+        });
+        canvas.addEventListener('mouseup', e => {
+            const button: number = e.button;
+            const index: number = this.mouseButtons.indexOf(button);
+            if (index >= 0) {
+                this.mouseButtons.splice(index, 1);
+            }
+            console.log(this.mouseButtons);
+        });
     }
     /**
      * Completely clears the canvas.
@@ -60,7 +105,7 @@ export class Canvas {
      * Set defaults for all undefined options.
      */
     private static setDefaults<T>(options: Partial<T>, defaults: T): T {
-        const copy: T = JSON.parse(JSON.stringify(defaults))
+        const copy: T = JSON.parse(JSON.stringify(defaults));
         for (const key in copy) {
             copy[key] = options[key] ?? defaults[key];
         }
@@ -96,4 +141,12 @@ export interface Options {
      * The CSS border style for the canvas
      */
     readonly border: Color;
+    /**
+     * Optionally show or hide the mouse when hovering over the canvas
+     */
+    readonly showMouse: boolean;
+    // readonly keyboard: (key: string) => void;
+    // readonly mouse: (x: number, y: number) => void;
+    // readonly click: (x: number, y: number) => void;
+    // readonly loop: (keys: string[], x: number, y: number) => void;
 }
