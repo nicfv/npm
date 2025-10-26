@@ -13,8 +13,8 @@ export class Canvas {
         width: 600,
         height: 400,
         scale: 1,
-        background: new Color(0, 0, 0, 0),
-        border: new Color(0, 0, 0, 0),
+        background: 'transparent',
+        border: 'transparent',
         showMouse: true,
     };
     /**
@@ -178,11 +178,11 @@ export interface Options {
     /**
      * The background color of the canvas
      */
-    readonly background: Color;
+    readonly background: string;
     /**
-     * The CSS border style for the canvas
+     * The border color for the canvas
      */
-    readonly border: Color;
+    readonly border: string;
     /**
      * Optionally show or hide the mouse when hovering over the canvas
      */
