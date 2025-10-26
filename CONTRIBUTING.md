@@ -12,6 +12,7 @@ Below is a list of requirements that must be followed when contributing to this 
 - Source code must be written in `./packages/<name>/src/` and in the latest supported version of TypeScript
     - Includes `index.ts` as the entry point file
     - Includes `test.ts` for unit/integration testing
+- Tests should use the latest version of `t6` for assertion testing
 - Must contain examples in `example/`
 
 ### Examples
@@ -34,3 +35,17 @@ Below is a list of requirements that must be followed when contributing to this 
 - Increase the major counter for major changes that break backwards compatibility
 - `CHANGELOG.md` should read in reverse chronological order, with the latest version at the top
     - The latest version in the changelog should match that of the package version
+
+## Development Testing
+- To test examples during development, make sure dependencies are installed and open 2 separate terminals
+- Terminal "A" will rebuild the package on update:
+    ```shell
+    cd ./packages/<name>/
+    npx tsc --watch
+    ```
+- Terminal "B" will rebuild the example on update:
+    ```shell
+    cd ./packages/<name>/example/<example_name>/
+    npx webpack --mode development --watch
+    ```
+- In a browser, navigate to that example's `index.html` page, and refresh when changes are made to either the package or example
