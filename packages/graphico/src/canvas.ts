@@ -6,7 +6,7 @@ export class Canvas {
      * Default canvas options
      */
     private static readonly defaults: Options = {
-        parent: null,
+        parent: document.body,
     };
     /**
      * Configuration options for this canvas
@@ -20,7 +20,7 @@ export class Canvas {
      * Create a new canvas with the provided options
      * @param options Configuration options
      */
-    constructor(options: Partial<Options>) {
+    constructor(options: Partial<Options> = {}) {
         this.config = Canvas.setDefaults(options, Canvas.defaults);
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         const graphics = canvas.getContext('2d');
@@ -29,9 +29,7 @@ export class Canvas {
         } else {
             throw new Error('Could not initialize canvas graphics.');
         }
-        if (this.config.parent) {
-            this.config.parent.appendChild(canvas);
-        }
+        this.config.parent.appendChild(canvas);
     }
     /**
      * Set defaults for all undefined options.
@@ -50,7 +48,7 @@ export class Canvas {
  */
 export interface Options {
     /**
-     * If set, appends the canvas onto the parent element
+     * Appends the canvas onto the parent element
      */
-    readonly parent: Node | null;
+    readonly parent: Node;
 }
