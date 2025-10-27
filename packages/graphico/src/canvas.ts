@@ -13,6 +13,7 @@ export class Canvas {
         scale: 1,
         background: 'transparent',
         border: 'transparent',
+        borderBlur: 'transparent',
         showMouse: true,
         framesPerSecond: 60,
         keydown() { },
@@ -78,15 +79,15 @@ export class Canvas {
         canvas.style.width = `${this.config.width * this.config.scale}px`;
         canvas.style.height = `${this.config.height * this.config.scale}px`;
         canvas.style.background = this.config.background.toString();
-        canvas.style.border = `1px solid ${this.config.border}`;
+        canvas.style.border = `${this.config.scale}px solid ${this.config.border}`;
         canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
         // Initialize main sequence
         if (this.config.framesPerSecond > 0) {
             setInterval(() => {
                 if (!this.focused) { return; }
                 this.frame++;
-                this.config.loop(this.frame, this.keys, this.mouseButtons, this.mouseX, this.mouseY);
                 this.log(this.frame);
+                this.config.loop(this.frame, this.keys, this.mouseButtons, this.mouseX, this.mouseY);
             }, 1000 / this.config.framesPerSecond);
         }
         // Event listeners
@@ -94,53 +95,55 @@ export class Canvas {
             if (!this.focused) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
-            this.config.mousemove(this.mouseX, this.mouseY);
             this.log(e.type, this.mouseX, this.mouseY);
+            this.config.mousemove(this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
             if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
+            this.log(e.type, this.keys);
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
                 this.config.keydown(key);
             }
-            this.log(e.type, this.keys);
         });
         canvas.addEventListener('keyup', e => {
             if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
+            this.log(e.type, this.keys);
             if (index >= 0) {
                 this.keys.splice(index, 1);
                 this.config.keyup(key);
             }
-            this.log(e.type, this.keys);
         });
         canvas.addEventListener('mousedown', e => {
             if (!this.focused) { return; }
             const button: number = e.button;
+            this.log(e.type, this.mouseButtons);
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
                 this.config.mousedown(this.mouseX, this.mouseY, button);
             }
-            this.log(e.type, this.mouseButtons);
         });
         canvas.addEventListener('mouseup', e => {
             if (!this.focused) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
+            this.log(e.type, this.mouseButtons);
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
                 this.config.mouseup(this.mouseX, this.mouseY, button);
             }
-            this.log(e.type, this.mouseButtons);
         });
         canvas.addEventListener('focusin', e => {
             this.focused = true;
+            canvas.style.borderColor = this.config.border;
             this.log(e.type, this.focused);
         });
         canvas.addEventListener('focusout', e => {
             this.focused = false;
+            canvas.style.borderColor = this.config.borderBlur;
             this.log(e.type, this.focused);
         });
         canvas.addEventListener('contextmenu', e => e.preventDefault());
@@ -225,9 +228,13 @@ export interface Options {
      */
     readonly background: string;
     /**
-     * The border color for the canvas
+     * The border color for the canvas (when focused)
      */
     readonly border: string;
+    /**
+     * The border color for the canvas (when not focused)
+     */
+    readonly borderBlur: string;
     /**
      * Optionally show or hide the mouse when hovering over the canvas
      */
