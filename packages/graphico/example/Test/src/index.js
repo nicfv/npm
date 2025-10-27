@@ -1,25 +1,35 @@
 import { Canvas } from 'graphico';
 
+let mx, my, md, mb;
+
+class point {
+    draw(ctx) {
+        if (md) {
+            if (mb === 0) {
+                ctx.fillStyle = 'yellow';
+            } else {
+                ctx.fillStyle = 'green';
+            }
+            ctx.fillRect(mx, my, 2, 2);
+        }
+    }
+}
+
 const canvas = new Canvas({
     // debug: true,
     background: '#aabbcc',
     border: '#000000',
-    width: 60,
-    height: 40,
-    scale: 10,
-    keyboard(key) { console.log(key) },
+    borderBlur: 'gray',
+    width: 600,
+    height: 400,
+    scale: 2,
+    mousedown(x, y, b) { md = true; mb = b; },
+    mouseup() { md = false },
+    mousemove(x, y) { mx = x; my = y; },
+    loop() {
+        canvas.draw(new point());
+    }
 });
 
-class Obj {
-    draw(ctx) {
-        ctx.strokeStyle = '#f00000';
-        ctx.lineWidth = 5;
-        ctx.moveTo(10, 20);
-        ctx.lineTo(30, 50);
-        ctx.stroke();
-    }
-}
-
-canvas.draw(new Obj());
 
 // canvas.clear();
