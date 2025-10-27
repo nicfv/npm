@@ -15,11 +15,12 @@ export class Canvas {
         border: 'transparent',
         showMouse: true,
         framesPerSecond: 60,
-        // onInput() { },
-        // keyboard() { },
-        // mouse() { },
-        // click() { },
-        // loop() { },
+        keydown() { },
+        keyup() { },
+        mousemove() { },
+        mousedown() { },
+        mouseup() { },
+        loop() { },
     };
     /**
      * Configuration options for this canvas
@@ -84,6 +85,7 @@ export class Canvas {
             setInterval(() => {
                 if (!this.focused) { return; }
                 this.frame++;
+                this.config.loop(this.frame, this.keys, this.mouseButtons, this.mouseX, this.mouseY);
                 this.log(this.frame);
             }, 1000 / this.config.framesPerSecond);
         }
@@ -92,14 +94,15 @@ export class Canvas {
             if (!this.focused) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
+            this.config.mousemove(this.mouseX, this.mouseY);
             this.log(e.type, this.mouseX, this.mouseY);
-            // this.config.mouse(this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
             if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
+                this.config.keydown(key);
             }
             this.log(e.type, this.keys);
         });
@@ -109,6 +112,7 @@ export class Canvas {
             const index: number = this.keys.indexOf(key);
             if (index >= 0) {
                 this.keys.splice(index, 1);
+                this.config.keyup(key);
             }
             this.log(e.type, this.keys);
         });
@@ -117,6 +121,7 @@ export class Canvas {
             const button: number = e.button;
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
+                this.config.mousedown(this.mouseX, this.mouseY, button);
             }
             this.log(e.type, this.mouseButtons);
         });
@@ -126,6 +131,7 @@ export class Canvas {
             const index: number = this.mouseButtons.indexOf(button);
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
+                this.config.mouseup(this.mouseX, this.mouseY, button);
             }
             this.log(e.type, this.mouseButtons);
         });
@@ -173,7 +179,7 @@ export class Canvas {
     /**
      * Log a message to the debug console.
      */
-    private log(...x: any[]): void {
+    private log(...x: unknown[]): void {
         if (this.config.debug) {
             console.log(...x);
         }
@@ -181,13 +187,10 @@ export class Canvas {
     /**
      * Set defaults for all undefined options.
      */
-    private static setDefaults<T extends {}>(options: Partial<T>, defaults: T): T {
+    private static setDefaults<T extends object>(options: Partial<T>, defaults: T): T {
         const copy: Partial<T> = {};
         for (const key of Object.keys(defaults)) {
             copy[key as keyof T] = options[key as keyof T] ?? defaults[key as keyof T];
-            // if (key === 'keyboard') {
-            //     console.log(key, options[key as keyof T], defaults[key as keyof T], (copy[key as keyof T] as Function)('hi'));
-            // }
         }
         return copy as T;
     }
@@ -233,22 +236,48 @@ export interface Options {
      * The number of frames to render every second
      */
     readonly framesPerSecond: number;
-    // readonly onInput: (state: InputState) => void;
-    // readonly keyboard: (key: string, down: boolean) => void;
-    // readonly mouse: (x: number, y: number) => void;
-    // readonly click: (x: number, y: number, down: boolean) => void;
-    // readonly loop: (keys: string[], mouseButtons: number[], x: number, y: number) => void;
+    /**
+     * Event listener for when a key is pressed
+     * @param key The key that was pressed
+     */
+    readonly keydown: (key: string) => void;
+    /**
+     * Event listener for when a key is released
+     * @param key The key that was released
+     */
+    readonly keyup: (key: string) => void;
+    /**
+     * Event listener for when the mouse is moved
+     * @param x Cursor X-coordinate
+     * @param y Cursor Y-coordinate
+     */
+    readonly mousemove: (x: number, y: number) => void;
+    /**
+     * Event listener for when a button on the mouse is pressed
+     * @param x Cursor X-coordinate
+     * @param y Cursor Y-coordinate
+     * @param button The button that was pressed
+     */
+    readonly mousedown: (x: number, y: number, button: number) => void;
+    /**
+     * Event listener for when a button on the mouse is released
+     * @param x Cursor X-coordinate
+     * @param y Cursor Y-coordinate
+     * @param button The button that was released
+     */
+    readonly mouseup: (x: number, y: number, button: number) => void;
+    /**
+     * Event listener for a the main loop, only called when:
+     * - `framesPerSecond` > 0
+     * - The canvas is focused
+     * @param frame The frame sequence number
+     * @param keys A list of keys that are currently pressed
+     * @param mouseButtons A list of buttons that are currently pressed
+     * @param x Cursor X-coordinate
+     * @param y Cursor Y-coordinate
+     */
+    readonly loop: (frame: number, keys: string[], mouseButtons: number[], x: number, y: number) => void;
 }
-
-// export interface InputState {
-//     type: string;
-//     key: string | null;
-//     mouseButton: number | null;
-//     mx: number;
-//     my: number;
-//     readonly keys: string[];
-//     readonly mouseButtons: number[];
-// }
 
 /**
  * Represents an object that can be drawn on the canvas.
