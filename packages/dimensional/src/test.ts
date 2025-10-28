@@ -194,6 +194,10 @@ import { AmountOfSubstance } from './defaults/dimensions';
     const nm_2 = new Quantity(1, units.meter.prefix(prefixes.nano)),
         ft_2 = nm_2.as(units.foot);
     T6.is(ft_2.toString(), '3.281 \\times 10^{-9} \\left[ \\text{ft} \\right]');
+    const neg_1 = new Quantity(-200, units.liter),
+        neg_2 = neg_1.as(units.millimeter.pow(3));
+    T6.is(neg_1.toString(), '-200 \\left[ \\text{L} \\right]');
+    T6.is(neg_2.toString(), '-2 \\times 10^{8} \\left[ {\\text{m}\\text{m}}^{3} \\right]');
     // Infinity
     const inf_1 = new Quantity(1 / 0, units.ohm);
     T6.is(inf_1.toString(), '\\infty \\left[ {\\Omega} \\right]');

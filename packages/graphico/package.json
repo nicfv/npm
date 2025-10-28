@@ -1,7 +1,7 @@
 {
-  "name": "dimensional",
-  "version": "1.3.1",
-  "description": "Dimensional analysis and unit conversions",
+  "name": "graphico",
+  "version": "0.0.1",
+  "description": "Canvas 2D rendering toolkit for games and visual projects",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
   "main": "dist/index.js",
@@ -14,19 +14,16 @@
     "start": "../../.github/workflows/scripts"
   },
   "keywords": [
-    "quantity",
-    "unit",
-    "attribute",
-    "dimension",
-    "dimensional",
-    "analysis",
-    "convert",
-    "conversion",
-    "metric",
-    "system",
-    "prefix",
-    "SI",
-    "imperial"
+    "graphic",
+    "graphics",
+    "canvas",
+    "game",
+    "template",
+    "draw",
+    "drawing",
+    "art",
+    "render",
+    "2D"
   ],
   "author": {
     "name": "Nicolas Ventura",
@@ -39,9 +36,6 @@
   },
   "repository": "github:nicfv/npm",
   "license": "MIT",
-  "dependencies": {
-    "smath": "1.13.2"
-  },
   "devDependencies": {
     "t6": "1.2.1"
   }

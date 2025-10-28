@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+- Support negative quantities when rendering LaTeX with `toString`
+
 ## 1.3.0
 
 - Add configuration option `showUnitless` to optionally show/hide units for unitless quantities
