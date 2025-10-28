@@ -16,12 +16,12 @@ export class Canvas {
         borderBlur: 'transparent',
         showMouse: true,
         framesPerSecond: 60,
-        keydown() { },
-        keyup() { },
-        mousemove() { },
-        mousedown() { },
-        mouseup() { },
-        loop() { },
+        keydown() { return; },
+        keyup() { return; },
+        mousemove() { return; },
+        mousedown() { return; },
+        mouseup() { return; },
+        loop() { return; },
     };
     /**
      * Configuration options for this canvas
