@@ -100,6 +100,7 @@ export class Canvas {
         });
         canvas.addEventListener('keydown', e => {
             if (!this.focused) { return; }
+            e.preventDefault();
             const key: string = e.key.toLowerCase();
             this.log(e.type, this.keys);
             if (!this.keys.includes(key)) {
@@ -123,7 +124,7 @@ export class Canvas {
             this.log(e.type, this.mouseButtons);
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
-                this.config.mousedown(this.mouseX, this.mouseY, button);
+                this.config.mousedown(button);
             }
         });
         canvas.addEventListener('mouseup', e => {
@@ -133,7 +134,7 @@ export class Canvas {
             this.log(e.type, this.mouseButtons);
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
-                this.config.mouseup(this.mouseX, this.mouseY, button);
+                this.config.mouseup(button);
             }
         });
         canvas.addEventListener('focusin', e => {
@@ -261,18 +262,14 @@ export interface Options {
     readonly mousemove: (x: number, y: number) => void;
     /**
      * Event listener for when a button on the mouse is pressed
-     * @param x Cursor X-coordinate
-     * @param y Cursor Y-coordinate
      * @param button The button that was pressed
      */
-    readonly mousedown: (x: number, y: number, button: number) => void;
+    readonly mousedown: (button: number) => void;
     /**
      * Event listener for when a button on the mouse is released
-     * @param x Cursor X-coordinate
-     * @param y Cursor Y-coordinate
      * @param button The button that was released
      */
-    readonly mouseup: (x: number, y: number, button: number) => void;
+    readonly mouseup: (button: number) => void;
     /**
      * Event listener for a the main loop, only called when:
      * - `framesPerSecond` > 0
