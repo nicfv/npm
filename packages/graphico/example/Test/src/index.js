@@ -32,10 +32,11 @@ class Circle {
 }
 
 const canvas = new Canvas({
+    // Set the background and border colors on focus/unfocus
     background: '#aabbcc',
     border: 'black',
     borderBlur: 'gray',
-    // The following 3 functions are event listeners
+    // The following 3 functions are event listeners for mouse input (when the canvas is selected)
     mousedown(mouseButton) {
         mouseButtonDown = mouseButton;
     },
