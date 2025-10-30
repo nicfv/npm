@@ -65,10 +65,16 @@ for exampledir in */ ; do
     if [ ! -d "${exampledir}" ] ; then
         continue
     fi
+    # Run and build example
     example="${exampledir%/}"
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
     cd "${example}" && npm i && npx webpack --mode development || exit 1
+    # Create directory and copy example output
+    outpath="_assets/${package_name}/${exampledir}"
+    mkdir -p "../../../../${outpath}"
+    cp -r index.html dist "../../../../${outpath}"
+    # Write example instructions
     {
         echo "# ${example}"
         cat ./*.md || exit 1
@@ -104,11 +110,13 @@ for exampledir in */ ; do
         echo
         echo '```'
         echo '## Build Project'
-        echo "In the base project directory \`${projectdir}/\`, run the following commands, and then open your \`index.html\` file in any web browser of your choice! Uncomment the second line to open the project in Firefox, for example."
+        echo "In the base project directory \`${projectdir}/\`, run the following command. If changes are made in the source files, the demo will automatically be recompiled. Press CTRL+C to stop running."
         echo '```shell'
-        echo 'npx webpack --mode development # or --mode production'
-        echo '# firefox index.html'
+        echo 'npx webpack --mode development --watch'
         echo '```'
+        echo '## View Project'
+        echo 'Open the `index.html` file in any web browser of your choice! You should see a page similar to the one below.'
+        echo "<iframe src=\"../${outpath}/index.html\" width=\"100%\" height=\"600\"></iframe>"
         echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>'
     } > "../../Examples/${example}.md"
     cd ..
