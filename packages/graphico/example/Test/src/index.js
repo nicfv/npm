@@ -1,35 +1,56 @@
 import { Canvas } from 'graphico';
 
-let mx, my, md, mb;
+// Mouse button IDs (could possibly be different for your hardware)
+const LCLICK = 0,
+    MCLICK = 1,
+    RCLICK = 2,
+    NONE = -1;
 
-class point {
+// Current mouse button pressed
+let mouseButtonDown = NONE;
+
+
+// Extends `Drawable` by implementing the `draw` function.
+class Circle {
+    #color;
+    #x;
+    #y;
+    #r;
+    constructor(color = '', x = 0, y = 0, r = 0) {
+        this.#color = color;
+        this.#x = x;
+        this.#y = y;
+        this.#r = r;
+    }
     draw(ctx) {
-        if (md) {
-            if (mb === 0) {
-                ctx.fillStyle = 'yellow';
-            } else {
-                ctx.fillStyle = 'green';
-            }
-            ctx.fillRect(mx, my, 2, 2);
-        }
+        // Call HTML canvas context rendering 2D functions here using the `ctx` object
+        ctx.fillStyle = this.#color;
+        ctx.beginPath();
+        ctx.arc(this.#x, this.#y, this.#r, 0, 2 * Math.PI);
+        ctx.fill();
     }
 }
 
 const canvas = new Canvas({
-    // debug: true,
     background: '#aabbcc',
-    border: '#000000',
+    border: 'black',
     borderBlur: 'gray',
-    width: 600,
-    height: 400,
-    scale: 2,
-    mousedown(x, y, b) { md = true; mb = b; },
-    mouseup() { md = false },
-    mousemove(x, y) { mx = x; my = y; },
-    loop() {
-        canvas.draw(new point());
-    }
+    // The following 3 functions are event listeners
+    mousedown(mouseButton) {
+        mouseButtonDown = mouseButton;
+    },
+    mouseup() {
+        mouseButtonDown = NONE;
+    },
+    mousemove(x, y) {
+        const RADIUS = 3;
+        // Change paint color depending on which mouse button was pressed
+        if (mouseButtonDown === LCLICK) {
+            canvas.draw(new Circle('blue', x, y, RADIUS));
+        } else if (mouseButtonDown === MCLICK) {
+            canvas.draw(new Circle('green', x, y, RADIUS));
+        } else if (mouseButtonDown === RCLICK) {
+            canvas.draw(new Circle('yellow', x, y, RADIUS));
+        }
+    },
 });
-
-
-// canvas.clear();
