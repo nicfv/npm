@@ -8,4 +8,4 @@ find packages -name types -type d -print0 | xargs --null rm -rf
 find packages -name Examples -type d -print0 | xargs --null rm -rf
 
 # Delete build files in the main directory
-rm -rf node_modules package-lock.json docs
+rm -rf node_modules package-lock.json docs _assets

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "npm i && tsc -v && npm start --workspaces && typedoc --version && typedoc",
+    "start": "npm i && tsc -v && npm start --workspaces && typedoc --version && typedoc && mv _assets docs",
     "stop": ".github/workflows/clean"
   },
   "workspaces": [
