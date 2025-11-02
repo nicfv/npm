@@ -39,6 +39,14 @@ export class Canvas {
      */
     private readonly mouseButtons: number[] = [];
     /**
+     * The width of the canvas, in pixels
+     */
+    public readonly width: number;
+    /**
+     * The height of the canvas, in pixels
+     */
+    public readonly height: number;
+    /**
      * Contains the mouse X-coordinate, in pixels
      */
     private mouseX = 0;
@@ -60,6 +68,8 @@ export class Canvas {
      */
     constructor(options: Partial<Options> = {}) {
         this.config = Canvas.setDefaults(options, Canvas.defaults);
+        this.width = this.config.width;
+        this.height = this.config.height;
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         const graphics = canvas.getContext('2d');
         if (graphics) {
@@ -196,6 +206,42 @@ export class Canvas {
      */
     public getMousePosition(): [number, number] {
         return [this.mouseX, this.mouseY];
+    }
+    /**
+     * Get the color of the selected pixel.
+     * @param x The pixel's x-coordinate
+     * @param y The pixel's y-coordinate
+     * @returns `[red, green, blue, alpha]`
+     */
+    public getPixel(x: number, y: number): [number, number, number, number] {
+        const data: ImageDataArray = this.graphics.getImageData(x, y, 1, 1).data;
+        console.log(this.graphics.getImageData(x, y, 2, 2));;
+        return [data[0], data[1], data[2], data[3]];
+    }
+    /**
+     * Set the color of the selected pixel.
+     * @param x The pixel's x-coordinate
+     * @param y The pixel's y-coordinate
+     * @param color `[red, green, blue, alpha]`
+     */
+    public setPixel(x: number, y: number, color: [number, number, number, number]): void {
+        const data: ImageData = this.graphics.getImageData(x, y, 1, 1);
+        data.data[0] = color[0];
+        data.data[1] = color[1];
+        data.data[2] = color[2];
+        data.data[3] = color[3];
+        console.log(data);
+        this.graphics.putImageData(data, x, y);
+    }
+    /**
+     * Take a screenshot of the canvas contents and save to a .png file.
+     */
+    public screenshot(): void {
+        const dataURL: string = this.graphics.canvas.toDataURL();
+        const downloadLink: HTMLAnchorElement = document.createElement('a');
+        downloadLink.setAttribute('href', dataURL);
+        downloadLink.setAttribute('download', 'screenshot');
+        downloadLink.click();
     }
     /**
      * Draw an object onto the canvas.
