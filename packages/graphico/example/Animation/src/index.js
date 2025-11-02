@@ -5,11 +5,11 @@ const G = 9.81; // Gravitation constant [m/s^2]
 
 class Ball {
     #color;
-    #x; // [px]
-    #r; // [px]
-    #y; // [px]
-    #vy; // [px/s]
-    #groundY; // [px]
+    #x;
+    #r;
+    #y;
+    #vy;
+    #groundY;
     constructor(color = '', radius = 0, x = 0, dropHeight = 0, groundY = 0) {
         this.#color = color;
         this.#x = x;
@@ -47,28 +47,30 @@ class Ground {
     }
     draw(ctx) {
         ctx.fillStyle = 'sandybrown';
-        ctx.fillRect(0, this.#y, 1000, 1000);
+        ctx.fillRect(0, this.#y, canvas.width, canvas.height);
     }
 }
 
+// Create the animation objects
 const ball = new Ball('red', 10, 100, 100, 150);
 const ground = new Ground(150);
 
+// Create the canvas
 const canvas = new Canvas({
-    // debug: true,
     border: 'black',
     borderBlur: 'gray',
     background: 'skyblue',
     width: 200,
     height: 200,
     loop(dt) {
-        ball.step(dt);
-        canvas.clear();
-        return [ground, ball];
+        ball.step(dt); // Compute the motion for the ball
+        canvas.clear(); // Clear the canvas before rendering any objects
+        return [ground, ball]; // You can optionally return an array of `Drawable` instead of having to call `canvas.draw()` on each one
     },
     keydown(key) {
+        // Press space to drop the ball
         if (key === ' ') {
             ball.reset(100);
         }
-    }
+    },
 });
