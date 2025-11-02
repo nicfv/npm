@@ -28,18 +28,15 @@ class Ball {
         this.#y += this.#vy * dt_s; // [px/s] * [s] = [px]
         // Check if the ball should bounce off the ground
         if (this.#y + this.#r >= this.#groundY) {
-            this.#y = this.#groundY - this.#r;
+            this.#y = this.#groundY - this.#r; // make sure ball doesn't go through the ground
             this.#vy *= -0.9; // some "energy" is lost
         }
-        console.log(this.#x, this.#y, this.#vy);
     }
     draw(ctx) {
-        if (ctx instanceof CanvasRenderingContext2D) {
-            ctx.fillStyle = this.#color;
-            ctx.beginPath();
-            ctx.arc(this.#x, this.#y, this.#r, 0, 2 * Math.PI);
-            ctx.fill();
-        }
+        ctx.fillStyle = this.#color;
+        ctx.beginPath();
+        ctx.arc(this.#x, this.#y, this.#r, 0, 2 * Math.PI);
+        ctx.fill();
     }
 }
 
@@ -54,46 +51,22 @@ class Ground {
     }
 }
 
-class Instructions {
-    #content;
-    #x;
-    #y;
-    #show;
-    constructor(content = '', x = 0, y = 0) {
-        this.#content = content;
-        this.#x = x;
-        this.#y = y;
-        this.#show = true;
-    }
-    hide() {
-        this.#show = false;
-    }
-    draw(ctx) {
-        if (this.#show) {
-            ctx.fillStyle = 'black';
-            ctx.font = '12px sans-serif';
-            ctx.fillText(this.#content, this.#x, this.#y);
-        }
-    }
-}
-
 const ball = new Ball('red', 10, 50, 200, 300);
 const ground = new Ground(300);
-const instructions = new Instructions('Press space to drop ball', 400, 20);
 
 const canvas = new Canvas({
     // debug: true,
     border: 'black',
+    borderBlur: 'gray',
     background: 'skyblue',
     loop(dt) {
         ball.step(dt);
         canvas.clear();
-        return [ground, ball, instructions];
+        return [ground, ball];
     },
     keydown(key) {
         if (key === ' ') {
             ball.reset(200);
-            instructions.hide();
         }
     }
 });
