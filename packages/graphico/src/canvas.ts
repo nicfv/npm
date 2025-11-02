@@ -15,7 +15,6 @@ export class Canvas {
         border: 'transparent',
         borderBlur: 'transparent',
         showMouse: true,
-        framesPerSecond: 60,
         keydown() { return; },
         keyup() { return; },
         mousemove() { return; },
@@ -56,6 +55,14 @@ export class Canvas {
      */
     private mouseY = 0;
     /**
+     * Represents the animation ID handle to cancel the animation
+     */
+    private animation = 0;
+    /**
+     * The last frame's high resolution timestamp
+     */
+    private lastFrame = 0;
+    /**
      * Create a new canvas with the provided options
      * @param options Configuration options
      */
@@ -73,6 +80,7 @@ export class Canvas {
         canvas.tabIndex = 1; // For element focus
         canvas.style.outline = 'none';
         canvas.style.imageRendering = 'pixelated';
+        graphics.imageSmoothingEnabled = false;
         // Set custom properties
         canvas.width = this.config.width;
         canvas.height = this.config.height;
@@ -81,15 +89,6 @@ export class Canvas {
         canvas.style.background = this.config.background.toString();
         canvas.style.border = `${this.config.scale}px solid ${this.config.border}`;
         canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
-        // Initialize main sequence
-        if (this.config.framesPerSecond > 0) {
-            setInterval(() => {
-                if (!this.focused) { return; }
-                this.frame++;
-                this.log(this.frame);
-                this.config.loop(this.frame, this.keys, this.mouseButtons, this.mouseX, this.mouseY);
-            }, 1000 / this.config.framesPerSecond);
-        }
         // Event listeners
         canvas.addEventListener('mousemove', e => {
             if (!this.focused) { return; }
@@ -141,6 +140,7 @@ export class Canvas {
             this.focused = true;
             canvas.style.borderColor = this.config.border;
             this.log(e.type, this.focused);
+            this.animation = requestAnimationFrame(time => this.startAnimate(time));
         });
         canvas.addEventListener('focusout', e => {
             this.focused = false;
@@ -150,6 +150,32 @@ export class Canvas {
         canvas.addEventListener('contextmenu', e => e.preventDefault());
         // Focus on the canvas
         canvas.focus();
+    }
+    /**
+     * Start the animation.
+     */
+    private startAnimate(time: DOMHighResTimeStamp): void {
+        this.log('startAnimate', time);
+        this.lastFrame = time;
+        this.animation = requestAnimationFrame(time => this.animate(time));
+    }
+    /**
+     * Run the main animation loop.
+     */
+    private animate(time: DOMHighResTimeStamp): void {
+        if (!this.focused) {
+            cancelAnimationFrame(this.animation);
+            return;
+        }
+        const currentFrame: number = time;
+        const dt: number = currentFrame - this.lastFrame;
+        this.lastFrame = currentFrame;
+        this.log('animate', dt, currentFrame);
+        const drawables: Drawable[] = this.config.loop(dt) ?? [];
+        for (const drawable of drawables) {
+            this.draw(drawable);
+        }
+        this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
      * Determine whether a key is currently pressed.
@@ -166,6 +192,13 @@ export class Canvas {
      */
     public isMouseButtonDown(button: number): boolean {
         return this.mouseButtons.includes(button);
+    }
+    /**
+     * Get the current cursor position.
+     * @returns Cursor position as `[x, y]`
+     */
+    public getMousePosition(): [number, number] {
+        return [this.mouseX, this.mouseY];
     }
     /**
      * Draw an object onto the canvas.
@@ -241,10 +274,6 @@ export interface Options {
      */
     readonly showMouse: boolean;
     /**
-     * The number of frames to render every second
-     */
-    readonly framesPerSecond: number;
-    /**
      * Event listener for when a key is pressed
      * @param key The key that was pressed
      */
@@ -271,16 +300,11 @@ export interface Options {
      */
     readonly mouseup: (button: number) => void;
     /**
-     * Event listener for a the main loop, only called when:
-     * - `framesPerSecond` > 0
-     * - The canvas is focused
-     * @param frame The frame sequence number
-     * @param keys A list of keys that are currently pressed
-     * @param mouseButtons A list of buttons that are currently pressed
-     * @param x Cursor X-coordinate
-     * @param y Cursor Y-coordinate
+     * Event listener for a the main animation loop
+     * @param dt The number of milliseconds in between frames
+     * @returns An array of `Drawable` to render, or void
      */
-    readonly loop: (frame: number, keys: string[], mouseButtons: number[], x: number, y: number) => void;
+    readonly loop: (dt: number) => Drawable[] | (void | never);
 }
 
 /**
