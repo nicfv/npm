@@ -31,14 +31,6 @@ export class Canvas {
      */
     private readonly graphics: CanvasRenderingContext2D;
     /**
-     * Whether or not the control is focused
-     */
-    private focused = false;
-    /**
-     * Frame counter, increments every frame
-     */
-    private frame = 0;
-    /**
      * Contains a list of current keys pressed
      */
     private readonly keys: string[] = [];
@@ -91,14 +83,14 @@ export class Canvas {
         canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
         // Event listeners
         canvas.addEventListener('mousemove', e => {
-            if (!this.focused) { return; }
+            if (!this.isFocused()) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
             this.log(e.type, this.mouseX, this.mouseY);
             this.config.mousemove(this.mouseX, this.mouseY);
         });
         canvas.addEventListener('keydown', e => {
-            if (!this.focused) { return; }
+            if (!this.isFocused()) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
             this.log(e.type, this.keys);
@@ -108,7 +100,7 @@ export class Canvas {
             }
         });
         canvas.addEventListener('keyup', e => {
-            if (!this.focused) { return; }
+            if (!this.isFocused()) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
             this.log(e.type, this.keys);
@@ -118,7 +110,7 @@ export class Canvas {
             }
         });
         canvas.addEventListener('mousedown', e => {
-            if (!this.focused) { return; }
+            if (!this.isFocused()) { return; }
             const button: number = e.button;
             this.log(e.type, this.mouseButtons);
             if (!this.mouseButtons.includes(button)) {
@@ -127,7 +119,7 @@ export class Canvas {
             }
         });
         canvas.addEventListener('mouseup', e => {
-            if (!this.focused) { return; }
+            if (!this.isFocused()) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
             this.log(e.type, this.mouseButtons);
@@ -137,19 +129,28 @@ export class Canvas {
             }
         });
         canvas.addEventListener('focusin', e => {
-            this.focused = true;
             canvas.style.borderColor = this.config.border;
-            this.log(e.type, this.focused);
+            this.log(e.type);
             this.animation = requestAnimationFrame(time => this.startAnimate(time));
         });
         canvas.addEventListener('focusout', e => {
-            this.focused = false;
             canvas.style.borderColor = this.config.borderBlur;
-            this.log(e.type, this.focused);
+            this.log(e.type);
+            cancelAnimationFrame(this.animation);
+        });
+        window.addEventListener('blur', e => {
+            this.log(e.type);
+            cancelAnimationFrame(this.animation);
         });
         canvas.addEventListener('contextmenu', e => e.preventDefault());
         // Focus on the canvas
         canvas.focus();
+    }
+    /**
+     * Determine if the canvas is currently focused.
+     */
+    private isFocused(): boolean {
+        return this.graphics.canvas === document.activeElement;
     }
     /**
      * Start the animation.
@@ -163,10 +164,6 @@ export class Canvas {
      * Run the main animation loop.
      */
     private animate(time: DOMHighResTimeStamp): void {
-        if (!this.focused) {
-            cancelAnimationFrame(this.animation);
-            return;
-        }
         const currentFrame: number = time;
         const dt: number = currentFrame - this.lastFrame;
         this.lastFrame = currentFrame;
