@@ -51,14 +51,16 @@ class Ground {
     }
 }
 
-const ball = new Ball('red', 10, 50, 200, 300);
-const ground = new Ground(300);
+const ball = new Ball('red', 10, 100, 100, 150);
+const ground = new Ground(150);
 
 const canvas = new Canvas({
     // debug: true,
     border: 'black',
     borderBlur: 'gray',
     background: 'skyblue',
+    width: 200,
+    height: 200,
     loop(dt) {
         ball.step(dt);
         canvas.clear();
@@ -66,7 +68,7 @@ const canvas = new Canvas({
     },
     keydown(key) {
         if (key === ' ') {
-            ball.reset(200);
+            ball.reset(100);
         }
     }
 });
