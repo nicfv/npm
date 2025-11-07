@@ -70,6 +70,7 @@ export class Canvas {
         this.config = Canvas.setDefaults(options, Canvas.defaults);
         this.width = this.config.width;
         this.height = this.config.height;
+        const container: HTMLDivElement = document.createElement('div');
         const canvas: HTMLCanvasElement = document.createElement('canvas');
         const graphics = canvas.getContext('2d');
         if (graphics) {
@@ -77,29 +78,34 @@ export class Canvas {
         } else {
             throw new Error('Could not initialize canvas graphics.');
         }
-        // Set static properties
-        this.config.parent.appendChild(canvas);
-        canvas.tabIndex = 1; // For element focus
-        canvas.style.outline = 'none';
+        // Append elements to document
+        this.config.parent.appendChild(container);
+        container.appendChild(canvas);
+        // Set properties for container
+        container.tabIndex = 1; // For element focus
+        container.style.outline = 'none';
+        container.style.width = `${this.config.width * this.config.scale}px`;
+        container.style.height = `${this.config.height * this.config.scale}px`;
+        container.style.border = `${this.config.scale}px solid ${this.config.border}`;
+        container.style.background = this.config.background;
+        container.style.cursor = this.config.showMouse ? 'default' : 'none';
+        // Set properties for canvas
         canvas.style.imageRendering = 'pixelated';
-        graphics.imageSmoothingEnabled = false;
-        // Set custom properties
+        canvas.style.boxSizing = 'border-box';
         canvas.width = this.config.width;
         canvas.height = this.config.height;
-        canvas.style.width = `${this.config.width * this.config.scale}px`;
-        canvas.style.height = `${this.config.height * this.config.scale}px`;
-        canvas.style.background = this.config.background.toString();
-        canvas.style.border = `${this.config.scale}px solid ${this.config.border}`;
-        canvas.style.cursor = this.config.showMouse ? 'default' : 'none';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        graphics.imageSmoothingEnabled = false;
         // Event listeners
-        canvas.addEventListener('mousemove', e => {
+        container.addEventListener('mousemove', e => {
             if (!this.isFocused()) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
             this.log(e.type, this.mouseX, this.mouseY);
             this.config.mousemove(this.mouseX, this.mouseY);
         });
-        canvas.addEventListener('keydown', e => {
+        container.addEventListener('keydown', e => {
             if (!this.isFocused()) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
@@ -109,7 +115,7 @@ export class Canvas {
                 this.config.keydown(key);
             }
         });
-        canvas.addEventListener('keyup', e => {
+        container.addEventListener('keyup', e => {
             if (!this.isFocused()) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
@@ -119,7 +125,7 @@ export class Canvas {
                 this.config.keyup(key);
             }
         });
-        canvas.addEventListener('mousedown', e => {
+        container.addEventListener('mousedown', e => {
             if (!this.isFocused()) { return; }
             const button: number = e.button;
             this.log(e.type, this.mouseButtons);
@@ -128,7 +134,7 @@ export class Canvas {
                 this.config.mousedown(button);
             }
         });
-        canvas.addEventListener('mouseup', e => {
+        container.addEventListener('mouseup', e => {
             if (!this.isFocused()) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
@@ -138,13 +144,13 @@ export class Canvas {
                 this.config.mouseup(button);
             }
         });
-        canvas.addEventListener('focusin', e => {
-            canvas.style.borderColor = this.config.border;
+        container.addEventListener('focusin', e => {
+            container.style.borderColor = this.config.border;
             this.log(e.type);
             this.animation = requestAnimationFrame(time => this.startAnimate(time));
         });
-        canvas.addEventListener('focusout', e => {
-            canvas.style.borderColor = this.config.borderBlur;
+        container.addEventListener('focusout', e => {
+            container.style.borderColor = this.config.borderBlur;
             this.log(e.type);
             cancelAnimationFrame(this.animation);
         });
@@ -152,9 +158,9 @@ export class Canvas {
             this.log(e.type);
             cancelAnimationFrame(this.animation);
         });
-        canvas.addEventListener('contextmenu', e => e.preventDefault());
+        container.addEventListener('contextmenu', e => e.preventDefault());
         // Focus on the canvas
-        canvas.focus();
+        container.focus();
     }
     /**
      * Determine if the canvas is currently focused.
