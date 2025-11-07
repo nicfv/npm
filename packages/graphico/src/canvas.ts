@@ -15,6 +15,7 @@ export class Canvas {
         border: 'transparent',
         borderBlur: 'transparent',
         showMouse: true,
+        numLayers: 1,
         keydown() { return; },
         keyup() { return; },
         mousemove() { return; },
@@ -29,7 +30,7 @@ export class Canvas {
     /**
      * Can be used to render 2D graphics onto the canvas
      */
-    private readonly graphics: CanvasRenderingContext2D;
+    private readonly graphics: CanvasRenderingContext2D[] = [];
     /**
      * Contains a list of current keys pressed
      */
@@ -63,6 +64,10 @@ export class Canvas {
      */
     private lastFrame = 0;
     /**
+     * Determine whether the client is focused or not
+     */
+    private focused = false;
+    /**
      * Create a new canvas with the provided options
      * @param options Configuration options
      */
@@ -70,18 +75,8 @@ export class Canvas {
         this.config = Canvas.setDefaults(options, Canvas.defaults);
         this.width = this.config.width;
         this.height = this.config.height;
+        // Create the container <div> element and set properties
         const container: HTMLDivElement = document.createElement('div');
-        const canvas: HTMLCanvasElement = document.createElement('canvas');
-        const graphics = canvas.getContext('2d');
-        if (graphics) {
-            this.graphics = graphics;
-        } else {
-            throw new Error('Could not initialize canvas graphics.');
-        }
-        // Append elements to document
-        this.config.parent.appendChild(container);
-        container.appendChild(canvas);
-        // Set properties for container
         container.tabIndex = 1; // For element focus
         container.style.outline = 'none';
         container.style.width = `${this.config.width * this.config.scale}px`;
@@ -89,24 +84,38 @@ export class Canvas {
         container.style.border = `${this.config.scale}px solid ${this.config.border}`;
         container.style.background = this.config.background;
         container.style.cursor = this.config.showMouse ? 'default' : 'none';
-        // Set properties for canvas
-        canvas.style.imageRendering = 'pixelated';
-        canvas.style.boxSizing = 'border-box';
-        canvas.width = this.config.width;
-        canvas.height = this.config.height;
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        graphics.imageSmoothingEnabled = false;
+        container.style.position = 'relative';
+        this.config.parent.appendChild(container);
+        // Create canvas layers
+        for (let i = 0; i < this.config.numLayers; i++) {
+            const canvas: HTMLCanvasElement = document.createElement('canvas');
+            const graphics = canvas.getContext('2d');
+            if (graphics) {
+                this.graphics.push(graphics);
+            } else {
+                throw new Error('Could not initialize canvas graphics.');
+            }
+            // Set properties for canvas
+            canvas.style.imageRendering = 'pixelated';
+            canvas.style.boxSizing = 'border-box';
+            canvas.width = this.config.width;
+            canvas.height = this.config.height;
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.position = 'absolute';
+            graphics.imageSmoothingEnabled = false;
+            container.appendChild(canvas);
+        }
         // Event listeners
         container.addEventListener('mousemove', e => {
-            if (!this.isFocused()) { return; }
+            if (!this.focused) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
             this.log(e.type, this.mouseX, this.mouseY);
             this.config.mousemove(this.mouseX, this.mouseY);
         });
         container.addEventListener('keydown', e => {
-            if (!this.isFocused()) { return; }
+            if (!this.focused) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
             this.log(e.type, this.keys);
@@ -116,7 +125,7 @@ export class Canvas {
             }
         });
         container.addEventListener('keyup', e => {
-            if (!this.isFocused()) { return; }
+            if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
             this.log(e.type, this.keys);
@@ -126,7 +135,7 @@ export class Canvas {
             }
         });
         container.addEventListener('mousedown', e => {
-            if (!this.isFocused()) { return; }
+            if (!this.focused) { return; }
             const button: number = e.button;
             this.log(e.type, this.mouseButtons);
             if (!this.mouseButtons.includes(button)) {
@@ -135,7 +144,7 @@ export class Canvas {
             }
         });
         container.addEventListener('mouseup', e => {
-            if (!this.isFocused()) { return; }
+            if (!this.focused) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
             this.log(e.type, this.mouseButtons);
@@ -145,13 +154,15 @@ export class Canvas {
             }
         });
         container.addEventListener('focusin', e => {
+            this.focused = true;
             container.style.borderColor = this.config.border;
-            this.log(e.type);
+            this.log(e.type, this.focused);
             this.animation = requestAnimationFrame(time => this.startAnimate(time));
         });
         container.addEventListener('focusout', e => {
+            this.focused = false;
             container.style.borderColor = this.config.borderBlur;
-            this.log(e.type);
+            this.log(e.type, this.focused);
             cancelAnimationFrame(this.animation);
         });
         window.addEventListener('blur', e => {
@@ -161,12 +172,6 @@ export class Canvas {
         container.addEventListener('contextmenu', e => e.preventDefault());
         // Focus on the canvas
         container.focus();
-    }
-    /**
-     * Determine if the canvas is currently focused.
-     */
-    private isFocused(): boolean {
-        return this.graphics.canvas === document.activeElement;
     }
     /**
      * Start the animation.
@@ -217,11 +222,12 @@ export class Canvas {
      * Get the color of the selected pixel.
      * @param x The pixel's x-coordinate
      * @param y The pixel's y-coordinate
+     * @param layer The zero-indexed layer to get data from
      * @returns `[red, green, blue, alpha]`
      */
-    public getPixel(x: number, y: number): [number, number, number, number] {
-        const data: ImageDataArray = this.graphics.getImageData(x, y, 1, 1).data;
-        console.log(this.graphics.getImageData(x, y, 2, 2));;
+    public getPixel(x: number, y: number, layer = 0): [number, number, number, number] {
+        const data: ImageDataArray = this.graphics[layer].getImageData(x, y, 1, 1).data;
+        this.log(this.graphics[layer].getImageData(x, y, 2, 2));;
         return [data[0], data[1], data[2], data[3]];
     }
     /**
@@ -229,21 +235,22 @@ export class Canvas {
      * @param x The pixel's x-coordinate
      * @param y The pixel's y-coordinate
      * @param color `[red, green, blue, alpha]`
+     * @param layer The zero-indexed layer to set data to
      */
-    public setPixel(x: number, y: number, color: [number, number, number, number]): void {
-        const data: ImageData = this.graphics.getImageData(x, y, 1, 1);
+    public setPixel(x: number, y: number, color: [number, number, number, number], layer = 0): void {
+        const data: ImageData = this.graphics[layer].getImageData(x, y, 1, 1);
         data.data[0] = color[0];
         data.data[1] = color[1];
         data.data[2] = color[2];
         data.data[3] = color[3];
-        console.log(data);
-        this.graphics.putImageData(data, x, y);
+        this.log(data);
+        this.graphics[layer].putImageData(data, x, y);
     }
     /**
      * Take a screenshot of the canvas contents and save to a .png file.
      */
     public screenshot(): void {
-        const dataURL: string = this.graphics.canvas.toDataURL();
+        const dataURL: string = this.graphics[0].canvas.toDataURL(); // TODO
         const downloadLink: HTMLAnchorElement = document.createElement('a');
         downloadLink.setAttribute('href', dataURL);
         downloadLink.setAttribute('download', 'screenshot');
@@ -252,15 +259,23 @@ export class Canvas {
     /**
      * Draw an object onto the canvas.
      * @param drawable Any drawable object
+     * @param layer The zero-indexed layer to draw to
      */
-    public draw(drawable: Drawable): void {
-        drawable.draw(this.graphics);
+    public draw(drawable: Drawable, layer = 0): void {
+        drawable.draw(this.graphics[layer]);
     }
     /**
      * Completely clears the canvas.
+     * @param layer The zero-indexed layer to clear, if unset, will clear all layers
      */
-    public clear(): void {
-        this.graphics.clearRect(0, 0, this.config.width, this.config.height);
+    public clear(layer = -1): void {
+        if (layer < 0) {
+            for (const graphic of this.graphics) {
+                graphic.clearRect(0, 0, this.config.width, this.config.height);
+            }
+        } else {
+            this.graphics[layer].clearRect(0, 0, this.config.width, this.config.height);
+        }
     }
     /**
      * Log a message to the debug console.
@@ -322,6 +337,10 @@ export interface Options {
      * Optionally show or hide the mouse when hovering over the canvas
      */
     readonly showMouse: boolean;
+    /**
+     * The number of layers in this canvas
+     */
+    readonly numLayers: number;
     /**
      * Event listener for when a key is pressed
      * @param key The key that was pressed
