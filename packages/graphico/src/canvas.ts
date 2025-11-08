@@ -248,13 +248,31 @@ export class Canvas {
     }
     /**
      * Take a screenshot of the canvas contents and save to a .png file.
+     * @param name The file name of the screenshot
      */
-    public screenshot(): void {
-        const dataURL: string = this.graphics[0].canvas.toDataURL(); // TODO
+    public screenshot(name = 'screenshot'): void {
+        // Create an offscreen canvas
+        const screen: Canvas = new Canvas({
+            parent: document.createElement('div'),
+            height: this.config.height,
+            width: this.config.width,
+            scale: this.config.scale,
+        });
+        // Draw the background and each layer
+        screen.graphics[0].fillStyle = this.config.background;
+        screen.graphics[0].fillRect(0, 0, screen.width, screen.height);
+        for (const graphic of this.graphics) {
+            screen.graphics[0].drawImage(graphic.canvas, 0, 0);
+        }
+        // Generate a data URL and set it as the download parameter for <a>
+        const dataURL: string = screen.graphics[0].canvas.toDataURL();
         const downloadLink: HTMLAnchorElement = document.createElement('a');
         downloadLink.setAttribute('href', dataURL);
-        downloadLink.setAttribute('download', 'screenshot');
+        downloadLink.setAttribute('download', name);
         downloadLink.click();
+        // Remove all keys and mouse buttons down because we lose focus
+        this.keys.splice(0);
+        this.mouseButtons.splice(0);
     }
     /**
      * Draw an object onto the canvas.
