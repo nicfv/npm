@@ -3,11 +3,7 @@ import { Canvas } from 'graphico';
 // Mouse button IDs (could possibly be different for your hardware)
 const LCLICK = 0,
     MCLICK = 1,
-    RCLICK = 2,
-    NONE = -1;
-
-// Current mouse button pressed
-let mouseButtonDown = NONE;
+    RCLICK = 2;
 
 // The HSL color hue
 let hue = 0;
@@ -69,20 +65,17 @@ const canvas = new Canvas({
     borderBlur: 'gray',
     showMouse: false,
     numLayers: 2,
-    // The following 3 functions are event listeners for mouse input (when the canvas is selected)
-    mousedown(mouseButton) {
-        mouseButtonDown = mouseButton;
-    },
-    mouseup() {
-        mouseButtonDown = NONE;
-    },
+    // The following 2 functions are event listeners for mouse/keyboard input (when the canvas is selected)
     mousemove(x, y) {
         // Change paint color depending on which mouse button was pressed
-        if (mouseButtonDown === LCLICK) {
+        // We could use the `mousedown(button)` event listener to record which
+        // mouse button is down in a global `mouseButtonDown` variable, instead
+        // of calling `isMouseButtonDown(button)` each time the mouse moves.
+        if (canvas.isMouseButtonDown(LCLICK)) {
             canvas.draw(new Circle(hsl(hue), x, y)); // Draws on layer 0 automatically
-        } else if (mouseButtonDown === MCLICK) {
+        } else if (canvas.isMouseButtonDown(MCLICK)) {
             canvas.draw(new Circle(hsl(hue + 90), x, y));
-        } else if (mouseButtonDown === RCLICK) {
+        } else if (canvas.isMouseButtonDown(RCLICK)) {
             canvas.draw(new Circle(hsl(hue + 180), x, y));
         }
         canvas.clear(1);
@@ -116,6 +109,7 @@ const canvas = new Canvas({
                 break;
             }
             case ('p'): {
+                // Take and save a screenshot
                 canvas.screenshot();
                 break;
             }
