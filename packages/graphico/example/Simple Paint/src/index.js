@@ -9,53 +9,58 @@ const LCLICK = 0,
 // Current mouse button pressed
 let mouseButtonDown = NONE;
 
+// The HSL color hue
+let hue = 0;
+
+// The paint brush radius
+let radius = 3;
+
+
+// Return the HSL color code
+function hsl(h = 0, s = 100, l = 50) {
+    return `hsl(${h},${s}%,${l}%)`;
+}
 
 // Extends `Drawable` by implementing the `draw` function.
 class Circle {
     #color;
     #x;
     #y;
-    #r;
-    constructor(color = '', x = 0, y = 0, r = 0) {
+    constructor(color = '', x = 0, y = 0) {
         this.#color = color;
         this.#x = x;
         this.#y = y;
-        this.#r = r;
     }
     draw(ctx) {
         // Call HTML canvas context rendering 2D functions here using the `ctx` object
         ctx.fillStyle = this.#color;
         ctx.beginPath();
-        ctx.arc(this.#x, this.#y, this.#r, 0, 2 * Math.PI);
+        ctx.arc(this.#x, this.#y, radius, 0, 2 * Math.PI);
         ctx.fill();
     }
 }
 
 class Cursor {
-    #color;
     #x;
     #y;
-    #r;
-    constructor(color = '', r = 0) {
-        this.#color = color;
+    constructor() {
         this.#x = 0;
         this.#y = 0;
-        this.#r = r;
     }
     updatePos(x = 0, y = 0) {
         this.#x = x;
         this.#y = y;
     }
     draw(ctx) {
-        ctx.strokeStyle = this.#color;
-        ctx.lineWidth = this.#r / 3;
+        ctx.strokeStyle = hsl(hue);
+        ctx.lineWidth = radius / 3;
         ctx.beginPath();
-        ctx.arc(this.#x, this.#y, this.#r, 0, 2 * Math.PI);
+        ctx.arc(this.#x, this.#y, radius + 1, 0, 2 * Math.PI);
         ctx.stroke();
     }
 }
 
-const myCursor = new Cursor('red', 4);
+const myCursor = new Cursor();
 
 const canvas = new Canvas({
     // Set the background and border colors on focus/unfocus
@@ -72,17 +77,50 @@ const canvas = new Canvas({
         mouseButtonDown = NONE;
     },
     mousemove(x, y) {
-        const RADIUS = 3;
         // Change paint color depending on which mouse button was pressed
         if (mouseButtonDown === LCLICK) {
-            canvas.draw(new Circle('blue', x, y, RADIUS), 0); // Draw on layer 0
+            canvas.draw(new Circle(hsl(hue), x, y)); // Draws on layer 0 automatically
         } else if (mouseButtonDown === MCLICK) {
-            canvas.draw(new Circle('green', x, y, RADIUS), 0);
+            canvas.draw(new Circle(hsl(hue + 90), x, y));
         } else if (mouseButtonDown === RCLICK) {
-            canvas.draw(new Circle('yellow', x, y, RADIUS), 0);
+            canvas.draw(new Circle(hsl(hue + 180), x, y));
         }
         canvas.clear(1);
         myCursor.updatePos(x, y);
         canvas.draw(myCursor, 1); // Draw on layer 1
     },
+    keydown(key) {
+        switch (key) {
+            case ('arrowup'): {
+                // Increase the brush size
+                if (radius < 10) {
+                    radius++;
+                }
+                break;
+            }
+            case ('arrowdown'): {
+                // Decrease the brush size
+                if (radius > 1) {
+                    radius--;
+                }
+                break;
+            }
+            case ('arrowleft'): {
+                // Change color by -45deg
+                hue -= 45;
+                break;
+            }
+            case ('arrowright'): {
+                // Change color by 45deg
+                hue += 45;
+                break;
+            }
+            case ('p'): {
+                canvas.screenshot();
+                break;
+            }
+        }
+        canvas.clear(1);
+        canvas.draw(myCursor, 1); // Draw on layer 1
+    }
 });
