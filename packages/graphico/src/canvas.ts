@@ -291,7 +291,8 @@ export class Canvas {
     private static setDefaults<T extends object>(options: Partial<T>, defaults: T): T {
         const copy: Partial<T> = {};
         for (const key of Object.keys(defaults)) {
-            copy[key as keyof T] = options[key as keyof T] ?? defaults[key as keyof T];
+            const option = options[key as keyof T];
+            copy[key as keyof T] = (option === undefined) ? defaults[key as keyof T] : option;
         }
         return copy as T;
     }
