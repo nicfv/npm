@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.4
+
+- Support canvas layers
+- Update simple paint example so that it accepts user keyboard input to change brush size and color
+
 ## 0.0.3
 
 - Add animation example
