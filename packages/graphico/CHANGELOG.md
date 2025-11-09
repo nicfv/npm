@@ -3,6 +3,13 @@
 ## 0.0.4
 
 - Support canvas layers
+    - Defaults:
+        - One layer (zero-indexed, so layer ID is `0`)
+        - Drawables are drawn onto layer `0` (including returned from `loop()` callback)
+        - `Canvas.clear()` clears *all* layers unless a layer is specified
+        - Get/set pixel functions default to layer `0`
+- Accept hardware/software acceleration toggle configuration parameter
+- `Canvas.screenshot()` function now accepts a name for the screenshot (optionally)
 - Update simple paint example so that it accepts user keyboard input to change brush size and color
 
 ## 0.0.3
