@@ -126,7 +126,4 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             curve.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
         }
     }
-    private hideTooltip(): void {
-        Chart.clearChildren(this.g.tips);
-    }
 }
