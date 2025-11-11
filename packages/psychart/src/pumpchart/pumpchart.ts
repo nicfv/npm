@@ -65,6 +65,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
         }
+        this.drawCurve(this.g.curves, 'test', Color.rgb(144, 55, 77), 2, q => q ** 2 / 100);
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -110,6 +111,19 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, axisColor, this.g.tips));
             label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        }
+    }
+    private drawCurve(layer: SVGGElement, tooltip: string, color: Color, width: number, h: (q: number) => number, min = 0, max = this.options.flow.max, steps = 1e3): void {
+        const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
+        const curve: SVGPathElement = this.createPath(states, false);
+        curve.setAttribute('fill', 'none');
+        curve.setAttribute('stroke', color.toString());
+        curve.setAttribute('stroke-width', `${width}px`);
+        curve.setAttribute('stroke-linecap', 'round');
+        layer.appendChild(curve);
+        if (tooltip) {
+            curve.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
+            curve.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
         }
     }
     private hideTooltip(): void {
