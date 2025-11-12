@@ -65,7 +65,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
         }
-        this.drawCurve('test', Color.rgb(144, 55, 77), 2, q => q ** 2 / 100);
+        this.drawPumpCurves(80, 90, 5);
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -113,6 +113,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
         }
     }
+    /**
+     * Draw a curve `y = h(q)` on the curves layer.
+     */
     private drawCurve(tooltip: string, color: Color, width: number, h: (q: number) => number, min = 0, max = this.options.flow.max, steps = 1e3): void {
         const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
         const curve: SVGPathElement = this.createPath(states, false);
@@ -124,6 +127,20 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         if (tooltip) {
             curve.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
             curve.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        }
+    }
+    private drawPumpCurves(h0: number, q0: number, minor: number): void {
+        const color: Color = Color.rgb(200, 150, 100);
+        const func = (q: number) => h0 * (1 - (q / q0) ** 2);
+        this.drawCurve('Pump Curve', color, 2, func, 0, q0);
+        if (minor > 0) {
+            const minorCurvePoints: number[] = SMath.linspace(0, 1, minor + 1);
+            minorCurvePoints.shift(); // Cut off the 0%
+            minorCurvePoints.pop(); // Cut off the 100%
+            minorCurvePoints.forEach(pct => {
+                const func2 = (q: number) => (h0 * pct) * (1 - (q / (q0 * pct)) ** 2);
+                this.drawCurve('', color, 1, func2, 0, q0 * pct);
+            });
         }
     }
 }
