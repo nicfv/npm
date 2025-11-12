@@ -1,29 +1,6 @@
 import { PsychartOptions, DataOptions, RegionName, Datum } from './types';
 
 /**
- * Produce a deep copy of an object.
- * @param obj Any object.
- * @returns A deep copy of `obj`.
- */
-export function deepCopy<T>(obj: T): T {
-    return JSON.parse(JSON.stringify(obj));
-}
-
-/**
- * Take an object with all optional values, and set all unset values to their defaults.
- * @param optional An object with all parameters optional.
- * @param defaults An object with all parameters default.
- * @returns An object with all parameters that are unset as their default values.
- */
-export function setDefaults<T extends object>(optional: Partial<T>, defaults: T): T {
-    const required: T = deepCopy(defaults);
-    for (const key in required) {
-        required[key] = optional[key] ?? defaults[key];
-    }
-    return required;
-}
-
-/**
  * Represents a set of default options for Psychart.
  */
 export const defaultPsychartOptions: PsychartOptions = {
@@ -39,7 +16,7 @@ export const defaultPsychartOptions: PsychartOptions = {
     flipGradients: false,
     flipXY: false,
     font: {
-        family: 'sans-serif',
+        name: 'sans-serif',
         size: 12,
     },
     legend: {

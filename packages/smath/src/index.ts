@@ -382,7 +382,7 @@ export function rdist(count: number, mean = 0, stdev = 1): number[] {
  * ```
  */
 export function shuffle<T>(stack: T[]): T[] {
-    const rawData: { index: number, value: T }[] = []
+    const rawData: { index: number, value: T }[] = [];
     for (const item of stack) {
         rawData.push({ index: Math.random(), value: item });
     }
