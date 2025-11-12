@@ -65,7 +65,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
         }
-        this.drawPumpCurves(80, 90, 5);
+        this.drawPerformanceCurves(80, 90, 5);
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -129,10 +129,16 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             curve.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
         }
     }
-    private drawPumpCurves(h0: number, q0: number, minor: number): void {
+    /**
+     * Draw concentric pump performance curves.
+     * @param h0 Head pressure at no flow
+     * @param q0 Flow at no head pressure
+     * @param minor The number of concentric performance curves to show, for example `3` would show performance curves at `25%`, `50%`, and `75%` diameter/speeds
+     */
+    private drawPerformanceCurves(h0: number, q0: number, minor: number): void {
         const color: Color = Color.rgb(200, 150, 100);
         const func = (q: number) => h0 * (1 - (q / q0) ** 2);
-        this.drawCurve('Pump Curve', color, 2, func, 0, q0);
+        this.drawCurve('Performance Curve', color, 2, func, 0, q0);
         if (minor > 0) {
             const minorCurvePoints: number[] = SMath.linspace(0, 1, minor + 1);
             minorCurvePoints.shift(); // Cut off the 0%
