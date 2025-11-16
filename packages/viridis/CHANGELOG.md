@@ -3,6 +3,7 @@
 ## 1.4.0
 
 - Remove `Color.from()` (use `Color.hex()` instead)
+- Support more gradient types in `Gradient.toString()`
 
 ## 1.3.1
 
