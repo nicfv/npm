@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- Remove `Color.from()` (use `Color.hex()` instead)
+
 ## 1.3.1
 
 - Re-generate builtin color palettes in main README file
