@@ -16,7 +16,6 @@ export class Canvas {
         borderBlur: 'transparent',
         showMouse: true,
         numLayers: 1,
-        acceleration: 'hardware',
         keydown() { return; },
         keyup() { return; },
         mousemove() { return; },
@@ -90,7 +89,7 @@ export class Canvas {
         // Create canvas layers
         for (let i = 0; i < this.config.numLayers; i++) {
             const canvas: HTMLCanvasElement = document.createElement('canvas');
-            const graphics = canvas.getContext('2d', { 'willReadFrequently': this.config.acceleration === 'software' });
+            const graphics = canvas.getContext('2d');
             if (graphics) {
                 this.graphics.push(graphics);
             } else {
@@ -328,12 +327,6 @@ export interface Options {
      * The number of layers in this canvas
      */
     readonly numLayers: number;
-    /**
-     * Uses hardware (GPU) or software (CPU) acceleration
-     * - For pixel manipulation, software acceleration is recommended
-     * - Otherwise, hardware acceleration is recommended (default)
-     */
-    readonly acceleration: 'hardware' | 'software';
     /**
      * Event listener for when a key is pressed
      * @param key The key that was pressed
