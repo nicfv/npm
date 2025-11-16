@@ -9,10 +9,10 @@ const RGB_Gradient = new Gradient([
 
 // Generate valid CSS code for this color gradient
 console.log('CSS code        : ' + RGB_Gradient);
-console.log('CSS code [45deg]: ' + RGB_Gradient.toString(45));
+console.log('CSS code [45deg]: ' + RGB_Gradient.toString('linear', 1, ['45deg']));
 
 // Show the internal array of color stops
-console.log('Color Stops', RGB_Gradient.colors);
+console.log('Color Stops', RGB_Gradient.colors.join(','));
 
 // Generate a short list of intermediate color values
 // Gradient will automatically interpolate if given
