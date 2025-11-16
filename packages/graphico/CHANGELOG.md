@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.5
+
+- Remove `get/setPixel()` functions
+
 ## 0.0.4
 
 - Support canvas layers
