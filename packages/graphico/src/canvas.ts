@@ -189,6 +189,7 @@ export class Canvas {
         const dt: number = currentFrame - this.lastFrame;
         this.lastFrame = currentFrame;
         this.log('animate', dt, currentFrame);
+        this.config.loop(dt);
         this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
