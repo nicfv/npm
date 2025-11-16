@@ -65,7 +65,8 @@ const canvas = new Canvas({
     loop(dt) {
         ball.step(dt); // Compute the motion for the ball
         canvas.clear(); // Clear the canvas before rendering any objects
-        return [ground, ball]; // You can optionally return an array of `Drawable` instead of having to call `canvas.draw()` on each one
+        canvas.draw(ground); // Draw the ground (calls the ground.draw() function)
+        canvas.draw(ball); // Draw the ball
     },
     keydown(key) {
         // Press space to drop the ball

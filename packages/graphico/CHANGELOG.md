@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.0.5
+
+- Remove `get/setPixel()` functions
+    - Remove hardware/software acceleration type (only used for pixel manipulation)
+- Remove shorthand in `loop()` function from returning an array of `Drawable`, to make behavior consistent for single and multi-layered canvases
+- Minor updates to animation example
+- Add instructions to both examples
+
 ## 0.0.4
 
 - Support canvas layers

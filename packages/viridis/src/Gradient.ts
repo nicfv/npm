@@ -34,7 +34,7 @@ export class Gradient {
      * @example
      * ```js
      * const myColor = redBlue.getColor(0.5);
-     * // Returns interpolated color (127.5, 0, 127.5)
+     * // Returns interpolated color #7F007F
      * ```
      */
     public getColor(x: number, min = 0, max = 1): Color {
@@ -61,16 +61,18 @@ export class Gradient {
     }
     /**
      * Return a string representation of this gradient.
-     * @param deg The direction of this color gradient, in degrees
+     * @param type The gradient pattern shape
+     * @param repeat The number of times to repeat this gradient
+     * @param options Options to add before the color stops
      * @returns A valid CSS color gradient
      * @example
      * ```js
-     * const str = redBlue.toString(180);
-     * // linear-gradient(180deg,rgba(255,0,0,100%),rgba(0,0,255,100%))
+     * const str = redBlue.toString('linear', 2, ['45deg']);
+     * // repeating-linear-gradient(45deg,#FF0000,#0000FF 50%)
      * ```
      */
-    public toString(deg = 90): string {
-        return 'linear-gradient(' + deg + 'deg,' + this.colors.map(color => color.toString()).join(',') + ')';
+    public toString(type: 'linear' | 'radial' | 'conic' = 'linear', repeat = 1, options: string[] = []): string {
+        return `${repeat > 1 ? 'repeating-' : ''}${type}-gradient(${[...options, ...this.colors.map(color => color.toString())].join(',')}${repeat > 1 ? ` ${100 / repeat}%` : ''})`;
     }
     /**
      * Generate an SVG linear gradient element.

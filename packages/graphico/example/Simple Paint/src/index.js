@@ -59,6 +59,8 @@ class Cursor {
 const myCursor = new Cursor();
 
 const canvas = new Canvas({
+    // Append the canvas onto the <div id="canvas"> element
+    parent: document.getElementById('canvas'),
     // Set the background and border colors on focus/unfocus
     background: '#aabbcc',
     border: 'black',

@@ -16,7 +16,6 @@ export class Canvas {
         borderBlur: 'transparent',
         showMouse: true,
         numLayers: 1,
-        acceleration: 'hardware',
         keydown() { return; },
         keyup() { return; },
         mousemove() { return; },
@@ -90,7 +89,7 @@ export class Canvas {
         // Create canvas layers
         for (let i = 0; i < this.config.numLayers; i++) {
             const canvas: HTMLCanvasElement = document.createElement('canvas');
-            const graphics = canvas.getContext('2d', { 'willReadFrequently': this.config.acceleration === 'software' });
+            const graphics = canvas.getContext('2d');
             if (graphics) {
                 this.graphics.push(graphics);
             } else {
@@ -190,10 +189,7 @@ export class Canvas {
         const dt: number = currentFrame - this.lastFrame;
         this.lastFrame = currentFrame;
         this.log('animate', dt, currentFrame);
-        const drawables: Drawable[] = this.config.loop(dt) ?? [];
-        for (const drawable of drawables) {
-            this.draw(drawable);
-        }
+        this.config.loop(dt);
         this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
@@ -218,34 +214,6 @@ export class Canvas {
      */
     public getMousePosition(): [number, number] {
         return [this.mouseX, this.mouseY];
-    }
-    /**
-     * Get the color of the selected pixel.
-     * @param x The pixel's x-coordinate
-     * @param y The pixel's y-coordinate
-     * @param layer The zero-indexed layer to get data from
-     * @returns `[red, green, blue, alpha]`
-     */
-    public getPixel(x: number, y: number, layer = 0): [number, number, number, number] {
-        const data: ImageDataArray = this.graphics[layer].getImageData(x, y, 1, 1).data;
-        this.log(this.graphics[layer].getImageData(x, y, 2, 2));;
-        return [data[0], data[1], data[2], data[3]];
-    }
-    /**
-     * Set the color of the selected pixel.
-     * @param x The pixel's x-coordinate
-     * @param y The pixel's y-coordinate
-     * @param color `[red, green, blue, alpha]`
-     * @param layer The zero-indexed layer to set data to
-     */
-    public setPixel(x: number, y: number, color: [number, number, number, number], layer = 0): void {
-        const data: ImageData = this.graphics[layer].getImageData(x, y, 1, 1);
-        data.data[0] = color[0];
-        data.data[1] = color[1];
-        data.data[2] = color[2];
-        data.data[3] = color[3];
-        this.log(data);
-        this.graphics[layer].putImageData(data, x, y);
     }
     /**
      * Take a screenshot of the canvas contents and save to a .png file.
@@ -361,12 +329,6 @@ export interface Options {
      */
     readonly numLayers: number;
     /**
-     * Uses hardware (GPU) or software (CPU) acceleration
-     * - For pixel manipulation, software acceleration is recommended
-     * - Otherwise, hardware acceleration is recommended (default)
-     */
-    readonly acceleration: 'hardware' | 'software';
-    /**
      * Event listener for when a key is pressed
      * @param key The key that was pressed
      */
@@ -397,7 +359,7 @@ export interface Options {
      * @param dt The number of milliseconds in between frames
      * @returns An array of `Drawable` to render on layer 0, or void
      */
-    readonly loop: (dt: number) => Drawable[] | (void | never);
+    readonly loop: (dt: number) => void;
 }
 
 /**
