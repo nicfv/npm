@@ -190,10 +190,6 @@ export class Canvas {
         const dt: number = currentFrame - this.lastFrame;
         this.lastFrame = currentFrame;
         this.log('animate', dt, currentFrame);
-        const drawables: Drawable[] = this.config.loop(dt) ?? [];
-        for (const drawable of drawables) {
-            this.draw(drawable);
-        }
         this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
@@ -369,7 +365,7 @@ export interface Options {
      * @param dt The number of milliseconds in between frames
      * @returns An array of `Drawable` to render on layer 0, or void
      */
-    readonly loop: (dt: number) => Drawable[] | (void | never);
+    readonly loop: (dt: number) => void;
 }
 
 /**
