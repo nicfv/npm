@@ -220,34 +220,6 @@ export class Canvas {
         return [this.mouseX, this.mouseY];
     }
     /**
-     * Get the color of the selected pixel.
-     * @param x The pixel's x-coordinate
-     * @param y The pixel's y-coordinate
-     * @param layer The zero-indexed layer to get data from
-     * @returns `[red, green, blue, alpha]`
-     */
-    public getPixel(x: number, y: number, layer = 0): [number, number, number, number] {
-        const data: ImageDataArray = this.graphics[layer].getImageData(x, y, 1, 1).data;
-        this.log(this.graphics[layer].getImageData(x, y, 2, 2));;
-        return [data[0], data[1], data[2], data[3]];
-    }
-    /**
-     * Set the color of the selected pixel.
-     * @param x The pixel's x-coordinate
-     * @param y The pixel's y-coordinate
-     * @param color `[red, green, blue, alpha]`
-     * @param layer The zero-indexed layer to set data to
-     */
-    public setPixel(x: number, y: number, color: [number, number, number, number], layer = 0): void {
-        const data: ImageData = this.graphics[layer].getImageData(x, y, 1, 1);
-        data.data[0] = color[0];
-        data.data[1] = color[1];
-        data.data[2] = color[2];
-        data.data[3] = color[3];
-        this.log(data);
-        this.graphics[layer].putImageData(data, x, y);
-    }
-    /**
      * Take a screenshot of the canvas contents and save to a .png file.
      * @param name The file name of the screenshot
      */
