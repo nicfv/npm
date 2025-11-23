@@ -1,12 +1,8 @@
 In this example, we create a simple canvas in which we can paint in different colors, depending on what color is currently selected which mouse button is pressed. Our "paint" is a series of circles that are rendered whenever the mouse button is down and when the mouse is moved. The canvas must also be in focus.
 
-We use callback functions to accept user mouse input and keyboard input, and have set up the following controls:
+We use callback functions to accept user mouse input and keyboard input.
 
-- Left arrow = Change color hue by -45 degrees
-- Right arrow = Change color hue by 45 degrees
-- Up arrow = Increase brush stroke by 1px
-- Down arrow = Decrease brush stroke by 1px
-- P = Take a screenshot of the canvas
+> The keyboard instructions are outlined in the `index.html` file below.
 
 We also can determine which mouse button was pressed and draw different colors depending on which button was pressed:
 
