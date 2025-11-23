@@ -6,3 +6,4 @@
  * ![NPM Last Update](https://img.shields.io/npm/last-update/graphico)
  */
 export * from './canvas';
+export * from './types';
