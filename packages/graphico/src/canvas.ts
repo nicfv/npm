@@ -72,6 +72,10 @@ export class Canvas {
      */
     private focused = false;
     /**
+     * The media recording object for screen captures
+     */
+    private readonly recorder: MediaRecorder;
+    /**
      * Create a new canvas with the provided options
      * @param options Configuration options
      */
@@ -180,6 +184,27 @@ export class Canvas {
         main.addEventListener('contextmenu', e => e.preventDefault());
         // Focus on the canvas
         main.focus();
+        // Initialize the media recorder
+        const recordPart: BlobPart[] = [];
+        this.recorder = new MediaRecorder(main.captureStream());
+        this.recorder.addEventListener('dataavailable', e => {
+            this.log(e.type);
+            recordPart.push(e.data);
+        });
+        this.recorder.addEventListener('stop', e => {
+            this.log(e.type);
+            const recording: Blob = new Blob(recordPart, { type: 'video/webm;codecs=h264' });
+            const url: string = URL.createObjectURL(recording);
+            const downloadLink: HTMLAnchorElement = document.createElement('a');
+            downloadLink.setAttribute('href', url);
+            downloadLink.setAttribute('download', `recording-${Date.now()}`);
+            downloadLink.click();
+            // Clear out the existing blob parts for recording a new capture
+            recordPart.splice(0);
+            // Remove all keys and mouse buttons down because we lose focus
+            this.keys.splice(0);
+            this.mouseButtons.splice(0);
+        });
     }
     /**
      * Start the animation.
@@ -196,7 +221,6 @@ export class Canvas {
         const currentFrame: number = time;
         const dt: number = currentFrame - this.lastFrame;
         this.lastFrame = currentFrame;
-        this.log('animate', dt, currentFrame);
         this.config.loop(dt);
         // Draw all the layers onto the main canvas
         this.graphic.fillStyle = this.config.background;
@@ -243,6 +267,25 @@ export class Canvas {
         // Remove all keys and mouse buttons down because we lose focus
         this.keys.splice(0);
         this.mouseButtons.splice(0);
+    }
+    /**
+     * Start recording all layers on the canvas
+     */
+    public startRecording(): void {
+        this.recorder.start();
+    }
+    /**
+     * Stop recording and download screen capture
+     */
+    public stopRecording(): void {
+        this.recorder.stop();
+    }
+    /**
+     * Determines whether the media recorder is active
+     * @returns `true` if currently recording
+     */
+    public isRecording(): boolean {
+        return this.recorder.state === 'recording';
     }
     /**
      * Draw an object onto the canvas.
