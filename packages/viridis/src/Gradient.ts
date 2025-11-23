@@ -67,11 +67,11 @@ export class Gradient {
      * @returns A valid CSS color gradient
      * @example
      * ```js
-     * const str = redBlue.toString('linear', 2, ['45deg']);
+     * const str = redBlue.toString('linear', 2, '45deg');
      * // repeating-linear-gradient(45deg,#FF0000,#0000FF 50%)
      * ```
      */
-    public toString(type: 'linear' | 'radial' | 'conic' = 'linear', repeat = 1, options: string[] = []): string {
+    public toString(type: 'linear' | 'radial' | 'conic' = 'linear', repeat = 1, ...options: string[]): string {
         return `${repeat > 1 ? 'repeating-' : ''}${type}-gradient(${[...options, ...this.colors.map(color => color.toString())].join(',')}${repeat > 1 ? ` ${100 / repeat}%` : ''})`;
     }
     /**
