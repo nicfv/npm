@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+- All layers are drawn onto a single canvas element
+- Support simple screen recording (no audio)
+- Updates to paint example
+
 ## 0.0.5
 
 - Remove `get/setPixel()` functions
