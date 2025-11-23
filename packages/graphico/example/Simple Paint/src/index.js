@@ -115,6 +115,15 @@ const canvas = new Canvas({
                 canvas.screenshot();
                 break;
             }
+            case ('o'): {
+                // Capture a screen recording
+                if (canvas.isRecording()) {
+                    canvas.stopRecording();
+                } else {
+                    canvas.startRecording();
+                }
+                break;
+            }
         }
         canvas.clear(1);
         canvas.draw(myCursor, 1); // Draw on layer 1

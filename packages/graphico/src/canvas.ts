@@ -1,3 +1,5 @@
+import { Drawable, Options } from '.';
+
 /**
  * Represents a canvas for drawing and animating
  */
@@ -11,7 +13,7 @@ export class Canvas {
         width: 600,
         height: 400,
         scale: 1,
-        background: 'transparent',
+        background: 'white',
         border: 'transparent',
         borderBlur: 'transparent',
         showMouse: true,
@@ -28,9 +30,13 @@ export class Canvas {
      */
     private readonly config: Options;
     /**
-     * Can be used to render 2D graphics onto the canvas
+     * Used to render 2D objects onto the main canvas
      */
-    private readonly graphics: CanvasRenderingContext2D[] = [];
+    private readonly graphic: CanvasRenderingContext2D;
+    /**
+     * Can be used to render 2D graphics onto layers of the canvas
+     */
+    private readonly layers: CanvasRenderingContext2D[] = [];
     /**
      * Contains a list of current keys pressed
      */
@@ -68,6 +74,10 @@ export class Canvas {
      */
     private focused = false;
     /**
+     * The media recording object for screen captures
+     */
+    private readonly recorder: MediaRecorder;
+    /**
      * Create a new canvas with the provided options
      * @param options Configuration options
      */
@@ -75,46 +85,50 @@ export class Canvas {
         this.config = Canvas.setDefaults(options, Canvas.defaults);
         this.width = this.config.width;
         this.height = this.config.height;
-        // Create the container <div> element and set properties
-        const container: HTMLDivElement = document.createElement('div');
-        container.tabIndex = 1; // For element focus
-        container.style.outline = 'none';
-        container.style.width = `${this.config.width * this.config.scale}px`;
-        container.style.height = `${this.config.height * this.config.scale}px`;
-        container.style.border = `${this.config.scale}px solid ${this.config.border}`;
-        container.style.background = this.config.background;
-        container.style.cursor = this.config.showMouse ? 'default' : 'none';
-        container.style.position = 'relative';
-        this.config.parent.appendChild(container);
+        // Create the main <canvas> element and set properties
+        const main: HTMLCanvasElement = document.createElement('canvas');
+        main.tabIndex = 1; // For element focus
+        main.style.outline = 'none';
+        main.style.imageRendering = 'pixelated';
+        main.width = this.config.width;
+        main.height = this.config.height;
+        main.style.width = `${this.config.width * this.config.scale}px`;
+        main.style.height = `${this.config.height * this.config.scale}px`;
+        main.style.border = `${this.config.scale}px solid ${this.config.border}`;
+        main.style.cursor = this.config.showMouse ? 'default' : 'none';
+        this.config.parent.appendChild(main);
+        // Create main canvas graphics object
+        const graphics = main.getContext('2d');
+        if (graphics) {
+            this.graphic = graphics;
+        } else {
+            throw new Error('Could not initialize canvas graphics.');
+        }
+        graphics.imageSmoothingEnabled = false;
         // Create canvas layers
         for (let i = 0; i < this.config.numLayers; i++) {
             const canvas: HTMLCanvasElement = document.createElement('canvas');
-            const graphics = canvas.getContext('2d');
-            if (graphics) {
-                this.graphics.push(graphics);
+            const layer = canvas.getContext('2d');
+            if (layer) {
+                this.layers.push(layer);
             } else {
                 throw new Error('Could not initialize canvas graphics.');
             }
             // Set properties for canvas
             canvas.style.imageRendering = 'pixelated';
-            canvas.style.boxSizing = 'border-box';
             canvas.width = this.config.width;
             canvas.height = this.config.height;
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.position = 'absolute';
-            graphics.imageSmoothingEnabled = false;
-            container.appendChild(canvas);
+            layer.imageSmoothingEnabled = false;
         }
         // Event listeners
-        container.addEventListener('mousemove', e => {
+        main.addEventListener('mousemove', e => {
             if (!this.focused) { return; }
             this.mouseX = (e.offsetX / this.config.scale) | 0;
             this.mouseY = (e.offsetY / this.config.scale) | 0;
             this.log(e.type, this.mouseX, this.mouseY);
             this.config.mousemove(this.mouseX, this.mouseY);
         });
-        container.addEventListener('keydown', e => {
+        main.addEventListener('keydown', e => {
             if (!this.focused) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
@@ -124,7 +138,7 @@ export class Canvas {
                 this.config.keydown(key);
             }
         });
-        container.addEventListener('keyup', e => {
+        main.addEventListener('keyup', e => {
             if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
@@ -134,7 +148,7 @@ export class Canvas {
                 this.config.keyup(key);
             }
         });
-        container.addEventListener('mousedown', e => {
+        main.addEventListener('mousedown', e => {
             if (!this.focused) { return; }
             const button: number = e.button;
             this.log(e.type, this.mouseButtons);
@@ -143,7 +157,7 @@ export class Canvas {
                 this.config.mousedown(button);
             }
         });
-        container.addEventListener('mouseup', e => {
+        main.addEventListener('mouseup', e => {
             if (!this.focused) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
@@ -153,15 +167,15 @@ export class Canvas {
                 this.config.mouseup(button);
             }
         });
-        container.addEventListener('focusin', e => {
+        main.addEventListener('focusin', e => {
             this.focused = true;
-            container.style.borderColor = this.config.border;
+            main.style.borderColor = this.config.border;
             this.log(e.type, this.focused);
             this.animation = requestAnimationFrame(time => this.startAnimate(time));
         });
-        container.addEventListener('focusout', e => {
+        main.addEventListener('focusout', e => {
             this.focused = false;
-            container.style.borderColor = this.config.borderBlur;
+            main.style.borderColor = this.config.borderBlur;
             this.log(e.type, this.focused);
             cancelAnimationFrame(this.animation);
         });
@@ -169,9 +183,30 @@ export class Canvas {
             this.log(e.type);
             cancelAnimationFrame(this.animation);
         });
-        container.addEventListener('contextmenu', e => e.preventDefault());
+        main.addEventListener('contextmenu', e => e.preventDefault());
         // Focus on the canvas
-        container.focus();
+        main.focus();
+        // Initialize the media recorder
+        const recordPart: BlobPart[] = [];
+        this.recorder = new MediaRecorder(main.captureStream());
+        this.recorder.addEventListener('dataavailable', e => {
+            this.log(e.type);
+            recordPart.push(e.data);
+        });
+        this.recorder.addEventListener('stop', e => {
+            this.log(e.type);
+            const recording: Blob = new Blob(recordPart, { type: 'video/webm;codecs=h264' });
+            const url: string = URL.createObjectURL(recording);
+            const downloadLink: HTMLAnchorElement = document.createElement('a');
+            downloadLink.setAttribute('href', url);
+            downloadLink.setAttribute('download', `recording-${Date.now()}`);
+            downloadLink.click();
+            // Clear out the existing blob parts for recording a new capture
+            recordPart.splice(0);
+            // Remove all keys and mouse buttons down because we lose focus
+            this.keys.splice(0);
+            this.mouseButtons.splice(0);
+        });
     }
     /**
      * Start the animation.
@@ -188,8 +223,13 @@ export class Canvas {
         const currentFrame: number = time;
         const dt: number = currentFrame - this.lastFrame;
         this.lastFrame = currentFrame;
-        this.log('animate', dt, currentFrame);
         this.config.loop(dt);
+        // Draw all the layers onto the main canvas
+        this.graphic.fillStyle = this.config.background;
+        this.graphic.fillRect(0, 0, this.width, this.height);
+        for (const layer of this.layers) {
+            this.graphic.drawImage(layer.canvas, 0, 0);
+        }
         this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
@@ -220,21 +260,8 @@ export class Canvas {
      * @param name The file name of the screenshot
      */
     public screenshot(name = 'screenshot'): void {
-        // Create an offscreen canvas
-        const screen: Canvas = new Canvas({
-            parent: document.createElement('div'),
-            height: this.config.height,
-            width: this.config.width,
-            scale: this.config.scale,
-        });
-        // Draw the background and each layer
-        screen.graphics[0].fillStyle = this.config.background;
-        screen.graphics[0].fillRect(0, 0, screen.width, screen.height);
-        for (const graphic of this.graphics) {
-            screen.graphics[0].drawImage(graphic.canvas, 0, 0);
-        }
         // Generate a data URL and set it as the download parameter for <a>
-        const dataURL: string = screen.graphics[0].canvas.toDataURL();
+        const dataURL: string = this.graphic.canvas.toDataURL();
         const downloadLink: HTMLAnchorElement = document.createElement('a');
         downloadLink.setAttribute('href', dataURL);
         downloadLink.setAttribute('download', name);
@@ -244,12 +271,31 @@ export class Canvas {
         this.mouseButtons.splice(0);
     }
     /**
+     * Start recording all layers on the canvas
+     */
+    public startRecording(): void {
+        this.recorder.start();
+    }
+    /**
+     * Stop recording and download screen capture
+     */
+    public stopRecording(): void {
+        this.recorder.stop();
+    }
+    /**
+     * Determines whether the media recorder is active
+     * @returns `true` if currently recording
+     */
+    public isRecording(): boolean {
+        return this.recorder.state === 'recording';
+    }
+    /**
      * Draw an object onto the canvas.
      * @param drawable Any drawable object
      * @param layer The zero-indexed layer to draw to
      */
     public draw(drawable: Drawable, layer = 0): void {
-        drawable.draw(this.graphics[layer]);
+        drawable.draw(this.layers[layer]);
     }
     /**
      * Completely clears the canvas.
@@ -257,11 +303,11 @@ export class Canvas {
      */
     public clear(layer = -1): void {
         if (layer < 0) {
-            for (const graphic of this.graphics) {
-                graphic.clearRect(0, 0, this.config.width, this.config.height);
+            for (const layer of this.layers) {
+                layer.clearRect(0, 0, this.config.width, this.config.height);
             }
         } else {
-            this.graphics[layer].clearRect(0, 0, this.config.width, this.config.height);
+            this.layers[layer].clearRect(0, 0, this.config.width, this.config.height);
         }
     }
     /**
@@ -282,93 +328,4 @@ export class Canvas {
         }
         return copy as T;
     }
-}
-
-/**
- * Configuration Options for Canvas
- */
-export interface Options {
-    /**
-     * Optionally print debug messages to the console
-     */
-    readonly debug: boolean;
-    /**
-     * Appends the canvas onto the parent element
-     */
-    readonly parent: Node;
-    /**
-     * The width of the drawing area, in pixels
-     */
-    readonly width: number;
-    /**
-     * The height of the drawing area, in pixels
-     */
-    readonly height: number;
-    /**
-     * The scale of the drawing area to the actual size of the canvas element
-     */
-    readonly scale: number;
-    /**
-     * The background color of the canvas
-     */
-    readonly background: string;
-    /**
-     * The border color for the canvas (when focused)
-     */
-    readonly border: string;
-    /**
-     * The border color for the canvas (when not focused)
-     */
-    readonly borderBlur: string;
-    /**
-     * Optionally show or hide the mouse when hovering over the canvas
-     */
-    readonly showMouse: boolean;
-    /**
-     * The number of layers in this canvas
-     */
-    readonly numLayers: number;
-    /**
-     * Event listener for when a key is pressed
-     * @param key The key that was pressed
-     */
-    readonly keydown: (key: string) => void;
-    /**
-     * Event listener for when a key is released
-     * @param key The key that was released
-     */
-    readonly keyup: (key: string) => void;
-    /**
-     * Event listener for when the mouse is moved
-     * @param x Cursor X-coordinate
-     * @param y Cursor Y-coordinate
-     */
-    readonly mousemove: (x: number, y: number) => void;
-    /**
-     * Event listener for when a button on the mouse is pressed
-     * @param button The button that was pressed
-     */
-    readonly mousedown: (button: number) => void;
-    /**
-     * Event listener for when a button on the mouse is released
-     * @param button The button that was released
-     */
-    readonly mouseup: (button: number) => void;
-    /**
-     * Event listener for a the main animation loop
-     * @param dt The number of milliseconds in between frames
-     * @returns An array of `Drawable` to render on layer 0, or void
-     */
-    readonly loop: (dt: number) => void;
-}
-
-/**
- * Represents an object that can be drawn on the canvas.
- */
-export interface Drawable {
-    /**
-     * Draw this object onto the canvas.
-     * @param graphics Canvas 2D rendering interface
-     */
-    draw(graphics: CanvasRenderingContext2D): void;
 }

@@ -65,11 +65,12 @@ const gradient: Gradient = new Gradient([
 T6.is(gradient.toString(), 'linear-gradient(#FF0000,#00FF00,#0000FF)');
 T6.is(gradient.toString('linear'), 'linear-gradient(#FF0000,#00FF00,#0000FF)');
 T6.is(gradient.toString('linear', 1), 'linear-gradient(#FF0000,#00FF00,#0000FF)');
-T6.is(gradient.toString('linear', 1, ['90deg']), 'linear-gradient(90deg,#FF0000,#00FF00,#0000FF)');
+T6.is(gradient.toString('linear', 1, '90deg'), 'linear-gradient(90deg,#FF0000,#00FF00,#0000FF)');
 T6.is(gradient.toString('linear', 2), 'repeating-linear-gradient(#FF0000,#00FF00,#0000FF 50%)');
-T6.is(gradient.toString('linear', 2, ['90deg']), 'repeating-linear-gradient(90deg,#FF0000,#00FF00,#0000FF 50%)');
+T6.is(gradient.toString('linear', 2, '90deg'), 'repeating-linear-gradient(90deg,#FF0000,#00FF00,#0000FF 50%)');
 T6.is(gradient.toString('radial'), 'radial-gradient(#FF0000,#00FF00,#0000FF)');
 T6.is(gradient.toString('conic'), 'conic-gradient(#FF0000,#00FF00,#0000FF)');
+T6.is(gradient.toString('radial', 1, 'ellipse', 'white'), 'radial-gradient(ellipse,white,#FF0000,#00FF00,#0000FF)');
 T6.is(gradient.getColor(-1).toString(), '#FF0000');
 T6.is(gradient.getColor(0, 10, 20).toString(), '#FF0000');
 T6.is(gradient.getColor(0.25).toString(), '#7F7F00');
