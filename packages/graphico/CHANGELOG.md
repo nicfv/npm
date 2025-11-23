@@ -5,6 +5,7 @@
 - All layers are drawn onto a single canvas element
 - Support simple screen recording (no audio)
 - Updates to paint example
+- Add main README file
 
 ## 0.0.5
 
