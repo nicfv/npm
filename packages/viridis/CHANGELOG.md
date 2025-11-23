@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- Change `Gradient.toString()` options from an array to a rest parameter
+
 ## 1.4.0
 
 - Remove `Color.from()` (use `Color.hex()` instead)
