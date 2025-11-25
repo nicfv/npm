@@ -146,6 +146,13 @@ export abstract class Chart<T extends ChartOptions> {
         }
         return text;
     }
+    /**
+     * Draw a tooltip onto the chart.
+     * @param content The text content of the tooltip
+     * @param location The position of the tooltip
+     * @param color The background color
+     * @param parent The element to append onto
+     */
     protected drawTooltip(content: string, location: Point, color: Color, parent: SVGElement): void {
         const base: SVGGElement = document.createElementNS(this.NS, 'g');
         const back: SVGRectElement = document.createElementNS(this.NS, 'rect');
