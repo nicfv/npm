@@ -96,12 +96,6 @@ export class Color {
         }
     }
     /**
-     * @deprecated Use `Color.hex('#code')` instead
-     */
-    public static from(hex: string): Color {
-        return Color.hex(hex);
-    }
-    /**
      * Create a new color given a hexadecimal string.
      * Will throw an error if the string is invalid.
      * - Expects 2 bits [0-F] for red, green, blue channels each
