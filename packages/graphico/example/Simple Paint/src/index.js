@@ -59,6 +59,8 @@ class Cursor {
 const myCursor = new Cursor();
 
 const canvas = new Canvas({
+    // Append the canvas onto the <div id="canvas"> element
+    parent: document.getElementById('canvas'),
     // Set the background and border colors on focus/unfocus
     background: '#aabbcc',
     border: 'black',
@@ -111,6 +113,15 @@ const canvas = new Canvas({
             case ('p'): {
                 // Take and save a screenshot
                 canvas.screenshot();
+                break;
+            }
+            case ('o'): {
+                // Capture a screen recording
+                if (canvas.isRecording()) {
+                    canvas.stopRecording();
+                } else {
+                    canvas.startRecording();
+                }
                 break;
             }
         }
