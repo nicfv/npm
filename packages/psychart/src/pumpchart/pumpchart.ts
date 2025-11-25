@@ -65,7 +65,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
         }
-        this.drawPerformanceCurves(80, 90, 5);
+        this.drawPerformanceCurves();
         this.drawSystemCurveAndOperation();
     }
     /**
@@ -132,33 +132,36 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     }
     /**
      * Draw concentric pump performance curves.
-     * @param h0 Head pressure at no flow
-     * @param q0 Flow at no head pressure
-     * @param minor The number of concentric performance curves to show, for example `3` would show performance curves at `25%`, `50%`, and `75%` diameter/speeds
      */
-    private drawPerformanceCurves(h0: number, q0: number, minor: number): void {
+    private drawPerformanceCurves(): void {
         const color: Color = Color.rgb(200, 150, 100);
-        const curve = Pumpchart.performanceCurve(h0, q0);
-        this.drawCurve('Performance Curve', color, 2, curve, 0, q0);
+        const p: f = this.performanceCurve();
+        const q0: number = this.options.pumpMaxFlow;
+        const minor: number = this.options.performanceSteps;
+        this.drawCurve('Performance Curve', color, 2, p, 0, q0);
         if (minor > 0) {
             const minorCurvePoints: number[] = SMath.linspace(0, 1, minor + 1);
             minorCurvePoints.shift(); // Cut off the 0%
             minorCurvePoints.pop(); // Cut off the 100%
             minorCurvePoints.forEach(pct => {
-                const midcurve = Pumpchart.performanceCurve(h0 * pct, q0 * pct);
-                this.drawCurve('', color, 1, midcurve, 0, q0 * pct);
+                const p1: f = this.performanceCurve(pct);
+                this.drawCurve('', color, 1, p1, 0, q0 * pct);
             });
         }
     }
+    /**
+     * Draw the system curve and operational point.
+     */
     private drawSystemCurveAndOperation(): void {
         const color: Color = Color.rgb(100, 200, 150);
-        const p: f = Pumpchart.performanceCurve(80, 90);
-        const s: f = Pumpchart.systemCurve(p, 10, 60);
+        const q0: number = this.options.systemOpFlow;
+        const p: f = this.performanceCurve();
+        const s: f = this.systemCurve();
         this.drawCurve('System Curve', color, 2, s, 0, 60);
         const operation = this.createPath([
-            { flow: 0, head: p(60) },
-            { flow: 60, head: p(60) },
-            { flow: 60, head: 0 },
+            { flow: 0, head: p(q0) },
+            { flow: q0, head: p(q0) },
+            { flow: q0, head: 0 },
         ], false);
         operation.setAttribute('fill', 'none');
         operation.setAttribute('stroke', color.toString());
@@ -168,21 +171,22 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     }
     /**
      * Generate the pump performance curve.
-     * @param h0 Head pressure at no flow
-     * @param q0 Flow at no head pressure
+     * @param rpmPct The normalized speed percent
      * @returns The performance curve `h = p(q)`
      */
-    private static performanceCurve(h0: number, q0: number): f {
+    private performanceCurve(rpmPct: number = 1): f {
+        const h0: number = this.options.pumpMaxHead * rpmPct;
+        const q0: number = this.options.pumpMaxFlow * rpmPct;
         return q => h0 * (1 - (q / q0) ** 2);
     }
     /**
      * Generate the system curve.
-     * @param p The pump performance curve
-     * @param h0 Elevation/static head difference betweem system inlet and outlet
-     * @param q0 Operating point (flow)
      * @returns The system curve `h = s(q)`
      */
-    private static systemCurve(p: f, h0: number, q0: number): f {
+    private systemCurve(): f {
+        const p: f = this.performanceCurve();
+        const h0: number = this.options.systemMinHead;
+        const q0: number = this.options.systemOpFlow;
         return q => h0 + (p(q0) - h0) * (q / q0) ** 2;
     }
 }
