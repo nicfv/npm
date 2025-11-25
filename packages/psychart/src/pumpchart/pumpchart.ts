@@ -66,6 +66,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
         }
         this.drawPerformanceCurves(80, 90, 5);
+        this.drawSystemCurveAndOperation();
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -114,9 +115,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
     }
     /**
-     * Draw a curve `y = h(q)` on the curves layer.
+     * Draw a curve `h = f(q)` on the curves layer.
      */
-    private drawCurve(tooltip: string, color: Color, width: number, h: (q: number) => number, min = 0, max = this.options.flow.max, steps = 1e3): void {
+    private drawCurve(tooltip: string, color: Color, width: number, h: f, min = 0, max = this.options.flow.max, steps = 1e3): void {
         const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
         const curve: SVGPathElement = this.createPath(states, false);
         curve.setAttribute('fill', 'none');
@@ -149,13 +150,29 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             });
         }
     }
+    private drawSystemCurveAndOperation(): void {
+        const color: Color = Color.rgb(100, 200, 150);
+        const p: f = Pumpchart.performanceCurve(80, 90);
+        const s: f = Pumpchart.systemCurve(p, 10, 60);
+        this.drawCurve('System Curve', color, 2, s, 0, 60);
+        const operation = this.createPath([
+            { flow: 0, head: p(60) },
+            { flow: 60, head: p(60) },
+            { flow: 60, head: 0 },
+        ], false);
+        operation.setAttribute('fill', 'none');
+        operation.setAttribute('stroke', color.toString());
+        operation.setAttribute('stroke-width', '1px');
+        operation.setAttribute('stroke-linecap', 'round');
+        this.g.curves.append(operation);
+    }
     /**
      * Generate the pump performance curve.
      * @param h0 Head pressure at no flow
      * @param q0 Flow at no head pressure
      * @returns The performance curve `h = p(q)`
      */
-    private static performanceCurve(h0: number, q0: number): fx {
+    private static performanceCurve(h0: number, q0: number): f {
         return q => h0 * (1 - (q / q0) ** 2);
     }
     /**
@@ -165,12 +182,12 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param q0 Operating point (flow)
      * @returns The system curve `h = s(q)`
      */
-    private static systemCurve(p: fx, h0: number, q0: number): fx {
+    private static systemCurve(p: f, h0: number, q0: number): f {
         return q => h0 + (p(q0) - h0) * (q / q0) ** 2;
     }
 }
 
 /**
- * Represents a mathematical function `y = f(x)`
+ * Represents a mathematical function `h = f(q)`
  */
-type fx = (x: number) => number;
+type f = (q: number) => number;
