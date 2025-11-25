@@ -25,4 +25,9 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         name: 'sans-serif',
         size: 12,
     },
+    pumpMaxFlow: 90,
+    pumpMaxHead: 80,
+    systemMinHead: 10,
+    systemOpFlow: 60,
+    performanceSteps: 4,
 };
