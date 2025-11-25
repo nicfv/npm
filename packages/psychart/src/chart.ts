@@ -157,7 +157,7 @@ export abstract class Chart<T extends ChartOptions> {
         const base: SVGGElement = document.createElementNS(this.NS, 'g');
         const back: SVGRectElement = document.createElementNS(this.NS, 'rect');
         const lines: SVGTextElement[] = content.split('\n').map((line: string, i: number) => this.createLabel(line, { x: 0, y: i * this.options.font.size }, color.getContrastingColor(), TextAnchor.NW));
-        // Append elements to the base
+        // Append elements to the base & parent (required to compute line width)
         base.appendChild(back);
         base.append(...lines);
         parent.append(base);
