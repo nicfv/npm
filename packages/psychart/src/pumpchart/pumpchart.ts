@@ -137,16 +137,40 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private drawPerformanceCurves(h0: number, q0: number, minor: number): void {
         const color: Color = Color.rgb(200, 150, 100);
-        const func = (q: number) => h0 * (1 - (q / q0) ** 2);
-        this.drawCurve('Performance Curve', color, 2, func, 0, q0);
+        const curve = Pumpchart.performanceCurve(h0, q0);
+        this.drawCurve('Performance Curve', color, 2, curve, 0, q0);
         if (minor > 0) {
             const minorCurvePoints: number[] = SMath.linspace(0, 1, minor + 1);
             minorCurvePoints.shift(); // Cut off the 0%
             minorCurvePoints.pop(); // Cut off the 100%
             minorCurvePoints.forEach(pct => {
-                const func2 = (q: number) => (h0 * pct) * (1 - (q / (q0 * pct)) ** 2);
-                this.drawCurve('', color, 1, func2, 0, q0 * pct);
+                const midcurve = Pumpchart.performanceCurve(h0 * pct, q0 * pct);
+                this.drawCurve('', color, 1, midcurve, 0, q0 * pct);
             });
         }
     }
+    /**
+     * Generate the pump performance curve.
+     * @param h0 Head pressure at no flow
+     * @param q0 Flow at no head pressure
+     * @returns The performance curve `h = p(q)`
+     */
+    private static performanceCurve(h0: number, q0: number): fx {
+        return q => h0 * (1 - (q / q0) ** 2);
+    }
+    /**
+     * Generate the system curve.
+     * @param p The pump performance curve
+     * @param h0 Elevation/static head difference betweem system inlet and outlet
+     * @param q0 Operating point (flow)
+     * @returns The system curve `h = s(q)`
+     */
+    private static systemCurve(p: fx, h0: number, q0: number): fx {
+        return q => h0 + (p(q0) - h0) * (q / q0) ** 2;
+    }
 }
+
+/**
+ * Represents a mathematical function `y = f(x)`
+ */
+type fx = (x: number) => number;
