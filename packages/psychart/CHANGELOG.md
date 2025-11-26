@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0
+
+- `Psychart` now inherits class methods from base `Chart`
+- Release the very first version of `Pumpchart`
+    - Handles drawing pump curves and system curves
+    - Shows point of operation
+    - Can plot and clear data with several display options
+    - User interaction with mouse hover
+
 ## 0.6.1
 
 - Follow `eslint` styling rules
