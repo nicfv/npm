@@ -158,6 +158,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const p: f = this.performanceCurve();
         const s: f = this.systemCurve();
         this.drawCurve('System Curve', color, 2, s, 0, 60);
+        // Draw operation axis lines
         const operation = this.createPath([
             { flow: 0, head: p(q0) },
             { flow: q0, head: p(q0) },
@@ -168,13 +169,23 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-width', '1px');
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
+        // Draw operating point
+        const oppt: SVGCircleElement = document.createElementNS(this.NS, 'circle');
+        const opcenter: Point = this.state2xy({ flow: q0, head: p(q0) });
+        oppt.setAttribute('fill', color.toString());
+        oppt.setAttribute('cx', `${opcenter.x}px`);
+        oppt.setAttribute('cy', `${opcenter.y}px`);
+        oppt.setAttribute('r', '5px');
+        this.g.curves.append(oppt);
+        oppt.addEventListener('mouseover', e => this.drawTooltip(`Operation Point\nFlow = ${q0.toFixed(1)} [${this.options.flow.unit}]\nHead = ${p(q0).toFixed(1)} [${this.options.head.unit}]`, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
+        oppt.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
     }
     /**
      * Generate the pump performance curve.
      * @param rpmPct The normalized speed percent
      * @returns The performance curve `h = p(q)`
      */
-    private performanceCurve(rpmPct: number = 1): f {
+    private performanceCurve(rpmPct = 1): f {
         const h0: number = this.options.pumpMaxHead * rpmPct;
         const q0: number = this.options.pumpMaxFlow * rpmPct;
         return q => h0 * (1 - (q / q0) ** 2);
