@@ -13,6 +13,14 @@ export interface State {
      * Head pressure (e.g. ft)
      */
     readonly head: number;
+    /**
+     * Pump speed (e.g. rpm)
+     */
+    readonly speed?: number;
+    /**
+     * Pump power (e.g. kW)
+     */
+    readonly power?: number;
 }
 
 /**
@@ -66,5 +74,13 @@ export interface PumpchartOptions extends ChartOptions {
          * Head pressure (e.g. ft)
          */
         readonly head: string;
+        /**
+         * Pump speed (e.g. rpm)
+         */
+        readonly speed: string;
+        /**
+         * Pump power (e.g. kW)
+         */
+        readonly power: string;
     },
 }

@@ -23,5 +23,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     units: {
         flow: 'gpm',
         head: 'ft',
+        power: 'kW',
+        speed: 'rpm',
     },
 };
