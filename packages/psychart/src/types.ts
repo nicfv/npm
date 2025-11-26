@@ -1,10 +1,3 @@
-import { PaletteName } from 'viridis';
-
-/**
- * A human-readable name for a psychrometric envelope.
- */
-export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
-
 /**
  * An (x,y) cartesian coordinate pair.
  */
@@ -12,221 +5,74 @@ export interface Point {
     /**
      * The x-coordinate (horizontal)
      */
-    x: number;
+    readonly x: number;
     /**
      * The y-coordinate (vertical)
      */
-    y: number;
+    readonly y: number;
 }
 
 /**
- * This data object fixes the psychrometric state.
+ * Represents a set of options for this chart.
  */
-export interface Datum {
+export interface ChartOptions {
     /**
-     * Dry Bulb (db)
-     */
-    db: number;
-    /**
-     * One of these values, depending on `measurement`
-     * - Relative Humidity (rh)
-     * - Wet Bulb (wb)
-     * - Dew Point (dp)
-     * - Humidity Ratio (hr)
-     */
-    other: number;
-    /**
-     * The two types of measurements that were taken to fix the state.
-     */
-    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp' | 'dbhr';
-}
-
-/**
- * Configuration options for Psychart.
- */
-export interface PsychartOptions {
-    /**
-     * The outer size of Psychart, in pixels.
+     * The outer size of this chart, in pixels.
      */
     readonly size: Point;
     /**
-     * The padding in pixels.
-     */
-    readonly padding: Point;
-    /**
-     * The default color settings for Psychart.
-     */
-    readonly colors: {
-        /**
-         * The font color as a **hex-code** string.
-         */
-        readonly font: string;
-        /**
-         * The axis color as a **hex-code** string.
-         */
-        readonly axis: string;
-        /**
-         * Defines the palette name used for region coloring.
-         */
-        readonly regionGradient: PaletteName;
-    };
-    /**
-     * Optinally reverse gradients, making more/less saturated points appear on opposite ends.
-     */
-    readonly flipGradients: boolean;
-    /**
-     * Details for the font used in Psychart.
+     * The font used in this chart.
      */
     readonly font: {
         /**
-         * The font size, in pixels.
+         * The name of the font family.
+         */
+        readonly name: string;
+        /**
+         * The size of the font, in pixels.
          */
         readonly size: number;
-        /**
-         * The name of the font.
-         */
-        readonly family: string;
     };
-    /**
-     * The chart resolution, in units.
-     */
-    readonly resolution: number;
-    /**
-     * The major axis intervals for different units.
-     */
-    readonly major: {
-        /**
-         * Temperature
-         */
-        readonly temp: number;
-        /**
-         * Humidity Ratio
-         */
-        readonly humRat: number;
-        /**
-         * Relative Humidity
-         */
-        readonly relHum: number;
-    };
-    /**
-     * Represents the unit system, in either US (IP) or metric (SI)
-     */
-    readonly unitSystem: 'IP' | 'SI';
-    /**
-     * The altitude of measurements taken.
-     */
-    readonly altitude: number;
-    /**
-     * The minimum value on the dry bulb axis.
-     */
-    readonly dbMin: number;
-    /**
-     * The maximum value on the dry bulb axis.
-     */
-    readonly dbMax: number;
-    /**
-     * The maximum value on the dew point axis.
-     */
-    readonly dpMax: number;
-    /**
-     * Determine whether to render a Mollier diagram.
-     */
-    readonly flipXY: boolean;
-    /**
-     * Defines whether to use dew point or humidity ratio on the Y-axis.
-     */
-    readonly yAxis: 'dp' | 'hr';
-    /**
-     * Determine where to show units.
-     */
-    readonly showUnits: {
-        /**
-         * Show units on the tooltips.
-         */
-        readonly tooltip: boolean;
-        /**
-         * Show units on the axes.
-         */
-        readonly axis: boolean;
-    }
-    /**
-     * Render pre-defined shaded regions.
-     */
-    readonly regions: RegionName[];
-    /**
-     * Styling options for the legend. If set to `false`, will not render a legend on Psychart.
-     */
-    readonly legend: false | {
-        /**
-         * The title of the legend.
-         */
-        readonly title: string;
-        /**
-         * The margin between the top-left of the legend and the top-left of Psychart, in pixels.
-         */
-        readonly margin: Point;
-        /**
-         * The size of the legend, in pixels. The scrollbar will be visible in the event of overflow.
-         */
-        readonly size: Point;
-    };
-    /**
-     * The spacing factor between entries in the legend, where 2.0 indicates double-spacing, for example.
-     */
-    readonly lineHeight: number;
 }
 
 /**
- * Configuration settings for plotting data.
+ * Defines where the anchor is on a `<text>` element.
  */
-export interface DataOptions {
+export const enum TextAnchor {
     /**
-     * Adds a name to a point or data series to be shown in the tooltip. Must be set to create an entry in the legend.
+     * Centered
      */
-    readonly name: string;
+    C,
     /**
-     * Optionally show this point in the legend.
+     * Northwest (upper-left)
      */
-    readonly legend: boolean;
+    NW,
     /**
-     * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
+     * North (upper-centered)
      */
-    readonly relHumType: 'percent' | 'float';
+    N,
     /**
-     * The point radius, in pixels.
+     * Northeast (upper-right)
      */
-    readonly pointRadius: number;
+    NE,
     /**
-     * Determines whether or not to connect points with a line. If a `Datum` is provided, will draw a line from that point.
+     * East (right-centered)
      */
-    readonly line: boolean | Datum;
+    E,
     /**
-     * Determine the solid color **hex-code** for time-independent plots.
+     * Southeast (lower-right)
      */
-    readonly color: string;
+    SE,
     /**
-     * Determines the color gradient for time series plots.
+     * South (lower-centered)
      */
-    readonly gradient: PaletteName;
+    S,
     /**
-     * Set the timespan for this time-dependent data series.
+     * Southwest (lower-left)
      */
-    readonly time: {
-        /**
-         * The timestamp for the first data point.
-         */
-        readonly start: number;
-        /**
-         * The timestamp for the current data point.
-         */
-        readonly now: number;
-        /**
-         * The timestamp for the last data point.
-         */
-        readonly end: number;
-    }
+    SW,
     /**
-     * Defines whether or not to show advanced state variables.
+     * West (left-centered)
      */
-    readonly advanced: boolean;
+    W,
 }
