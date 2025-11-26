@@ -63,6 +63,14 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly performanceSteps: number;
     /**
+     * The **hexadecimal** code for the performance curve(s)
+     */
+    readonly performanceCurveColor: string;
+    /**
+     * The **hexadecimal** code for the system curve
+     */
+    readonly systemCuveColor: string;
+    /**
      * Units for various quantities
      */
     readonly units: {

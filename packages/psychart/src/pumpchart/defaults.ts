@@ -20,6 +20,8 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     systemMinHead: 10,
     systemOpFlow: 80,
     performanceSteps: 4,
+    performanceCurveColor: '#ffaa55',
+    systemCuveColor: '#55ffaa',
     units: {
         flow: 'gpm',
         head: 'ft',

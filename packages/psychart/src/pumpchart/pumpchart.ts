@@ -48,27 +48,28 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
-        // Create the axes.
+        // Compute the axes limits and intervals
         this.maxFlow = this.options.pumpMaxFlow * 1.1;
+        this.maxHead = this.options.pumpMaxHead * 1.1;
         const flowStep: number = Pumpchart.getStep(this.maxFlow, this.options.size.x / this.options.font.size / 6)
+        const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
+        // Create the axes.
         const xFlowAxis = this.createPath([
             { flow: 0, head: 0 },
             { flow: this.maxFlow, head: 0 },
         ]);
-        this.maxHead = this.options.pumpMaxHead * 1.1;
-        const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
         const yHeadAxis = this.createPath([
             { flow: 0, head: 0 },
             { flow: 0, head: this.maxHead },
         ]);
         xFlowAxis.setAttribute('stroke', this.options.axisColor);
         yHeadAxis.setAttribute('stroke', this.options.axisColor);
-        xFlowAxis.setAttribute('stroke-width', (this.options.axisWidth * 2) + 'px');
-        yHeadAxis.setAttribute('stroke-width', (this.options.axisWidth * 2) + 'px');
+        xFlowAxis.setAttribute('stroke-width', `${this.options.axisWidth * 2}px`);
+        yHeadAxis.setAttribute('stroke-width', `${this.options.axisWidth * 2}px`);
         xFlowAxis.setAttribute('stroke-linecap', 'round');
         yHeadAxis.setAttribute('stroke-linecap', 'round');
         this.g.axes.append(xFlowAxis, yHeadAxis);
-        for (let flow = 0; flow < this.maxFlow; flow += flowStep) {
+        for (let flow = flowStep; flow < this.maxFlow; flow += flowStep) {
             // Draw iso-flow vertical lines
             const isoFlowLine = this.createPath([
                 { flow: flow, head: 0 },
@@ -81,7 +82,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${flow}${this.options.units.flow}`, { flow: flow, head: 0 }, TextAnchor.N, `Flow [${this.options.units.flow}]`);
         }
-        for (let head = 0; head < this.maxHead; head += headStep) {
+        for (let head = headStep; head < this.maxHead; head += headStep) {
             // Draw iso-head horizontal lines
             const isoHeadLine = this.createPath([
                 { flow: 0, head: head },
@@ -179,7 +180,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Draw concentric pump performance curves.
      */
     private drawPerformanceCurves(): void {
-        const color: Color = Color.rgb(200, 150, 100);
+        const color: Color = Color.hex(this.options.performanceCurveColor);
         const p: f = this.performanceCurve();
         const q0: number = this.options.pumpMaxFlow;
         const minor: number = this.options.performanceSteps;
@@ -198,7 +199,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Draw the system curve and operational point.
      */
     private drawSystemCurveAndOperation(): void {
-        const color: Color = Color.rgb(100, 200, 150);
+        const color: Color = Color.hex(this.options.systemCuveColor);
         const q0: number = this.options.systemOpFlow;
         const p: f = this.performanceCurve();
         const s: f = this.systemCurve();
