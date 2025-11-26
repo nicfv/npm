@@ -1,8 +1,8 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
-import { defaultPumpchartOptions } from './defaults';
-import { Point, PumpchartOptions, State } from './types';
-import { Color } from 'viridis';
+import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults';
+import { Point, PumpchartDataOptions, PumpchartOptions, State } from './types';
+import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 
 /**
@@ -237,6 +237,29 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const h0: number = this.options.systemMinHead;
         const q0: number = this.options.systemOpFlow;
         return q => h0 + (p(q0) - h0) * (q / q0) ** 2;
+    }
+    /**
+     * Plot a single data point.
+     * @param state The current state of the system
+     * @param config Display options for plotting data
+     */
+    public plot(state: State, config: Partial<PumpchartDataOptions> = {}): void {
+        const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
+        const color: Color = Palette[options.gradient.name].getColor(options.gradient.score);
+        const tip: string =
+            (options.name ? `${options.name}\n` : '') +
+            (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
+            `Flow = ${state.flow} [${this.options.units.flow}]` +
+            `\nHead = ${state.head} [${this.options.units.head}]` +
+            (typeof state.speed !== 'undefined' ? `\nSpeed = ${state.speed} [${this.options.units.speed}]` : '') +
+            (typeof state.power !== 'undefined' ? `\nPower = ${state.power} [${this.options.units.power}]` : '');
+        this.drawCircle(tip, color, state, options.radius, this.g.data);
+    }
+    /**
+     * Clear all the data from this chart.
+     */
+    public clearData(): void {
+        Chart.clearChildren(this.g.data);
     }
 }
 
