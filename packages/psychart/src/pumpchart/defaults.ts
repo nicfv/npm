@@ -1,5 +1,8 @@
-import { PumpchartOptions } from './types';
+import { PumpchartDataOptions, PumpchartOptions } from './types';
 
+/**
+ * Default configuration options for Pumpchart
+ */
 export const defaultPumpchartOptions: PumpchartOptions = {
     size: {
         x: 600,
@@ -28,4 +31,17 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         power: 'kW',
         speed: 'rpm',
     },
+};
+
+/**
+ * Default data display options for Pumpchart
+ */
+export const defaultPumpchartDataOptions: PumpchartDataOptions = {
+    name: '',
+    radius: 5,
+    gradient: {
+        name: 'Viridis',
+        score: 0.5,
+    },
+    timestamp: 0,
 };

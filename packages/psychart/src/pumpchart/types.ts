@@ -1,3 +1,4 @@
+import { PaletteName } from 'viridis';
 import { ChartOptions, Point } from '../types';
 export { Point };
 
@@ -91,4 +92,35 @@ export interface PumpchartOptions extends ChartOptions {
          */
         readonly power: string;
     },
+}
+
+/**
+ * Options for data plotting.
+ */
+export interface PumpchartDataOptions {
+    /**
+     * An optional name for this data point
+     */
+    readonly name: string;
+    /**
+     * The radius of this data point, in pixels
+     */
+    readonly radius: number;
+    /**
+     * Properties that define this point's color
+     */
+    readonly gradient: {
+        /**
+         * The name of the gradient
+         */
+        readonly name: PaletteName;
+        /**
+         * The normalized "score" to color this data point along the gradient
+         */
+        readonly score: number;
+    },
+    /**
+     * An optional timestamp for this data point
+     */
+    readonly timestamp: number;
 }
