@@ -38,7 +38,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
  */
 export const defaultPumpchartDataOptions: PumpchartDataOptions = {
     name: '',
-    radius: 5,
+    radius: 2.5,
     gradient: {
         name: 'Viridis',
         score: 0.5,
