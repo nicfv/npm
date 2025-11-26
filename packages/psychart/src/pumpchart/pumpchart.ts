@@ -131,6 +131,22 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
     }
     /**
+     * Draw a custom circle onto any layer.
+     */
+    private drawCircle(tooltip: string, color: Color, state: State, radius: number, parent: SVGElement): void {
+        const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
+        const center: Point = this.state2xy(state);
+        circle.setAttribute('fill', color.toString());
+        circle.setAttribute('cx', `${center.x}px`);
+        circle.setAttribute('cy', `${center.y}px`);
+        circle.setAttribute('r', `${radius}px`);
+        parent.appendChild(circle);
+        if (tooltip) {
+            circle.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
+            circle.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        }
+    }
+    /**
      * Draw concentric pump performance curves.
      */
     private drawPerformanceCurves(): void {
@@ -170,15 +186,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw operating point
-        const oppt: SVGCircleElement = document.createElementNS(this.NS, 'circle');
-        const opcenter: Point = this.state2xy({ flow: q0, head: p(q0) });
-        oppt.setAttribute('fill', color.toString());
-        oppt.setAttribute('cx', `${opcenter.x}px`);
-        oppt.setAttribute('cy', `${opcenter.y}px`);
-        oppt.setAttribute('r', '5px');
-        this.g.curves.append(oppt);
-        oppt.addEventListener('mouseover', e => this.drawTooltip(`Operation Point\nFlow = ${q0.toFixed(1)} [${this.options.flow.unit}]\nHead = ${p(q0).toFixed(1)} [${this.options.head.unit}]`, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
-        oppt.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        this.drawCircle(`Operation Point\nFlow = ${q0.toFixed(1)} [${this.options.flow.unit}]\nHead = ${p(q0).toFixed(1)} [${this.options.head.unit}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
     }
     /**
      * Generate the pump performance curve.
