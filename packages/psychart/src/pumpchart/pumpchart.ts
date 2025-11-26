@@ -19,18 +19,47 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
     };
+    /**
+     * The maximum flow rate shown on the x-axis
+     */
+    private readonly maxFlow: number;
+    /**
+     * The maximum head pressure shown on the y-axis
+     */
+    private readonly maxHead: number;
+    /**
+     * Get the ideal axis interval
+     */
+    private static getStep(range: number, maxIntervals: number): number {
+        const steps: number[] = [1, 2, 2.5, 5];
+        let magnitude = 1;
+        while (magnitude < 10) {
+            for (const stepi of steps) {
+                const step: number = stepi * (10 ** magnitude);
+                if (range / step < maxIntervals) {
+                    return step;
+                }
+            }
+            magnitude++;
+        }
+        return 1;
+    }
     constructor(options: Partial<PumpchartOptions> = {}) {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
         // Create the axes.
+        this.maxFlow = this.options.pumpMaxFlow * 1.1;
+        const flowStep: number = Pumpchart.getStep(this.maxFlow, this.options.size.x / this.options.font.size / 6)
         const xFlowAxis = this.createPath([
             { flow: 0, head: 0 },
-            { flow: this.options.flow.max, head: 0 },
+            { flow: this.maxFlow, head: 0 },
         ]);
+        this.maxHead = this.options.pumpMaxHead * 1.1;
+        const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
         const yHeadAxis = this.createPath([
             { flow: 0, head: 0 },
-            { flow: 0, head: this.options.head.max },
+            { flow: 0, head: this.maxHead },
         ]);
         xFlowAxis.setAttribute('stroke', this.options.axisColor);
         yHeadAxis.setAttribute('stroke', this.options.axisColor);
@@ -39,31 +68,31 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         xFlowAxis.setAttribute('stroke-linecap', 'round');
         yHeadAxis.setAttribute('stroke-linecap', 'round');
         this.g.axes.append(xFlowAxis, yHeadAxis);
-        for (let flow = 0; flow < this.options.flow.max; flow += this.options.flow.step) {
+        for (let flow = 0; flow < this.maxFlow; flow += flowStep) {
             // Draw iso-flow vertical lines
             const isoFlowLine = this.createPath([
                 { flow: flow, head: 0 },
-                { flow: flow, head: this.options.head.max },
+                { flow: flow, head: this.maxHead },
             ], false);
             isoFlowLine.setAttribute('stroke', this.options.axisColor);
             isoFlowLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoFlowLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoFlowLine);
             // Show axis label
-            this.drawLabel(`${flow}${this.options.flow.unit}`, { flow: flow, head: 0 }, TextAnchor.N, `Flow [${this.options.flow.unit}]`);
+            this.drawLabel(`${flow}${this.options.units.flow}`, { flow: flow, head: 0 }, TextAnchor.N, `Flow [${this.options.units.flow}]`);
         }
-        for (let head = 0; head < this.options.head.max; head += this.options.head.step) {
+        for (let head = 0; head < this.maxHead; head += headStep) {
             // Draw iso-head horizontal lines
             const isoHeadLine = this.createPath([
                 { flow: 0, head: head },
-                { flow: this.options.flow.max, head: head },
+                { flow: this.maxFlow, head: head },
             ], false);
             isoHeadLine.setAttribute('stroke', this.options.axisColor);
             isoHeadLine.setAttribute('stroke-width', this.options.axisWidth + 'px');
             isoHeadLine.setAttribute('stroke-linecap', 'round');
             this.g.axes.appendChild(isoHeadLine);
             // Show axis label
-            this.drawLabel(`${head}${this.options.head.unit}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.head.unit}]`);
+            this.drawLabel(`${head}${this.options.units.head}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.units.head}]`);
         }
         this.drawPerformanceCurves();
         this.drawSystemCurveAndOperation();
@@ -79,8 +108,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const yMin: number = this.options.padding.y;
         const yMax: number = this.options.size.y - this.options.padding.y;
         return {
-            x: SMath.clamp(SMath.translate(state.flow, 0, this.options.flow.max, xMin, xMax), xMin, xMax),
-            y: SMath.clamp(SMath.translate(state.head, 0, this.options.head.max, yMax, yMin), yMin, yMax),
+            x: SMath.clamp(SMath.translate(state.flow, 0, this.maxFlow, xMin, xMax), xMin, xMax),
+            y: SMath.clamp(SMath.translate(state.head, 0, this.maxHead, yMax, yMin), yMin, yMax),
         };
     }
     /**
@@ -117,7 +146,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     /**
      * Draw a curve `h = f(q)` on the curves layer.
      */
-    private drawCurve(tooltip: string, color: Color, width: number, h: f, min = 0, max = this.options.flow.max, steps = 1e3): void {
+    private drawCurve(tooltip: string, color: Color, width: number, h: f, min = 0, max = this.maxFlow, steps = 1e3): void {
         const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
         const curve: SVGPathElement = this.createPath(states, false);
         curve.setAttribute('fill', 'none');
@@ -173,7 +202,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const q0: number = this.options.systemOpFlow;
         const p: f = this.performanceCurve();
         const s: f = this.systemCurve();
-        this.drawCurve('System Curve', color, 2, s, 0, 60);
+        this.drawCurve('System Curve', color, 2, s, 0, q0);
         // Draw operation axis lines
         const operation = this.createPath([
             { flow: 0, head: p(q0) },
@@ -186,7 +215,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw operating point
-        this.drawCircle(`Operation Point\nFlow = ${q0.toFixed(1)} [${this.options.flow.unit}]\nHead = ${p(q0).toFixed(1)} [${this.options.head.unit}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
+        this.drawCircle(`Operation Point\nFlow = ${q0.toFixed(1)} [${this.options.units.flow}]\nHead = ${p(q0).toFixed(1)} [${this.options.units.head}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
     }
     /**
      * Generate the pump performance curve.

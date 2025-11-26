@@ -9,25 +9,19 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         x: 40,
         y: 20,
     },
-    flow: {
-        unit: 'gpm',
-        step: 10,
-        max: 100,
-    },
-    head: {
-        unit: 'ft',
-        step: 10,
-        max: 100,
-    },
     axisColor: '#666666',
     axisWidth: 1,
     font: {
         name: 'sans-serif',
         size: 12,
     },
-    pumpMaxFlow: 90,
-    pumpMaxHead: 80,
+    pumpMaxFlow: 175,
+    pumpMaxHead: 120,
     systemMinHead: 10,
-    systemOpFlow: 60,
+    systemOpFlow: 80,
     performanceSteps: 4,
+    units: {
+        flow: 'gpm',
+        head: 'ft',
+    },
 };
