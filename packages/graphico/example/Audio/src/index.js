@@ -104,6 +104,13 @@ const canv = new Canvas({
                 canv.mute();
             }
         }
+        if (key === 'r') {
+            if (canv.isRecording()) {
+                canv.stopRecording();
+            } else {
+                canv.startRecording();
+            }
+        }
     },
     loop(dt) {
         canv.clear();
@@ -114,6 +121,6 @@ const canv = new Canvas({
 });
 
 // Set the button callback functions to the `playAudio()` and `stopAudio()` API calls
-const btnPlay = new Button(canv.width * 1 / 3, canv.height / 2, 80, () => canv.playAudio('https://cs1.mp3.pm/download/88834782/eGpsZHUyd3pJempjbWozeUJhSUxnRzBUUXp5TGVkcnl4aExUcmhDVzR5Y3d2MUZrUnBpamM0bWNieW5yQ1BxYndTSEkwTUpuUitFUFVCQy9XUG5PNWRYL2s2bFFGSFJyclNpODhEMnVRZ0pVUjJiL0FDUXhNajJJc3JJcXJRTFU/Ricky_Astley_-_Never_Gonna_Give_You_Up_(mp3.pm).mp3'), 'green');
+const btnPlay = new Button(canv.width * 1 / 3, canv.height / 2, 80, () => canv.playAudio('./mggyu.mp3'), 'green');
 const btnStop = new Button(canv.width * 2 / 3, canv.height / 2, 80, () => canv.stopAudio(), 'red');
 const soundStatus = new SoundStatus(10, 30);
