@@ -1,1 +1,5 @@
-Example with audio.
+In this example we create two `Drawable` classes: a button and a sound status (to show whether the canvas sound is on/off.) When the cursor moves over the button, it changes color; and when the mouse is down (clicked), the button appears like it was pressed and plays a sound using the `playAudio()` API function. This function accepts some parameters to adjust the audio volume and whether or not the audio should be played on a loop.
+
+When the user presses the `M` key, it toggles the sound on/off. Try pressing the button when the sound is on, and again when the sound is off. Any audio files that are currently playing will be muted when the sound is toggled off, and then unmuted when the sound is toggled back on.
+
+Additionally, `Canvas` exposes a `stopAudio()` API function in which all currently playing audio files are stopped, but doesn't affect the mute/unmute status. Any audio after this should be requested with a new call to the `playAudio()` function.
