@@ -18,6 +18,7 @@ export class Canvas {
         borderBlur: 'transparent',
         showMouse: true,
         numLayers: 1,
+        numTracks: 1,
         keydown() { return; },
         keyup() { return; },
         mousemove() { return; },
@@ -73,6 +74,10 @@ export class Canvas {
      * Determine whether the client is focused or not
      */
     private focused = false;
+    /**
+     * Determine whether the user has interacted with this canvas
+     */
+    private interacted = false;
     /**
      * The media recording object for screen captures
      */
@@ -137,6 +142,8 @@ export class Canvas {
             this.config.mousemove(this.mouseX, this.mouseY);
         });
         main.addEventListener('keydown', e => {
+            audioContext.resume();
+            this.interacted = true;
             if (!this.focused) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
@@ -157,6 +164,8 @@ export class Canvas {
             }
         });
         main.addEventListener('mousedown', e => {
+            audioContext.resume();
+            this.interacted = true;
             if (!this.focused) { return; }
             const button: number = e.button;
             this.log(e.type, this.mouseButtons);
@@ -192,11 +201,24 @@ export class Canvas {
             cancelAnimationFrame(this.animation);
         });
         main.addEventListener('contextmenu', e => e.preventDefault());
-        // Focus on the canvas
-        main.focus();
+        // Initialize audio tracks for recording
+        const stream: MediaStream = new MediaStream(main.captureStream()); // video stream
+        const audioContext = new window.AudioContext();
+        for (let i = 0; i < this.config.numTracks; i++) {
+            const audio: HTMLAudioElement = new Audio();
+            const source = audioContext.createMediaElementSource(audio);
+            const destination = audioContext.createMediaStreamDestination();
+            source.connect(destination); // contains the audio stream for recording
+            source.connect(audioContext.destination); // so the user can hear
+            this.audios.push(audio);
+            for (const track of destination.stream.getAudioTracks()) {
+                console.log(i, track.id);
+                stream.addTrack(track); // add audio track
+            }
+        }
         // Initialize the media recorder
         const recordPart: BlobPart[] = [];
-        this.recorder = new MediaRecorder(main.captureStream());
+        this.recorder = new MediaRecorder(stream);
         this.recorder.addEventListener('dataavailable', e => {
             this.log(e.type);
             recordPart.push(e.data);
@@ -215,6 +237,8 @@ export class Canvas {
             this.keys.splice(0);
             this.mouseButtons.splice(0);
         });
+        // Focus on the canvas
+        main.focus();
     }
     /**
      * Start the animation.
@@ -282,6 +306,9 @@ export class Canvas {
      * Start recording all layers on the canvas
      */
     public startRecording(): void {
+        if (!this.interacted) {
+            throw new Error('The user has not yet interacted with this canvas.');
+        }
         this.recorder.start();
     }
     /**
@@ -302,23 +329,36 @@ export class Canvas {
      * @param src The path of the audio file
      * @param loop Whether to play the audio on loop
      * @param volume The normalized [0-1] volume
+     * @param track The track number to play on
      */
-    public playAudio(src: string, loop = false, volume = 1): void {
-        const audio: HTMLAudioElement = new Audio(src);
+    public playAudio(src: string, loop = false, volume = 1, track = 0): void {
+        if (!this.interacted) {
+            throw new Error('The user has not yet interacted with this canvas.');
+        }
+        if (track < 0 || track >= this.config.numTracks) {
+            throw new Error(`Track ${track} is out of range. [0,${this.config.numTracks})`);
+        }
+        const audio: HTMLAudioElement = this.audios[track];
+        audio.src = src;
         audio.loop = loop;
         audio.volume = volume;
         audio.muted = this.muted;
         audio.play();
-        this.audios.push(audio);
     }
     /**
      * Stop all audio tracks from playing
      */
-    public stopAudio(): void {
-        for (const audio of this.audios) {
-            audio.pause();
+    public stopAudio(track = -1): void {
+        if (track >= this.config.numTracks) {
+            throw new Error(`Track ${track} is out of range. [0,${this.config.numTracks})`);
         }
-        this.audios.splice(0);
+        if (track < 0) {
+            for (const audio of this.audios) {
+                audio.pause();
+            }
+        } else {
+            this.audios[track].pause();
+        }
     }
     /**
      * Mute all audio
@@ -351,6 +391,9 @@ export class Canvas {
      * @param layer The zero-indexed layer to draw to
      */
     public draw(drawable: Drawable, layer = 0): void {
+        if (layer < 0 || layer >= this.config.numLayers) {
+            throw new Error(`Layer ${layer} is out of range. [0,${this.config.numLayers})`);
+        }
         drawable.draw(this.layers[layer]);
     }
     /**
@@ -358,6 +401,9 @@ export class Canvas {
      * @param layer The zero-indexed layer to clear, if unset, will clear all layers
      */
     public clear(layer = -1): void {
+        if (layer >= this.config.numLayers) {
+            throw new Error(`Layer ${layer} is out of range. [0,${this.config.numLayers})`);
+        }
         if (layer < 0) {
             for (const layer of this.layers) {
                 layer.clearRect(0, 0, this.config.width, this.config.height);
