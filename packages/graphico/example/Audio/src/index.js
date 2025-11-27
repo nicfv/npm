@@ -1,22 +1,25 @@
 import { Canvas } from 'graphico';
 
+// Generate a button with a custom callback function on click
 class Button {
     #x;
     #y;
     #rx;
     #ry;
     #h;
+    #callback;
     #color;
     #hovercolor;
     #backcolor;
     #isHover;
     #isDown;
-    constructor(x = 0, y = 0, size = 100, color = 'red', hovercolor = 'yellow', backcolor = 'gray') {
+    constructor(x = 0, y = 0, size = 100, callback = () => { }, color = 'red', hovercolor = 'yellow', backcolor = 'gray') {
         this.#x = x;
         this.#y = y;
         this.#rx = size;
         this.#ry = size * 0.75;
         this.#h = size * 0.25;
+        this.#callback = callback;
         this.#color = color;
         this.#hovercolor = hovercolor;
         this.#backcolor = backcolor;
@@ -31,11 +34,11 @@ class Button {
         // Make sure that the cursor is over the button and the left mouse button was pressed
         if (this.#isHover && btn === 0 && !this.#isDown) {
             this.#isDown = true;
-            // Play an audio file
-            canv.playAudio('https://www.wavsource.com/snds_2020-10-01_3728627494378403/sfx/blurp_x.wav');
+            this.#callback();
         }
     }
     mouseRelease(btn = 0) {
+        // Release the button if the left mouse button is released
         if (this.#isDown && btn === 0) {
             this.#isDown = false;
         }
@@ -54,6 +57,7 @@ class Button {
     }
 }
 
+// Display "sound on/off" depending on whether the canvas is muted or not
 class SoundStatus {
     #x;
     #y;
@@ -81,13 +85,16 @@ const canv = new Canvas({
     border: 'black',
     borderBlur: 'gray',
     mousemove(x, y) {
-        btn.mouseMove(x, y);
+        btnPlay.mouseMove(x, y);
+        btnStop.mouseMove(x, y);
     },
     mousedown(button) {
-        btn.mouseClick(button);
+        btnPlay.mouseClick(button);
+        btnStop.mouseClick(button);
     },
     mouseup(button) {
-        btn.mouseRelease(button);
+        btnPlay.mouseRelease(button);
+        btnStop.mouseRelease(button);
     },
     keydown(key) {
         if (key === 'm') {
@@ -100,10 +107,13 @@ const canv = new Canvas({
     },
     loop(dt) {
         canv.clear();
-        canv.draw(btn);
+        canv.draw(btnPlay);
+        canv.draw(btnStop);
         canv.draw(soundStatus);
     },
 });
 
-const btn = new Button(canv.width / 2, canv.height / 2);
+// Set the button callback functions to the `playAudio()` and `stopAudio()` API calls
+const btnPlay = new Button(canv.width * 1 / 3, canv.height / 2, 80, () => canv.playAudio('https://cs1.mp3.pm/download/88834782/eGpsZHUyd3pJempjbWozeUJhSUxnRzBUUXp5TGVkcnl4aExUcmhDVzR5Y3d2MUZrUnBpamM0bWNieW5yQ1BxYndTSEkwTUpuUitFUFVCQy9XUG5PNWRYL2s2bFFGSFJyclNpODhEMnVRZ0pVUjJiL0FDUXhNajJJc3JJcXJRTFU/Ricky_Astley_-_Never_Gonna_Give_You_Up_(mp3.pm).mp3'), 'green');
+const btnStop = new Button(canv.width * 2 / 3, canv.height / 2, 80, () => canv.stopAudio(), 'red');
 const soundStatus = new SoundStatus(10, 30);
