@@ -78,6 +78,14 @@ export class Canvas {
      */
     private readonly recorder: MediaRecorder;
     /**
+     * Determine whether audio is allowed or muted
+     */
+    private muted = false;
+    /**
+     * Contains the list of all active audio elements
+     */
+    private readonly audios: HTMLAudioElement[] = [];
+    /**
      * Create a new canvas with the provided options
      * @param options Configuration options
      */
@@ -284,10 +292,58 @@ export class Canvas {
     }
     /**
      * Determines whether the media recorder is active
-     * @returns `true` if currently recording
+     * @returns True if currently recording
      */
     public isRecording(): boolean {
         return this.recorder.state === 'recording';
+    }
+    /**
+     * Play an audio file
+     * @param src The path of the audio file
+     * @param loop Whether to play the audio on loop
+     * @param volume The normalized [0-1] volume
+     */
+    public playAudio(src: string, loop = false, volume = 1): void {
+        const audio: HTMLAudioElement = new Audio(src);
+        audio.loop = loop;
+        audio.volume = volume;
+        audio.muted = this.muted;
+        audio.play();
+        this.audios.push(audio);
+    }
+    /**
+     * Stop all audio tracks from playing
+     */
+    public stopAudio(): void {
+        for (const audio of this.audios) {
+            audio.pause();
+        }
+        this.audios.splice(0);
+    }
+    /**
+     * Mute all audio
+     */
+    public mute(): void {
+        this.muted = true;
+        for (const audio of this.audios) {
+            audio.muted = this.muted;
+        }
+    }
+    /**
+     * Unmute all audio
+     */
+    public unmute(): void {
+        this.muted = false;
+        for (const audio of this.audios) {
+            audio.muted = this.muted;
+        }
+    }
+    /**
+     * Determines whether audio is muted
+     * @returns True if currently muted
+     */
+    public isMuted(): boolean {
+        return this.muted;
     }
     /**
      * Draw an object onto the canvas.
