@@ -3,3 +3,8 @@ In this example we create two `Drawable` classes: a button and a sound status (t
 In this example, the green button plays a sound using the `playAudio()` API function. This function accepts some parameters to adjust the audio volume and whether or not the audio should be played on a loop. The red button stops all sound using the `stopAudio()` API function. Pressing the green button will start the sound from the beginning.
 
 When the user presses the `M` key, it toggles the sound on/off using the `mute()` and `unmute()` API functions. Try pressing `M` slowly twice when the sound is playing. Any audio files that are currently playing will be muted when the sound is toggled off, and then unmuted when the sound is toggled back on. It does not pause any currently playing audio files.
+
+> **Notes:**
+> - In this example, we embed an audio file directly within the source code. This is **not** required, in fact it is recommended to use a file path instead of a data url.
+> - Due to browser security policies against autoplay, `playAudio()` cannot be invoked automatically. The user **must** interact with the canvas beforehand in order to play audio.
+> - A similar reason also requires `startRecording()` from being invoked automatically.
