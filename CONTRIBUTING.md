@@ -23,9 +23,10 @@ Below is a list of requirements that must be followed when contributing to this 
     - This is shown above the example code in the generated documentation
     - This file supports LaTeX (uses MathJax for rendering)
 - UI examples must be contained in their own subfolder within the examples folder
-    - Must depend on `webpack-cli` in addition to the above requirements
+    - Must be built with webpack using the command `webpack --mode development --watch` in addition to the above requirements
     - Allowed files: `index.html`, `src/index.js` (for webpack's no-config setup, this isn't a webpack tutorial!)
     - Must include a descriptive `README.md` file in subfolder
+    - If media files are required, keep them under 1MB and embed them using data URLs generated from: https://tools.nicfv.com/data-url/
 
 ### Versioning
 - Packages begin development at version `0.0.0`
@@ -37,7 +38,7 @@ Below is a list of requirements that must be followed when contributing to this 
     - The latest version in the changelog should match that of the package version
 
 ## Development Testing
-- To test examples during development, make sure dependencies are installed and open 2 separate terminals
+- To test UI examples during development, make sure dependencies are installed and open 2 separate terminals
 - Terminal "A" will rebuild the package on update:
     ```shell
     cd ./packages/<name>/
@@ -46,6 +47,6 @@ Below is a list of requirements that must be followed when contributing to this 
 - Terminal "B" will rebuild the example on update:
     ```shell
     cd ./packages/<name>/example/<example_name>/
-    npx webpack --mode development --watch
+    npm start # to compile with webpack
     ```
 - In a browser, navigate to that example's `index.html` page, and refresh when changes are made to either the package or example
