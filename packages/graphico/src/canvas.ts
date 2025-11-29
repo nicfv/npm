@@ -204,16 +204,16 @@ export class Canvas {
         // Initialize audio tracks for recording
         const stream: MediaStream = new MediaStream(main.captureStream()); // video stream
         const audioContext = new window.AudioContext();
-        for (let i = 0; i < this.config.numTracks; i++) {
+        for (let track = 0; track < this.config.numTracks; track++) {
             const audio: HTMLAudioElement = new Audio();
             const source = audioContext.createMediaElementSource(audio);
             const destination = audioContext.createMediaStreamDestination();
             source.connect(destination); // contains the audio stream for recording
             source.connect(audioContext.destination); // so the user can hear
             this.audios.push(audio);
-            for (const track of destination.stream.getAudioTracks()) {
-                console.log(i, track.id);
-                stream.addTrack(track); // add audio track
+            for (const audioTrack of destination.stream.getAudioTracks()) {
+                this.log(`Adding ${audioTrack.id} to track ${track}.`);
+                stream.addTrack(audioTrack); // add audio track
             }
         }
         // Initialize the media recorder
