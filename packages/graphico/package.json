@@ -1,6 +1,6 @@
 {
   "name": "graphico",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Canvas 2D rendering toolkit for games and visual projects",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
@@ -23,7 +23,12 @@
     "drawing",
     "art",
     "render",
-    "2D"
+    "2D",
+    "layer",
+    "audio",
+    "track",
+    "animate",
+    "visual"
   ],
   "author": {
     "name": "Nicolas Ventura",

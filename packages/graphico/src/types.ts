@@ -43,6 +43,10 @@ export interface Options {
      */
     readonly numLayers: number;
     /**
+     * The number of audio tracks
+     */
+    readonly numTracks: number;
+    /**
      * Event listener for when a key is pressed
      * @param key The key that was pressed
      */
