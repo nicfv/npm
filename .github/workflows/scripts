@@ -69,7 +69,7 @@ for exampledir in */ ; do
     example="${exampledir%/}"
     projectdir="${example// /_}_demo"
     echo "Running example ${example}..."
-    cd "${example}" && npm i && npx webpack --mode production || exit 1
+    cd "${example}" && npx webpack --mode production || exit 1
     # Create directory and copy example output
     outpath="_assets/${package_name}/${exampledir}"
     mkdir -p "../../../../${outpath}"
