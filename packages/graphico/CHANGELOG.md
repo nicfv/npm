@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0
+
+- Add the ability to play audio!
+    - Audio is initialized in multiple "tracks", like canvas "layers" for graphics
+    - Audio can be played and stopped in a specific track
+    - All audio can be muted/unmuted
+    - Audio can only be started *after* the canvas has been interacted with
+- Screen recordings can only be started *after* the canvas has been interacted with
+- Add new audio example
+- Major updates to main readme file
+
 ## 1.0.0
 
 - All layers are drawn onto a single canvas element
