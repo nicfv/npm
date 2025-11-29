@@ -23,7 +23,12 @@
     "drawing",
     "art",
     "render",
-    "2D"
+    "2D",
+    "layer",
+    "audio",
+    "track",
+    "animate",
+    "visual"
   ],
   "author": {
     "name": "Nicolas Ventura",
