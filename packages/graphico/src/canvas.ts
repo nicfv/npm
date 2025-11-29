@@ -332,6 +332,7 @@ export class Canvas {
      * @param track The track number to play on
      */
     public playAudio(src: string, loop = false, volume = 1, track = 0): void {
+        this.log(`Playing audio on track ${track}.`);
         if (!this.interacted) {
             throw new Error('The user has not yet interacted with this canvas.');
         }
@@ -349,6 +350,7 @@ export class Canvas {
      * Stop all audio tracks from playing
      */
     public stopAudio(track = -1): void {
+        this.log(`Stopping audio on track ${track}.`);
         if (track >= this.config.numTracks) {
             throw new Error(`Track ${track} is out of range. [0,${this.config.numTracks})`);
         }
