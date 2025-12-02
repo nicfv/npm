@@ -26,3 +26,15 @@ export function zero(func: f, left: number, right: number, maxIterations = 1e6):
     }
     return left;
 }
+/**
+ * Convert a raw function definition into a valid function.
+ */
+export function getFunction(raw: string, variable: string): f {
+    const ALLOWABLE_CHARS = '1234567890.+-*/^()' + variable;
+    for (const char of raw) {
+        if (!ALLOWABLE_CHARS.includes(char)) {
+            throw new Error(`Invalid character ${char} in function: ${raw}`);
+        }
+    }
+    return new Function('q', `return +(${raw.replace('^', '**')})`) as f;
+}
