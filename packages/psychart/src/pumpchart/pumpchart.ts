@@ -4,6 +4,7 @@ import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults
 import { Point, PumpchartDataOptions, PumpchartOptions, State } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
+import { f, getFunction, zero } from './lib';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -19,6 +20,18 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
     };
+    /**
+     * The pump curve `h = p(q)`
+     */
+    private readonly p: f;
+    /**
+     * The system curve `h = s(q)`
+     */
+    private readonly s: f;
+    /**
+     * The maximum pump flow rate
+     */
+    private readonly p_q0: number;
     /**
      * The maximum flow rate shown on the x-axis
      */
@@ -48,9 +61,13 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        // Initialize the pump curve and system curve
+        this.p = getFunction(this.options.pumpCurve, 'q');
+        this.s = getFunction(this.options.systemCurve, 'q');
         // Compute the axes limits and intervals
-        this.maxFlow = this.options.pumpMaxFlow * 1.1;
-        this.maxHead = this.options.pumpMaxHead * 1.1;
+        this.p_q0 = zero(this.p, 0, 1e6);
+        this.maxFlow = 1.1 * this.p_q0;
+        this.maxHead = 1.1 * this.p(0);
         const flowStep: number = Pumpchart.getStep(this.maxFlow, this.options.size.x / this.options.font.size / 6)
         const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
         // Create the axes.
@@ -177,33 +194,33 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
     }
     /**
+     * Scale a function.
+     */
+    private scale(p: f, n: number): f {
+        return q => n * p(q / n);
+    }
+    /**
      * Draw concentric pump performance curves.
      */
     private drawPerformanceCurves(): void {
-        const color: Color = Color.hex(this.options.performanceCurveColor);
-        const p: f = this.performanceCurve();
-        const q0: number = this.options.pumpMaxFlow;
-        const minor: number = this.options.performanceSteps;
-        this.drawCurve('Performance Curve', color, 2, p, 0, q0);
-        if (minor > 0) {
-            const minorCurvePoints: number[] = SMath.linspace(0, 1, minor + 1);
-            minorCurvePoints.shift(); // Cut off the 0%
-            minorCurvePoints.pop(); // Cut off the 100%
-            minorCurvePoints.forEach(pct => {
-                const p1: f = this.performanceCurve(pct);
-                this.drawCurve('', color, 1, p1, 0, q0 * pct);
-            });
-        }
+        const color: Color = Color.hex(this.options.pumpCurveColor);
+        this.drawCurve('Performance Curve', color, 2, this.p, 0, this.p_q0);
+        this.options.speedSteps.forEach(pct => {
+            pct = SMath.clamp(pct, 0.01, 1);
+            const p1: f = this.scale(this.p, pct);
+            this.drawCurve('', color, 1, p1, 0, this.p_q0 * pct);
+        });
     }
     /**
      * Draw the system curve and operational point.
      */
     private drawSystemCurveAndOperation(): void {
         const color: Color = Color.hex(this.options.systemCuveColor);
-        const q0: number = this.options.systemOpFlow;
-        const p: f = this.performanceCurve();
-        const s: f = this.systemCurve();
-        this.drawCurve('System Curve', color, 2, s, 0, q0);
+        const n: number = SMath.clamp(this.options.operationSpeed, 0, 1);
+        const p: f = this.scale(this.p, n);
+        const q100: number = zero(q => this.s(q) - this.p(q), 0, 1e6);
+        const q0: number = zero(q => this.s(q) - p(q), 0, 1e6);
+        this.drawCurve('System Curve', color, 2, this.s, 0, q100);
         // Draw operation axis lines
         const operation = this.createPath([
             { flow: 0, head: p(q0) },
@@ -216,27 +233,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw operating point
-        this.drawCircle(`Operation Point\nFlow = ${q0.toFixed(1)} [${this.options.units.flow}]\nHead = ${p(q0).toFixed(1)} [${this.options.units.head}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
-    }
-    /**
-     * Generate the pump performance curve.
-     * @param rpmPct The normalized speed percent
-     * @returns The performance curve `h = p(q)`
-     */
-    private performanceCurve(rpmPct = 1): f {
-        const h0: number = this.options.pumpMaxHead * rpmPct;
-        const q0: number = this.options.pumpMaxFlow * rpmPct;
-        return q => h0 * (1 - (q / q0) ** 2);
-    }
-    /**
-     * Generate the system curve.
-     * @returns The system curve `h = s(q)`
-     */
-    private systemCurve(): f {
-        const p: f = this.performanceCurve();
-        const h0: number = this.options.systemMinHead;
-        const q0: number = this.options.systemOpFlow;
-        return q => h0 + (p(q0) - h0) * (q / q0) ** 2;
+        this.drawCircle(`Operation Point\nSpeed = ${(n * 100) | 0}%\nFlow = ${q0.toFixed(1)} [${this.options.units.flow}]\nHead = ${p(q0).toFixed(1)} [${this.options.units.head}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
     }
     /**
      * Plot a single data point.
@@ -262,8 +259,3 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         Chart.clearChildren(this.g.data);
     }
 }
-
-/**
- * Represents a mathematical function `h = f(q)`
- */
-type f = (q: number) => number;
