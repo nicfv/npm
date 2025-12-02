@@ -1,7 +1,9 @@
 import * as T6 from 't6';
+import * as SMath from 'smath';
 import { Psychart } from '.';
 import { defaultPsychartOptions, regions } from './psychart/defaults';
 import { PsyState } from './psychart/psystate';
+import { zero } from './pumpchart/lib';
 
 T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
@@ -47,4 +49,36 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
     const xy = ps1.toXY();
     T6.gt(xy.x, 0);
     T6.gt(xy.y, 0);
+}
+
+{
+    const f1 = (x: number) => x * x - 9; // Has 2 solutions
+    T6.isTrue(SMath.approx(zero(f1, 0, 10), 3));
+    T6.isTrue(SMath.approx(zero(f1, 0, -10), -3));
+    const f2 = (x: number) => x * x * x - 64;
+    T6.isTrue(SMath.approx(zero(f2, 0, 10), 4));
+    T6.isTrue(SMath.approx(zero(f2, 0, 4), 4));
+    T6.isTrue(SMath.approx(zero(f2, 4, 0), 4));
+    let caught: boolean;
+    caught = false;
+    try {
+        zero(f1, -5, -4);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Did not catch f1 [-5, -4]');
+    caught = false;
+    try {
+        zero(f1, -5, 5); // Cannot find both solutions at once
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Did not catch f1 [-5, 5]');
+    caught = false;
+    try {
+        zero(f2, -5, -10);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Did not catch f2');
 }
