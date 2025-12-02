@@ -41,32 +41,25 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly axisWidth: number;
     /**
-     * The maximum pump flow at no head pressure (used to build the performance curve)
+     * The pump performance curve `h = f(q)` using `q` as the function variable (at 100% speed)
      */
-    readonly pumpMaxFlow: number;
+    readonly pumpCurve: string;
     /**
-     * The pump head or differential pressure at no flow (used to build the performance curve)
+     * The system curve `h = f(q)` using `q` as the function variable
      */
-    readonly pumpMaxHead: number;
+    readonly systemCurve: string;
     /**
-     * The system head at no flow, or the difference between the inlet/outlet elevation (used to build the system curve)
+     * The intermediate performance curves to generate for different pump speeds in the range [0,1]
      */
-    readonly systemMinHead: number;
+    readonly speedSteps: number[];
     /**
-     * The flow rate at the operational point of the system (used to build the system curve)
+     * The speed of optimal operation in the range [0,1]
      */
-    readonly systemOpFlow: number;
+    readonly operationSpeed: number;
     /**
-     * The number of intermediate performance curves to generate, examples...
-     * - A value of **1** would only generate the performance curve at 100%
-     * - A value of **2** would generate the performances at 50% and 100%
-     * - A value of **4** would generate performances at 25%, 50%, 75%, and 100%
+     * The **hexadecimal** code for the pump performance curve(s)
      */
-    readonly performanceSteps: number;
-    /**
-     * The **hexadecimal** code for the performance curve(s)
-     */
-    readonly performanceCurveColor: string;
+    readonly pumpCurveColor: string;
     /**
      * The **hexadecimal** code for the system curve
      */
