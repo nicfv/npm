@@ -4,7 +4,7 @@ import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults
 import { Point, PumpchartDataOptions, PumpchartOptions, State } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
-import { f, getFunction, zero } from './lib';
+import { f, toFunction, zero } from './lib';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -62,8 +62,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
         // Initialize the pump curve and system curve
-        this.p = getFunction(this.options.pumpCurve, 'q');
-        this.s = getFunction(this.options.systemCurve, 'q');
+        this.p = toFunction(this.options.pumpCurve, 'q');
+        this.s = toFunction(this.options.systemCurve, 'q');
         // Compute the axes limits and intervals
         this.p_q0 = zero(this.p, 0, 1e6);
         this.maxFlow = 1.1 * this.p_q0;
