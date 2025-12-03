@@ -3,7 +3,7 @@ import * as SMath from 'smath';
 import { Psychart } from '.';
 import { defaultPsychartOptions, regions } from './psychart/defaults';
 import { PsyState } from './psychart/psystate';
-import { zero } from './pumpchart/lib';
+import { f, zero } from './pumpchart/lib';
 
 T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
@@ -52,33 +52,56 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 }
 
 {
-    const f1 = (x: number) => x * x - 9; // Has 2 solutions
+    const f1: f = x => x * x - 9; // Has 2 solutions
     T6.isTrue(SMath.approx(zero(f1, 0, 10), 3));
     T6.isTrue(SMath.approx(zero(f1, 0, -10), -3));
-    const f2 = (x: number) => x * x * x - 64;
+    const f2: f = x => x * x * x - 64;
     T6.isTrue(SMath.approx(zero(f2, 0, 10), 4));
     T6.isTrue(SMath.approx(zero(f2, 0, 4), 4));
     T6.isTrue(SMath.approx(zero(f2, 4, 0), 4));
     let caught: boolean;
+    let message: string;
     caught = false;
+    message = '';
     try {
         zero(f1, -5, -4);
-    } catch {
+    } catch (e) {
         caught = true;
+        message = (e as Error).message;
     }
     T6.isTrue(caught, 'Did not catch f1 [-5, -4]');
+    T6.is(message, 'A solution cannot be found.');
     caught = false;
+    message = '';
     try {
         zero(f1, -5, 5); // Cannot find both solutions at once
-    } catch {
+    } catch (e) {
         caught = true;
+        message = (e as Error).message;
     }
     T6.isTrue(caught, 'Did not catch f1 [-5, 5]');
+    T6.is(message, 'A solution cannot be found.');
     caught = false;
+    message = '';
     try {
         zero(f2, -5, -10);
-    } catch {
+    } catch (e) {
         caught = true;
+        message = (e as Error).message;
     }
     T6.isTrue(caught, 'Did not catch f2');
+    T6.is(message, 'A solution cannot be found.');
+    T6.isTrue(SMath.approx(zero(Math.sin, 1, 5), Math.PI), 'sin');
+    T6.isTrue(SMath.approx(zero(Math.cos, 0, 4), Math.PI / 2), 'cos');
+    T6.isTrue(SMath.approx(zero(Math.log, 0, 10), 1), 'log');
+    caught = false;
+    message = '';
+    try {
+        zero(Math.log, -1, 10); // Bad domain
+    } catch (e) {
+        caught = true;
+        message = (e as Error).message;
+    }
+    T6.isTrue(caught, 'Did not catch log(-1)');
+    T6.is(message, 'f(-1) is NaN');
 }
