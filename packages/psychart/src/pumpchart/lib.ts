@@ -38,12 +38,13 @@ export function zero(func: f, left: number, right: number, epsilon = 1e-6, maxIt
 /**
  * Convert a raw function definition into a valid function.
  */
-export function getFunction(raw: string, variable: string): f {
-    const ALLOWABLE_CHARS = '1234567890.+-*/^()' + variable;
+export function toFunction(raw: string, variable: string): f {
+    const varChar: string = variable.charAt(0);
+    const ALLOWABLE_CHARS: string = '1234567890.+-*/^()' + varChar;
     for (const char of raw) {
         if (!ALLOWABLE_CHARS.includes(char)) {
             throw new Error(`Invalid character ${char} in function: ${raw}`);
         }
     }
-    return new Function('q', `return +(${raw.replace('^', '**')})`) as f;
+    return new Function(varChar, `return +(${raw.replace('^', '**')})`) as f;
 }
