@@ -3,7 +3,7 @@ import * as SMath from 'smath';
 import { Psychart } from '.';
 import { defaultPsychartOptions, regions } from './psychart/defaults';
 import { PsyState } from './psychart/psystate';
-import { f, zero } from './pumpchart/lib';
+import { f, toFunction, zero } from './pumpchart/lib';
 
 T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
@@ -104,4 +104,51 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
     }
     T6.isTrue(caught, 'Did not catch log(-1)');
     T6.is(message, 'f(-1) is NaN');
+}
+
+{
+    const f1: f = toFunction('x^2-1', 'x');
+    const g1: f = x => x * x - 1;
+    for (const i of SMath.linspace(-10, 10, 5)) {
+        T6.eq(f1(i), g1(i), `f1(${i}) = ${f1(i)}; g1(${i}) = ${g1(i)}`);
+    }
+    const f2: f = toFunction('5*(2 - 4y + (y/3)^2)', 'y');
+    const g2: f = x => 5 * (2 - 4 * x + (x / 3) ** 2);
+    for (const i of SMath.linspace(-10, 10, 5)) {
+        T6.eq(f2(i), g2(i));
+    }
+    const f3: f = toFunction('4test/5  +  test', 'test');
+    const g3: f = x => 1.8 * x;
+    for (const i of SMath.linspace(-10, 10, 5)) {
+        T6.eq(f3(i), g3(i));
+    }
+    let caught: boolean;
+    caught = false;
+    try {
+        toFunction('', 'hello');
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught); // Empty
+    caught = false;
+    try {
+        toFunction('hello!', 'hello');
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught); // Illegal chars
+    caught = false;
+    try {
+        toFunction('5hello', 'hello');
+    } catch {
+        caught = true;
+    }
+    T6.isFalse(caught); // Valid function (5 * hello)
+    caught = false;
+    try {
+        toFunction('hello5', 'hello');
+    } catch {
+        caught = true;
+    }
+    T6.isFalse(caught); // Does not catch because no illegal chars
 }
