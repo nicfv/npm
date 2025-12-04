@@ -39,12 +39,10 @@ export function zero(func: f, left: number, right: number, epsilon = 1e-6, maxIt
  * Convert a raw function definition into a valid function.
  */
 export function toFunction(raw: string, variable: string): f {
-    const varChar: string = variable.charAt(0);
-    const ALLOWABLE_CHARS: string = '1234567890.+-*/^()' + varChar;
-    for (const char of raw) {
-        if (!ALLOWABLE_CHARS.includes(char)) {
-            throw new Error(`Invalid character ${char} in function: ${raw}`);
-        }
+    const allowed = new RegExp(`^([0-9\\.\\+\\-\\*\\/\\^\\(\\)\\s]|(${variable}))+$`);
+    const multShorthand = new RegExp(`([0-9]+)(${variable})`); // e.g. 5x (5*x)
+    if (!allowed.test(raw)) {
+        throw new Error(`Illegal character(s) found in function: ${raw}`);
     }
-    return new Function(varChar, `return +(${raw.replace('^', '**')})`) as f;
+    return new Function(variable, `return +(${raw.replace('^', '**').replace(multShorthand, '$1*$2')})`) as f;
 }
