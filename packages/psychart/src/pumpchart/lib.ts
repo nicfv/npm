@@ -1,8 +1,8 @@
 import * as SMath from 'smath';
 /**
- * Represents a mathematical function `h = f(q)`
+ * Represents a mathematical function `y = f(x)`
  */
-export type f = (q: number) => number;
+export type f = (x: number) => number;
 /**
  * Find the solution (zero) of a function.
  */
