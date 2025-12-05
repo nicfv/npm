@@ -49,13 +49,22 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly systemCurve: string;
     /**
-     * The intermediate performance curves to generate for different pump speeds in the range [0,1]
+     * Values for speed in the units specified, used to generate pump performance curves
      */
-    readonly speedSteps: number[];
-    /**
-     * The speed of optimal operation in the range [0,1]
-     */
-    readonly operationSpeed: number;
+    readonly speed: {
+        /**
+         * The maximum pump speed
+         */
+        readonly max: number,
+        /**
+         * The speed of optimal operation
+         */
+        readonly operation: number,
+        /**
+         * The intermediate performance curves to generate for different pump speeds
+         */
+        readonly steps: number[],
+    },
     /**
      * The **hexadecimal** code for the pump performance curve(s)
      */
