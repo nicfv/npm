@@ -11,9 +11,9 @@ const pumpchart = new Pumpchart({
     pumpCurve: '30-(q/100)^2',
     systemCurve: '5+(q/75)^2',
     speed: {
-        max: 60,
-        operation: 55,
-        steps: [15, 30, 45],
+        max: 60, // Max pump speed (rpm)
+        operation: 55, // Operational speed (rpm)
+        steps: [15, 30, 45], // Minor pump curves (rpm)
     },
     units: {
         flow: 'gpm',
