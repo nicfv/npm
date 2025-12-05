@@ -250,13 +250,18 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
         const color: Color = Palette[options.gradient.name].getColor(options.gradient.score);
         const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;
-        const speedEstimate: number = SMath.expand(zero(speedEstimator, 0.01, 1), 0, this.options.speed.max);
+        let speedEstimate: number;
+        try {
+            speedEstimate = SMath.expand(zero(speedEstimator, 0.01, 1), 0, this.options.speed.max);
+        } catch {
+            speedEstimate = 0;
+        }
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
             (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
             `Flow = ${SMath.round2(state.flow, 0.1)} [${this.options.units.flow}]` +
             `\nHead = ${SMath.round2(state.head, 0.1)} [${this.options.units.head}]` +
-            `\nSpeed = ${SMath.round2(speedEstimate, 0.1)} [${this.options.units.speed}] (est.)` +
+            (speedEstimate > 0 ? `\nSpeed = ${SMath.round2(speedEstimate, 0.1)} [${this.options.units.speed}] (est.)` : '\nSpeed cannot be estimated') +
             (typeof state.speed !== 'undefined' ? `\nSpeed = ${SMath.round2(state.speed, 0.1)} [${this.options.units.speed}]` : '') +
             (typeof state.power !== 'undefined' ? `\nPower = ${SMath.round2(state.power, 0.1)} [${this.options.units.power}]` : '');
         this.drawCircle(tip, color, state, options.radius, this.g.data);
