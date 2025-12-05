@@ -20,8 +20,11 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     },
     pumpCurve: '120-120*(q/175)^2',
     systemCurve: '10+70*(q/100)^2',
-    speedSteps: [0.25, 0.50, 0.75],
-    operationSpeed: 0.75,
+    speed: {
+        max: 60,
+        operation: 45,
+        steps: [15, 30, 45],
+    },
     pumpCurveColor: '#ffaa55',
     systemCuveColor: '#55ffaa',
     units: {
