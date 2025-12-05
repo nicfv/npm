@@ -41,13 +41,18 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly axisWidth: number;
     /**
-     * The pump performance curve `h = f(q)` using `q` as the function variable (at 100% speed)
+     * Defines the curves to render on Pumpchart `h = f(q)` using `q` as the function variable
      */
-    readonly pumpCurve: string;
-    /**
-     * The system curve `h = f(q)` using `q` as the function variable
-     */
-    readonly systemCurve: string;
+    readonly curve: {
+        /**
+         * The pump performance curve at 100% pump speed
+         */
+        readonly pump: string;
+        /**
+         * The system curve
+         */
+        readonly system: string;
+    },
     /**
      * Values for speed in the units specified, used to generate pump performance curves
      */

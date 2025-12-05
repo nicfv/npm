@@ -18,8 +18,10 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         name: 'sans-serif',
         size: 12,
     },
-    pumpCurve: '50-50*(q/200)^2',
-    systemCurve: '10+40*(q/200)^2',
+    curve: {
+        pump: '50-50*(q/200)^2',
+        system: '10+40*(q/200)^2',
+    },
     speed: {
         max: 100,
         operation: 100,

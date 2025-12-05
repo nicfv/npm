@@ -62,8 +62,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
         // Initialize the pump curve and system curve
-        this.p = toFunction(this.options.pumpCurve, 'q');
-        this.s = toFunction(this.options.systemCurve, 'q');
+        this.p = toFunction(this.options.curve.pump, 'q');
+        this.s = toFunction(this.options.curve.system, 'q');
         // Compute the axes limits and intervals
         this.p_q0 = zero(this.p, 0, 1e6);
         this.maxFlow = 1.1 * this.p_q0;
