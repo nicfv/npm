@@ -11,6 +11,10 @@ import { f, toFunction, zero } from './lib';
  */
 export class Pumpchart extends Chart<PumpchartOptions> {
     /**
+     * The operating point for the system
+     */
+    public readonly operation: State;
+    /**
      * Layers of the SVG as groups.
      */
     private readonly g = {
@@ -28,10 +32,6 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * The system curve `h = s(q)`
      */
     private readonly s: f;
-    /**
-     * The maximum pump flow rate
-     */
-    private readonly p_q0: number;
     /**
      * The maximum flow rate shown on the x-axis
      */
@@ -65,8 +65,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         this.p = toFunction(this.options.curve.pump, 'q');
         this.s = toFunction(this.options.curve.system, 'q');
         // Compute the axes limits and intervals
-        this.p_q0 = zero(this.p, 0, 1e6);
-        this.maxFlow = 1.1 * this.p_q0;
+        const q0: number = zero(this.p, 0, 1e6); // Max pump flow with 0 head
+        this.maxFlow = 1.1 * q0;
         this.maxHead = 1.1 * this.p(0);
         const flowStep: number = Pumpchart.getStep(this.maxFlow, this.options.size.x / this.options.font.size / 6)
         const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
@@ -112,8 +112,41 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${head}${this.options.units.head}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.units.head}]`);
         }
-        this.drawSystemCurveAndOperation();
-        this.drawPerformanceCurves();
+        // Draw the system curve
+        const sysColor: Color = Color.hex(this.options.systemCuveColor);
+        const n: number = SMath.clamp(SMath.normalize(this.options.speed.operation, 0, this.options.speed.max), 0.01, 1);
+        const p: f = this.scale(this.p, n);
+        const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
+        const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
+        this.operation = { flow: qop, head: p(qop), speed: this.options.speed.operation };
+        this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, this.s, 0, qmax);
+        // Draw operation axis lines
+        const operation = this.createPath([
+            { flow: 0, head: this.operation.head },
+            this.operation,
+            { flow: this.operation.flow, head: 0 },
+        ], false);
+        operation.setAttribute('fill', 'none');
+        operation.setAttribute('stroke', sysColor.toString());
+        operation.setAttribute('stroke-width', `${this.options.axisWidth}px`);
+        operation.setAttribute('stroke-linecap', 'round');
+        this.g.curves.append(operation);
+        // Draw the operating point
+        this.drawCircle(
+            `Operation Point` +
+            `\nFlow = ${SMath.round2(qop, 0.1)}${this.options.units.flow}` +
+            `\nHead = ${SMath.round2(p(qop), 0.1)}${this.options.units.head}` +
+            `\nSpeed = ${SMath.round2(this.options.speed.operation, 0.1)}${this.options.units.speed}`,
+            sysColor, { flow: qop, head: p(qop) }, 5 * this.options.axisWidth, this.g.curves
+        );
+        // Draw concentric pump performance curves
+        const pumpColor: Color = Color.hex(this.options.pumpCurveColor);
+        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, pumpColor, this.options.axisWidth * 2, this.p, 0, q0);
+        this.options.speed.steps.forEach(speed => {
+            const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
+            const p1: f = this.scale(this.p, pct);
+            this.drawCurve('', pumpColor, this.options.axisWidth, p1, 0, q0 * pct);
+        });
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -198,48 +231,6 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private scale(p: f, n: number): f {
         return q => n * p(q / n);
-    }
-    /**
-     * Draw concentric pump performance curves.
-     */
-    private drawPerformanceCurves(): void {
-        const color: Color = Color.hex(this.options.pumpCurveColor);
-        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, color, this.options.axisWidth * 2, this.p, 0, this.p_q0);
-        this.options.speed.steps.forEach(speed => {
-            const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
-            const p1: f = this.scale(this.p, pct);
-            this.drawCurve('', color, this.options.axisWidth, p1, 0, this.p_q0 * pct);
-        });
-    }
-    /**
-     * Draw the system curve and operational point.
-     */
-    private drawSystemCurveAndOperation(): void {
-        const color: Color = Color.hex(this.options.systemCuveColor);
-        const n: number = SMath.clamp(SMath.normalize(this.options.speed.operation, 0, this.options.speed.max), 0.01, 1);
-        const p: f = this.scale(this.p, n);
-        const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
-        const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
-        this.drawCurve('System Curve', color, 2 * this.options.axisWidth, this.s, 0, qmax);
-        // Draw operation axis lines
-        const operation = this.createPath([
-            { flow: 0, head: p(qop) },
-            { flow: qop, head: p(qop) },
-            { flow: qop, head: 0 },
-        ], false);
-        operation.setAttribute('fill', 'none');
-        operation.setAttribute('stroke', color.toString());
-        operation.setAttribute('stroke-width', `${this.options.axisWidth}px`);
-        operation.setAttribute('stroke-linecap', 'round');
-        this.g.curves.append(operation);
-        // Draw operating point
-        this.drawCircle(
-            `Operation Point` +
-            `\nFlow = ${SMath.round2(qop, 0.1)}${this.options.units.flow}` +
-            `\nHead = ${SMath.round2(p(qop), 0.1)}${this.options.units.head}` +
-            `\nSpeed = ${SMath.round2(this.options.speed.operation, 0.1)}${this.options.units.speed}`,
-            color, { flow: qop, head: p(qop) }, 5 * this.options.axisWidth, this.g.curves
-        );
     }
     /**
      * Plot a single data point.
