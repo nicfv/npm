@@ -204,9 +204,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private drawPerformanceCurves(): void {
         const color: Color = Color.hex(this.options.pumpCurveColor);
-        this.drawCurve('Performance Curve', color, 2, this.p, 0, this.p_q0);
-        this.options.speedSteps.forEach(pct => {
-            pct = SMath.clamp(pct, 0.01, 1);
+        this.drawCurve(`Performance Curve at ${this.options.speed.max} [${this.options.units.speed}]`, color, 2, this.p, 0, this.p_q0);
+        this.options.speed.steps.forEach(speed => {
+            const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
             const p1: f = this.scale(this.p, pct);
             this.drawCurve('', color, 1, p1, 0, this.p_q0 * pct);
         });
@@ -216,7 +216,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private drawSystemCurveAndOperation(): void {
         const color: Color = Color.hex(this.options.systemCuveColor);
-        const n: number = SMath.clamp(this.options.operationSpeed, 0, 1);
+        const n: number = SMath.clamp(SMath.normalize(this.options.speed.operation, 0, this.options.speed.max), 0.01, 1);
         const p: f = this.scale(this.p, n);
         const q100: number = zero(q => this.s(q) - this.p(q), 0, 1e6);
         const q0: number = zero(q => this.s(q) - p(q), 0, 1e6);
@@ -233,7 +233,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw operating point
-        this.drawCircle(`Operation Point\nSpeed = ${(n * 100) | 0}%\nFlow = ${q0.toFixed(1)} [${this.options.units.flow}]\nHead = ${p(q0).toFixed(1)} [${this.options.units.head}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
+        this.drawCircle(`Operation Point\nSpeed = ${this.options.speed.operation} [${this.options.units.speed}]\nFlow = ${q0.toFixed(1)} [${this.options.units.flow}]\nHead = ${p(q0).toFixed(1)} [${this.options.units.head}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
     }
     /**
      * Plot a single data point.
@@ -243,11 +243,14 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     public plot(state: State, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
         const color: Color = Palette[options.gradient.name].getColor(options.gradient.score);
+        const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;
+        const speedEstimate: number = SMath.expand(zero(speedEstimator, 0.01, 1), 0, this.options.speed.max);
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
             (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
             `Flow = ${state.flow} [${this.options.units.flow}]` +
             `\nHead = ${state.head} [${this.options.units.head}]` +
+            `\nSpeed (est.) = ${speedEstimate} [${this.options.units.speed}]` +
             (typeof state.speed !== 'undefined' ? `\nSpeed = ${state.speed} [${this.options.units.speed}]` : '') +
             (typeof state.power !== 'undefined' ? `\nPower = ${state.power} [${this.options.units.power}]` : '');
         this.drawCircle(tip, color, state, options.radius, this.g.data);
