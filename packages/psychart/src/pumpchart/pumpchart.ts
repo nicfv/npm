@@ -132,13 +132,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw the operating point
-        this.drawCircle(
-            `Operation Point` +
-            `\nFlow = ${SMath.round2(qop, 0.1)}${this.options.units.flow}` +
-            `\nHead = ${SMath.round2(p(qop), 0.1)}${this.options.units.head}` +
-            `\nSpeed = ${SMath.round2(this.options.speed.operation, 0.1)}${this.options.units.speed}`,
-            sysColor, { flow: qop, head: p(qop) }, 5 * this.options.axisWidth, this.g.curves
-        );
+        this.plot(this.operation, {
+            name: 'Operation Point',
+            radius: 5 * this.options.axisWidth,
+        });
         // Draw concentric pump performance curves
         const pumpColor: Color = Color.hex(this.options.pumpCurveColor);
         this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, pumpColor, this.options.axisWidth * 2, this.p, 0, q0);
