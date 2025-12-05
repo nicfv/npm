@@ -204,7 +204,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private drawPerformanceCurves(): void {
         const color: Color = Color.hex(this.options.pumpCurveColor);
-        this.drawCurve(`Performance Curve at ${this.options.speed.max} [${this.options.units.speed}]`, color, 2, this.p, 0, this.p_q0);
+        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)} [${this.options.units.speed}]`, color, 2, this.p, 0, this.p_q0);
         this.options.speed.steps.forEach(speed => {
             const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
             const p1: f = this.scale(this.p, pct);
@@ -233,7 +233,13 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw operating point
-        this.drawCircle(`Operation Point\nSpeed = ${this.options.speed.operation} [${this.options.units.speed}]\nFlow = ${q0.toFixed(1)} [${this.options.units.flow}]\nHead = ${p(q0).toFixed(1)} [${this.options.units.head}]`, color, { flow: q0, head: p(q0) }, 5, this.g.curves);
+        this.drawCircle(
+            `Operation Point` +
+            `\nSpeed = ${SMath.round2(this.options.speed.operation, 0.1)} [${this.options.units.speed}]` +
+            `\nFlow = ${SMath.round2(q0, 0.1)} [${this.options.units.flow}]` +
+            `\nHead = ${SMath.round2(p(q0), 0.1)} [${this.options.units.head}]`,
+            color, { flow: q0, head: p(q0) }, 5, this.g.curves
+        );
     }
     /**
      * Plot a single data point.
@@ -248,11 +254,11 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
             (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
-            `Flow = ${state.flow} [${this.options.units.flow}]` +
-            `\nHead = ${state.head} [${this.options.units.head}]` +
-            `\nSpeed (est.) = ${speedEstimate} [${this.options.units.speed}]` +
-            (typeof state.speed !== 'undefined' ? `\nSpeed = ${state.speed} [${this.options.units.speed}]` : '') +
-            (typeof state.power !== 'undefined' ? `\nPower = ${state.power} [${this.options.units.power}]` : '');
+            `Flow = ${SMath.round2(state.flow, 0.1)} [${this.options.units.flow}]` +
+            `\nHead = ${SMath.round2(state.head, 0.1)} [${this.options.units.head}]` +
+            `\nSpeed = ${SMath.round2(speedEstimate, 0.1)} [${this.options.units.speed}] (est.)` +
+            (typeof state.speed !== 'undefined' ? `\nSpeed = ${SMath.round2(state.speed, 0.1)} [${this.options.units.speed}]` : '') +
+            (typeof state.power !== 'undefined' ? `\nPower = ${SMath.round2(state.power, 0.1)} [${this.options.units.power}]` : '');
         this.drawCircle(tip, color, state, options.radius, this.g.data);
     }
     /**
