@@ -8,8 +8,10 @@ const nData = 100;
 
 // Create a custom pump chart
 const pumpchart = new Pumpchart({
-    pumpCurve: '30-(q/100)^2',
-    systemCurve: '5+(q/75)^2',
+    curve: { // Define performance curves as a function of `q` (flow rate)
+        pump: '30-(q/100)^2',
+        system: '5+(q/75)^2',
+    },
     speed: {
         max: 60, // Max pump speed (rpm)
         operation: 55, // Operational speed (rpm)
