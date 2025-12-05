@@ -79,6 +79,23 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly systemCuveColor: string;
     /**
+     * The gradient name for plotting time-series data
+     */
+    readonly gradient: PaletteName;
+    /**
+     * Timestamps for colorizing time-series data
+     */
+    readonly timestamp: {
+        /**
+         * The starting timestamp
+         */
+        readonly start: number;
+        /**
+         * The ending timestamp
+         */
+        readonly stop: number;
+    },
+    /**
      * Units for various quantities
      */
     readonly units: {
@@ -113,19 +130,6 @@ export interface PumpchartDataOptions {
      * The radius of this data point, in pixels
      */
     readonly radius: number;
-    /**
-     * Properties that define this point's color
-     */
-    readonly gradient: {
-        /**
-         * The name of the gradient
-         */
-        readonly name: PaletteName;
-        /**
-         * The normalized "score" to color this data point along the gradient
-         */
-        readonly score: number;
-    },
     /**
      * An optional timestamp for this data point
      */
