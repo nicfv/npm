@@ -36,6 +36,5 @@ for (let t = now; t < in1hr; t += onehr / nData) {
     });
 }
 
-window.addEventListener('load', () => {
-    document.body.append(pumpchart.getElement());
-});
+// Append pumpchart to the document <body>
+document.body.append(pumpchart.getElement());
