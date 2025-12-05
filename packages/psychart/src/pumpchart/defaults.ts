@@ -18,20 +18,20 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         name: 'sans-serif',
         size: 12,
     },
-    pumpCurve: '120-120*(q/175)^2',
-    systemCurve: '10+70*(q/100)^2',
+    pumpCurve: '50-50*(q/200)^2',
+    systemCurve: '10+40*(q/200)^2',
     speed: {
-        max: 60,
-        operation: 45,
-        steps: [15, 30, 45],
+        max: 100,
+        operation: 100,
+        steps: [25, 50, 75],
     },
     pumpCurveColor: '#ffaa55',
     systemCuveColor: '#55ffaa',
     units: {
-        flow: 'gpm',
-        head: 'ft',
+        flow: 'm3/h',
+        head: 'm',
         power: 'kW',
-        speed: 'rpm',
+        speed: '%',
     },
 };
 
