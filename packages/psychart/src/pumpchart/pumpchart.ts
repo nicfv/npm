@@ -218,14 +218,14 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const color: Color = Color.hex(this.options.systemCuveColor);
         const n: number = SMath.clamp(SMath.normalize(this.options.speed.operation, 0, this.options.speed.max), 0.01, 1);
         const p: f = this.scale(this.p, n);
-        const q100: number = zero(q => this.s(q) - this.p(q), 0, 1e6);
-        const q0: number = zero(q => this.s(q) - p(q), 0, 1e6);
-        this.drawCurve('System Curve', color, 2, this.s, 0, q100);
+        const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
+        const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
+        this.drawCurve('System Curve', color, 2, this.s, 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
-            { flow: 0, head: p(q0) },
-            { flow: q0, head: p(q0) },
-            { flow: q0, head: 0 },
+            { flow: 0, head: p(qop) },
+            { flow: qop, head: p(qop) },
+            { flow: qop, head: 0 },
         ], false);
         operation.setAttribute('fill', 'none');
         operation.setAttribute('stroke', color.toString());
@@ -236,9 +236,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         this.drawCircle(
             `Operation Point` +
             `\nSpeed = ${SMath.round2(this.options.speed.operation, 0.1)} [${this.options.units.speed}]` +
-            `\nFlow = ${SMath.round2(q0, 0.1)} [${this.options.units.flow}]` +
-            `\nHead = ${SMath.round2(p(q0), 0.1)} [${this.options.units.head}]`,
-            color, { flow: q0, head: p(q0) }, 5, this.g.curves
+            `\nFlow = ${SMath.round2(qop, 0.1)} [${this.options.units.flow}]` +
+            `\nHead = ${SMath.round2(p(qop), 0.1)} [${this.options.units.head}]`,
+            color, { flow: qop, head: p(qop) }, 5, this.g.curves
         );
     }
     /**
