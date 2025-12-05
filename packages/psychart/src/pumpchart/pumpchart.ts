@@ -14,8 +14,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Layers of the SVG as groups.
      */
     private readonly g = {
-        axes: document.createElementNS(this.NS, 'g'),
         curves: document.createElementNS(this.NS, 'g'),
+        axes: document.createElementNS(this.NS, 'g'),
         data: document.createElementNS(this.NS, 'g'),
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
@@ -112,8 +112,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             // Show axis label
             this.drawLabel(`${head}${this.options.units.head}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.units.head}]`);
         }
-        this.drawPerformanceCurves();
         this.drawSystemCurveAndOperation();
+        this.drawPerformanceCurves();
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -204,11 +204,11 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private drawPerformanceCurves(): void {
         const color: Color = Color.hex(this.options.pumpCurveColor);
-        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, color, 2, this.p, 0, this.p_q0);
+        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, color, this.options.axisWidth * 2, this.p, 0, this.p_q0);
         this.options.speed.steps.forEach(speed => {
             const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
             const p1: f = this.scale(this.p, pct);
-            this.drawCurve('', color, 1, p1, 0, this.p_q0 * pct);
+            this.drawCurve('', color, this.options.axisWidth, p1, 0, this.p_q0 * pct);
         });
     }
     /**
@@ -220,7 +220,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const p: f = this.scale(this.p, n);
         const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
         const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
-        this.drawCurve('System Curve', color, 2, this.s, 0, qmax);
+        this.drawCurve('System Curve', color, 2 * this.options.axisWidth, this.s, 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
             { flow: 0, head: p(qop) },
@@ -229,7 +229,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         ], false);
         operation.setAttribute('fill', 'none');
         operation.setAttribute('stroke', color.toString());
-        operation.setAttribute('stroke-width', '1px');
+        operation.setAttribute('stroke-width', `${this.options.axisWidth}px`);
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw operating point
@@ -238,7 +238,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             `\nFlow = ${SMath.round2(qop, 0.1)}${this.options.units.flow}` +
             `\nHead = ${SMath.round2(p(qop), 0.1)}${this.options.units.head}` +
             `\nSpeed = ${SMath.round2(this.options.speed.operation, 0.1)}${this.options.units.speed}`,
-            color, { flow: qop, head: p(qop) }, 5, this.g.curves
+            color, { flow: qop, head: p(qop) }, 5 * this.options.axisWidth, this.g.curves
         );
     }
     /**
