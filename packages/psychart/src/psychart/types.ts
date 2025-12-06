@@ -201,3 +201,11 @@ export interface PsychartDataOptions {
      */
     readonly advanced: boolean;
 }
+/**
+ * @deprecated Use `PsychartState`
+ */
+export type Datum = PsychartState;
+/**
+ * @deprecated Use `PsychartDataOptions`
+ */
+export type DataOptions = PsychartDataOptions;
