@@ -2,6 +2,7 @@
 
 ## 0.8.0
 
+- Add package keywords
 - Updates for `Pumpchart`:
     - Add main readme page
     - Example now renders 100 random data points
