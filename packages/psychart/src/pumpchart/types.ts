@@ -71,11 +71,11 @@ export interface PumpchartOptions extends ChartOptions {
         readonly steps: number[],
     },
     /**
-     * The **hexadecimal** code for the pump performance curve(s)
+     * The **hexadecimal** color code for the pump performance curve(s)
      */
     readonly pumpCurveColor: string;
     /**
-     * The **hexadecimal** code for the system curve
+     * The **hexadecimal** color code for the system curve
      */
     readonly systemCuveColor: string;
     /**
@@ -130,6 +130,10 @@ export interface PumpchartDataOptions {
      * The radius of this data point, in pixels
      */
     readonly radius: number;
+    /**
+     * The **hexadecimal** color code for this data point, only used for time-independent data
+     */
+    readonly color: string;
     /**
      * An optional timestamp for this data point
      */
