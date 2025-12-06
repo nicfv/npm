@@ -232,7 +232,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     public plot(state: State, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
-        const color: Color = Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop);
+        const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
         const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;
         let speedEstimate: number;
         try {
