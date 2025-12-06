@@ -1,7 +1,7 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
 import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults';
-import { Point, PumpchartDataOptions, PumpchartOptions, State } from './types';
+import { Point, PumpchartDataOptions, PumpchartOptions, PumpchartState } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 import { f, toFunction, zero } from './lib';
@@ -114,7 +114,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const p: f = this.scale(this.p, n);
         const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
         const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
-        const opPt: State = { flow: qop, head: p(qop), speed: this.options.speed.operation };
+        const opPt: PumpchartState = { flow: qop, head: p(qop), speed: this.options.speed.operation };
         this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, this.s, 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
@@ -147,7 +147,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param state Any state in this system
      * @returns An (x,y) coordinate on the screen
      */
-    private state2xy(state: State): Point {
+    private state2xy(state: PumpchartState): Point {
         const xMin: number = this.options.padding.x;
         const xMax: number = this.options.size.x - this.options.padding.x
         const yMin: number = this.options.padding.y;
@@ -163,7 +163,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param closePath Whether or not to close the path
      * @returns A `<path>` element containing the array of states
      */
-    private createPath(data: State[], closePath = false): SVGPathElement {
+    private createPath(data: PumpchartState[], closePath = false): SVGPathElement {
         const path: SVGPathElement = document.createElementNS(this.NS, 'path');
         path.setAttribute('d', 'M ' + data.map(pt => {
             const xy: Point = this.state2xy(pt);
@@ -179,7 +179,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param anchor Label text anchor
      * @param tooltip Optional tooltip text on mouse hover
      */
-    private drawLabel(content: string, location: State, anchor: TextAnchor, tooltip?: string): void {
+    private drawLabel(content: string, location: PumpchartState, anchor: TextAnchor, tooltip?: string): void {
         const axisColor: Color = Color.hex(this.options.axisColor);
         const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor);
         this.g.text.appendChild(label);
@@ -192,7 +192,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Draw a curve `h = f(q)` on the curves layer.
      */
     private drawCurve(tooltip: string, color: Color, width: number, h: f, min = 0, max = this.maxFlow, steps = 1e3): void {
-        const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
+        const states: PumpchartState[] = SMath.linspace(min, max, steps).map<PumpchartState>(q => { return { flow: q, head: h(q) } });
         const curve: SVGPathElement = this.createPath(states, false);
         curve.setAttribute('fill', 'none');
         curve.setAttribute('stroke', color.toString());
@@ -207,7 +207,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     /**
      * Draw a custom circle onto any layer.
      */
-    private drawCircle(tooltip: string, color: Color, state: State, radius: number, parent: SVGElement): void {
+    private drawCircle(tooltip: string, color: Color, state: PumpchartState, radius: number, parent: SVGElement): void {
         const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
         const center: Point = this.state2xy(state);
         circle.setAttribute('fill', color.toString());
@@ -231,7 +231,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param state The current state of the system
      * @param config Display options for plotting data
      */
-    public plot(state: State, config: Partial<PumpchartDataOptions> = {}): void {
+    public plot(state: PumpchartState, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
         const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
         const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;

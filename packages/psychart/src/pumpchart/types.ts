@@ -5,7 +5,7 @@ export { Point };
 /**
  * Represents a single point in time.
  */
-export interface State {
+export interface PumpchartState {
     /**
      * Flow rate (e.g. gpm)
      */
