@@ -150,7 +150,7 @@ export interface PsychartOptions extends ChartOptions {
 /**
  * Configuration settings for plotting data.
  */
-export interface DataOptions {
+export interface PsychartDataOptions {
     /**
      * Adds a name to a point or data series to be shown in the tooltip. Must be set to create an entry in the legend.
      */

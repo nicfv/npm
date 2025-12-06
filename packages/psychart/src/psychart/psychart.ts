@@ -1,7 +1,7 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import * as SMath from 'smath';
-import { PsychartOptions, Datum, RegionName, DataOptions } from './types';
+import { PsychartOptions, Datum, RegionName, PsychartDataOptions } from './types';
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
 import { TextAnchor } from '../types';
@@ -393,13 +393,13 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    public plot(state: Datum, config: Partial<DataOptions> = {}): void {
+    public plot(state: Datum, config: Partial<PsychartDataOptions> = {}): void {
         // Skip series that are missing a measurement point.
         if (!Number.isFinite(state.db) || !Number.isFinite(state.other)) {
             return;
         }
         // Set default data options.
-        const options: DataOptions = Chart.setDefaults(config, defaultDataOptions);
+        const options: PsychartDataOptions = Chart.setDefaults(config, defaultDataOptions);
         // Determine whether this is time-dependent.
         const hasTimeStamp: boolean = Number.isFinite(options.time.now),
             timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);

@@ -1,4 +1,4 @@
-import { PsychartOptions, DataOptions, RegionName, Datum } from './types';
+import { PsychartOptions, RegionName, Datum, PsychartDataOptions } from './types';
 
 /**
  * Represents a set of default options for Psychart.
@@ -45,7 +45,7 @@ export const defaultPsychartOptions: PsychartOptions = {
 /**
  * Represents a set of default data options.
  */
-export const defaultDataOptions: DataOptions = {
+export const defaultDataOptions: PsychartDataOptions = {
     advanced: false,
     color: '#FF0000',
     gradient: 'Viridis',
