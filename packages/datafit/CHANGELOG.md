@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.11
+
+- Minor tsdoc changes
+
 ## 1.4.10
 
 - Follow `eslint` styling rules
