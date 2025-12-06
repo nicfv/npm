@@ -92,3 +92,35 @@ Pumps will *always* operate somewhere along the system curve in steady-state ope
 ## Net Positive Suction Head
 
 **IMPORTANT!** This curve is not (yet) shown on Pumpchart. Net positive suction head required, or NPSHr, is an extremely important property of the pump which dictates at least how much gauge pressure is required on the suction side of the pump. If the suction pressure drops below this amount, then *cavitation* will occur. This causes bubbles to form and collapse in the fluid which causes damage to piping and the pump itself.
+
+## Getting Started
+
+Pumpchart can be initialized with no configuration. After installing `psychart`, you can immediately start using it out-of-box like this.
+
+```js
+const pumpchart = new Pumpchart(); // Use default settings
+document.body.append(pumpchart.getElement());
+pumpchart.plot({ flow: 60, head: 40 });
+```
+
+However, Pumpchart is meant to be highly customizable and the following sections will outline some of its features.
+
+## PumpchartOptions
+
+Set axes properties, unit system, define the pump performance and system curves, operating speed, and styling options here.
+
+```js
+const pumpchart = new Pumpchart({ /* options here */ });
+```
+
+## PumpchartDataOptions
+
+Set options for plotting data, such as providing a point name, timestamp, point radius, and color.
+
+```js
+pumpchart.plot({ flow: 60, head: 40 }, { /* options here */ });
+```
+
+## Troubleshooting
+
+If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic curves with $p(q) = h_{p} - k_{p}q^{2}$ and $s(q) = h_{s} + k_{s}q^{2}$ patterns. Also, make sure that these raw strings are functions of the variable `q` and reference no other variables.
