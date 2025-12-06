@@ -15,7 +15,6 @@ import { Datum, F, Summary, VariableType } from './types';
  * decayed standard deviation until the final iteration.
  * @returns The set of parameters and error for the best fit.
  * @example
- * ```ts
  * // Define model function
  * function f(x: number, a2: number = -0.5, a1: number = 3.9, a0: number = -1.2): number {
  *     return a2 * x ** 2 + a1 * x + a0;
@@ -24,7 +23,6 @@ import { Datum, F, Summary, VariableType } from './types';
  * const data: Datum<number>[] = [0, 2, 4].map(x => ({ x: x, y: f(x) }));
  * // Compute best-fit summary
  * const summary = fit(f, data);
- * ```
  */
 export function fit<T extends VariableType>(f: F<T>, data: Datum<T>[], params_initial: number[] = [], iterations = 1e3, maxDeviation = 1): Summary<T> {
     const N_params: number = f.length - 1;

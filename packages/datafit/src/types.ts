@@ -5,18 +5,14 @@ export type VariableType = number | number[];
 /**
  * Represents a mathematical function y = f(x) with unknown parameters.
  * @example
- * Single variable function in Typescript, 2nd degree polynomial:
- * ```ts
+ * // Single variable function in Typescript, 2nd degree polynomial:
  * function f(x: number, a2: number, a1: number, a0: number): number {
  *     return a2 * x ** 2 + a1 * x + a0;
  * }
- * ```
- * Multivariable function in Typescript, general plane equation:
- * ```ts
+ * // Multivariable function in Typescript, general plane equation:
  * function f([x, y]: number[], cx: number, cy: number, cz: number): number {
  *     return cx * x + cy * y + cz;
  * }
- * ```
  */
 export type F<T extends VariableType> = (x: T, ...params: number[]) => number;
 /**
