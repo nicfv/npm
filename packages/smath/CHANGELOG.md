@@ -3,6 +3,7 @@
 ## 1.13.3
 
 - Minor tsdoc changes
+- Deprecate `toHex` and add warning to the `npx` command
 
 ## 1.13.2
 
