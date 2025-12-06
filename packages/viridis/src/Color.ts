@@ -39,6 +39,14 @@ export class Color {
         this.lightness = SMath.clamp(hsl.lightness, 0, 100) | 0;
     }
     /**
+     * Convert a decimal byte [0-255] to a hexadecimal [00-FF] byte.
+     * @param byte Decimal byte value
+     * @returns Hexadecimal byte value
+     */
+    private static toHex(byte: number): string {
+        return SMath.clamp(byte | 0, 0, 255).toString(16).padStart(2, '0').toUpperCase();
+    }
+    /**
      * Return the most contrasting color for
      * text on a background of this color.
      * @returns Black or white
@@ -76,16 +84,16 @@ export class Color {
                 }
             }
             case ('hex'): {
-                const noTransparency = `#${SMath.toHex(this.red, 2)}${SMath.toHex(this.green, 2)}${SMath.toHex(this.blue, 2)}`;
+                const noTransparency = `#${Color.toHex(this.red)}${Color.toHex(this.green)}${Color.toHex(this.blue)}`;
                 if (this.alpha < 100) {
                     const alpha255: number = SMath.clamp(SMath.translate(this.alpha, 0, 100, 0, 255) | 0, 0, 255);
-                    return noTransparency + SMath.toHex(alpha255, 2);
+                    return noTransparency + Color.toHex(alpha255);
                 } else {
                     return noTransparency;
                 }
             }
             default: {
-                throw new Error('Invalid color type: ' + type);
+                throw new Error(`Invalid color type: ${type}`);
             }
         }
     }
@@ -103,7 +111,7 @@ export class Color {
     public static hex(hex: string): Color {
         const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
         if (regex === null) {
-            throw new Error('Invalid hexadecimal string: ' + hex);
+            throw new Error(`Invalid hexadecimal string: ${hex}`);
         }
         return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
     }
