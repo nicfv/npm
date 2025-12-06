@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.3
+
+- Minor tsdoc changes
+
 ## 1.13.2
 
 - Remove precision errors in `round2` (round to the 10th decimal place)
