@@ -23,19 +23,17 @@ const pumpchart = new Pumpchart({
         power: 'kW',
         speed: 'rpm',
     },
+    timestamp: { // Set the start and ending timestamps for colorizing data
+        start: now,
+        stop: in1hr,
+    }
 });
 
 // Plot `nData` number of data points
 for (let t = now; t < in1hr; t += onehr / nData) {
     const flow = Math.random() * 300;
     const head = Math.random() * 20;
-    pumpchart.plot({ flow: flow, head: head }, {
-        timestamp: t,
-        gradient: {
-            name: 'Viridis',
-            score: (t - now) / onehr,
-        },
-    });
+    pumpchart.plot({ flow: flow, head: head }, { timestamp: t });
 }
 
 // Append pumpchart to the document <body>
