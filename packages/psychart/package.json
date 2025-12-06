@@ -1,6 +1,6 @@
 {
   "name": "psychart",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "View air conditions on a psychrometric chart",
   "homepage": "https://npm.nicfv.com/",
   "bin": "",
@@ -34,7 +34,17 @@
     "conditioning",
     "visual",
     "state",
-    "graph"
+    "graph",
+    "pump",
+    "system",
+    "curve",
+    "hydraulic",
+    "flow",
+    "head",
+    "pressure",
+    "throttle",
+    "operation",
+    "centrifugal"
   ],
   "author": {
     "name": "Nicolas Ventura",
