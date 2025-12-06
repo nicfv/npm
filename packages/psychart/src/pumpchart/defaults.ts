@@ -47,6 +47,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
  */
 export const defaultPumpchartDataOptions: PumpchartDataOptions = {
     name: '',
+    color: '#ff0000',
     radius: 2.5,
     timestamp: 0,
 };
