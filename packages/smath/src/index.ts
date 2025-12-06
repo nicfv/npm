@@ -470,6 +470,7 @@ export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, 
  * @returns The number `n` converted to hexadecimal
  * @example
  * const hex = SMath.toHex(10, 2); // '0A'
+ * @deprecated Use native `number.toString(16)`
  */
 export function toHex(n: number, length = 0): string {
     return (n < 0 ? '-' : '') + (n < 0 ? -n : n).toString(16).padStart(length, '0').toUpperCase();
