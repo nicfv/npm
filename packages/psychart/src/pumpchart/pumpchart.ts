@@ -131,6 +131,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         this.plot(opPt, {
             name: 'Operation Point',
             radius: 5 * this.options.axisWidth,
+            color: this.options.systemCuveColor,
         });
         // Draw concentric pump performance curves
         const pumpColor: Color = Color.hex(this.options.pumpCurveColor);
