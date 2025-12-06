@@ -10,12 +10,10 @@ export class Gradient {
      * stops, which are all equally spaced from one another.
      * @param colors An array of colors to define this color gradient
      * @example
-     * ```js
      * const redBlue = new Gradient([
      *     new Color(255, 0, 0),
      *     new Color(0, 0, 255),
      * ]);
-     * ```
      */
     constructor(public readonly colors: Color[]) {
         if (colors.length < 1) {
@@ -32,10 +30,8 @@ export class Gradient {
      * @param max The maximum range of the color scale
      * @returns The interpolated color
      * @example
-     * ```js
      * const myColor = redBlue.getColor(0.5);
      * // Returns interpolated color #7F007F
-     * ```
      */
     public getColor(x: number, min = 0, max = 1): Color {
         x = SMath.normalize(x, min, max);
@@ -66,10 +62,8 @@ export class Gradient {
      * @param options Options to add before the color stops
      * @returns A valid CSS color gradient
      * @example
-     * ```js
      * const str = redBlue.toString('linear', 2, '45deg');
      * // repeating-linear-gradient(45deg,#FF0000,#0000FF 50%)
-     * ```
      */
     public toString(type: 'linear' | 'radial' | 'conic' = 'linear', repeat = 1, ...options: string[]): string {
         return `${repeat > 1 ? 'repeating-' : ''}${type}-gradient(${[...options, ...this.colors.map(color => color.toString())].join(',')}${repeat > 1 ? ` ${100 / repeat}%` : ''})`;
@@ -80,10 +74,8 @@ export class Gradient {
      * @param deg The angle of this color gradient, in degrees clockwise from the vertical
      * @returns A valid SVG color gradient
      * @example
-     * ```js
      * const linearGrad = grad.toSVG('myGrad');
      * // Returns a <linearGradient> element to be appended onto <defs>
-     * ```
      */
     public toSVG(id: string, deg = 90): SVGLinearGradientElement {
         const linearGradient: SVGLinearGradientElement = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
