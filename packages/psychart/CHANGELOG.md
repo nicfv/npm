@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.8.0
+
+- Add package keywords
+- Updates for `Psychart`:
+    - Refactor `Datum` => `PsychartState`
+    - Refactor `DataOptions` => `PsychartDataOptions`
+- Updates for `Pumpchart`:
+    - Add main readme page
+    - Example now renders 100 random data points
+    - Pump curve and system curve now accepts raw strings of variable `q`
+    - Add logic to find solutions to arbitrary functions
+    - Gradient is stored in `PumpchartOptions`
+    - Rearrange layers a bit for visual clarity
+    - Pump and system curve logic done when Pumpchart is constructed
+    - Allow solid color data points
+    - Estimate pump speed for data points without a speed provided
+    - Remove brackets around units in certain tooltips
+    - Add several unit tests
+
 ## 0.7.0
 
 - `Psychart` now inherits class methods from base `Chart`

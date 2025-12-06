@@ -5,7 +5,7 @@ export { Point };
 /**
  * Represents a single point in time.
  */
-export interface State {
+export interface PumpchartState {
     /**
      * Flow rate (e.g. gpm)
      */
@@ -41,36 +41,60 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly axisWidth: number;
     /**
-     * The maximum pump flow at no head pressure (used to build the performance curve)
+     * Defines the curves to render on Pumpchart `h = f(q)` using `q` as the function variable
      */
-    readonly pumpMaxFlow: number;
+    readonly curve: {
+        /**
+         * The pump performance curve at 100% pump speed
+         */
+        readonly pump: string;
+        /**
+         * The system curve
+         */
+        readonly system: string;
+    },
     /**
-     * The pump head or differential pressure at no flow (used to build the performance curve)
+     * Values for speed in the units specified, used to generate pump performance curves
      */
-    readonly pumpMaxHead: number;
+    readonly speed: {
+        /**
+         * The maximum pump speed
+         */
+        readonly max: number,
+        /**
+         * The speed of optimal operation
+         */
+        readonly operation: number,
+        /**
+         * The intermediate performance curves to generate for different pump speeds
+         */
+        readonly steps: number[],
+    },
     /**
-     * The system head at no flow, or the difference between the inlet/outlet elevation (used to build the system curve)
+     * The **hexadecimal** color code for the pump performance curve(s)
      */
-    readonly systemMinHead: number;
+    readonly pumpCurveColor: string;
     /**
-     * The flow rate at the operational point of the system (used to build the system curve)
-     */
-    readonly systemOpFlow: number;
-    /**
-     * The number of intermediate performance curves to generate, examples...
-     * - A value of **1** would only generate the performance curve at 100%
-     * - A value of **2** would generate the performances at 50% and 100%
-     * - A value of **4** would generate performances at 25%, 50%, 75%, and 100%
-     */
-    readonly performanceSteps: number;
-    /**
-     * The **hexadecimal** code for the performance curve(s)
-     */
-    readonly performanceCurveColor: string;
-    /**
-     * The **hexadecimal** code for the system curve
+     * The **hexadecimal** color code for the system curve
      */
     readonly systemCuveColor: string;
+    /**
+     * The gradient name for plotting time-series data
+     */
+    readonly gradient: PaletteName;
+    /**
+     * Timestamps for colorizing time-series data
+     */
+    readonly timestamp: {
+        /**
+         * The starting timestamp
+         */
+        readonly start: number;
+        /**
+         * The ending timestamp
+         */
+        readonly stop: number;
+    },
     /**
      * Units for various quantities
      */
@@ -107,18 +131,9 @@ export interface PumpchartDataOptions {
      */
     readonly radius: number;
     /**
-     * Properties that define this point's color
+     * The **hexadecimal** color code for this data point, only used for time-independent data
      */
-    readonly gradient: {
-        /**
-         * The name of the gradient
-         */
-        readonly name: PaletteName;
-        /**
-         * The normalized "score" to color this data point along the gradient
-         */
-        readonly score: number;
-    },
+    readonly color: string;
     /**
      * An optional timestamp for this data point
      */

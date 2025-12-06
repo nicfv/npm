@@ -59,3 +59,68 @@ Different data series are independent from one another - one series may incorpor
 Some errors can arise from plotting data due to the fact that wet bulb and dew point must be less than or equal to the dry bulb temperature and relative humidity must be within the range of 0-1. If relative humidity is a driving measurement, make sure that the measurement type is correct (0-1 or 0%-100%). For other measurements, make sure that they are correct, numerical values. For example, the wet bulb and dew point temperatures must be less than the dry bulb temperature.
 
 Psychart works best both visually and practically when observing a manageable amount of data, e.g. a short timespan of a few days at most. If Psychart is loading very slowly, try clicking on a data series in the legend to disable it, or clearing the plotted data using `Psychart.clearData()` and start fresh. However, this will **wipe all data** from Psychart, so make sure it's saved somewhere!
+
+# Pumpchart
+
+Show pump performance for different operating conditions.
+
+## What is a pump chart?
+
+Pump charts illustrate the relationship between fluid flow rate and head pressure for centrifugal pumps. Pump charts are often used in pump sizing selections and help engineers understand the pump's performance and effiency under various conditions.
+
+Similar to the psychrometric chart described above, a pump chart is a graphical representation of various *states* of a hydraulic system. A *state* consists of a **flow rate** (e.g. gpm or m^3/h) and a **head pressure** (e.g. psi or bar.) The head pressure can also be represented in terms of the height of a fluid column, so it may be represented in units such as feet or meters, but it represents the same property regardless if it is a measurement of pressure or length. Other properties can be present such as pump speed, input power, and efficiency, but only **flow rate** and **head pressure** are needed to fix the state.
+
+It's these two properties (flow and head) that are represented on the axes of the pump chart. Flow rate is represented on the x-axis and head pressure is represented on the y-axis.
+
+> One way to visualize **head** if given in terms of length, is that it would be the maximum possible height that a pump could move the fluid for that flow rate.
+
+## Pump and System Curves
+
+In addition to the axes and plotted data points, Pumpchart renders two additional curves. These are called the **pump performance curve** and the **system curve**. The pump performance curve(s) show the relationship between the pump's flow rate and the pressure added to the fluid. There may be concentric pump performance curves that show this relationship for different operating speeds.
+
+The system curve represents the characteristics of the system, independent from the pump curve. It illustrates the relationship between flow rate and head loss for the entire hydraulic system. Head loss can be due to sharp pipe bends, friction, throttling, or any other restrictions in the system.
+
+For a closed system, the system curve should theoretically pass through the origin, indicating no head loss for no flow. For an open system, the system curve will pass through a point along the y-axis, indicating that there is a head loss even for no flow. This head loss is the elevation difference between the system inlet and outlet, which the pump needs to overcome in order to produce any flow at all.
+
+## Operation Point
+
+Pumps will *always* operate somewhere along the system curve in steady-state operation. Where the pump curve (for the current pump speed) and the system curve meet is called the **operation point**. The operation point can be adjusted by one of two ways:
+
+1. **Adjusting the pump speed** which adjusts the active pump curve. If this is possible (e.g. the pump has multiple speed settings or is powered by a variable frequency drive) then this maintains the efficiency of the pump.
+1. **Throttle the system** which adjusts the system curve. This decreases pump efficiency because the same amount of power is inputted into the pump motor but it is outputting a lower flow rate.
+
+## Net Positive Suction Head
+
+**IMPORTANT!** This curve is not (yet) shown on Pumpchart. Net positive suction head required, or NPSHr, is an extremely important property of the pump which dictates at least how much gauge pressure is required on the suction side of the pump. If the suction pressure drops below this amount, then *cavitation* will occur. This causes bubbles to form and collapse in the fluid which causes damage to piping and the pump itself.
+
+## Getting Started
+
+Pumpchart can be initialized with no configuration. After installing `psychart`, you can immediately start using it out-of-box like this.
+
+```js
+const pumpchart = new Pumpchart(); // Use default settings
+document.body.append(pumpchart.getElement());
+pumpchart.plot({ flow: 60, head: 40 });
+```
+
+However, Pumpchart is meant to be highly customizable and the following sections will outline some of its features.
+
+## PumpchartOptions
+
+Set axes properties, unit system, define the pump performance and system curves, operating speed, and styling options here.
+
+```js
+const pumpchart = new Pumpchart({ /* options here */ });
+```
+
+## PumpchartDataOptions
+
+Set options for plotting data, such as providing a point name, timestamp, point radius, and color.
+
+```js
+pumpchart.plot({ flow: 60, head: 40 }, { /* options here */ });
+```
+
+## Troubleshooting
+
+If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic curves with \\\(p(q) = h_{p} - k_{p}q^{2}\\\) and \\\(s(q) = h_{s} + k_{s}q^{2}\\\) patterns. Also, make sure that these raw strings are functions of the variable `q` and reference no other variables.

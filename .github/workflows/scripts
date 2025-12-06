@@ -57,7 +57,7 @@ for examplejs in *.mjs ; do
         echo '```text'
         node "${examplejs}" || exit 1
         echo '```'
-        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>'
+        echo '<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>'
     } > "../Examples/${example}.md"
 done
 # Run UI examples with webpack

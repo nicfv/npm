@@ -18,18 +18,27 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         name: 'sans-serif',
         size: 12,
     },
-    pumpMaxFlow: 175,
-    pumpMaxHead: 120,
-    systemMinHead: 10,
-    systemOpFlow: 80,
-    performanceSteps: 4,
-    performanceCurveColor: '#ffaa55',
+    curve: {
+        pump: '50-50*(q/200)^2',
+        system: '10+40*(q/200)^2',
+    },
+    speed: {
+        max: 100,
+        operation: 100,
+        steps: [25, 50, 75],
+    },
+    pumpCurveColor: '#ffaa55',
     systemCuveColor: '#55ffaa',
+    gradient: 'Viridis',
+    timestamp: {
+        start: Date.now(),
+        stop: Date.now() + 60 * 60 * 1000,
+    },
     units: {
-        flow: 'gpm',
-        head: 'ft',
+        flow: 'm3/h',
+        head: 'm',
         power: 'kW',
-        speed: 'rpm',
+        speed: '%',
     },
 };
 
@@ -38,10 +47,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
  */
 export const defaultPumpchartDataOptions: PumpchartDataOptions = {
     name: '',
+    color: '#ff0000',
     radius: 2.5,
-    gradient: {
-        name: 'Viridis',
-        score: 0.5,
-    },
     timestamp: 0,
 };
