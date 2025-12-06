@@ -29,6 +29,11 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     },
     pumpCurveColor: '#ffaa55',
     systemCuveColor: '#55ffaa',
+    gradient: 'Viridis',
+    timestamp: {
+        start: Date.now(),
+        stop: Date.now() + 60 * 60 * 1000,
+    },
     units: {
         flow: 'm3/h',
         head: 'm',
@@ -43,9 +48,5 @@ export const defaultPumpchartOptions: PumpchartOptions = {
 export const defaultPumpchartDataOptions: PumpchartDataOptions = {
     name: '',
     radius: 2.5,
-    gradient: {
-        name: 'Viridis',
-        score: 0.5,
-    },
     timestamp: 0,
 };
