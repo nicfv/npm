@@ -11,10 +11,6 @@ import { f, toFunction, zero } from './lib';
  */
 export class Pumpchart extends Chart<PumpchartOptions> {
     /**
-     * The operating point for the system
-     */
-    public readonly operation: State;
-    /**
      * Layers of the SVG as groups.
      */
     private readonly g = {
@@ -118,13 +114,13 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const p: f = this.scale(this.p, n);
         const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
         const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
-        this.operation = { flow: qop, head: p(qop), speed: this.options.speed.operation };
+        const opPt: State = { flow: qop, head: p(qop), speed: this.options.speed.operation };
         this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, this.s, 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
-            { flow: 0, head: this.operation.head },
-            this.operation,
-            { flow: this.operation.flow, head: 0 },
+            { flow: 0, head: opPt.head },
+            opPt,
+            { flow: opPt.flow, head: 0 },
         ], false);
         operation.setAttribute('fill', 'none');
         operation.setAttribute('stroke', sysColor.toString());
@@ -132,7 +128,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         operation.setAttribute('stroke-linecap', 'round');
         this.g.curves.append(operation);
         // Draw the operating point
-        this.plot(this.operation, {
+        this.plot(opPt, {
             name: 'Operation Point',
             radius: 5 * this.options.axisWidth,
         });
@@ -236,7 +232,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     public plot(state: State, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
-        const color: Color = Palette[options.gradient.name].getColor(options.gradient.score);
+        const color: Color = Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop);
         const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;
         let speedEstimate: number;
         try {
