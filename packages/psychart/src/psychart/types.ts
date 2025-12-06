@@ -10,7 +10,7 @@ export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (ligh
 /**
  * This data object fixes the psychrometric state.
  */
-export interface Datum {
+export interface PsychartState {
     /**
      * Dry Bulb (db)
      */
@@ -170,7 +170,7 @@ export interface PsychartDataOptions {
     /**
      * Determines whether or not to connect points with a line. If a `Datum` is provided, will draw a line from that point.
      */
-    readonly line: boolean | Datum;
+    readonly line: boolean | PsychartState;
     /**
      * Determine the solid color **hex-code** for time-independent plots.
      */

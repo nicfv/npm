@@ -1,4 +1,4 @@
-import { PsychartOptions, RegionName, Datum, PsychartDataOptions } from './types';
+import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
 
 /**
  * Represents a set of default options for Psychart.
@@ -65,7 +65,7 @@ export const defaultDataOptions: PsychartDataOptions = {
  * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
  * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
  */
-export const regions: Record<RegionName, { tooltip: string, data: Datum[] }> = {
+export const regions: Record<RegionName, { tooltip: string, data: PsychartState[] }> = {
     'Summer (sitting)': {
         tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
         data: [

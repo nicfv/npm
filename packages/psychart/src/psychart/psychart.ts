@@ -1,7 +1,7 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import * as SMath from 'smath';
-import { PsychartOptions, Datum, RegionName, PsychartDataOptions } from './types';
+import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
 import { TextAnchor } from '../types';
@@ -393,7 +393,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    public plot(state: Datum, config: Partial<PsychartDataOptions> = {}): void {
+    public plot(state: PsychartState, config: Partial<PsychartDataOptions> = {}): void {
         // Skip series that are missing a measurement point.
         if (!Number.isFinite(state.db) || !Number.isFinite(state.other)) {
             return;
@@ -485,7 +485,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Draw a shaded region on Psychart.
      */
-    private drawRegion(data: Datum[], color: Color, tooltip?: string): void {
+    private drawRegion(data: PsychartState[], color: Color, tooltip?: string): void {
         // Interpolate to get a set of psychrometric states that make the border of the region
         const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum, this.options)), false);
         // Create the SVG element to render the shaded region

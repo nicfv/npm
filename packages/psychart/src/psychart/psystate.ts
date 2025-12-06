@@ -1,5 +1,5 @@
 import * as SMath from 'smath';
-import { Datum, Point, PsychartOptions } from './types';
+import { Point, PsychartOptions, PsychartState } from './types';
 import * as Psychrolib from 'psychrolib';
 
 /**
@@ -53,7 +53,7 @@ export class PsyState {
     /**
      * Initialize a new psychrometric state.
      */
-    constructor(public readonly state: Datum, private readonly options: PsychartOptions) {
+    constructor(public readonly state: PsychartState, private readonly options: PsychartOptions) {
         Psychrolib.SetUnitSystem(options.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
         this.atm = Psychrolib.GetStandardAtmPressure(options.altitude);
         this.hrMax = Psychrolib.GetHumRatioFromTDewPoint(options.dpMax, this.atm);
