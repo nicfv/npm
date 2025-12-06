@@ -3,6 +3,9 @@
 ## 0.8.0
 
 - Add package keywords
+- Updates for `Psychart`:
+    - Refactor `Datum` => `PsychartState`
+    - Refactor `DataOptions` => `PsychartDataOptions`
 - Updates for `Pumpchart`:
     - Add main readme page
     - Example now renders 100 random data points
