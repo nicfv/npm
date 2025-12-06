@@ -123,4 +123,4 @@ pumpchart.plot({ flow: 60, head: 40 }, { /* options here */ });
 
 ## Troubleshooting
 
-If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic curves with $p(q) = h_{p} - k_{p}q^{2}$ and $s(q) = h_{s} + k_{s}q^{2}$ patterns. Also, make sure that these raw strings are functions of the variable `q` and reference no other variables.
+If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic curves with \\\(p(q) = h_{p} - k_{p}q^{2}\\\) and \\\(s(q) = h_{s} + k_{s}q^{2}\\\) patterns. Also, make sure that these raw strings are functions of the variable `q` and reference no other variables.
