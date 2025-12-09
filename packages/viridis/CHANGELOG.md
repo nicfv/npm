@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.2
+
+- Minor tsdoc changes
+- Create builtin `toHex` function to convert decimal bytes to hex
+
 ## 1.4.1
 
 - Change `Gradient.toString()` options from an array to a rest parameter

@@ -149,6 +149,7 @@ switch (func) {
         break;
     }
     case ('tohex'): {
+        console.warn('toHex() is deprecated!');
         console.log(SMath.toHex(nums[0], nums[1] ?? 0));
         break;
     }

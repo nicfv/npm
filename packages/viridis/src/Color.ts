@@ -25,9 +25,7 @@ export class Color {
      * @param blue Blue channel intensity [0, 255]
      * @param alpha Alpha channel transparency [0, 100]
      * @example
-     * ```js
      * const red = new Color(255, 0, 0);
-     * ```
      */
     constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha = 100) {
         this.red = SMath.clamp(red, 0, 255) | 0;
@@ -41,13 +39,19 @@ export class Color {
         this.lightness = SMath.clamp(hsl.lightness, 0, 100) | 0;
     }
     /**
+     * Convert a decimal byte [0-255] to a hexadecimal [00-FF] byte.
+     * @param byte Decimal byte value
+     * @returns Hexadecimal byte value
+     */
+    private static toHex(byte: number): string {
+        return SMath.clamp(byte | 0, 0, 255).toString(16).padStart(2, '0').toUpperCase();
+    }
+    /**
      * Return the most contrasting color for
      * text on a background of this color.
      * @returns Black or white
      * @example
-     * ```js
      * const contrast = red.getContrastingColor(); // #FFFFFF
-     * ```
      */
     public getContrastingColor(): Color {
         if (this.lightness > 50) {
@@ -61,9 +65,7 @@ export class Color {
      * @param type The color encoding to use
      * @returns A valid CSS color code
      * @example
-     * ```js
      * const css = red.toString(); // #FF0000
-     * ```
      */
     public toString(type: 'rgb' | 'hsl' | 'hex' = 'hex'): string {
         switch (type) {
@@ -82,16 +84,16 @@ export class Color {
                 }
             }
             case ('hex'): {
-                const noTransparency = `#${SMath.toHex(this.red, 2)}${SMath.toHex(this.green, 2)}${SMath.toHex(this.blue, 2)}`;
+                const noTransparency = `#${Color.toHex(this.red)}${Color.toHex(this.green)}${Color.toHex(this.blue)}`;
                 if (this.alpha < 100) {
                     const alpha255: number = SMath.clamp(SMath.translate(this.alpha, 0, 100, 0, 255) | 0, 0, 255);
-                    return noTransparency + SMath.toHex(alpha255, 2);
+                    return noTransparency + Color.toHex(alpha255);
                 } else {
                     return noTransparency;
                 }
             }
             default: {
-                throw new Error('Invalid color type: ' + type);
+                throw new Error(`Invalid color type: ${type}`);
             }
         }
     }
@@ -104,14 +106,12 @@ export class Color {
      * @param hex Hexadecimal string
      * @returns A new color defined by the hexadecimal string
      * @example
-     * ```js
      * const red = Color.hex('#ff0000');
-     * ```
      */
     public static hex(hex: string): Color {
         const regex = /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})?$/.exec(hex);
         if (regex === null) {
-            throw new Error('Invalid hexadecimal string: ' + hex);
+            throw new Error(`Invalid hexadecimal string: ${hex}`);
         }
         return new Color(parseInt(regex[1], 16), parseInt(regex[2], 16), parseInt(regex[3], 16), SMath.translate(parseInt(regex[4] ?? 'FF', 16), 0, 255, 0, 100));
     }
@@ -123,9 +123,7 @@ export class Color {
      * @param alpha Alpha channel transparency [0, 100]
      * @returns A new color defined by color channel intensity values
      * @example
-     * ```js
      * const red = Color.rgb(255, 0, 0); // #FF0000
-     * ```
      */
     public static rgb(red: number, green: number, blue: number, alpha = 100): Color {
         return new Color(red, green, blue, alpha);
@@ -138,9 +136,7 @@ export class Color {
      * @param alpha Alpha channel intensity [0, 100]
      * @returns A new color defined by hue, sautration, and lightness
      * @example
-     * ```js
      * const red = Color.hsl(0, 100, 50); // #FF0000
-     * ```
      */
     public static hsl(hue: number, saturation: number, lightness: number, alpha = 100): Color {
         const rgb: RGB = hsl2rgb({ hue: hue, saturation: saturation, lightness: lightness });
