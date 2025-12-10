@@ -9,12 +9,18 @@ const nData = 100;
 // Create a custom pump chart
 const pumpchart = new Pumpchart({
     curve: { // Define performance curves as a function of `q` (flow rate)
-        pump: '30-(q/100)^2',
-        system: '5+(q/75)^2',
+        pump: {
+            maxFlow: 600,
+            maxHead: 30,
+        },
+        system: {
+            static: 5,
+            friction: 75 ** -2,
+        },
     },
     speed: {
         max: 60, // Max pump speed (rpm)
-        operation: 55, // Operational speed (rpm)
+        operation: 45, // Operational speed (rpm)
         steps: [15, 30, 45], // Minor pump curves (rpm)
     },
     units: {
