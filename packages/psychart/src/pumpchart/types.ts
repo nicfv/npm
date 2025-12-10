@@ -122,19 +122,23 @@ export interface PumpchartOptions extends ChartOptions {
         /**
          * Flow rate (e.g. gpm)
          */
-        readonly flow: string;
+        readonly flow: Flow;
         /**
          * Head pressure (e.g. ft)
          */
-        readonly head: string;
+        readonly head: Head;
         /**
          * Pump speed (e.g. rpm)
          */
-        readonly speed: string;
+        readonly speed: Speed;
         /**
          * Pump power (e.g. kW)
          */
-        readonly power: string;
+        readonly power: Power;
+        /**
+         * Fluid density (e.g. kg/m3)
+         */
+        readonly density: Density;
     };
 }
 
@@ -168,6 +172,10 @@ export type Flow = 'm3/s' | 'm3/m' | 'm3/h' | 'L/s' | 'L/m' | 'L/h' | 'ft3/s' | 
  * Available units for head pressure
  */
 export type Head = 'in' | 'ft' | 'mm' | 'cm' | 'm' | 'psi' | 'psf' | 'Pa' | 'kPa' | 'bar' | 'atm';
+/**
+ * Available units for speed
+ */
+export type Speed = '%' | 'rpm' | 'Hz';
 /**
  * Available units for power
  */
