@@ -33,6 +33,10 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly padding: Point;
     /**
+     * The fluid density in the units provided
+     */
+    readonly density: number;
+    /**
      * The axis color (hexadecimal)
      */
     readonly axisColor: string;
