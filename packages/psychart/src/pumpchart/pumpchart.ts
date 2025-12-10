@@ -97,7 +97,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             this.drawLabel(`${head}${this.options.units.head}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.units.head}]`);
         }
         // Draw the system curve
-        const sysColor: Color = Color.hex(this.options.systemCuveColor);
+        const sysColor: Color = Color.hex(this.options.systemCurveColor);
         const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity); // max speed
         const nop: number = SMath.clamp(this.options.speed.operation, 0, nmax); // operation speed
         const qmax: number = zero(q => this.s(q) - this.p(q, nmax), 0, 1e6); // flow @ max speed
@@ -119,7 +119,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         this.plot(opPt, {
             name: 'Operation Point',
             radius: 5 * this.options.axisWidth,
-            color: this.options.systemCuveColor,
+            color: this.options.systemCurveColor,
         });
         // Draw concentric pump performance curves
         const pumpColor: Color = Color.hex(this.options.pumpCurveColor);

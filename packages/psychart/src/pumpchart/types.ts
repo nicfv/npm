@@ -97,7 +97,7 @@ export interface PumpchartOptions extends ChartOptions {
     /**
      * The **hexadecimal** color code for the system curve
      */
-    readonly systemCuveColor: string;
+    readonly systemCurveColor: string;
     /**
      * The gradient name for plotting time-series data
      */

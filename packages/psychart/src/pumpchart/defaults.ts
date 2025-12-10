@@ -34,7 +34,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         steps: [25, 50, 75],
     },
     pumpCurveColor: '#ffaa55',
-    systemCuveColor: '#55ffaa',
+    systemCurveColor: '#55ffaa',
     gradient: 'Viridis',
     timestamp: {
         start: Date.now(),
