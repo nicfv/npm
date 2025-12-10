@@ -4,7 +4,7 @@ import * as SMath from 'smath';
 import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
-import { TextAnchor } from '../types';
+import { Point, TextAnchor } from '../types';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
@@ -134,6 +134,21 @@ export class Psychart extends Chart<PsychartOptions> {
         // Create new SVG groups, and append all the
         // layers into the chart.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        // Write the axis titles.
+        if (this.options.showAxisNames) {
+            const fontColor: Color = Color.hex(this.options.colors.font);
+            const yAxisText: string = (this.options.yAxis === 'hr') ? 'Humidity Ratio' : 'Dew Point';
+            let xAxisLabel: SVGTextElement;
+            let yAxisLabel: SVGTextElement;
+            if (this.options.flipXY) {
+                xAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x / 2, y: 0 }, fontColor, TextAnchor.N);
+                yAxisLabel = super.createLabel('Dry Bulb', { x: 0, y: this.options.size.y / 2 }, fontColor, TextAnchor.N);
+            } else {
+                xAxisLabel = super.createLabel('Dry Bulb', { x: this.options.size.x / 2, y: this.options.size.y }, fontColor, TextAnchor.S);
+                yAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x, y: this.options.size.y / 2 }, fontColor, TextAnchor.S);
+            }
+            this.g.text.append(xAxisLabel, yAxisLabel);
+        }
         // Draw constant dry bulb vertical lines.
         Psychart.getRange(this.options.dbMin, this.options.dbMax, this.options.major.temp).forEach(db => {
             const data: PsyState[] = [];
@@ -302,7 +317,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Draw an axis label.
      */
-    private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
+    private drawLabel(text: string, location: PsyState | Point, anchor: TextAnchor, tooltip?: string): void {
         // Determine if anchor needs to be mirrored
         if (this.options.flipXY) {
             switch (anchor) {
@@ -333,7 +348,7 @@ export class Psychart extends Chart<PsychartOptions> {
             }
         }
         const fontColor: Color = Color.hex(this.options.colors.font),
-            label = this.createLabel(text, location.toXY(), fontColor, anchor);
+            label: SVGTextElement = this.createLabel(text, (location instanceof PsyState ? location.toXY() : location), fontColor, anchor);
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor, this.g.tooltips));
