@@ -239,7 +239,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
         let speedEstimate: number;
         try {
-            speedEstimate = zero(speedEstimator, 0.01, 1);
+            speedEstimate = zero(speedEstimator, 0, this.options.speed.max);
         } catch {
             speedEstimate = 0;
         }
