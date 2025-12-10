@@ -108,6 +108,10 @@ export interface PsychartOptions extends ChartOptions {
      */
     readonly yAxis: 'dp' | 'hr';
     /**
+     * Determine whether to show titles below the axes.
+     */
+    readonly showAxisNames: boolean;
+    /**
      * Determine where to show units.
      */
     readonly showUnits: {
