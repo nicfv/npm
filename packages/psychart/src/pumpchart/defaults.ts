@@ -14,6 +14,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     },
     axisColor: '#666666',
     axisWidth: 1,
+    density: 62.4,
     font: {
         name: 'sans-serif',
         size: 12,
@@ -41,10 +42,11 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         stop: Date.now() + 60 * 60 * 1000,
     },
     units: {
-        flow: 'm3/h',
-        head: 'm',
-        power: 'kW',
-        speed: '%',
+        density: 'lb/ft3',
+        flow: 'gpm',
+        head: 'ft',
+        power: 'hp',
+        speed: 'rpm',
     },
 };
 
