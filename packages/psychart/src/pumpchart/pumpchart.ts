@@ -1,10 +1,11 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
 import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults';
-import { Point, PumpchartDataOptions, PumpchartOptions, PumpchartState } from './types';
+import { Density, Flow, Head, Point, Power, PumpchartDataOptions, PumpchartOptions, PumpchartState, Speed } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 import { f, zero } from './lib';
+import { DensityUnits, FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -45,6 +46,45 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
         return 1;
     }
+    /**
+     * Get the list of all available units for flow.
+     * @returns A list of units
+     */
+    public static getFlowUnits(): Flow[] {
+        return Object.keys(FlowUnits) as Flow[];
+    }
+    /**
+     * Get the list of all available units for head.
+     * @returns A list of units
+     */
+    public static getHeadUnits(): Head[] {
+        return Object.keys(HeadUnits) as Head[];
+    }
+    /**
+     * Get the list of all available units for speed.
+     * @returns A list of units
+     */
+    public static getSpeedUnits(): Speed[] {
+        return Object.keys(SpeedUnits) as Speed[];
+    }
+    /**
+     * Get the list of all available units for power.
+     * @returns A list of units
+     */
+    public static getPowerUnits(): Power[] {
+        return Object.keys(PowerUnits) as Power[];
+    }
+    /**
+     * Get the list of all available units for density.
+     * @returns A list of units
+     */
+    public static getDensityUnits(): Density[] {
+        return Object.keys(DensityUnits) as Density[];
+    }
+    /**
+     * Create a new Pumpchart with custom options.
+     * @param options Customization options for the new Pumpchart.
+     */
     constructor(options: Partial<PumpchartOptions> = {}) {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
