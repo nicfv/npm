@@ -41,18 +41,38 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly axisWidth: number;
     /**
-     * Defines the curves to render on Pumpchart `h = f(q)` using `q` as the function variable
+     * Defines the curve parameters to render on Pumpchart
      */
     readonly curve: {
         /**
-         * The pump performance curve at 100% pump speed
+         * The pump performance curve parameters at 100% pump speed
          */
-        readonly pump: string;
+        readonly pump: {
+            /**
+             * The maximum head at zero flow (shut-off head)
+             */
+            readonly maxHead: number;
+            /**
+             * The maximum flow rate at zero head
+             */
+            readonly maxFlow: number;
+        };
         /**
-         * The system curve
+         * The system curve parameters: `sys(q) = static + friction * q^2`
          */
-        readonly system: string;
-    },
+        readonly system: {
+            /**
+             * Static head loss in the system, which is defined by the
+             * elevation difference between the inlet and outlet of the
+             * system, and is theoretically zero for closed systems
+             */
+            readonly static: number;
+            /**
+             * The coefficient of friction (dynamic head loss) of the system
+             */
+            readonly friction: number;
+        };
+    };
     /**
      * Values for speed in the units specified, used to generate pump performance curves
      */
@@ -60,16 +80,16 @@ export interface PumpchartOptions extends ChartOptions {
         /**
          * The maximum pump speed
          */
-        readonly max: number,
+        readonly max: number;
         /**
          * The speed of optimal operation
          */
-        readonly operation: number,
+        readonly operation: number;
         /**
          * The intermediate performance curves to generate for different pump speeds
          */
-        readonly steps: number[],
-    },
+        readonly steps: number[];
+    };
     /**
      * The **hexadecimal** color code for the pump performance curve(s)
      */
@@ -94,7 +114,7 @@ export interface PumpchartOptions extends ChartOptions {
          * The ending timestamp
          */
         readonly stop: number;
-    },
+    };
     /**
      * Units for various quantities
      */
@@ -115,7 +135,7 @@ export interface PumpchartOptions extends ChartOptions {
          * Pump power (e.g. kW)
          */
         readonly power: string;
-    },
+    };
 }
 
 /**
