@@ -19,8 +19,14 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         size: 12,
     },
     curve: {
-        pump: '50-50*(q/200)^2',
-        system: '10+40*(q/200)^2',
+        pump: {
+            maxFlow: 200,
+            maxHead: 50,
+        },
+        system: {
+            static: 10,
+            friction: 1 / 400,
+        },
     },
     speed: {
         max: 100,
