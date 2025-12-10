@@ -4,7 +4,7 @@ import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults
 import { Point, PumpchartDataOptions, PumpchartOptions, PumpchartState } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
-import { f, toFunction, zero } from './lib';
+import { f, zero } from './lib';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -20,14 +20,6 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
     };
-    /**
-     * The pump curve `h = p(q)`
-     */
-    private readonly p: f;
-    /**
-     * The system curve `h = s(q)`
-     */
-    private readonly s: f;
     /**
      * The maximum flow rate shown on the x-axis
      */
@@ -57,13 +49,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
-        // Initialize the pump curve and system curve
-        this.p = toFunction(this.options.curve.pump, 'q');
-        this.s = toFunction(this.options.curve.system, 'q');
         // Compute the axes limits and intervals
-        const q0: number = zero(this.p, 0, 1e6); // Max pump flow with 0 head
-        this.maxFlow = 1.1 * q0;
-        this.maxHead = 1.1 * this.p(0);
+        this.maxFlow = 1.1 * SMath.clamp(this.options.curve.pump.maxFlow, 0, Infinity);
+        this.maxHead = 1.1 * SMath.clamp(this.options.curve.pump.maxHead, 0, Infinity);
         const flowStep: number = Pumpchart.getStep(this.maxFlow, this.options.size.x / this.options.font.size / 6)
         const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
         // Create the axes.
@@ -110,12 +98,12 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
         // Draw the system curve
         const sysColor: Color = Color.hex(this.options.systemCuveColor);
-        const n: number = SMath.clamp(SMath.normalize(this.options.speed.operation, 0, this.options.speed.max), 0.01, 1);
-        const p: f = this.scale(this.p, n);
-        const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
-        const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
-        const opPt: PumpchartState = { flow: qop, head: p(qop), speed: this.options.speed.operation };
-        this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, this.s, 0, qmax);
+        const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity); // max speed
+        const nop: number = SMath.clamp(this.options.speed.operation, 0, nmax); // operation speed
+        const qmax: number = zero(q => this.s(q) - this.p(q, nmax), 0, 1e6); // flow @ max speed
+        const qop: number = zero(q => this.s(q) - this.p(q, nop), 0, 1e6); // flow @ operation
+        const opPt: PumpchartState = { flow: qop, head: this.p(qop, nop), speed: nop }; // operation point
+        this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, q => this.s(q), 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
             { flow: 0, head: opPt.head },
@@ -135,11 +123,9 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         });
         // Draw concentric pump performance curves
         const pumpColor: Color = Color.hex(this.options.pumpCurveColor);
-        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, pumpColor, this.options.axisWidth * 2, this.p, 0, q0);
+        this.drawCurve(`Performance Curve at ${SMath.round2(nmax, 0.1)}${this.options.units.speed}`, pumpColor, this.options.axisWidth * 2, q => this.p(q, nmax));
         this.options.speed.steps.forEach(speed => {
-            const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
-            const p1: f = this.scale(this.p, pct);
-            this.drawCurve('', pumpColor, this.options.axisWidth, p1, 0, q0 * pct);
+            this.drawCurve('', pumpColor, this.options.axisWidth, q => this.p(q, speed), 0);
         });
     }
     /**
@@ -221,10 +207,26 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
     }
     /**
-     * Scale a function.
+     * Represents the pump curve `h = p(q)`
+     * @param q Flow rate
+     * @param speed Pump speed
+     * @returns Head gained by the fluid by the pump
      */
-    private scale(p: f, n: number): f {
-        return q => n * p(q / n);
+    public p(q: number, speed: number): number {
+        const n: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
+        const h0: number = SMath.clamp(this.options.curve.pump.maxHead * n, 0, Infinity);
+        const q0: number = SMath.clamp(this.options.curve.pump.maxFlow * n, 0, Infinity);
+        return h0 * (1 - (q / q0) ** 2);
+    }
+    /**
+     * Represents the system curve `h = s(q)`
+     * @param q Flow rate
+     * @returns Head loss from the fluid by the system
+     */
+    public s(q: number): number {
+        const h0: number = SMath.clamp(this.options.curve.system.static, 0, Infinity);
+        const k: number = SMath.clamp(this.options.curve.system.friction, 0, Infinity);
+        return h0 + k * q ** 2;
     }
     /**
      * Plot a single data point.
@@ -234,10 +236,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     public plot(state: PumpchartState, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
         const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
-        const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;
+        const speedEstimator: f = n => this.p(state.flow, n) - state.head;
         let speedEstimate: number;
         try {
-            speedEstimate = SMath.expand(zero(speedEstimator, 0.01, 1), 0, this.options.speed.max);
+            speedEstimate = zero(speedEstimator, 0.01, 1);
         } catch {
             speedEstimate = 0;
         }
