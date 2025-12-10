@@ -1,5 +1,5 @@
 import { prefixes, Unit, units } from 'dimensional';
-import { Density, Flow, Head, Power } from './types';
+import { Density, Flow, Head, Power, Speed } from './types';
 
 /**
  * Convert the string representation of the flow to the actual units
@@ -32,6 +32,14 @@ export const HeadUnits: Record<Head, Unit> = {
     mm: units.millimeter,
     psf: units.poundsPerSquareFoot,
     psi: units.poundsPerSquareInch,
+};
+/**
+ * Convert the string representation of the speed to the actual units
+ */
+export const SpeedUnits: Record<Speed, Unit> = {
+    '%': units.hertz,
+    'Hz': units.hertz,
+    'rpm': units.minute.pow(-1),
 };
 /**
  * Convert the string representation of the power to the actual units
