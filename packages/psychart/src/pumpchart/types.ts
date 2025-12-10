@@ -171,7 +171,7 @@ export interface PumpchartDataOptions {
 /**
  * Available units for flow rate
  */
-export type Flow = 'm3/s' | 'm3/m' | 'm3/h' | 'L/s' | 'L/m' | 'L/h' | 'ft3/s' | 'ft3/m' | 'ft3/h' | 'gpm';
+export type Flow = 'm3/s' | 'm3/m' | 'm3/h' | 'L/s' | 'L/m' | 'L/h' | 'ft3/s' | 'ft3/m' | 'ft3/h' | 'gpm' | 'gph';
 /**
  * Available units for head pressure
  */
