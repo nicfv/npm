@@ -159,3 +159,20 @@ export interface PumpchartDataOptions {
      */
     readonly timestamp: number;
 }
+
+/**
+ * Available units for flow rate
+ */
+export type Flow = 'm3/s' | 'm3/m' | 'm3/h' | 'L/s' | 'L/m' | 'L/h' | 'ft3/s' | 'ft3/m' | 'ft3/h' | 'gpm';
+/**
+ * Available units for head pressure
+ */
+export type Head = 'in' | 'ft' | 'mm' | 'cm' | 'm' | 'psi' | 'psf' | 'Pa' | 'kPa' | 'bar' | 'atm';
+/**
+ * Available units for power
+ */
+export type Power = 'W' | 'kW' | 'hp';
+/**
+ * Available units for density
+ */
+export type Density = 'g/cm3' | 'kg/m3' | 'g/mL' | 'kg/L' | 'oz/in3' | 'lb/ft3' | 'lb/gal';
