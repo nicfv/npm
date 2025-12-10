@@ -237,12 +237,12 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
         const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
-        let speedEstimate: number;
+        let speedEstimate: number = 0;
         try {
-            speedEstimate = zero(speedEstimator, 0, this.options.speed.max);
-        } catch {
-            speedEstimate = 0;
-        }
+            if (typeof state.speed === 'undefined') {
+                speedEstimate = zero(speedEstimator, 0, this.options.speed.max);
+            }
+        } catch { }
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
             (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
