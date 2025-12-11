@@ -4,7 +4,7 @@ import * as SMath from 'smath';
 import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
 import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
 import { Chart } from '../chart';
-import { Point, TextAnchor } from '../types';
+import { TextAnchor } from '../types';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
