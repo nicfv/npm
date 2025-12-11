@@ -105,7 +105,6 @@ export abstract class Chart<T extends ChartOptions> {
             const rot: Point = { x: Math.cos(angleRad), y: Math.sin(angleRad) };
             text.setAttribute('x', `${rot.x * padded.x + rot.y * padded.y}px`);
             text.setAttribute('y', `${rot.x * padded.y - rot.y * padded.x}px`);
-            // text.style.transform = `translate(${location.x + xPad * padding}px,${location.y + yPad * padding}px)`;
             text.setAttribute('text-anchor', textAnchor);
             text.setAttribute('dominant-baseline', dominantBaseline);
         }
