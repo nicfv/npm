@@ -104,7 +104,7 @@ export class Psychart extends Chart<PsychartOptions> {
             this.legend.setAttribute('width', this.options.size.x + 'px');
             this.legend.setAttribute('height', this.getLegendHeight() + 'px');
             this.legend.appendChild(this.legendDefs);
-            this.legend.appendChild(this.createLabel(this.options.legend.title, { x: 0, y: 0 }, Color.hex(this.options.colors.font), TextAnchor.NW));
+            this.legend.appendChild(this.createLabel(this.options.legend.title, { x: 0, y: 0 }, Color.hex(this.options.colors.font), TextAnchor.NW, 0));
             this.legend.appendChild(this.legendg);
             // Attach elements to the base element.
             const legendContainer: HTMLDivElement = document.createElement('div');
@@ -141,11 +141,11 @@ export class Psychart extends Chart<PsychartOptions> {
             let xAxisLabel: SVGTextElement;
             let yAxisLabel: SVGTextElement;
             if (this.options.flipXY) {
-                xAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x / 2, y: 0 }, fontColor, TextAnchor.N);
-                yAxisLabel = super.createLabel('Dry Bulb', { x: 0, y: this.options.size.y / 2 }, fontColor, TextAnchor.N);
+                xAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x / 2, y: 0 }, fontColor, TextAnchor.N, 0);
+                yAxisLabel = super.createLabel('Dry Bulb', { x: 0, y: this.options.size.y / 2 }, fontColor, TextAnchor.N, -90);
             } else {
-                xAxisLabel = super.createLabel('Dry Bulb', { x: this.options.size.x / 2, y: this.options.size.y }, fontColor, TextAnchor.S);
-                yAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x, y: this.options.size.y / 2 }, fontColor, TextAnchor.S);
+                xAxisLabel = super.createLabel('Dry Bulb', { x: this.options.size.x / 2, y: this.options.size.y }, fontColor, TextAnchor.S, 0);
+                yAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x, y: this.options.size.y / 2 }, fontColor, TextAnchor.N, 90);
             }
             this.g.text.append(xAxisLabel, yAxisLabel);
         }
@@ -347,8 +347,8 @@ export class Psychart extends Chart<PsychartOptions> {
                 }
             }
         }
-        const fontColor: Color = Color.hex(this.options.colors.font),
-            label: SVGTextElement = this.createLabel(text, (location instanceof PsyState ? location.toXY() : location), fontColor, anchor);
+        const fontColor: Color = Color.hex(this.options.colors.font);
+        const label: SVGTextElement = this.createLabel(text, (location instanceof PsyState ? location.toXY() : location), fontColor, anchor, 0);
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor, this.g.tooltips));
@@ -378,8 +378,8 @@ export class Psychart extends Chart<PsychartOptions> {
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-        const fontColor: Color = Color.hex(this.options.colors.font),
-            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.options.font.size * 1.5, y: this.getLegendHeight() - this.options.font.size }, fontColor, TextAnchor.W);
+        const fontColor: Color = Color.hex(this.options.colors.font);
+        const legendText: SVGTextElement = this.createLabel(seriesName, { x: this.options.font.size * 1.5, y: this.getLegendHeight() - this.options.font.size }, fontColor, TextAnchor.W, 0);
         g.addEventListener('click', () => {
             this.series[seriesName].hidden = !this.series[seriesName].hidden;
             if (this.series[seriesName].hidden) {
