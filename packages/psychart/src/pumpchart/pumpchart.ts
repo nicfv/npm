@@ -253,7 +253,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param speed Pump speed
      * @returns Head gained by the fluid by the pump
      */
-    public p(q: number, speed: number): number {
+    private p(q: number, speed: number): number {
         const n: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
         const h0: number = SMath.clamp(this.options.curve.pump.maxHead * n, 0, Infinity);
         const q0: number = SMath.clamp(this.options.curve.pump.maxFlow * n, 0, Infinity);
@@ -264,7 +264,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param q Flow rate
      * @returns Head loss from the fluid by the system
      */
-    public s(q: number): number {
+    private s(q: number): number {
         const h0: number = SMath.clamp(this.options.curve.system.static, 0, Infinity);
         const k: number = SMath.clamp(this.options.curve.system.friction, 0, Infinity);
         return h0 + k * q ** 2;
