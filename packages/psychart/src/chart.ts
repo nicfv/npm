@@ -84,22 +84,27 @@ export abstract class Chart<T extends ChartOptions> {
      * @param location The location of the text element, in pixels
      * @param color The fill color of the text
      * @param anchor How the text is anchored relative to its location
+     * @param rotation The text rotation in degrees from horizontal
      * @returns A `<text>` element
      */
-    protected createLabel(content: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
+    protected createLabel(content: string, location: Point, color: Color, anchor: TextAnchor, rotation: number): SVGTextElement {
         const text: SVGTextElement = document.createElementNS(this.NS, 'text');
         const padding: number = this.options.font.size / 2;
+        const angleRad: number = rotation * Math.PI / 180;
         text.textContent = content;
         text.setAttribute('fill', color.toString());
         text.setAttribute('font-family', this.options.font.name);
         text.setAttribute('font-size', this.options.font.size + 'px');
+        text.style.rotate = `${rotation}deg`;
         /**
          * Shorthand to set all alignment properties for the text element
          */
         function setProps(xPad: 1 | 0 | -1, yPad: 1 | 0 | -1, textAnchor: 'start' | 'middle' | 'end', dominantBaseline: 'hanging' | 'middle' | 'alphabetic'): void {
             // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
-            text.setAttribute('x', (location.x + xPad * padding) + 'px');
-            text.setAttribute('y', (location.y + yPad * padding) + 'px');
+            const padded: Point = { x: location.x + xPad * padding, y: location.y + yPad * padding };
+            const rot: Point = { x: Math.cos(angleRad), y: Math.sin(angleRad) };
+            text.setAttribute('x', `${rot.x * padded.x + rot.y * padded.y}px`);
+            text.setAttribute('y', `${rot.x * padded.y - rot.y * padded.x}px`);
             text.setAttribute('text-anchor', textAnchor);
             text.setAttribute('dominant-baseline', dominantBaseline);
         }
@@ -156,7 +161,7 @@ export abstract class Chart<T extends ChartOptions> {
     protected drawTooltip(content: string, location: Point, color: Color, parent: SVGElement): void {
         const base: SVGGElement = document.createElementNS(this.NS, 'g');
         const back: SVGRectElement = document.createElementNS(this.NS, 'rect');
-        const lines: SVGTextElement[] = content.split('\n').map((line: string, i: number) => this.createLabel(line, { x: 0, y: i * this.options.font.size }, color.getContrastingColor(), TextAnchor.NW));
+        const lines: SVGTextElement[] = content.split('\n').map((line: string, i: number) => this.createLabel(line, { x: 0, y: i * this.options.font.size }, color.getContrastingColor(), TextAnchor.NW, 0));
         // Append elements to the base & parent (required to compute line width)
         base.appendChild(back);
         base.append(...lines);

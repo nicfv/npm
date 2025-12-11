@@ -33,6 +33,7 @@ export const defaultPsychartOptions: PsychartOptions = {
     padding: { x: 40, y: 20 },
     regions: [],
     resolution: 0.5,
+    showAxisNames: false,
     showUnits: {
         axis: true,
         tooltip: true,

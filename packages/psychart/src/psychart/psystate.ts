@@ -91,15 +91,24 @@ export class PsyState {
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
     public toXY(): Point {
+        const fontPad: number = this.options.showAxisNames ? (1.5 * this.options.font.size) : 0;
+        const origin: Point = {
+            x: this.options.padding.x + (this.options.flipXY ? fontPad : 0),
+            y: this.options.padding.y + (this.options.flipXY ? fontPad : 0),
+        };
+        const bound: Point = {
+            x: this.options.size.x - this.options.padding.x - (this.options.flipXY ? 0 : fontPad),
+            y: this.options.size.y - this.options.padding.y - (this.options.flipXY ? 0 : fontPad),
+        };
         if (this.options.flipXY) {
             return {
-                x: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, this.options.padding.x, this.options.size.x - this.options.padding.x), this.options.padding.x, this.options.size.x - this.options.padding.x),
-                y: SMath.clamp(SMath.translate(this.db, this.options.dbMin, this.options.dbMax, this.options.size.y - this.options.padding.y, this.options.padding.y), this.options.padding.y, this.options.size.y - this.options.padding.y)
+                x: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, origin.x, bound.x), origin.x, bound.x),
+                y: SMath.clamp(SMath.translate(this.db, this.options.dbMin, this.options.dbMax, bound.y, origin.y), origin.y, bound.y)
             };
         } else {
             return {
-                x: SMath.clamp(SMath.translate(this.db, this.options.dbMin, this.options.dbMax, this.options.padding.x, this.options.size.x - this.options.padding.x), this.options.padding.x, this.options.size.x - this.options.padding.x),
-                y: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, this.options.size.y - this.options.padding.y, this.options.padding.y), this.options.padding.y, this.options.size.y - this.options.padding.y)
+                x: SMath.clamp(SMath.translate(this.db, this.options.dbMin, this.options.dbMax, origin.x, bound.x), origin.x, bound.x),
+                y: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, bound.y, origin.y), origin.y, bound.y)
             };
         }
     }

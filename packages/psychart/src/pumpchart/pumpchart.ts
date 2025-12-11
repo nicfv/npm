@@ -208,7 +208,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     private drawLabel(content: string, location: PumpchartState, anchor: TextAnchor, tooltip?: string): void {
         const axisColor: Color = Color.hex(this.options.axisColor);
-        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor);
+        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor, 0);
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, axisColor, this.g.tips));
