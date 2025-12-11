@@ -280,8 +280,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
         const speedEstimate: number = (typeof state.speed === 'undefined') ? zero(speedEstimator, 0, this.options.speed.max) : 0;
         // Calculate the efficiency if power is given
-        let efficiency: number = 0;
-        let output: number = 0;
+        let efficiency = 0;
+        let output = 0;
         if (typeof state.power === 'number') {
             let headQty: Quantity = new Quantity(state.head, HeadUnits[this.options.units.head]);
             if (HeadUnits[this.options.units.head].dimensions.is(dimensions.Length)) {
