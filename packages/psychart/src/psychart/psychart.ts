@@ -158,7 +158,7 @@ export class Psychart extends Chart<PsychartOptions> {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }, this.options));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 'Dry Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(db + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 0, 'Dry Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         switch (this.options.yAxis) {
             case ('dp'): {
@@ -171,7 +171,7 @@ export class Psychart extends Chart<PsychartOptions> {
                     data.push(new PsyState({ db: this.options.dbMax, other: dp, measurement: 'dbdp' }, this.options));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + (this.options.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 'Dew Point' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+                    this.drawLabel(dp + (this.options.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 0, 'Dew Point' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
                 });
                 break;
             }
@@ -188,7 +188,7 @@ export class Psychart extends Chart<PsychartOptions> {
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.options));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(SMath.round2(hr * this.scaleFactor.hr, 1) + (this.options.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 'Humidity Ratio' + (this.options.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(SMath.round2(hr * this.scaleFactor.hr, 1) + (this.options.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 0, 'Humidity Ratio' + (this.options.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
@@ -205,25 +205,27 @@ export class Psychart extends Chart<PsychartOptions> {
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 15, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         // Draw constant relative humidity lines.
         Psychart.getRange(0, 100, this.options.major.relHum).forEach(rh => {
             const data: PsyState[] = [];
             let preferredAnchor: TextAnchor = TextAnchor.NE;
+            let rotation = 0;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
             for (let db = this.options.dbMin; db <= this.options.dbMax; db += this.options.resolution) {
                 data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }, this.options));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.options.dpMax) {
-                    preferredAnchor = TextAnchor.S;
+                    preferredAnchor = TextAnchor.SW;
+                    rotation = -30;
                     break;
                 }
             }
             // Draw the axis and the label
             this.drawAxis(data);
             if (rh > 0 && rh < 100) {
-                this.drawLabel(rh + (this.options.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.options.showUnits.tooltip ? ' [%]' : ''));
+                this.drawLabel(rh + (this.options.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, rotation, 'Relative Humidity' + (this.options.showUnits.tooltip ? ' [%]' : ''));
             }
         });
         // Draw any regions, if applicable
@@ -317,7 +319,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Draw an axis label.
      */
-    private drawLabel(text: string, location: PsyState | Point, anchor: TextAnchor, tooltip?: string): void {
+    private drawLabel(text: string, location: PsyState | Point, anchor: TextAnchor, rotation: number, tooltip?: string): void {
         // Determine if anchor needs to be mirrored
         if (this.options.flipXY) {
             switch (anchor) {
@@ -348,7 +350,7 @@ export class Psychart extends Chart<PsychartOptions> {
             }
         }
         const fontColor: Color = Color.hex(this.options.colors.font);
-        const label: SVGTextElement = this.createLabel(text, (location instanceof PsyState ? location.toXY() : location), fontColor, anchor, 0);
+        const label: SVGTextElement = this.createLabel(text, (location instanceof PsyState ? location.toXY() : location), fontColor, anchor, rotation);
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor, this.g.tooltips));
