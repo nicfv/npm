@@ -104,7 +104,7 @@ export class Psychart extends Chart<PsychartOptions> {
             this.legend.setAttribute('width', this.options.size.x + 'px');
             this.legend.setAttribute('height', this.getLegendHeight() + 'px');
             this.legend.appendChild(this.legendDefs);
-            this.legend.appendChild(this.createLabel(this.options.legend.title, { x: 0, y: 0 }, Color.hex(this.options.colors.font), TextAnchor.NW));
+            this.legend.appendChild(this.createLabel(this.options.legend.title, { x: 0, y: 0 }, Color.hex(this.options.colors.font), TextAnchor.NW, 0));
             this.legend.appendChild(this.legendg);
             // Attach elements to the base element.
             const legendContainer: HTMLDivElement = document.createElement('div');
@@ -134,6 +134,21 @@ export class Psychart extends Chart<PsychartOptions> {
         // Create new SVG groups, and append all the
         // layers into the chart.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        // Write the axis titles.
+        if (this.options.showAxisNames) {
+            const fontColor: Color = Color.hex(this.options.colors.font);
+            const yAxisText: string = (this.options.yAxis === 'hr') ? 'Humidity Ratio' : 'Dew Point';
+            let xAxisLabel: SVGTextElement;
+            let yAxisLabel: SVGTextElement;
+            if (this.options.flipXY) {
+                xAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x / 2, y: 0 }, fontColor, TextAnchor.N, 0);
+                yAxisLabel = super.createLabel('Dry Bulb', { x: 0, y: this.options.size.y / 2 }, fontColor, TextAnchor.N, -90);
+            } else {
+                xAxisLabel = super.createLabel('Dry Bulb', { x: this.options.size.x / 2, y: this.options.size.y }, fontColor, TextAnchor.S, 0);
+                yAxisLabel = super.createLabel(yAxisText, { x: this.options.size.x, y: this.options.size.y / 2 }, fontColor, TextAnchor.N, 90);
+            }
+            this.g.text.append(xAxisLabel, yAxisLabel);
+        }
         // Draw constant dry bulb vertical lines.
         Psychart.getRange(this.options.dbMin, this.options.dbMax, this.options.major.temp).forEach(db => {
             const data: PsyState[] = [];
@@ -143,7 +158,7 @@ export class Psychart extends Chart<PsychartOptions> {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }, this.options));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 'Dry Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(db + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.N, 0, 'Dry Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         switch (this.options.yAxis) {
             case ('dp'): {
@@ -156,7 +171,7 @@ export class Psychart extends Chart<PsychartOptions> {
                     data.push(new PsyState({ db: this.options.dbMax, other: dp, measurement: 'dbdp' }, this.options));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(dp + (this.options.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 'Dew Point' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+                    this.drawLabel(dp + (this.options.showUnits.axis ? this.units.temp : ''), data[1], TextAnchor.W, 0, 'Dew Point' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
                 });
                 break;
             }
@@ -173,7 +188,7 @@ export class Psychart extends Chart<PsychartOptions> {
                     data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }, this.options));
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(SMath.round2(hr * this.scaleFactor.hr, 1) + (this.options.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 'Humidity Ratio' + (this.options.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
+                    this.drawLabel(SMath.round2(hr * this.scaleFactor.hr, 1) + (this.options.showUnits.axis ? this.units.hr : ''), data[0], TextAnchor.W, 0, 'Humidity Ratio' + (this.options.showUnits.tooltip ? ' [' + this.units.hr + ']' : ''));
                 });
                 break;
             }
@@ -190,25 +205,27 @@ export class Psychart extends Chart<PsychartOptions> {
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+            this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 15, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
         });
         // Draw constant relative humidity lines.
         Psychart.getRange(0, 100, this.options.major.relHum).forEach(rh => {
             const data: PsyState[] = [];
             let preferredAnchor: TextAnchor = TextAnchor.NE;
+            let rotation = 0;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
             for (let db = this.options.dbMin; db <= this.options.dbMax; db += this.options.resolution) {
                 data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }, this.options));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.options.dpMax) {
-                    preferredAnchor = TextAnchor.S;
+                    preferredAnchor = TextAnchor.SW;
+                    rotation = -30;
                     break;
                 }
             }
             // Draw the axis and the label
             this.drawAxis(data);
             if (rh > 0 && rh < 100) {
-                this.drawLabel(rh + (this.options.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, 'Relative Humidity' + (this.options.showUnits.tooltip ? ' [%]' : ''));
+                this.drawLabel(rh + (this.options.showUnits.axis ? '%' : ''), data[data.length - 1], preferredAnchor, rotation, 'Relative Humidity' + (this.options.showUnits.tooltip ? ' [%]' : ''));
             }
         });
         // Draw any regions, if applicable
@@ -302,7 +319,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Draw an axis label.
      */
-    private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
+    private drawLabel(text: string, location: PsyState, anchor: TextAnchor, rotation: number, tooltip?: string): void {
         // Determine if anchor needs to be mirrored
         if (this.options.flipXY) {
             switch (anchor) {
@@ -332,8 +349,8 @@ export class Psychart extends Chart<PsychartOptions> {
                 }
             }
         }
-        const fontColor: Color = Color.hex(this.options.colors.font),
-            label = this.createLabel(text, location.toXY(), fontColor, anchor);
+        const fontColor: Color = Color.hex(this.options.colors.font);
+        const label: SVGTextElement = this.createLabel(text, location.toXY(), fontColor, anchor, rotation);
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor, this.g.tooltips));
@@ -363,8 +380,8 @@ export class Psychart extends Chart<PsychartOptions> {
         } else {
             throw new Error('Error in ' + seriesName + '. Must have color or gradient defined.');
         }
-        const fontColor: Color = Color.hex(this.options.colors.font),
-            legendText: SVGTextElement = this.createLabel(seriesName, { x: this.options.font.size * 1.5, y: this.getLegendHeight() - this.options.font.size }, fontColor, TextAnchor.W);
+        const fontColor: Color = Color.hex(this.options.colors.font);
+        const legendText: SVGTextElement = this.createLabel(seriesName, { x: this.options.font.size * 1.5, y: this.getLegendHeight() - this.options.font.size }, fontColor, TextAnchor.W, 0);
         g.addEventListener('click', () => {
             this.series[seriesName].hidden = !this.series[seriesName].hidden;
             if (this.series[seriesName].hidden) {
