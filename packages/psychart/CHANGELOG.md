@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.1
+
+- Updates for `Psychart`:
+    - Add axis labels
+    - Support text rotation
+    - Rotate wet bulb and relative humidity labels to fit the chart better
+    - Remove deprecated members
+
 ## 0.8.0
 
 - Add package keywords
