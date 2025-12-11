@@ -6,6 +6,7 @@ import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 import { f, zero } from './lib';
 import { DensityUnits, FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
+import { dimensions, Quantity, units } from 'dimensional';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -278,13 +279,40 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
         const speedEstimate: number = (typeof state.speed === 'undefined') ? zero(speedEstimator, 0, this.options.speed.max) : 0;
+        // Calculate the efficiency if power is given
+        let efficiency: number = 0;
+        let output: number = 0;
+        if (typeof state.power === 'number') {
+            let headQty: Quantity = new Quantity(state.head, HeadUnits[this.options.units.head]);
+            if (HeadUnits[this.options.units.head].dimensions.is(dimensions.Length)) {
+                // Need to multiply by specific weight to get the head in units of pressure
+                headQty = headQty.times(new Quantity(this.options.density, DensityUnits[this.options.units.density].times(units.Gs)));
+            }
+            // Efficiency = Power_{out} / Power_{in}
+            // Power_{out} = Pressure * FlowRate
+            const flowQty: Quantity = new Quantity(state.flow, FlowUnits[this.options.units.flow]);
+            const powQty: Quantity = new Quantity(state.power, PowerUnits[this.options.units.power]);
+            const eta: Quantity = headQty.times(flowQty).over(powQty);
+            output = headQty.times(flowQty).as(powQty.units).quantity;
+            efficiency = eta.as(units.Unitless).quantity * 100;
+            console.log(headQty.toString());
+            console.log(flowQty.toString());
+            console.log(powQty.toString());
+            console.log(eta.toString());
+            console.log(output);
+            console.log(efficiency);
+        }
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
             (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
             `Flow = ${SMath.round2(state.flow, 0.1)}${this.options.units.flow}` +
             `\nHead = ${SMath.round2(state.head, 0.1)}${this.options.units.head}` +
             `\nSpeed = ${SMath.round2(state.speed ?? speedEstimate, 0.1)}${this.options.units.speed}${typeof state.speed === 'undefined' ? ' (est.)' : ''}` +
-            (typeof state.power !== 'undefined' ? `\nPower = ${SMath.round2(state.power, 0.1)}${this.options.units.power}` : '');
+            (typeof state.power !== 'undefined' ? (
+                `\nPower = ${SMath.round2(state.power, 0.1)}${this.options.units.power}` +
+                `\nOutput = ${SMath.round2(output, 0.1)}${this.options.units.power}` +
+                `\nEfficiency = ${SMath.round2(efficiency, 0.1)}%`
+            ) : '');
         this.drawCircle(tip, color, state, options.radius, this.g.data);
     }
     /**
