@@ -4,18 +4,18 @@ import { Pumpchart } from 'psychart';
 const now = Date.now();
 const onehr = 60 * 60 * 1000;
 const in1hr = now + onehr
-const nData = 0;
+const nData = 100;
 
 // Create a custom pump chart
 const pumpchart = new Pumpchart({
     curve: { // Define performance curves as a function of `q` (flow rate)
         pump: {
-            maxFlow: 6000,
-            maxHead: 300,
+            maxFlow: 3000,
+            maxHead: 35,
         },
         system: {
             static: 5,
-            friction: 175 ** -2,
+            friction: 2e-6,
         },
     },
     speed: {
@@ -26,9 +26,9 @@ const pumpchart = new Pumpchart({
     density: 1,
     units: {
         density: 'g/cm3',
-        flow: 'm3/s',
-        head: 'Pa',
-        power: 'W',
+        flow: 'gpm',
+        head: 'psi',
+        power: 'kW',
         speed: 'rpm',
     },
     timestamp: { // Set the start and ending timestamps for colorizing data
@@ -39,9 +39,9 @@ const pumpchart = new Pumpchart({
 
 // Plot `nData` number of data points
 for (let t = now; t < in1hr; t += onehr / nData) {
-    const flow = Math.random() * 3000;
-    const head = Math.random() * 200;
-    const power = flow * head;
+    const flow = Math.random() * 2500;
+    const head = Math.random() * 25;
+    const power = flow * head / 2000;
     pumpchart.plot({ flow: flow, head: head, power: power }, { timestamp: t });
 }
 
