@@ -49,6 +49,12 @@ import { AmountOfSubstance } from './defaults/dimensions';
     T6.isFalse(customKm.is(units.kilometer)); // Not seen as the same unit [1a0cffd]
     T6.eq(customKm.to(units.kilometer), 1);
     T6.eq(customKm.to(units.meter), 1000);
+    T6.eq(units.year.prefix(prefixes.giga).to(units.year), 1e9); // Need to test with non-base units too
+    T6.eq(units.year.prefix(prefixes.deci).to(units.minute), 60 * 24 * 365.25 / 10);
+    T6.eq(units.watt.to(units.volt.times(units.ampere)), 1);
+    T6.eq(units.watt.prefix(prefixes.kilo).to(units.volt.times(units.ampere)), 1000);
+    T6.eq(units.watt.prefix(prefixes.kilo).to(units.watt), 1000);
+    T6.eq(units.watt.prefix(prefixes.centi).to(units.watt), 0.01);
     let caught: boolean;
     caught = false;
     try {
@@ -116,6 +122,10 @@ import { AmountOfSubstance } from './defaults/dimensions';
 {
     // Quantity
     // .as
+    const wattage = new Quantity(1500, units.watt);
+    const kW = units.watt.prefix(prefixes.kilo);
+    T6.eq(wattage.as(kW).quantity, 1.5);
+    T6.is(wattage.as(kW).toString(), '1.5 \\left[ {\\text{k}\\text{W}} \\right]');
     const mph = new Quantity(55, units.mile.over(units.hour)),
         mps = mph.as(units.meter.over(units.second));
     T6.eq(mph.quantity, 55);
