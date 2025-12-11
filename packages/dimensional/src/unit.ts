@@ -47,7 +47,7 @@ export class Unit extends Compound<Unit> {
      */
     public prefix(prefix: Prefix): Unit {
         if (typeof this.LaTeX === 'string' && this.allowPrefix) {
-            return new Unit(prefix.LaTeX + this.LaTeX, this, this.scale * prefix.scale, false);
+            return new Unit(prefix.LaTeX + this.LaTeX, this, prefix.scale, false);
         } else {
             throw new Error('Can only add a prefix to named base units.');
         }
