@@ -319,7 +319,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Draw an axis label.
      */
-    private drawLabel(text: string, location: PsyState | Point, anchor: TextAnchor, rotation: number, tooltip?: string): void {
+    private drawLabel(text: string, location: PsyState, anchor: TextAnchor, rotation: number, tooltip?: string): void {
         // Determine if anchor needs to be mirrored
         if (this.options.flipXY) {
             switch (anchor) {
@@ -350,7 +350,7 @@ export class Psychart extends Chart<PsychartOptions> {
             }
         }
         const fontColor: Color = Color.hex(this.options.colors.font);
-        const label: SVGTextElement = this.createLabel(text, (location instanceof PsyState ? location.toXY() : location), fontColor, anchor, rotation);
+        const label: SVGTextElement = this.createLabel(text, location.toXY(), fontColor, anchor, rotation);
         this.g.text.appendChild(label);
         if (tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, fontColor, this.g.tooltips));
