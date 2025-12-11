@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.2
+
+- Fix major bug where custom units with prefixes would have incorrect conversion factors
+
 ## 1.3.1
 
 - Support negative quantities when rendering LaTeX with `toString`
