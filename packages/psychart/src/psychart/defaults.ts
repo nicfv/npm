@@ -50,12 +50,12 @@ export const defaultDataOptions: DataOptions = {
     advanced: false,
     color: '#FF0000',
     gradient: 'Viridis',
-    id: NaN,
     legend: true,
     line: true,
     name: '',
     pointRadius: 2.5,
     relHumType: 'percent',
+    showId: false,
     time: {
         start: NaN,
         now: NaN,
