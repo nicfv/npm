@@ -5,7 +5,7 @@ export { Point };
 /**
  * A human-readable name for a psychrometric envelope.
  */
-export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
+export type Region = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
 
 /**
  * This data object fixes the psychrometric state.
@@ -127,7 +127,7 @@ export interface Options extends ChartOptions {
     /**
      * Render pre-defined shaded regions.
      */
-    readonly regions: RegionName[];
+    readonly regions: Region[];
     /**
      * Styling options for the legend. If set to `false`, will not render a legend on Psychart.
      */

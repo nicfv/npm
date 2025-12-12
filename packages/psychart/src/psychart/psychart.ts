@@ -1,7 +1,7 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import * as SMath from 'smath';
-import { DataOptions, Options, RegionName, State } from './types';
+import { DataOptions, Options, Region, State } from './types';
 import { defaultDataOptions, defaultOptions, regions } from './defaults';
 import { Chart } from '../chart';
 import { TextAnchor } from '../types';
@@ -65,8 +65,8 @@ export class Psychart extends Chart<Options> {
     /**
      * Helper function to return an array of region names and their corresponding tooltips.
      */
-    public static getRegionNamesAndTips(): [RegionName, string][] {
-        return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
+    public static getRegionNamesAndTips(): [Region, string][] {
+        return Object.entries(regions).map(([name, region]) => [name as Region, region.tooltip]);
     }
     /**
      * Convert from Celsius to Fahrenheit.
@@ -231,7 +231,7 @@ export class Psychart extends Chart<Options> {
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(regions)
-            .filter(([name,]) => this.options.regions?.includes(name as RegionName))
+            .filter(([name,]) => this.options.regions?.includes(name as Region))
             .forEach(([, region]) => {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
