@@ -7,6 +7,7 @@
     - Update example source and readme
     - Separate axis color from text color
     - Define units in options
+    - Fix bug where clearing data would get rid of the operation point
 
 ## 0.8.1
 
