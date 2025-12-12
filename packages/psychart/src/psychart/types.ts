@@ -164,6 +164,10 @@ export interface DataOptions {
      */
     readonly legend: boolean;
     /**
+     * Optionally assign a numeric ID value to this point which will be displayed within the legend and Pumpchart.
+     */
+    readonly id: number;
+    /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
     readonly relHumType: 'percent' | 'float';
