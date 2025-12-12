@@ -207,11 +207,11 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param tooltip Optional tooltip text on mouse hover
      */
     private drawLabel(content: string, location: PumpchartState, anchor: TextAnchor, tooltip?: string): void {
-        const axisColor: Color = Color.hex(this.options.axisColor);
-        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor, 0);
+        const textColor: Color = Color.hex(this.options.textColor);
+        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), textColor, anchor, 0);
         this.g.text.appendChild(label);
         if (tooltip) {
-            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, axisColor, this.g.tips));
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, textColor, this.g.tips));
             label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
         }
     }
