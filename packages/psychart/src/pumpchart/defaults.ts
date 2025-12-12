@@ -12,7 +12,8 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         x: 40,
         y: 20,
     },
-    axisColor: '#666666',
+    textColor: '#666666',
+    axisColor: '#dddddd',
     axisWidth: 1,
     density: 1,
     font: {
