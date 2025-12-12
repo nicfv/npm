@@ -38,13 +38,13 @@ document.body.append(psychart.getElement()); // Render Psychart onto the documen
 psychart.plot({ db: 68, other: 55, measurement: 'dbwb' }); // Plot a data point.
 ```
 
-### PsychartOptions
+### PsychartTypes.Options
 
 These options affect how the chart looks and behaves.
 
 Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, flip X & Y, y-axis variable, other styling options such as font and color, and optionally display ASHRAE comfort regions (envelopes). For data center envelopes, these comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality. For human comfort envelopes, these comfort regions follow the ASHRAE-55 guidelines published in 2017. These human comfort envelopes are a function of metabolic rate (`MET`, which is dependent on the indoor activity), clothing level (`CLO`), and air speed. In both cases, the envelopes show the target region for conditioned air supplied into the indoor space.
 
-### DataOptions
+### PsychartTypes.DataOptions
 
 These options change the visual appearance of data within the chart.
 
@@ -105,7 +105,7 @@ pumpchart.plot({ flow: 60, head: 40 });
 
 However, Pumpchart is meant to be highly customizable and the following sections will outline some of its features.
 
-### PumpchartOptions
+### PumpchartTypes.Options
 
 Set axes properties, unit system, define the pump performance and system curves, operating speed, and styling options here.
 
@@ -113,7 +113,7 @@ Set axes properties, unit system, define the pump performance and system curves,
 const pumpchart = new Pumpchart({ /* options here */ });
 ```
 
-### PumpchartDataOptions
+### PumpchartTypes.DataOptions
 
 Set options for plotting data, such as providing a point name, timestamp, point radius, and color.
 
