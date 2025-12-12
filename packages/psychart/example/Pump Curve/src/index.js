@@ -34,7 +34,7 @@ const pumpchart = new Pumpchart({
     timestamp: { // Set the start and ending timestamps for colorizing data
         start: now,
         stop: in1hr,
-    }
+    },
 });
 
 // Plot `nData` number of data points
