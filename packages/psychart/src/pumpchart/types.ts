@@ -37,7 +37,11 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly density: number;
     /**
-     * The axis color (hexadecimal)
+     * The **hexadecimal** color code for the axes labels
+     */
+    readonly textColor: string;
+    /**
+     * The **hexadecimal** color code for the chart axes
      */
     readonly axisColor: string;
     /**
