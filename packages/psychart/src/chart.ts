@@ -101,10 +101,10 @@ export abstract class Chart<T extends ChartOptions> {
          */
         function setProps(xPad: 1 | 0 | -1, yPad: 1 | 0 | -1, textAnchor: 'start' | 'middle' | 'end', dominantBaseline: 'hanging' | 'middle' | 'alphabetic'): void {
             // Use the `x`, `y`, `text-anchor`, and `dominant-baseline` properties to set the text anchor
-            const padded: Point = { x: location.x + xPad * padding, y: location.y + yPad * padding };
+            const padded: Point = { x: xPad * padding, y: yPad * padding };
             const rot: Point = { x: Math.cos(angleRad), y: Math.sin(angleRad) };
-            text.setAttribute('x', `${rot.x * padded.x + rot.y * padded.y}px`);
-            text.setAttribute('y', `${rot.x * padded.y - rot.y * padded.x}px`);
+            text.setAttribute('x', `${rot.x * location.x + rot.y * location.y + padded.x}px`);
+            text.setAttribute('y', `${rot.x * location.y - rot.y * location.x + padded.y}px`);
             text.setAttribute('text-anchor', textAnchor);
             text.setAttribute('dominant-baseline', dominantBaseline);
         }
