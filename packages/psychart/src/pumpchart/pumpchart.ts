@@ -279,11 +279,11 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
         const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
-        let speed: number;
+        let speed: number = state.speed ?? nmax;
         try {
             speed = zero(speedEstimator, 0, nmax);
         } catch {
-            speed = state.speed ?? nmax;
+            // Do nothing
         }
         // Calculate the efficiency if power is given
         let efficiency = 0;
