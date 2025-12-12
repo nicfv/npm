@@ -169,8 +169,10 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             this.drawCurve('', pumpColor, this.options.axisWidth, q => this.p(q, speed), 0);
         });
         // Copy over the operation point to the curves layer
-        this.g.curves.appendChild(this.g.data.lastChild!);
-        this.clearData();
+        if (this.g.data.lastChild) {
+            this.g.curves.appendChild(this.g.data.lastChild);
+            this.clearData();
+        }
     }
     /**
      * Convert a state to an (x,y) coordinate.
