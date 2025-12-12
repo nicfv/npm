@@ -54,7 +54,7 @@ export const defaultDataOptions: DataOptions = {
     legend: true,
     line: true,
     name: '',
-    pointRadius: 5,
+    pointRadius: 2.5,
     relHumType: 'percent',
     time: {
         start: NaN,
