@@ -431,14 +431,12 @@ export class Psychart extends Chart<Options> {
             tMax: number = (this.options.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.hex(options.color);
-        // Define a 0-length path element and assign its attributes.
-        const point = document.createElementNS(this.NS, 'path');
-        point.setAttribute('fill', 'none');
-        point.setAttribute('stroke', color.toString());
-        point.setAttribute('stroke-width', +options.pointRadius + 'px');
-        point.setAttribute('stroke-linecap', 'round');
-        point.setAttribute('vector-effect', 'non-scaling-stroke');
-        point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
+        // Define a circle element and assign its attributes.
+        const point = document.createElementNS(this.NS, 'circle');
+        point.setAttribute('fill', color.toString());
+        point.setAttribute('cx', `${location.x}px`);
+        point.setAttribute('cy', `${location.y}px`);
+        point.setAttribute('r', `${options.pointRadius}px`);
         // Determine whether to draw a line from another point.
         let lineFrom: PsyState | null = null;
         // Options for data series:
