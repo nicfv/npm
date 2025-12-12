@@ -10,7 +10,7 @@ export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (ligh
 /**
  * This data object fixes the psychrometric state.
  */
-export interface PsychartState {
+export interface State {
     /**
      * Dry Bulb (db)
      */
@@ -32,7 +32,7 @@ export interface PsychartState {
 /**
  * Configuration options for Psychart.
  */
-export interface PsychartOptions extends ChartOptions {
+export interface Options extends ChartOptions {
     /**
      * The padding in pixels.
      */
@@ -154,7 +154,7 @@ export interface PsychartOptions extends ChartOptions {
 /**
  * Configuration settings for plotting data.
  */
-export interface PsychartDataOptions {
+export interface DataOptions {
     /**
      * Adds a name to a point or data series to be shown in the tooltip. Must be set to create an entry in the legend.
      */
@@ -174,7 +174,7 @@ export interface PsychartDataOptions {
     /**
      * Determines whether or not to connect points with a line. If a `Datum` is provided, will draw a line from that point.
      */
-    readonly line: boolean | PsychartState;
+    readonly line: boolean | State;
     /**
      * Determine the solid color **hex-code** for time-independent plots.
      */

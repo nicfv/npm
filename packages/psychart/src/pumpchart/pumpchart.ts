@@ -1,7 +1,7 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
-import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults';
-import { Density, Flow, Head, Point, Power, PumpchartDataOptions, PumpchartOptions, PumpchartState, Speed } from './types';
+import { defaultOptions, defaultDataOptions } from './defaults';
+import { Density, Flow, Head, Point, Power, DataOptions, Options, State, Speed } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 import { f, zero } from './lib';
@@ -11,7 +11,7 @@ import { dimensions, Quantity, units } from 'dimensional';
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
  */
-export class Pumpchart extends Chart<PumpchartOptions> {
+export class Pumpchart extends Chart<Options> {
     /**
      * Layers of the SVG as groups.
      */
@@ -86,8 +86,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Create a new Pumpchart with custom options.
      * @param options Customization options for the new Pumpchart.
      */
-    constructor(options: Partial<PumpchartOptions> = {}) {
-        super(options, defaultPumpchartOptions);
+    constructor(options: Partial<Options> = {}) {
+        super(options, defaultOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
         // Compute the axes limits and intervals
@@ -143,7 +143,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const nop: number = SMath.clamp(this.options.speed.operation, 0, nmax); // operation speed
         const qmax: number = zero(q => this.s(q) - this.p(q, nmax), 0, 1e6); // flow @ max speed
         const qop: number = zero(q => this.s(q) - this.p(q, nop), 0, 1e6); // flow @ operation
-        const opPt: PumpchartState = { flow: qop, head: this.p(qop, nop), speed: nop }; // operation point
+        const opPt: State = { flow: qop, head: this.p(qop, nop), speed: nop }; // operation point
         this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, q => this.s(q), 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
@@ -179,7 +179,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param state Any state in this system
      * @returns An (x,y) coordinate on the screen
      */
-    private state2xy(state: PumpchartState): Point {
+    private state2xy(state: State): Point {
         const xMin: number = this.options.padding.x;
         const xMax: number = this.options.size.x - this.options.padding.x
         const yMin: number = this.options.padding.y;
@@ -195,7 +195,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param closePath Whether or not to close the path
      * @returns A `<path>` element containing the array of states
      */
-    private createPath(data: PumpchartState[], closePath = false): SVGPathElement {
+    private createPath(data: State[], closePath = false): SVGPathElement {
         const path: SVGPathElement = document.createElementNS(this.NS, 'path');
         path.setAttribute('d', 'M ' + data.map(pt => {
             const xy: Point = this.state2xy(pt);
@@ -211,7 +211,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param anchor Label text anchor
      * @param tooltip Optional tooltip text on mouse hover
      */
-    private drawLabel(content: string, location: PumpchartState, anchor: TextAnchor, tooltip?: string): void {
+    private drawLabel(content: string, location: State, anchor: TextAnchor, tooltip?: string): void {
         const textColor: Color = Color.hex(this.options.textColor);
         const label: SVGTextElement = this.createLabel(content, this.state2xy(location), textColor, anchor, 0);
         this.g.text.appendChild(label);
@@ -224,7 +224,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Draw a curve `h = f(q)` on the curves layer.
      */
     private drawCurve(tooltip: string, color: Color, width: number, h: f, min = 0, max = this.maxFlow, steps = 1e3): void {
-        const states: PumpchartState[] = SMath.linspace(min, max, steps).map<PumpchartState>(q => { return { flow: q, head: h(q) } });
+        const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
         const curve: SVGPathElement = this.createPath(states, false);
         curve.setAttribute('fill', 'none');
         curve.setAttribute('stroke', color.toString());
@@ -239,7 +239,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     /**
      * Draw a custom circle onto any layer.
      */
-    private drawCircle(tooltip: string, color: Color, state: PumpchartState, radius: number, parent: SVGElement): void {
+    private drawCircle(tooltip: string, color: Color, state: State, radius: number, parent: SVGElement): void {
         const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
         const center: Point = this.state2xy(state);
         circle.setAttribute('fill', color.toString());
@@ -279,8 +279,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param state The current state of the system
      * @param config Display options for plotting data
      */
-    public plot(state: PumpchartState, config: Partial<PumpchartDataOptions> = {}): void {
-        const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
+    public plot(state: State, config: Partial<DataOptions> = {}): void {
+        const options: DataOptions = Chart.setDefaults(config, defaultDataOptions);
         const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
         let speed: number;

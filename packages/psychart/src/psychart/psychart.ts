@@ -1,15 +1,15 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import * as SMath from 'smath';
-import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
-import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
+import { DataOptions, Options, RegionName, State } from './types';
+import { defaultDataOptions, defaultOptions, regions } from './defaults';
 import { Chart } from '../chart';
 import { TextAnchor } from '../types';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
  */
-export class Psychart extends Chart<PsychartOptions> {
+export class Psychart extends Chart<Options> {
     /**
      * Defines the string representations of the current unit system.
      */
@@ -89,8 +89,8 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(options: Partial<PsychartOptions> = {}) {
-        super(options, defaultPsychartOptions);
+    constructor(options: Partial<Options> = {}) {
+        super(options, defaultOptions);
         // Check to make sure that dpMax is less than dbMax
         if (this.options.dpMax > this.options.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
@@ -410,13 +410,13 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    public plot(state: PsychartState, config: Partial<PsychartDataOptions> = {}): void {
+    public plot(state: State, config: Partial<DataOptions> = {}): void {
         // Skip series that are missing a measurement point.
         if (!Number.isFinite(state.db) || !Number.isFinite(state.other)) {
             return;
         }
         // Set default data options.
-        const options: PsychartDataOptions = Chart.setDefaults(config, defaultDataOptions);
+        const options: DataOptions = Chart.setDefaults(config, defaultDataOptions);
         // Determine whether this is time-dependent.
         const hasTimeStamp: boolean = Number.isFinite(options.time.now),
             timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
@@ -502,7 +502,7 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Draw a shaded region on Psychart.
      */
-    private drawRegion(data: PsychartState[], color: Color, tooltip?: string): void {
+    private drawRegion(data: State[], color: Color, tooltip?: string): void {
         // Interpolate to get a set of psychrometric states that make the border of the region
         const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum, this.options)), false);
         // Create the SVG element to render the shaded region

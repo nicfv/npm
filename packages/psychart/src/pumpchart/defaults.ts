@@ -1,9 +1,9 @@
-import { PumpchartDataOptions, PumpchartOptions } from './types';
+import { DataOptions, Options } from './types';
 
 /**
  * Default configuration options for Pumpchart
  */
-export const defaultPumpchartOptions: PumpchartOptions = {
+export const defaultOptions: Options = {
     size: {
         x: 600,
         y: 400,
@@ -56,7 +56,7 @@ export const defaultPumpchartOptions: PumpchartOptions = {
 /**
  * Default data display options for Pumpchart
  */
-export const defaultPumpchartDataOptions: PumpchartDataOptions = {
+export const defaultDataOptions: DataOptions = {
     name: '',
     color: '#ff0000',
     radius: 2.5,

@@ -5,7 +5,7 @@ export { Point };
 /**
  * Represents a single point in time.
  */
-export interface PumpchartState {
+export interface State {
     /**
      * Flow rate (e.g. gpm)
      */
@@ -27,7 +27,7 @@ export interface PumpchartState {
 /**
  * Configuration options for Pumpchart.
  */
-export interface PumpchartOptions extends ChartOptions {
+export interface Options extends ChartOptions {
     /**
      * The padding of Pumpchart, in pixels.
      */
@@ -161,7 +161,7 @@ export interface PumpchartOptions extends ChartOptions {
 /**
  * Options for data plotting.
  */
-export interface PumpchartDataOptions {
+export interface DataOptions {
     /**
      * An optional name for this data point
      */

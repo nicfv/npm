@@ -1,7 +1,7 @@
 import * as T6 from 't6';
 import * as SMath from 'smath';
 import { Psychart } from '.';
-import { defaultPsychartOptions, regions } from './psychart/defaults';
+import { defaultOptions, regions } from './psychart/defaults';
 import { PsyState } from './psychart/psystate';
 import { f, zero } from './pumpchart/lib';
 
@@ -12,7 +12,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
     caught = false;
     try {
-        new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' }, defaultPsychartOptions);
+        new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' }, defaultOptions);
     } catch {
         caught = true;
     }
@@ -20,7 +20,7 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
     caught = false;
     try {
-        new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' }, defaultPsychartOptions);
+        new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' }, defaultOptions);
     } catch {
         caught = true;
     }
@@ -28,14 +28,14 @@ T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 
     caught = false;
     try {
-        new PsyState({ db: 70, other: 80, measurement: 'dbwb' }, defaultPsychartOptions);
+        new PsyState({ db: 70, other: 80, measurement: 'dbwb' }, defaultOptions);
     } catch {
         caught = true;
     }
     T6.isTrue(caught, 'Uncaught wb > db.');
 
     // We will not be testing the accuracy of psychrolib, but will make sure that PsyState computes.
-    const ps1: PsyState = new PsyState({ db: 70, other: 0.50, measurement: 'dbrh' }, defaultPsychartOptions);
+    const ps1: PsyState = new PsyState({ db: 70, other: 0.50, measurement: 'dbrh' }, defaultOptions);
     T6.eq(ps1.db, 70);
     T6.eq(ps1.rh, 0.50);
     // Just make sure that values are greater than zero.
