@@ -281,6 +281,7 @@ export class Pumpchart extends Chart<Options> {
      */
     public plot(state: State, config: Partial<DataOptions> = {}): void {
         const options: DataOptions = Chart.setDefaults(config, defaultDataOptions);
+        const hasTimeStamp: boolean = Number.isFinite(options.timestamp);
         const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
         let speed: number;
@@ -308,7 +309,7 @@ export class Pumpchart extends Chart<Options> {
         }
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
-            (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
+            (hasTimeStamp ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
             `Flow = ${SMath.round2(state.flow, 0.1)}${this.options.units.flow}` +
             `\nHead = ${SMath.round2(state.head, 0.1)}${this.options.units.head}` +
             `\nSpeed = ${SMath.round2(speed, 0.1)}${this.options.units.speed}${typeof state.speed === 'number' ? '' : ' (est.)'}` +
@@ -322,7 +323,7 @@ export class Pumpchart extends Chart<Options> {
         let gradientMax = 0;
         let gradientValue = 0;
         let useGradient = false;
-        if (this.options.colorizeBy === 'time' && options.timestamp > 0) {
+        if (this.options.colorizeBy === 'time' && hasTimeStamp) {
             gradientMin = this.options.timestamp.start;
             gradientMax = this.options.timestamp.stop;
             gradientValue = options.timestamp;
