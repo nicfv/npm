@@ -60,5 +60,5 @@ export const defaultDataOptions: DataOptions = {
     name: '',
     color: '#ff0000',
     radius: 2.5,
-    timestamp: 0,
+    timestamp: NaN,
 };
