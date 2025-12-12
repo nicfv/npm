@@ -35,14 +35,3 @@ export function zero(func: f, left: number, right: number, epsilon = 1e-6, maxIt
     }
     return (left + right) / 2;
 }
-/**
- * Convert a raw function definition into a valid function.
- */
-export function toFunction(raw: string, variable: string): f {
-    const allowed = new RegExp(`^([0-9\\.\\+\\-\\*\\/\\^\\(\\)\\s]|(${variable}))+$`);
-    const multShorthand = new RegExp(`([0-9]+)(${variable})`); // e.g. 5x (5*x)
-    if (!allowed.test(raw)) {
-        throw new Error(`Illegal character(s) found in function: ${raw}`);
-    }
-    return new Function(variable, `return +(${raw.replace('^', '**').replace(multShorthand, '$1*$2')})`) as f;
-}

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.2
+
+- Updates for `Pumpchart`:
+    - Pump and system curves are now created based on parameters instead of a raw string equation
+    - Update example source and readme
+    - Separate axis color from text color
+    - Define units in options
+    - Fix bug where clearing data would get rid of the operation point
+
 ## 0.8.1
 
 - Updates for `Psychart`:

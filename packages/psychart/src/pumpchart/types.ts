@@ -33,7 +33,15 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly padding: Point;
     /**
-     * The axis color (hexadecimal)
+     * The fluid density in the units provided
+     */
+    readonly density: number;
+    /**
+     * The **hexadecimal** color code for the axes labels
+     */
+    readonly textColor: string;
+    /**
+     * The **hexadecimal** color code for the chart axes
      */
     readonly axisColor: string;
     /**
@@ -41,18 +49,38 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly axisWidth: number;
     /**
-     * Defines the curves to render on Pumpchart `h = f(q)` using `q` as the function variable
+     * Defines the curve parameters to render on Pumpchart
      */
     readonly curve: {
         /**
-         * The pump performance curve at 100% pump speed
+         * The pump performance curve parameters at 100% pump speed
          */
-        readonly pump: string;
+        readonly pump: {
+            /**
+             * The maximum head at zero flow (shut-off head)
+             */
+            readonly maxHead: number;
+            /**
+             * The maximum flow rate at zero head
+             */
+            readonly maxFlow: number;
+        };
         /**
-         * The system curve
+         * The system curve parameters: `sys(q) = static + friction * q^2`
          */
-        readonly system: string;
-    },
+        readonly system: {
+            /**
+             * Static head loss in the system, which is defined by the
+             * elevation difference between the inlet and outlet of the
+             * system, and is theoretically zero for closed systems
+             */
+            readonly static: number;
+            /**
+             * The coefficient of friction (dynamic head loss) of the system
+             */
+            readonly friction: number;
+        };
+    };
     /**
      * Values for speed in the units specified, used to generate pump performance curves
      */
@@ -60,16 +88,16 @@ export interface PumpchartOptions extends ChartOptions {
         /**
          * The maximum pump speed
          */
-        readonly max: number,
+        readonly max: number;
         /**
          * The speed of optimal operation
          */
-        readonly operation: number,
+        readonly operation: number;
         /**
          * The intermediate performance curves to generate for different pump speeds
          */
-        readonly steps: number[],
-    },
+        readonly steps: number[];
+    };
     /**
      * The **hexadecimal** color code for the pump performance curve(s)
      */
@@ -77,7 +105,7 @@ export interface PumpchartOptions extends ChartOptions {
     /**
      * The **hexadecimal** color code for the system curve
      */
-    readonly systemCuveColor: string;
+    readonly systemCurveColor: string;
     /**
      * The gradient name for plotting time-series data
      */
@@ -94,7 +122,7 @@ export interface PumpchartOptions extends ChartOptions {
          * The ending timestamp
          */
         readonly stop: number;
-    },
+    };
     /**
      * Units for various quantities
      */
@@ -102,20 +130,24 @@ export interface PumpchartOptions extends ChartOptions {
         /**
          * Flow rate (e.g. gpm)
          */
-        readonly flow: string;
+        readonly flow: Flow;
         /**
          * Head pressure (e.g. ft)
          */
-        readonly head: string;
+        readonly head: Head;
         /**
          * Pump speed (e.g. rpm)
          */
-        readonly speed: string;
+        readonly speed: Speed;
         /**
          * Pump power (e.g. kW)
          */
-        readonly power: string;
-    },
+        readonly power: Power;
+        /**
+         * Fluid density (e.g. kg/m3)
+         */
+        readonly density: Density;
+    };
 }
 
 /**
@@ -139,3 +171,24 @@ export interface PumpchartDataOptions {
      */
     readonly timestamp: number;
 }
+
+/**
+ * Available units for flow rate
+ */
+export type Flow = 'm3/s' | 'm3/m' | 'm3/h' | 'L/s' | 'L/m' | 'L/h' | 'ft3/s' | 'ft3/m' | 'ft3/h' | 'gpm' | 'gph';
+/**
+ * Available units for head pressure
+ */
+export type Head = 'in' | 'ft' | 'mm' | 'cm' | 'm' | 'psi' | 'psf' | 'Pa' | 'kPa' | 'bar' | 'atm';
+/**
+ * Available units for speed
+ */
+export type Speed = '%' | 'rpm' | 'Hz';
+/**
+ * Available units for power
+ */
+export type Power = 'W' | 'kW' | 'hp';
+/**
+ * Available units for density
+ */
+export type Density = 'g/cm3' | 'kg/m3' | 'g/mL' | 'kg/L' | 'oz/in3' | 'lb/ft3' | 'lb/gal';

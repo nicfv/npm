@@ -1,10 +1,12 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
 import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults';
-import { Point, PumpchartDataOptions, PumpchartOptions, PumpchartState } from './types';
+import { Density, Flow, Head, Point, Power, PumpchartDataOptions, PumpchartOptions, PumpchartState, Speed } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
-import { f, toFunction, zero } from './lib';
+import { f, zero } from './lib';
+import { DensityUnits, FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
+import { dimensions, Quantity, units } from 'dimensional';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
@@ -20,14 +22,6 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
     };
-    /**
-     * The pump curve `h = p(q)`
-     */
-    private readonly p: f;
-    /**
-     * The system curve `h = s(q)`
-     */
-    private readonly s: f;
     /**
      * The maximum flow rate shown on the x-axis
      */
@@ -53,17 +47,52 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
         return 1;
     }
+    /**
+     * Get the list of all available units for flow.
+     * @returns A list of units
+     */
+    public static getFlowUnits(): Flow[] {
+        return Object.keys(FlowUnits) as Flow[];
+    }
+    /**
+     * Get the list of all available units for head.
+     * @returns A list of units
+     */
+    public static getHeadUnits(): Head[] {
+        return Object.keys(HeadUnits) as Head[];
+    }
+    /**
+     * Get the list of all available units for speed.
+     * @returns A list of units
+     */
+    public static getSpeedUnits(): Speed[] {
+        return Object.keys(SpeedUnits) as Speed[];
+    }
+    /**
+     * Get the list of all available units for power.
+     * @returns A list of units
+     */
+    public static getPowerUnits(): Power[] {
+        return Object.keys(PowerUnits) as Power[];
+    }
+    /**
+     * Get the list of all available units for density.
+     * @returns A list of units
+     */
+    public static getDensityUnits(): Density[] {
+        return Object.keys(DensityUnits) as Density[];
+    }
+    /**
+     * Create a new Pumpchart with custom options.
+     * @param options Customization options for the new Pumpchart.
+     */
     constructor(options: Partial<PumpchartOptions> = {}) {
         super(options, defaultPumpchartOptions);
         // Append all groups to the SVG.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
-        // Initialize the pump curve and system curve
-        this.p = toFunction(this.options.curve.pump, 'q');
-        this.s = toFunction(this.options.curve.system, 'q');
         // Compute the axes limits and intervals
-        const q0: number = zero(this.p, 0, 1e6); // Max pump flow with 0 head
-        this.maxFlow = 1.1 * q0;
-        this.maxHead = 1.1 * this.p(0);
+        this.maxFlow = 1.1 * SMath.clamp(this.options.curve.pump.maxFlow, 0, Infinity);
+        this.maxHead = 1.1 * SMath.clamp(this.options.curve.pump.maxHead, 0, Infinity);
         const flowStep: number = Pumpchart.getStep(this.maxFlow, this.options.size.x / this.options.font.size / 6)
         const headStep: number = Pumpchart.getStep(this.maxHead, this.options.size.y / this.options.font.size / 3)
         // Create the axes.
@@ -109,13 +138,13 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             this.drawLabel(`${head}${this.options.units.head}`, { flow: 0, head: head }, TextAnchor.E, `Head [${this.options.units.head}]`);
         }
         // Draw the system curve
-        const sysColor: Color = Color.hex(this.options.systemCuveColor);
-        const n: number = SMath.clamp(SMath.normalize(this.options.speed.operation, 0, this.options.speed.max), 0.01, 1);
-        const p: f = this.scale(this.p, n);
-        const qmax: number = zero(q => this.s(q) - this.p(q), 0, 1e6); // flow @ max speed
-        const qop: number = zero(q => this.s(q) - p(q), 0, 1e6); // flow @ operation
-        const opPt: PumpchartState = { flow: qop, head: p(qop), speed: this.options.speed.operation };
-        this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, this.s, 0, qmax);
+        const sysColor: Color = Color.hex(this.options.systemCurveColor);
+        const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity); // max speed
+        const nop: number = SMath.clamp(this.options.speed.operation, 0, nmax); // operation speed
+        const qmax: number = zero(q => this.s(q) - this.p(q, nmax), 0, 1e6); // flow @ max speed
+        const qop: number = zero(q => this.s(q) - this.p(q, nop), 0, 1e6); // flow @ operation
+        const opPt: PumpchartState = { flow: qop, head: this.p(qop, nop), speed: nop }; // operation point
+        this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, q => this.s(q), 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
             { flow: 0, head: opPt.head },
@@ -131,16 +160,19 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         this.plot(opPt, {
             name: 'Operation Point',
             radius: 5 * this.options.axisWidth,
-            color: this.options.systemCuveColor,
+            color: this.options.systemCurveColor,
         });
         // Draw concentric pump performance curves
         const pumpColor: Color = Color.hex(this.options.pumpCurveColor);
-        this.drawCurve(`Performance Curve at ${SMath.round2(this.options.speed.max, 0.1)}${this.options.units.speed}`, pumpColor, this.options.axisWidth * 2, this.p, 0, q0);
+        this.drawCurve(`Performance Curve at ${SMath.round2(nmax, 0.1)}${this.options.units.speed}`, pumpColor, this.options.axisWidth * 2, q => this.p(q, nmax));
         this.options.speed.steps.forEach(speed => {
-            const pct: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
-            const p1: f = this.scale(this.p, pct);
-            this.drawCurve('', pumpColor, this.options.axisWidth, p1, 0, q0 * pct);
+            this.drawCurve('', pumpColor, this.options.axisWidth, q => this.p(q, speed), 0);
         });
+        // Copy over the operation point to the curves layer
+        if (this.g.data.lastChild) {
+            this.g.curves.appendChild(this.g.data.lastChild);
+            this.clearData();
+        }
     }
     /**
      * Convert a state to an (x,y) coordinate.
@@ -180,11 +212,11 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param tooltip Optional tooltip text on mouse hover
      */
     private drawLabel(content: string, location: PumpchartState, anchor: TextAnchor, tooltip?: string): void {
-        const axisColor: Color = Color.hex(this.options.axisColor);
-        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), axisColor, anchor, 0);
+        const textColor: Color = Color.hex(this.options.textColor);
+        const label: SVGTextElement = this.createLabel(content, this.state2xy(location), textColor, anchor, 0);
         this.g.text.appendChild(label);
         if (tooltip) {
-            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, axisColor, this.g.tips));
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, textColor, this.g.tips));
             label.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
         }
     }
@@ -221,10 +253,26 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
     }
     /**
-     * Scale a function.
+     * Represents the pump curve `h = p(q)`
+     * @param q Flow rate
+     * @param speed Pump speed
+     * @returns Head gained by the fluid by the pump
      */
-    private scale(p: f, n: number): f {
-        return q => n * p(q / n);
+    private p(q: number, speed: number): number {
+        const n: number = SMath.clamp(SMath.normalize(speed, 0, this.options.speed.max), 0.01, 1);
+        const h0: number = SMath.clamp(this.options.curve.pump.maxHead * n, 0, Infinity);
+        const q0: number = SMath.clamp(this.options.curve.pump.maxFlow * n, 0, Infinity);
+        return h0 * (1 - (q / q0) ** 2);
+    }
+    /**
+     * Represents the system curve `h = s(q)`
+     * @param q Flow rate
+     * @returns Head loss from the fluid by the system
+     */
+    private s(q: number): number {
+        const h0: number = SMath.clamp(this.options.curve.system.static, 0, Infinity);
+        const k: number = SMath.clamp(this.options.curve.system.friction, 0, Infinity);
+        return h0 + k * q ** 2;
     }
     /**
      * Plot a single data point.
@@ -234,21 +282,42 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     public plot(state: PumpchartState, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
         const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
-        const speedEstimator: f = n => this.scale(this.p, n)(state.flow) - state.head;
-        let speedEstimate: number;
+        const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity);
+        const speedEstimator: f = n => this.p(state.flow, n) - state.head;
+        let speed: number = state.speed ?? nmax;
         try {
-            speedEstimate = SMath.expand(zero(speedEstimator, 0.01, 1), 0, this.options.speed.max);
+            speed = zero(speedEstimator, 0, nmax);
         } catch {
-            speedEstimate = 0;
+            // Do nothing
+        }
+        // Calculate the efficiency if power is given
+        let efficiency = 0;
+        let output = 0;
+        if (typeof state.power === 'number') {
+            let headQty: Quantity = new Quantity(state.head, HeadUnits[this.options.units.head]);
+            if (HeadUnits[this.options.units.head].dimensions.is(dimensions.Length)) {
+                // Need to multiply by specific weight to get the head in units of pressure
+                headQty = headQty.times(new Quantity(this.options.density, DensityUnits[this.options.units.density].times(units.Gs)));
+            }
+            // Efficiency = Power_{out} / Power_{in}
+            // Power_{out} = Pressure * FlowRate
+            const flowQty: Quantity = new Quantity(state.flow, FlowUnits[this.options.units.flow]);
+            const powQty: Quantity = new Quantity(state.power, PowerUnits[this.options.units.power]);
+            const eta: Quantity = headQty.times(flowQty).over(powQty);
+            output = headQty.times(flowQty).as(powQty.units).quantity;
+            efficiency = eta.as(units.Unitless).quantity * 100;
         }
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
             (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
             `Flow = ${SMath.round2(state.flow, 0.1)}${this.options.units.flow}` +
             `\nHead = ${SMath.round2(state.head, 0.1)}${this.options.units.head}` +
-            (speedEstimate > 0 ? `\nSpeed = ${SMath.round2(speedEstimate, 0.1)}${this.options.units.speed} (est.)` : '\nSpeed cannot be estimated') +
-            (typeof state.speed !== 'undefined' ? `\nSpeed = ${SMath.round2(state.speed, 0.1)}${this.options.units.speed}` : '') +
-            (typeof state.power !== 'undefined' ? `\nPower = ${SMath.round2(state.power, 0.1)}${this.options.units.power}` : '');
+            `\nSpeed = ${SMath.round2(speed, 0.1)}${this.options.units.speed}${typeof state.speed === 'number' ? '' : ' (est.)'}` +
+            (typeof state.power === 'number' ? (
+                `\nPower = ${SMath.round2(state.power, 0.1)}${this.options.units.power}` +
+                `\nOutput = ${SMath.round2(output, 0.1)}${this.options.units.power}` +
+                `\nEfficiency = ${SMath.round2(efficiency, 0.1)}%`
+            ) : '');
         this.drawCircle(tip, color, state, options.radius, this.g.data);
     }
     /**

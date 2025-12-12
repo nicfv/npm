@@ -12,15 +12,23 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         x: 40,
         y: 20,
     },
-    axisColor: '#666666',
+    textColor: '#222222',
+    axisColor: '#dddddd',
     axisWidth: 1,
+    density: 1,
     font: {
         name: 'sans-serif',
         size: 12,
     },
     curve: {
-        pump: '50-50*(q/200)^2',
-        system: '10+40*(q/200)^2',
+        pump: {
+            maxFlow: 200,
+            maxHead: 50,
+        },
+        system: {
+            static: 10,
+            friction: 1 / 400,
+        },
     },
     speed: {
         max: 100,
@@ -28,17 +36,18 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         steps: [25, 50, 75],
     },
     pumpCurveColor: '#ffaa55',
-    systemCuveColor: '#55ffaa',
+    systemCurveColor: '#55ffaa',
     gradient: 'Viridis',
     timestamp: {
         start: Date.now(),
         stop: Date.now() + 60 * 60 * 1000,
     },
     units: {
-        flow: 'm3/h',
-        head: 'm',
-        power: 'kW',
-        speed: '%',
+        density: 'g/cm3',
+        flow: 'gpm',
+        head: 'ft',
+        power: 'hp',
+        speed: 'rpm',
     },
 };
 
