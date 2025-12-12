@@ -111,6 +111,14 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly gradient: PaletteName;
     /**
+     * Determine whether to flip the gradient
+     */
+    readonly flipGradient: boolean;
+    /**
+     * Determine how to colorize data points with the gradient
+     */
+    readonly colorizeBy: 'time' | 'efficiency' | 'none';
+    /**
      * Timestamps for colorizing time-series data
      */
     readonly timestamp: {
@@ -163,7 +171,7 @@ export interface PumpchartDataOptions {
      */
     readonly radius: number;
     /**
-     * The **hexadecimal** color code for this data point, only used for time-independent data
+     * The **hexadecimal** color code for this data point, used as a fallback
      */
     readonly color: string;
     /**
