@@ -281,14 +281,13 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      */
     public plot(state: PumpchartState, config: Partial<PumpchartDataOptions> = {}): void {
         const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
-        const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
         const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
-        let speed: number = state.speed ?? nmax;
+        let speed: number;
         try {
-            speed = zero(speedEstimator, 0, nmax);
+            speed = state.speed ?? zero(speedEstimator, 0, nmax);
         } catch {
-            // Do nothing
+            speed = nmax;
         }
         // Calculate the efficiency if power is given
         let efficiency = 0;
@@ -318,6 +317,26 @@ export class Pumpchart extends Chart<PumpchartOptions> {
                 `\nOutput = ${SMath.round2(output, 0.1)}${this.options.units.power}` +
                 `\nEfficiency = ${SMath.round2(efficiency, 0.1)}%`
             ) : '');
+        // Determine the assigned color for this data point
+        let gradientMin = 0;
+        let gradientMax = 0;
+        let gradientValue = 0;
+        let useGradient = false;
+        if (this.options.colorizeBy === 'time' && options.timestamp > 0) {
+            gradientMin = this.options.timestamp.start;
+            gradientMax = this.options.timestamp.stop;
+            gradientValue = options.timestamp;
+            useGradient = true;
+        } else if (this.options.colorizeBy === 'efficiency' && typeof state.power === 'number') {
+            gradientMin = 0;
+            gradientMax = 100;
+            gradientValue = efficiency;
+            useGradient = true;
+        }
+        if (useGradient && this.options.flipGradient) {
+            [gradientMin, gradientMax] = [gradientMax, gradientMin];
+        }
+        const color: Color = useGradient ? Palette[this.options.gradient].getColor(gradientValue, gradientMin, gradientMax) : Color.hex(options.color);
         this.drawCircle(tip, color, state, options.radius, this.g.data);
     }
     /**
