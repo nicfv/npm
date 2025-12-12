@@ -63,6 +63,10 @@ export class Psychart extends Chart<Options> {
         }
     > = {};
     /**
+     * The serial number for identified points.
+     */
+    private pointId: number = 0;
+    /**
      * Helper function to return an array of region names and their corresponding tooltips.
      */
     public static getRegionNamesAndTips(): [Region, string][] {
@@ -440,33 +444,34 @@ export class Psychart extends Chart<Options> {
         // Determine whether to draw a line from another point.
         let lineFrom: PsyState | null = null;
         // Options for data series:
+        const seriesName: string = options.showId ? `[#${++this.pointId}] ${options.name}` : options.name;
         if (options.name) {
             // Add an item in the legend, if not previously added.
-            if (!this.series[options.name]) {
-                this.series[options.name] = {
+            if (!this.series[seriesName]) {
+                this.series[seriesName] = {
                     lastState: currentState,
                     hidden: false,
                     pointGroup: document.createElementNS(this.NS, 'g'),
                     lineGroup: document.createElementNS(this.NS, 'g'),
                 }
                 // Add the series-level group elements onto the main groups.
-                this.g.points.appendChild(this.series[options.name].pointGroup);
-                this.g.trends.appendChild(this.series[options.name].lineGroup);
+                this.g.points.appendChild(this.series[seriesName].pointGroup);
+                this.g.trends.appendChild(this.series[seriesName].lineGroup);
                 if (options.legend) {
-                    this.addToLegend(options.name, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+                    this.addToLegend(seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
                 }
             } else if (options.line === true) {
                 // Determine whether to connect the states with a line
-                lineFrom = this.series[options.name].lastState;
+                lineFrom = this.series[seriesName].lastState;
             }
             // Store the last state in order to draw a line.
-            this.series[options.name].lastState = currentState;
+            this.series[seriesName].lastState = currentState;
             // Plot the new data point onto the series group element.
-            this.series[options.name].pointGroup.appendChild(point);
+            this.series[seriesName].pointGroup.appendChild(point);
             // Create an ID label for the point if the ID has been assigned.
-            if (Number.isFinite(options.id)) {
-                const idLabel: SVGTextElement = super.createLabel(options.id.toString(), location, color, TextAnchor.NW, 0);
-                this.series[options.name].pointGroup.appendChild(idLabel);
+            if (options.showId) {
+                const idLabel: SVGTextElement = super.createLabel(this.pointId.toString(), location, color, TextAnchor.NW, 0);
+                this.series[seriesName].pointGroup.appendChild(idLabel);
             }
 
         } else {
@@ -480,8 +485,8 @@ export class Psychart extends Chart<Options> {
         // Draw a line.
         if (lineFrom) {
             const line: SVGPathElement = this.createLine(this.interpolate([lineFrom, currentState], true), color, options.pointRadius / 2);
-            if (options.name) {
-                this.series[options.name].lineGroup.appendChild(line);
+            if (seriesName) {
+                this.series[seriesName].lineGroup.appendChild(line);
             } else {
                 this.g.trends.appendChild(line);
             }
@@ -524,6 +529,7 @@ export class Psychart extends Chart<Options> {
      * Clear all plotted data from Psychart.
      */
     public clearData(): void {
+        this.pointId = 0;
         this.series = {};
         Chart.clearChildren(this.g.points);
         Chart.clearChildren(this.g.trends);
