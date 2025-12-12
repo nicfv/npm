@@ -38,6 +38,8 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     pumpCurveColor: '#ffaa55',
     systemCurveColor: '#55ffaa',
     gradient: 'Viridis',
+    flipGradient: false,
+    colorizeBy: 'time',
     timestamp: {
         start: Date.now(),
         stop: Date.now() + 60 * 60 * 1000,
