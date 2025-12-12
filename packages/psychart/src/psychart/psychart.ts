@@ -432,7 +432,7 @@ export class Psychart extends Chart<Options> {
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.hex(options.color);
         // Define a circle element and assign its attributes.
-        const point = document.createElementNS(this.NS, 'circle');
+        const point: SVGCircleElement = document.createElementNS(this.NS, 'circle');
         point.setAttribute('fill', color.toString());
         point.setAttribute('cx', `${location.x}px`);
         point.setAttribute('cy', `${location.y}px`);
@@ -463,6 +463,12 @@ export class Psychart extends Chart<Options> {
             this.series[options.name].lastState = currentState;
             // Plot the new data point onto the series group element.
             this.series[options.name].pointGroup.appendChild(point);
+            // Create an ID label for the point if the ID has been assigned.
+            if (Number.isFinite(options.id)) {
+                const idLabel: SVGTextElement = super.createLabel(options.id.toString(), location, color, TextAnchor.NW, 0);
+                this.series[options.name].pointGroup.appendChild(idLabel);
+            }
+
         } else {
             // Plot the new data point onto the base group element.
             this.g.points.appendChild(point);
