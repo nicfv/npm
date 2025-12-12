@@ -123,4 +123,4 @@ pumpchart.plot({ flow: 60, head: 40 }, { /* options here */ });
 
 ## Troubleshooting
 
-If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic with the pump curve as `h(q) = A - Bq^2` and the system curve as `h(q) = A + Bq^2`. For states "above" the pump curve, the estimated speed is 100% of the maximum speed provided in the pump options.
+If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic; see the Pumpchart example for more details. For states that land "above" the pump curve, the estimated speed is equal to the maximum speed provided in the pump options.
