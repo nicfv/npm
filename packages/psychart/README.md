@@ -74,7 +74,7 @@ It's these two properties (flow and head) that are represented on the axes of th
 
 > One way to visualize **head** if given in terms of length, is that it would be the maximum possible height that a pump could move the fluid for that flow rate.
 
-## Pump and System Curves
+### Pump and System Curves
 
 In addition to the axes and plotted data points, Pumpchart renders two additional curves. These are called the **pump performance curve** and the **system curve**. The pump performance curve(s) show the relationship between the pump's flow rate and the pressure added to the fluid. There may be concentric pump performance curves that show this relationship for different operating speeds.
 
@@ -82,14 +82,14 @@ The system curve represents the characteristics of the system, independent from 
 
 For a closed system, the system curve should theoretically pass through the origin, indicating no head loss for no flow. For an open system, the system curve will pass through a point along the y-axis, indicating that there is a head loss even for no flow. This head loss is the elevation difference between the system inlet and outlet, which the pump needs to overcome in order to produce any flow at all.
 
-## Operation Point
+### Operation Point
 
 Pumps will *always* operate somewhere along the system curve in steady-state operation. Where the pump curve (for the current pump speed) and the system curve meet is called the **operation point**. The operation point can be adjusted by one of two ways:
 
 1. **Adjusting the pump speed** which adjusts the active pump curve. If this is possible (e.g. the pump has multiple speed settings or is powered by a variable frequency drive) then this maintains the efficiency of the pump.
 1. **Throttle the system** which adjusts the system curve. This decreases pump efficiency because the same amount of power is inputted into the pump motor but it is outputting a lower flow rate.
 
-## Net Positive Suction Head
+### Net Positive Suction Head
 
 **IMPORTANT!** This curve is not (yet) shown on Pumpchart. Net positive suction head required, or NPSHr, is an extremely important property of the pump which dictates at least how much gauge pressure is required on the suction side of the pump. If the suction pressure drops below this amount, then *cavitation* will occur. This causes bubbles to form and collapse in the fluid which causes damage to piping and the pump itself.
 
@@ -105,7 +105,7 @@ pumpchart.plot({ flow: 60, head: 40 });
 
 However, Pumpchart is meant to be highly customizable and the following sections will outline some of its features.
 
-## PumpchartOptions
+### PumpchartOptions
 
 Set axes properties, unit system, define the pump performance and system curves, operating speed, and styling options here.
 
@@ -113,7 +113,7 @@ Set axes properties, unit system, define the pump performance and system curves,
 const pumpchart = new Pumpchart({ /* options here */ });
 ```
 
-## PumpchartDataOptions
+### PumpchartDataOptions
 
 Set options for plotting data, such as providing a point name, timestamp, point radius, and color.
 
@@ -123,4 +123,4 @@ pumpchart.plot({ flow: 60, head: 40 }, { /* options here */ });
 
 ## Troubleshooting
 
-If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic curves with \\\(p(q) = h_{p} - k_{p}q^{2}\\\) and \\\(s(q) = h_{s} + k_{s}q^{2}\\\) patterns. Also, make sure that these raw strings are functions of the variable `q` and reference no other variables.
+If you are experiencing errors in creating the pump curve initially, note that the pump curve must must cross the x-axis at a single point; and the pump and system curves must also cross at a single point to determine the operating point. These curves are typically quadratic with the pump curve as `h(q) = A - Bq^2` and the system curve as `h(q) = A + Bq^2`. For states "above" the pump curve, the estimated speed is 100% of the maximum speed provided in the pump options.
