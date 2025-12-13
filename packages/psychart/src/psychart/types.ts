@@ -50,6 +50,10 @@ export interface Options extends ChartOptions {
          */
         readonly axis: string;
         /**
+         * The highlight color (when clicking on a point) as a **hex-code** string.
+         */
+        readonly highlight: string;
+        /**
          * Defines the palette name used for region coloring.
          */
         readonly regionGradient: PaletteName;
