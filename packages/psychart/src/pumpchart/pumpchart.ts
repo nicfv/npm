@@ -1,11 +1,11 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
 import { defaultOptions, defaultDataOptions } from './defaults';
-import { Flow, Head, Point, Power, DataOptions, Options, State, Speed, Fluid } from './types';
+import { Flow, Head, Point, Power, DataOptions, Options, State, Speed } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 import { f, zero } from './lib';
-import { FlowUnits, FluidDensities, HeadUnits, PowerUnits, SpeedUnits } from './units';
+import { FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
 import { dimensions, Quantity, units } from 'dimensional';
 
 /**
@@ -75,13 +75,6 @@ export class Pumpchart extends Chart<Options> {
      */
     public static getPowerUnits(): Power[] {
         return Object.keys(PowerUnits) as Power[];
-    }
-    /**
-     * Get the list of all available process fluid types.
-     * @returns A list of fluid names
-     */
-    public static getFluidTypes(): Fluid[] {
-        return Object.keys(FluidDensities) as Fluid[];
     }
     /**
      * Create a new Pumpchart with custom options.
@@ -305,8 +298,7 @@ export class Pumpchart extends Chart<Options> {
             let headQty: Quantity = new Quantity(state.head, HeadUnits[this.options.units.head]);
             if (HeadUnits[this.options.units.head].dimensions.is(dimensions.Length)) {
                 // Need to multiply by specific weight to get the head in units of pressure
-                const gravity: Quantity = new Quantity(1, units.Gs);
-                const specWeight: Quantity = FluidDensities[this.options.fluid].times(gravity);
+                const specWeight: Quantity = new Quantity(SMath.clamp(this.options.specificGravity, 0, Infinity), units.gram.over(units.centimeter.pow(3)).times(units.Gs));
                 headQty = headQty.times(specWeight);
             }
             // Efficiency = Power_{out} / Power_{in}
