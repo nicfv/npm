@@ -47,6 +47,7 @@ export class Psychart extends Chart<Options> {
         axes: document.createElementNS(this.NS, 'g'),
         text: document.createElementNS(this.NS, 'g'),
         trends: document.createElementNS(this.NS, 'g'),
+        hilites: document.createElementNS(this.NS, 'g'),
         points: document.createElementNS(this.NS, 'g'),
         tooltips: document.createElementNS(this.NS, 'g'),
     };
@@ -135,9 +136,9 @@ export class Psychart extends Chart<Options> {
             hr: (this.options.unitSystem === 'IP' ? 1e3 : 1e3),
             h: (this.options.unitSystem === 'IP' ? 1 : 1e-3),
         };
-        // Create new SVG groups, and append all the
-        // layers into the chart.
+        // Append all the layers into the chart and clear highlights on click.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        this.svg.addEventListener('click', () => Chart.clearChildren(this.g.hilites));
         // Write the axis titles.
         if (this.options.showAxisNames) {
             const fontColor: Color = Color.hex(this.options.colors.font);
@@ -301,6 +302,18 @@ export class Psychart extends Chart<Options> {
         }).join(' ') + (closePath ? ' z' : ''));
     }
     /**
+     * Create an SVG circle element.
+     */
+    private createCircle(color: Color, location: PsyState, radius: number): SVGCircleElement {
+        const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
+        const point = location.toXY();
+        circle.setAttribute('fill', color.toString());
+        circle.setAttribute('cx', `${point.x}px`);
+        circle.setAttribute('cy', `${point.y}px`);
+        circle.setAttribute('r', `${radius}px`);
+        return circle;
+    }
+    /**
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
@@ -436,11 +449,7 @@ export class Psychart extends Chart<Options> {
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.hex(options.color);
         // Define a circle element and assign its attributes.
-        const point: SVGCircleElement = document.createElementNS(this.NS, 'circle');
-        point.setAttribute('fill', color.toString());
-        point.setAttribute('cx', `${location.x}px`);
-        point.setAttribute('cy', `${location.y}px`);
-        point.setAttribute('r', `${options.pointRadius}px`);
+        const point: SVGCircleElement = this.createCircle(color, currentState, options.pointRadius);
         // Determine whether to draw a line from another point.
         let lineFrom: PsyState | null = null;
         // Options for data series:
@@ -507,6 +516,12 @@ export class Psychart extends Chart<Options> {
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color, this.g.tooltips));
         point.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
+        point.addEventListener('click', e => {
+            e.stopPropagation(); // Stop the base <svg> from capturing this event
+            const highlightColor: Color = Color.hex(this.options.colors.highlight)
+            const highlight: SVGCircleElement = this.createCircle(highlightColor, currentState, options.pointRadius * 2);
+            this.g.hilites.appendChild(highlight);
+        });
     }
     /**
      * Draw a shaded region on Psychart.
@@ -533,6 +548,7 @@ export class Psychart extends Chart<Options> {
         this.series = {};
         Chart.clearChildren(this.g.points);
         Chart.clearChildren(this.g.trends);
+        Chart.clearChildren(this.g.hilites);
         Chart.clearChildren(this.legendDefs);
         Chart.clearChildren(this.legendg);
     }
