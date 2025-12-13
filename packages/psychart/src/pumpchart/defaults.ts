@@ -12,6 +12,7 @@ export const defaultOptions: Options = {
         x: 40,
         y: 20,
     },
+    highlightColor: '#ffff00',
     textColor: '#222222',
     axisColor: '#dddddd',
     axisWidth: 1,
