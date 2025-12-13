@@ -1,5 +1,5 @@
-import { prefixes, Quantity, Unit, units } from 'dimensional';
-import { Flow, Fluid, Head, Power, Speed } from './types';
+import { prefixes, Unit, units } from 'dimensional';
+import { Flow, Head, Power, Speed } from './types';
 
 /**
  * Convert the string representation of the flow to the actual units
@@ -48,10 +48,4 @@ export const PowerUnits: Record<Power, Unit> = {
     W: units.watt,
     hp: units.horsepower,
     kW: units.watt.prefix(prefixes.kilo),
-};
-/**
- * Contains the respective densities for different process fluids
- */
-export const FluidDensities: Record<Fluid, Quantity> = {
-    water: new Quantity(1, units.gram.over(units.centimeter.pow(3))),
 };
