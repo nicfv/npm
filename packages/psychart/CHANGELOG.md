@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.0
+
+- Update documentation, show formulas in Pumpchart example
+- Fix bug where rotated text would have an offset
+- Export options in respective `PsychartTypes` and `PumpchartTypes` namespaces
+- Support "highlighting" points by clicking on them, click anywhere else to clear highlights
+- Support showing an "id" underneath plotted points in `Psychart`
+    - This changes series name to `[#ID] NAME`
+- Remove density units from `Pumpchart` and add specific gravity option
+- Allow colorizing by time, efficiency, or neither (solid color only) for `Pumpchart` data
+- Support flipping gradient in `Pumpchart`
+
 ## 0.8.2
 
 - Updates for `Pumpchart`:
