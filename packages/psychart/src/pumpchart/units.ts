@@ -1,5 +1,5 @@
 import { prefixes, Unit, units } from 'dimensional';
-import { Density, Flow, Head, Power, Speed } from './types';
+import { Flow, Head, Power, Speed } from './types';
 
 /**
  * Convert the string representation of the flow to the actual units
@@ -48,16 +48,4 @@ export const PowerUnits: Record<Power, Unit> = {
     W: units.watt,
     hp: units.horsepower,
     kW: units.watt.prefix(prefixes.kilo),
-};
-/**
- * Convert the string representation of the density to the actual units
- */
-export const DensityUnits: Record<Density, Unit> = {
-    'g/cm3': units.gram.over(units.centimeter.pow(3)),
-    'g/mL': units.gram.over(units.liter.prefix(prefixes.milli)),
-    'kg/L': units.kilogram.over(units.liter),
-    'kg/m3': units.kilogram.over(units.meter.pow(3)),
-    'lb/ft3': units.poundMass.over(units.foot.pow(3)),
-    'lb/gal': units.poundMass.over(units.gallon),
-    'oz/in3': units.ounce.over(units.inch.pow(3)),
 };
