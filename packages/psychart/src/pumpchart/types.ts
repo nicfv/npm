@@ -33,9 +33,10 @@ export interface Options extends ChartOptions {
      */
     readonly padding: Point;
     /**
-     * The process fluid for the system
+     * The specific gravity of the process fluid used in
+     * the system (relative to pure water, at 1g/cm3)
      */
-    readonly fluid: Fluid;
+    readonly specificGravity: number;
     /**
      * The **hexadecimal** color code for data highlighting on click
      */
@@ -196,7 +197,3 @@ export type Speed = '%' | 'rpm' | 'Hz';
  * Available units for power
  */
 export type Power = 'W' | 'kW' | 'hp';
-/**
- * Available process fluid types.
- */
-export type Fluid = 'water';
