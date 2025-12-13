@@ -155,10 +155,6 @@ export interface Options extends ChartOptions {
          * Pump power (e.g. kW)
          */
         readonly power: Power;
-        /**
-         * Fluid density (e.g. kg/m3)
-         */
-        readonly density: Density;
     };
 }
 
@@ -200,7 +196,3 @@ export type Speed = '%' | 'rpm' | 'Hz';
  * Available units for power
  */
 export type Power = 'W' | 'kW' | 'hp';
-/**
- * Available units for density
- */
-export type Density = 'g/cm3' | 'kg/m3' | 'g/mL' | 'kg/L' | 'oz/in3' | 'lb/ft3' | 'lb/gal';
