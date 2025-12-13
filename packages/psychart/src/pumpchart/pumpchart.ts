@@ -16,9 +16,9 @@ export class Pumpchart extends Chart<Options> {
      * Layers of the SVG as groups.
      */
     private readonly g = {
+        hilites: document.createElementNS(this.NS, 'g'),
         curves: document.createElementNS(this.NS, 'g'),
         axes: document.createElementNS(this.NS, 'g'),
-        hilites: document.createElementNS(this.NS, 'g'),
         data: document.createElementNS(this.NS, 'g'),
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
@@ -89,8 +89,9 @@ export class Pumpchart extends Chart<Options> {
      */
     constructor(options: Partial<Options> = {}) {
         super(options, defaultOptions);
-        // Append all groups to the SVG.
+        // Append all groups to the SVG and clear highlights on click.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        this.svg.addEventListener('click', () => Chart.clearChildren(this.g.hilites));
         // Compute the axes limits and intervals
         this.maxFlow = 1.1 * SMath.clamp(this.options.curve.pump.maxFlow, 0, Infinity);
         this.maxHead = 1.1 * SMath.clamp(this.options.curve.pump.maxHead, 0, Infinity);
