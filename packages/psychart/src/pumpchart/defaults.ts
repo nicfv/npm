@@ -16,11 +16,11 @@ export const defaultOptions: Options = {
     textColor: '#222222',
     axisColor: '#dddddd',
     axisWidth: 1,
-    density: 1,
     font: {
         name: 'sans-serif',
         size: 12,
     },
+    fluid: 'water',
     curve: {
         pump: {
             maxFlow: 200,
@@ -46,7 +46,6 @@ export const defaultOptions: Options = {
         stop: Date.now() + 60 * 60 * 1000,
     },
     units: {
-        density: 'g/cm3',
         flow: 'gpm',
         head: 'ft',
         power: 'hp',
