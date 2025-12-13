@@ -1,13 +1,14 @@
-import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
+import { DataOptions, Options, Region, State } from './types';
 
 /**
  * Represents a set of default options for Psychart.
  */
-export const defaultPsychartOptions: PsychartOptions = {
+export const defaultOptions: Options = {
     altitude: 0,
     colors: {
         axis: '#E0E0E0', // #303030
         font: '#202020', // #D0D0D0
+        highlight: '#FFFF00',
         regionGradient: 'Purplish',
     },
     dbMax: 120,
@@ -46,15 +47,16 @@ export const defaultPsychartOptions: PsychartOptions = {
 /**
  * Represents a set of default data options.
  */
-export const defaultDataOptions: PsychartDataOptions = {
+export const defaultDataOptions: DataOptions = {
     advanced: false,
     color: '#FF0000',
     gradient: 'Viridis',
     legend: true,
     line: true,
     name: '',
-    pointRadius: 5,
+    pointRadius: 2.5,
     relHumType: 'percent',
+    showId: false,
     time: {
         start: NaN,
         now: NaN,
@@ -66,7 +68,7 @@ export const defaultDataOptions: PsychartDataOptions = {
  * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
  * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
  */
-export const regions: Record<RegionName, { tooltip: string, data: PsychartState[] }> = {
+export const regions: Record<Region, { tooltip: string, data: State[] }> = {
     'Summer (sitting)': {
         tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
         data: [

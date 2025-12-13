@@ -5,12 +5,12 @@ export { Point };
 /**
  * A human-readable name for a psychrometric envelope.
  */
-export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
+export type Region = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Givoni Comfort Zone' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)' | 'IBM TS4500 Ambient (cooling)' | 'IBM TS4500 Ambient (no cooling)' | 'IBM TS4500 Recommended';
 
 /**
  * This data object fixes the psychrometric state.
  */
-export interface PsychartState {
+export interface State {
     /**
      * Dry Bulb (db)
      */
@@ -32,7 +32,7 @@ export interface PsychartState {
 /**
  * Configuration options for Psychart.
  */
-export interface PsychartOptions extends ChartOptions {
+export interface Options extends ChartOptions {
     /**
      * The padding in pixels.
      */
@@ -49,6 +49,10 @@ export interface PsychartOptions extends ChartOptions {
          * The axis color as a **hex-code** string.
          */
         readonly axis: string;
+        /**
+         * The highlight color (when clicking on a point) as a **hex-code** string.
+         */
+        readonly highlight: string;
         /**
          * Defines the palette name used for region coloring.
          */
@@ -127,7 +131,7 @@ export interface PsychartOptions extends ChartOptions {
     /**
      * Render pre-defined shaded regions.
      */
-    readonly regions: RegionName[];
+    readonly regions: Region[];
     /**
      * Styling options for the legend. If set to `false`, will not render a legend on Psychart.
      */
@@ -154,7 +158,7 @@ export interface PsychartOptions extends ChartOptions {
 /**
  * Configuration settings for plotting data.
  */
-export interface PsychartDataOptions {
+export interface DataOptions {
     /**
      * Adds a name to a point or data series to be shown in the tooltip. Must be set to create an entry in the legend.
      */
@@ -163,6 +167,10 @@ export interface PsychartDataOptions {
      * Optionally show this point in the legend.
      */
     readonly legend: boolean;
+    /**
+     * Optionally assign a numeric ID value to this point which will be displayed within the legend and Pumpchart.
+     */
+    readonly showId: boolean;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
@@ -174,7 +182,7 @@ export interface PsychartDataOptions {
     /**
      * Determines whether or not to connect points with a line. If a `Datum` is provided, will draw a line from that point.
      */
-    readonly line: boolean | PsychartState;
+    readonly line: boolean | State;
     /**
      * Determine the solid color **hex-code** for time-independent plots.
      */

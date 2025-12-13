@@ -1,9 +1,9 @@
-import { PumpchartDataOptions, PumpchartOptions } from './types';
+import { DataOptions, Options } from './types';
 
 /**
  * Default configuration options for Pumpchart
  */
-export const defaultPumpchartOptions: PumpchartOptions = {
+export const defaultOptions: Options = {
     size: {
         x: 600,
         y: 400,
@@ -12,14 +12,15 @@ export const defaultPumpchartOptions: PumpchartOptions = {
         x: 40,
         y: 20,
     },
+    highlightColor: '#ffff00',
     textColor: '#222222',
     axisColor: '#dddddd',
     axisWidth: 1,
-    density: 1,
     font: {
         name: 'sans-serif',
         size: 12,
     },
+    specificGravity: 1,
     curve: {
         pump: {
             maxFlow: 200,
@@ -38,12 +39,13 @@ export const defaultPumpchartOptions: PumpchartOptions = {
     pumpCurveColor: '#ffaa55',
     systemCurveColor: '#55ffaa',
     gradient: 'Viridis',
+    flipGradient: false,
+    colorizeBy: 'time',
     timestamp: {
         start: Date.now(),
         stop: Date.now() + 60 * 60 * 1000,
     },
     units: {
-        density: 'g/cm3',
         flow: 'gpm',
         head: 'ft',
         power: 'hp',
@@ -54,9 +56,9 @@ export const defaultPumpchartOptions: PumpchartOptions = {
 /**
  * Default data display options for Pumpchart
  */
-export const defaultPumpchartDataOptions: PumpchartDataOptions = {
+export const defaultDataOptions: DataOptions = {
     name: '',
     color: '#ff0000',
     radius: 2.5,
-    timestamp: 0,
+    timestamp: NaN,
 };

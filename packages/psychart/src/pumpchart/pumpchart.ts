@@ -1,21 +1,22 @@
 import * as SMath from 'smath';
 import { Chart } from '../chart';
-import { defaultPumpchartDataOptions, defaultPumpchartOptions } from './defaults';
-import { Density, Flow, Head, Point, Power, PumpchartDataOptions, PumpchartOptions, PumpchartState, Speed } from './types';
+import { defaultOptions, defaultDataOptions } from './defaults';
+import { Flow, Head, Point, Power, DataOptions, Options, State, Speed } from './types';
 import { Color, Palette } from 'viridis';
 import { TextAnchor } from '../types';
 import { f, zero } from './lib';
-import { DensityUnits, FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
+import { FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
 import { dimensions, Quantity, units } from 'dimensional';
 
 /**
  * Show a pump's relationship between flow rate and pressure at different operating conditions.
  */
-export class Pumpchart extends Chart<PumpchartOptions> {
+export class Pumpchart extends Chart<Options> {
     /**
      * Layers of the SVG as groups.
      */
     private readonly g = {
+        hilites: document.createElementNS(this.NS, 'g'),
         curves: document.createElementNS(this.NS, 'g'),
         axes: document.createElementNS(this.NS, 'g'),
         data: document.createElementNS(this.NS, 'g'),
@@ -76,20 +77,14 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         return Object.keys(PowerUnits) as Power[];
     }
     /**
-     * Get the list of all available units for density.
-     * @returns A list of units
-     */
-    public static getDensityUnits(): Density[] {
-        return Object.keys(DensityUnits) as Density[];
-    }
-    /**
      * Create a new Pumpchart with custom options.
      * @param options Customization options for the new Pumpchart.
      */
-    constructor(options: Partial<PumpchartOptions> = {}) {
-        super(options, defaultPumpchartOptions);
-        // Append all groups to the SVG.
+    constructor(options: Partial<Options> = {}) {
+        super(options, defaultOptions);
+        // Append all groups to the SVG and clear highlights on click.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        this.svg.addEventListener('click', () => Chart.clearChildren(this.g.hilites));
         // Compute the axes limits and intervals
         this.maxFlow = 1.1 * SMath.clamp(this.options.curve.pump.maxFlow, 0, Infinity);
         this.maxHead = 1.1 * SMath.clamp(this.options.curve.pump.maxHead, 0, Infinity);
@@ -143,7 +138,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         const nop: number = SMath.clamp(this.options.speed.operation, 0, nmax); // operation speed
         const qmax: number = zero(q => this.s(q) - this.p(q, nmax), 0, 1e6); // flow @ max speed
         const qop: number = zero(q => this.s(q) - this.p(q, nop), 0, 1e6); // flow @ operation
-        const opPt: PumpchartState = { flow: qop, head: this.p(qop, nop), speed: nop }; // operation point
+        const opPt: State = { flow: qop, head: this.p(qop, nop), speed: nop }; // operation point
         this.drawCurve('System Curve', sysColor, 2 * this.options.axisWidth, q => this.s(q), 0, qmax);
         // Draw operation axis lines
         const operation = this.createPath([
@@ -179,7 +174,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param state Any state in this system
      * @returns An (x,y) coordinate on the screen
      */
-    private state2xy(state: PumpchartState): Point {
+    private state2xy(state: State): Point {
         const xMin: number = this.options.padding.x;
         const xMax: number = this.options.size.x - this.options.padding.x
         const yMin: number = this.options.padding.y;
@@ -195,7 +190,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param closePath Whether or not to close the path
      * @returns A `<path>` element containing the array of states
      */
-    private createPath(data: PumpchartState[], closePath = false): SVGPathElement {
+    private createPath(data: State[], closePath = false): SVGPathElement {
         const path: SVGPathElement = document.createElementNS(this.NS, 'path');
         path.setAttribute('d', 'M ' + data.map(pt => {
             const xy: Point = this.state2xy(pt);
@@ -211,7 +206,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param anchor Label text anchor
      * @param tooltip Optional tooltip text on mouse hover
      */
-    private drawLabel(content: string, location: PumpchartState, anchor: TextAnchor, tooltip?: string): void {
+    private drawLabel(content: string, location: State, anchor: TextAnchor, tooltip?: string): void {
         const textColor: Color = Color.hex(this.options.textColor);
         const label: SVGTextElement = this.createLabel(content, this.state2xy(location), textColor, anchor, 0);
         this.g.text.appendChild(label);
@@ -224,7 +219,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * Draw a curve `h = f(q)` on the curves layer.
      */
     private drawCurve(tooltip: string, color: Color, width: number, h: f, min = 0, max = this.maxFlow, steps = 1e3): void {
-        const states: PumpchartState[] = SMath.linspace(min, max, steps).map<PumpchartState>(q => { return { flow: q, head: h(q) } });
+        const states: State[] = SMath.linspace(min, max, steps).map<State>(q => { return { flow: q, head: h(q) } });
         const curve: SVGPathElement = this.createPath(states, false);
         curve.setAttribute('fill', 'none');
         curve.setAttribute('stroke', color.toString());
@@ -239,7 +234,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
     /**
      * Draw a custom circle onto any layer.
      */
-    private drawCircle(tooltip: string, color: Color, state: PumpchartState, radius: number, parent: SVGElement): void {
+    private drawCircle(tooltip: string, color: Color, state: State, radius: number, allowHighlight: boolean, parent: SVGElement): void {
         const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
         const center: Point = this.state2xy(state);
         circle.setAttribute('fill', color.toString());
@@ -250,6 +245,12 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         if (tooltip) {
             circle.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
             circle.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        }
+        if (allowHighlight) {
+            circle.addEventListener('click', e => {
+                e.stopPropagation();
+                this.drawCircle('', Color.hex(this.options.highlightColor), state, radius * 2, false, this.g.hilites);
+            });
         }
     }
     /**
@@ -279,16 +280,16 @@ export class Pumpchart extends Chart<PumpchartOptions> {
      * @param state The current state of the system
      * @param config Display options for plotting data
      */
-    public plot(state: PumpchartState, config: Partial<PumpchartDataOptions> = {}): void {
-        const options: PumpchartDataOptions = Chart.setDefaults(config, defaultPumpchartDataOptions);
-        const color: Color = options.timestamp > 0 ? Palette[this.options.gradient].getColor(options.timestamp, this.options.timestamp.start, this.options.timestamp.stop) : Color.hex(options.color);
+    public plot(state: State, config: Partial<DataOptions> = {}): void {
+        const options: DataOptions = Chart.setDefaults(config, defaultDataOptions);
+        const hasTimeStamp: boolean = Number.isFinite(options.timestamp);
         const nmax: number = SMath.clamp(this.options.speed.max, 0, Infinity);
         const speedEstimator: f = n => this.p(state.flow, n) - state.head;
-        let speed: number = state.speed ?? nmax;
+        let speed: number;
         try {
-            speed = zero(speedEstimator, 0, nmax);
+            speed = state.speed ?? zero(speedEstimator, 0, nmax);
         } catch {
-            // Do nothing
+            speed = nmax;
         }
         // Calculate the efficiency if power is given
         let efficiency = 0;
@@ -297,7 +298,8 @@ export class Pumpchart extends Chart<PumpchartOptions> {
             let headQty: Quantity = new Quantity(state.head, HeadUnits[this.options.units.head]);
             if (HeadUnits[this.options.units.head].dimensions.is(dimensions.Length)) {
                 // Need to multiply by specific weight to get the head in units of pressure
-                headQty = headQty.times(new Quantity(this.options.density, DensityUnits[this.options.units.density].times(units.Gs)));
+                const specWeight: Quantity = new Quantity(SMath.clamp(this.options.specificGravity, 0, Infinity), units.gram.over(units.centimeter.pow(3)).times(units.Gs));
+                headQty = headQty.times(specWeight);
             }
             // Efficiency = Power_{out} / Power_{in}
             // Power_{out} = Pressure * FlowRate
@@ -309,7 +311,7 @@ export class Pumpchart extends Chart<PumpchartOptions> {
         }
         const tip: string =
             (options.name ? `${options.name}\n` : '') +
-            (options.timestamp > 0 ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
+            (hasTimeStamp ? `${new Date(options.timestamp).toLocaleString()}\n` : '') +
             `Flow = ${SMath.round2(state.flow, 0.1)}${this.options.units.flow}` +
             `\nHead = ${SMath.round2(state.head, 0.1)}${this.options.units.head}` +
             `\nSpeed = ${SMath.round2(speed, 0.1)}${this.options.units.speed}${typeof state.speed === 'number' ? '' : ' (est.)'}` +
@@ -318,12 +320,33 @@ export class Pumpchart extends Chart<PumpchartOptions> {
                 `\nOutput = ${SMath.round2(output, 0.1)}${this.options.units.power}` +
                 `\nEfficiency = ${SMath.round2(efficiency, 0.1)}%`
             ) : '');
-        this.drawCircle(tip, color, state, options.radius, this.g.data);
+        // Determine the assigned color for this data point
+        let gradientMin = 0;
+        let gradientMax = 0;
+        let gradientValue = 0;
+        let useGradient = false;
+        if (this.options.colorizeBy === 'time' && hasTimeStamp) {
+            gradientMin = this.options.timestamp.start;
+            gradientMax = this.options.timestamp.stop;
+            gradientValue = options.timestamp;
+            useGradient = true;
+        } else if (this.options.colorizeBy === 'efficiency' && typeof state.power === 'number') {
+            gradientMin = 0;
+            gradientMax = 100;
+            gradientValue = efficiency;
+            useGradient = true;
+        }
+        if (useGradient && this.options.flipGradient) {
+            [gradientMin, gradientMax] = [gradientMax, gradientMin];
+        }
+        const color: Color = useGradient ? Palette[this.options.gradient].getColor(gradientValue, gradientMin, gradientMax) : Color.hex(options.color);
+        this.drawCircle(tip, color, state, options.radius, true, this.g.data);
     }
     /**
      * Clear all the data from this chart.
      */
     public clearData(): void {
         Chart.clearChildren(this.g.data);
+        Chart.clearChildren(this.g.hilites);
     }
 }

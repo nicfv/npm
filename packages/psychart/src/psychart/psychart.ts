@@ -1,15 +1,15 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate';
 import * as SMath from 'smath';
-import { PsychartOptions, RegionName, PsychartDataOptions, PsychartState } from './types';
-import { defaultDataOptions, defaultPsychartOptions, regions } from './defaults';
+import { DataOptions, Options, Region, State } from './types';
+import { defaultDataOptions, defaultOptions, regions } from './defaults';
 import { Chart } from '../chart';
 import { TextAnchor } from '../types';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
  */
-export class Psychart extends Chart<PsychartOptions> {
+export class Psychart extends Chart<Options> {
     /**
      * Defines the string representations of the current unit system.
      */
@@ -47,6 +47,7 @@ export class Psychart extends Chart<PsychartOptions> {
         axes: document.createElementNS(this.NS, 'g'),
         text: document.createElementNS(this.NS, 'g'),
         trends: document.createElementNS(this.NS, 'g'),
+        hilites: document.createElementNS(this.NS, 'g'),
         points: document.createElementNS(this.NS, 'g'),
         tooltips: document.createElementNS(this.NS, 'g'),
     };
@@ -63,10 +64,14 @@ export class Psychart extends Chart<PsychartOptions> {
         }
     > = {};
     /**
+     * The serial number for identified points.
+     */
+    private pointId = 0;
+    /**
      * Helper function to return an array of region names and their corresponding tooltips.
      */
-    public static getRegionNamesAndTips(): [RegionName, string][] {
-        return Object.entries(regions).map(([name, region]) => [name as RegionName, region.tooltip]);
+    public static getRegionNamesAndTips(): [Region, string][] {
+        return Object.entries(regions).map(([name, region]) => [name as Region, region.tooltip]);
     }
     /**
      * Convert from Celsius to Fahrenheit.
@@ -89,8 +94,8 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(options: Partial<PsychartOptions> = {}) {
-        super(options, defaultPsychartOptions);
+    constructor(options: Partial<Options> = {}) {
+        super(options, defaultOptions);
         // Check to make sure that dpMax is less than dbMax
         if (this.options.dpMax > this.options.dbMax) {
             throw new Error('Dew point maximum is greater than dry bulb range!');
@@ -131,9 +136,9 @@ export class Psychart extends Chart<PsychartOptions> {
             hr: (this.options.unitSystem === 'IP' ? 1e3 : 1e3),
             h: (this.options.unitSystem === 'IP' ? 1 : 1e-3),
         };
-        // Create new SVG groups, and append all the
-        // layers into the chart.
+        // Append all the layers into the chart and clear highlights on click.
         Object.values(this.g).forEach(group => this.svg.appendChild(group));
+        this.svg.addEventListener('click', () => Chart.clearChildren(this.g.hilites));
         // Write the axis titles.
         if (this.options.showAxisNames) {
             const fontColor: Color = Color.hex(this.options.colors.font);
@@ -231,7 +236,7 @@ export class Psychart extends Chart<PsychartOptions> {
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(regions)
-            .filter(([name,]) => this.options.regions?.includes(name as RegionName))
+            .filter(([name,]) => this.options.regions?.includes(name as Region))
             .forEach(([, region]) => {
                 // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
                 const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
@@ -295,6 +300,18 @@ export class Psychart extends Chart<PsychartOptions> {
             const xy = psy.toXY();
             return xy.x + ',' + xy.y;
         }).join(' ') + (closePath ? ' z' : ''));
+    }
+    /**
+     * Create an SVG circle element.
+     */
+    private createCircle(color: Color, location: PsyState, radius: number): SVGCircleElement {
+        const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
+        const point = location.toXY();
+        circle.setAttribute('fill', color.toString());
+        circle.setAttribute('cx', `${point.x}px`);
+        circle.setAttribute('cy', `${point.y}px`);
+        circle.setAttribute('r', `${radius}px`);
+        return circle;
     }
     /**
      * Draw an axis line given an array of psychrometric states.
@@ -410,13 +427,13 @@ export class Psychart extends Chart<PsychartOptions> {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    public plot(state: PsychartState, config: Partial<PsychartDataOptions> = {}): void {
+    public plot(state: State, config: Partial<DataOptions> = {}): void {
         // Skip series that are missing a measurement point.
         if (!Number.isFinite(state.db) || !Number.isFinite(state.other)) {
             return;
         }
         // Set default data options.
-        const options: PsychartDataOptions = Chart.setDefaults(config, defaultDataOptions);
+        const options: DataOptions = Chart.setDefaults(config, defaultDataOptions);
         // Determine whether this is time-dependent.
         const hasTimeStamp: boolean = Number.isFinite(options.time.now),
             timeSeries: boolean = hasTimeStamp && Number.isFinite(options.time.end) && Number.isFinite(options.time.start);
@@ -431,40 +448,41 @@ export class Psychart extends Chart<PsychartOptions> {
             tMax: number = (this.options.flipGradients) ? options.time.start : options.time.end,
             tNow: number = options.time.now,
             color: Color = timeSeries ? Palette[options.gradient].getColor(tNow, tMin, tMax) : Color.hex(options.color);
-        // Define a 0-length path element and assign its attributes.
-        const point = document.createElementNS(this.NS, 'path');
-        point.setAttribute('fill', 'none');
-        point.setAttribute('stroke', color.toString());
-        point.setAttribute('stroke-width', +options.pointRadius + 'px');
-        point.setAttribute('stroke-linecap', 'round');
-        point.setAttribute('vector-effect', 'non-scaling-stroke');
-        point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
+        // Define a circle element and assign its attributes.
+        const point: SVGCircleElement = this.createCircle(color, currentState, options.pointRadius);
         // Determine whether to draw a line from another point.
         let lineFrom: PsyState | null = null;
         // Options for data series:
+        const seriesName: string = options.showId ? `[#${++this.pointId}] ${options.name}` : options.name;
         if (options.name) {
             // Add an item in the legend, if not previously added.
-            if (!this.series[options.name]) {
-                this.series[options.name] = {
+            if (!this.series[seriesName]) {
+                this.series[seriesName] = {
                     lastState: currentState,
                     hidden: false,
                     pointGroup: document.createElementNS(this.NS, 'g'),
                     lineGroup: document.createElementNS(this.NS, 'g'),
                 }
                 // Add the series-level group elements onto the main groups.
-                this.g.points.appendChild(this.series[options.name].pointGroup);
-                this.g.trends.appendChild(this.series[options.name].lineGroup);
+                this.g.points.appendChild(this.series[seriesName].pointGroup);
+                this.g.trends.appendChild(this.series[seriesName].lineGroup);
                 if (options.legend) {
-                    this.addToLegend(options.name, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
+                    this.addToLegend(seriesName, timeSeries ? undefined : color, timeSeries ? options.gradient : undefined);
                 }
             } else if (options.line === true) {
                 // Determine whether to connect the states with a line
-                lineFrom = this.series[options.name].lastState;
+                lineFrom = this.series[seriesName].lastState;
             }
             // Store the last state in order to draw a line.
-            this.series[options.name].lastState = currentState;
+            this.series[seriesName].lastState = currentState;
             // Plot the new data point onto the series group element.
-            this.series[options.name].pointGroup.appendChild(point);
+            this.series[seriesName].pointGroup.appendChild(point);
+            // Create an ID label for the point if the ID has been assigned.
+            if (options.showId) {
+                const idLabel: SVGTextElement = super.createLabel(this.pointId.toString(), location, color, TextAnchor.NW, 0);
+                this.series[seriesName].pointGroup.appendChild(idLabel);
+            }
+
         } else {
             // Plot the new data point onto the base group element.
             this.g.points.appendChild(point);
@@ -476,8 +494,8 @@ export class Psychart extends Chart<PsychartOptions> {
         // Draw a line.
         if (lineFrom) {
             const line: SVGPathElement = this.createLine(this.interpolate([lineFrom, currentState], true), color, options.pointRadius / 2);
-            if (options.name) {
-                this.series[options.name].lineGroup.appendChild(line);
+            if (seriesName) {
+                this.series[seriesName].lineGroup.appendChild(line);
             } else {
                 this.g.trends.appendChild(line);
             }
@@ -498,11 +516,17 @@ export class Psychart extends Chart<PsychartOptions> {
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color, this.g.tooltips));
         point.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tooltips));
+        point.addEventListener('click', e => {
+            e.stopPropagation(); // Stop the base <svg> from capturing this event
+            const highlightColor: Color = Color.hex(this.options.colors.highlight)
+            const highlight: SVGCircleElement = this.createCircle(highlightColor, currentState, options.pointRadius * 2);
+            this.g.hilites.appendChild(highlight);
+        });
     }
     /**
      * Draw a shaded region on Psychart.
      */
-    private drawRegion(data: PsychartState[], color: Color, tooltip?: string): void {
+    private drawRegion(data: State[], color: Color, tooltip?: string): void {
         // Interpolate to get a set of psychrometric states that make the border of the region
         const states: PsyState[] = this.interpolate(data.map(datum => new PsyState(datum, this.options)), false);
         // Create the SVG element to render the shaded region
@@ -520,9 +544,11 @@ export class Psychart extends Chart<PsychartOptions> {
      * Clear all plotted data from Psychart.
      */
     public clearData(): void {
+        this.pointId = 0;
         this.series = {};
         Chart.clearChildren(this.g.points);
         Chart.clearChildren(this.g.trends);
+        Chart.clearChildren(this.g.hilites);
         Chart.clearChildren(this.legendDefs);
         Chart.clearChildren(this.legendg);
     }

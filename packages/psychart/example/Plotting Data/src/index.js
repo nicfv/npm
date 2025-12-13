@@ -87,7 +87,7 @@ function plotData() {
             name: 'Setpoint',
             legend: false, // Show in the tooltip but not create a legend entry
             color: '#DF1000', // Use a hex-code to define a single color instead of using a gradient
-            pointRadius: 8, // Enlarge the point to make it visually stand out
+            pointRadius: 4, // Enlarge the point to make it visually stand out
         }
     );
     // Draw a warning line on the 70F wetbulb line, from 70-80F dry bulb.

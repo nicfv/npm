@@ -5,7 +5,7 @@ export { Point };
 /**
  * Represents a single point in time.
  */
-export interface PumpchartState {
+export interface State {
     /**
      * Flow rate (e.g. gpm)
      */
@@ -27,15 +27,20 @@ export interface PumpchartState {
 /**
  * Configuration options for Pumpchart.
  */
-export interface PumpchartOptions extends ChartOptions {
+export interface Options extends ChartOptions {
     /**
      * The padding of Pumpchart, in pixels.
      */
     readonly padding: Point;
     /**
-     * The fluid density in the units provided
+     * The specific gravity of the process fluid used in
+     * the system (relative to pure water, at 1g/cm3)
      */
-    readonly density: number;
+    readonly specificGravity: number;
+    /**
+     * The **hexadecimal** color code for data highlighting on click
+     */
+    readonly highlightColor: string;
     /**
      * The **hexadecimal** color code for the axes labels
      */
@@ -111,6 +116,14 @@ export interface PumpchartOptions extends ChartOptions {
      */
     readonly gradient: PaletteName;
     /**
+     * Determine whether to flip the gradient
+     */
+    readonly flipGradient: boolean;
+    /**
+     * Determine how to colorize data points with the gradient
+     */
+    readonly colorizeBy: 'time' | 'efficiency' | 'none';
+    /**
      * Timestamps for colorizing time-series data
      */
     readonly timestamp: {
@@ -143,17 +156,13 @@ export interface PumpchartOptions extends ChartOptions {
          * Pump power (e.g. kW)
          */
         readonly power: Power;
-        /**
-         * Fluid density (e.g. kg/m3)
-         */
-        readonly density: Density;
     };
 }
 
 /**
  * Options for data plotting.
  */
-export interface PumpchartDataOptions {
+export interface DataOptions {
     /**
      * An optional name for this data point
      */
@@ -163,7 +172,7 @@ export interface PumpchartDataOptions {
      */
     readonly radius: number;
     /**
-     * The **hexadecimal** color code for this data point, only used for time-independent data
+     * The **hexadecimal** color code for this data point, used as a fallback
      */
     readonly color: string;
     /**
@@ -188,7 +197,3 @@ export type Speed = '%' | 'rpm' | 'Hz';
  * Available units for power
  */
 export type Power = 'W' | 'kW' | 'hp';
-/**
- * Available units for density
- */
-export type Density = 'g/cm3' | 'kg/m3' | 'g/mL' | 'kg/L' | 'oz/in3' | 'lb/ft3' | 'lb/gal';

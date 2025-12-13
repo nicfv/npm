@@ -23,9 +23,7 @@ const pumpchart = new Pumpchart({
         operation: 45, // Operational speed (rpm)
         steps: [15, 30, 45], // Minor pump curves (rpm)
     },
-    density: 1,
     units: {
-        density: 'g/cm3',
         flow: 'gpm',
         head: 'psi',
         power: 'kW',
@@ -34,7 +32,7 @@ const pumpchart = new Pumpchart({
     timestamp: { // Set the start and ending timestamps for colorizing data
         start: now,
         stop: in1hr,
-    }
+    },
 });
 
 // Plot `nData` number of data points
@@ -44,9 +42,6 @@ for (let t = now; t < in1hr; t += onehr / nData) {
     const power = flow * head / 2000;
     pumpchart.plot({ flow: flow, head: head, power: power }, { timestamp: t });
 }
-
-// pumpchart.clearData();
-// pumpchart.plot({ flow: 500, head: 150, power: 50 });
 
 // Append pumpchart to the document <body>
 document.body.append(pumpchart.getElement());
