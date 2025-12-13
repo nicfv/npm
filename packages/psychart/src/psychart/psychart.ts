@@ -65,7 +65,7 @@ export class Psychart extends Chart<Options> {
     /**
      * The serial number for identified points.
      */
-    private pointId: number = 0;
+    private pointId = 0;
     /**
      * Helper function to return an array of region names and their corresponding tooltips.
      */
