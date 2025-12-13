@@ -20,7 +20,7 @@ export const defaultOptions: Options = {
         name: 'sans-serif',
         size: 12,
     },
-    fluid: 'water',
+    specificGravity: 1,
     curve: {
         pump: {
             maxFlow: 200,
