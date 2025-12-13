@@ -8,6 +8,7 @@ export const defaultOptions: Options = {
     colors: {
         axis: '#E0E0E0', // #303030
         font: '#202020', // #D0D0D0
+        highlight: '#FFFF00',
         regionGradient: 'Purplish',
     },
     dbMax: 120,
