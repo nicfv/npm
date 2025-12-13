@@ -240,7 +240,7 @@ export class Pumpchart extends Chart<Options> {
     /**
      * Draw a custom circle onto any layer.
      */
-    private drawCircle(tooltip: string, color: Color, state: State, radius: number, parent: SVGElement): void {
+    private drawCircle(tooltip: string, color: Color, state: State, radius: number, allowHighlight: boolean, parent: SVGElement): void {
         const circle: SVGCircleElement = document.createElementNS(this.NS, 'circle');
         const center: Point = this.state2xy(state);
         circle.setAttribute('fill', color.toString());
@@ -251,6 +251,12 @@ export class Pumpchart extends Chart<Options> {
         if (tooltip) {
             circle.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color, this.g.tips));
             circle.addEventListener('mouseleave', () => Chart.clearChildren(this.g.tips));
+        }
+        if (allowHighlight) {
+            circle.addEventListener('click', e => {
+                e.stopPropagation();
+                this.drawCircle('', Color.hex(this.options.highlightColor), state, radius * 2, false, this.g.hilites);
+            });
         }
     }
     /**
@@ -339,7 +345,7 @@ export class Pumpchart extends Chart<Options> {
             [gradientMin, gradientMax] = [gradientMax, gradientMin];
         }
         const color: Color = useGradient ? Palette[this.options.gradient].getColor(gradientValue, gradientMin, gradientMax) : Color.hex(options.color);
-        this.drawCircle(tip, color, state, options.radius, this.g.data);
+        this.drawCircle(tip, color, state, options.radius, true, this.g.data);
     }
     /**
      * Clear all the data from this chart.
