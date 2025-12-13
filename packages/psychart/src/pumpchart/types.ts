@@ -33,10 +33,6 @@ export interface Options extends ChartOptions {
      */
     readonly padding: Point;
     /**
-     * The fluid density in the units provided
-     */
-    readonly density: number;
-    /**
      * The **hexadecimal** color code for data highlighting on click
      */
     readonly highlightColor: string;
