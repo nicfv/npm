@@ -18,6 +18,7 @@ export class Pumpchart extends Chart<Options> {
     private readonly g = {
         curves: document.createElementNS(this.NS, 'g'),
         axes: document.createElementNS(this.NS, 'g'),
+        hilites: document.createElementNS(this.NS, 'g'),
         data: document.createElementNS(this.NS, 'g'),
         text: document.createElementNS(this.NS, 'g'),
         tips: document.createElementNS(this.NS, 'g'),
@@ -345,5 +346,6 @@ export class Pumpchart extends Chart<Options> {
      */
     public clearData(): void {
         Chart.clearChildren(this.g.data);
+        Chart.clearChildren(this.g.hilites);
     }
 }
