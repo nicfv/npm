@@ -37,6 +37,10 @@ export interface Options extends ChartOptions {
      */
     readonly density: number;
     /**
+     * The **hexadecimal** color code for data highlighting on click
+     */
+    readonly highlightColor: string;
+    /**
      * The **hexadecimal** color code for the axes labels
      */
     readonly textColor: string;
