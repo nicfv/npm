@@ -489,6 +489,10 @@ export class Psychart extends Chart<Options> {
         }
         // Check for arbitrary origin point to draw a line.
         if (typeof options.line === 'object') {
+            // Divide by 100 if relHumType is set to 'percent'
+            if (options.line.measurement === 'dbrh' && options.relHumType === 'percent') {
+                options.line.other /= 100;
+            }
             lineFrom = new PsyState(options.line, this.options);
         }
         // Draw a line.
