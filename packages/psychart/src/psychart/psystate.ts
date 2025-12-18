@@ -100,11 +100,14 @@ export class PsyState {
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
     public toXY(): Point {
+        // Determine if additional padding is needed to show axis names
         const fontPad: number = this.options.showAxisNames ? (1.5 * this.options.font.size) : 0;
+        // The lower-left location
         const origin: Point = {
             x: this.options.padding.x + (this.options.flipXY ? fontPad : 0),
             y: this.options.padding.y + (this.options.flipXY ? fontPad : 0),
         };
+        // The upper-right location
         const bound: Point = {
             x: this.options.size.x - this.options.padding.x - (this.options.flipXY ? 0 : fontPad),
             y: this.options.size.y - this.options.padding.y - (this.options.flipXY ? 0 : fontPad),
