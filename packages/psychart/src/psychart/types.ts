@@ -26,7 +26,7 @@ export interface State {
     /**
      * The two types of measurements that were taken to fix the state.
      */
-    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp' | 'dbhr';
+    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp' | 'dbhr' | 'dbh';
 }
 
 /**
