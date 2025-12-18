@@ -1,6 +1,6 @@
 import { Psychart } from 'psychart';
 
-const ps = new Psychart({
+const psychart = new Psychart({
     unitSystem: 'SI',
     dbMax: 50, // [deg C]
     dbMin: 10, // [deg C]
@@ -11,6 +11,4 @@ const ps = new Psychart({
     showAxisNames: true,
 });
 
-window.addEventListener('load', () => {
-    document.body.append(ps.getElement());
-});
+document.body.append(psychart.getElement());
