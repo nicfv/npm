@@ -115,11 +115,4 @@ export class PsyState {
             };
         }
     }
-    /**
-     * Calculate the dry bulb temperature of dry air with enthalpy `h`
-     */
-    public static getDryAirWithEnthalpy(h: number, options: Options): PsyState {
-        const db: number = Psychrolib.GetTDryBulbFromEnthalpyAndHumRatio(h, 0);
-        return new PsyState({ db: db, other: 0, measurement: 'dbrh' }, options);
-    }
 }
