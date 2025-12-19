@@ -201,17 +201,25 @@ export class Psychart extends Chart<Options> {
                 throw new Error('Invalid y-axis type: ' + this.options.yAxis);
             }
         }
-        // Draw constant wet bulb diagonal lines.
-        Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
-            const data: PsyState[] = [];
-            // Dry bulb is always equal or greater than wet bulb.
-            for (let db = wb; db <= this.options.dbMax; db += this.options.resolution) {
-                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }, this.options));
+        switch (this.options.dAxis) {
+            case ('wb'): {
+                // Draw constant wet bulb diagonal lines.
+                Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
+                    const data: PsyState[] = [];
+                    // Dry bulb is always equal or greater than wet bulb.
+                    for (let db = wb; db <= this.options.dbMax; db += this.options.resolution) {
+                        data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }, this.options));
+                    }
+                    // Draw the axis and the label
+                    this.drawAxis(data);
+                    this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 15, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+                });
+                break;
             }
-            // Draw the axis and the label
-            this.drawAxis(data);
-            this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 15, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
-        });
+            default: {
+                throw new Error(`Invalid diagonal axis type: "${this.options.dAxis}"`);
+            }
+        }
         // Draw constant relative humidity lines.
         Psychart.getRange(0, 100, this.options.major.relHum).forEach(rh => {
             const data: PsyState[] = [];
