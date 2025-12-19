@@ -112,6 +112,10 @@ export interface Options extends ChartOptions {
      */
     readonly yAxis: 'dp' | 'hr';
     /**
+     * Defines whether to use wet bulb or enthalpy on the diagonal axis.
+     */
+    readonly dAxis: 'wb' | 'h';
+    /**
      * Determine whether to show titles below the axes.
      */
     readonly showAxisNames: boolean;
