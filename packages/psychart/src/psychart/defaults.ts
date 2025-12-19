@@ -11,6 +11,7 @@ export const defaultOptions: Options = {
         highlight: '#FFFF00',
         regionGradient: 'Purplish',
     },
+    dAxis: 'wb',
     dbMax: 120,
     dbMin: 20,
     dpMax: 90,
