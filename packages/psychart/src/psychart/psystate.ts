@@ -82,6 +82,15 @@ export class PsyState {
                 }
                 break;
             }
+            case ('dbh'): {
+                this.hr = Psychrolib.GetHumRatioFromEnthalpyAndTDryBulb(state.other, state.db);
+                this.dp = Psychrolib.GetTDewPointFromHumRatio(state.db, this.hr, this.atm);
+                [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, this.dp, this.atm);
+                if (!SMath.approx(this.h, state.other) && SMath.error(this.h, state.other) > 0.01) {
+                    throw new Error('Error in psychrolib computation. Expected: ' + state.other + ', Found: ' + this.h);
+                }
+                break;
+            }
             default: {
                 throw new Error('Invalid measurement type ' + state.measurement + '.');
             }
@@ -91,11 +100,14 @@ export class PsyState {
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
     public toXY(): Point {
+        // Determine if additional padding is needed to show axis names
         const fontPad: number = this.options.showAxisNames ? (1.5 * this.options.font.size) : 0;
+        // The lower-left location
         const origin: Point = {
             x: this.options.padding.x + (this.options.flipXY ? fontPad : 0),
             y: this.options.padding.y + (this.options.flipXY ? fontPad : 0),
         };
+        // The upper-right location
         const bound: Point = {
             x: this.options.size.x - this.options.padding.x - (this.options.flipXY ? 0 : fontPad),
             y: this.options.size.y - this.options.padding.y - (this.options.flipXY ? 0 : fontPad),
@@ -111,5 +123,11 @@ export class PsyState {
                 y: SMath.clamp(SMath.translate(this.hr, 0, this.hrMax, bound.y, origin.y), origin.y, bound.y)
             };
         }
+    }
+    /**
+     * Calculate the dry bulb temperature of dry air with enthalpy `h`
+     */
+    public static getDryBulbWithEnthalpy(h: number): number {
+        return Psychrolib.GetTDryBulbFromEnthalpyAndHumRatio(h, 0);
     }
 }

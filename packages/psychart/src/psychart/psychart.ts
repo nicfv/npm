@@ -201,17 +201,42 @@ export class Psychart extends Chart<Options> {
                 throw new Error('Invalid y-axis type: ' + this.options.yAxis);
             }
         }
-        // Draw constant wet bulb diagonal lines.
-        Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
-            const data: PsyState[] = [];
-            // Dry bulb is always equal or greater than wet bulb.
-            for (let db = wb; db <= this.options.dbMax; db += this.options.resolution) {
-                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }, this.options));
+        switch (this.options.dAxis) {
+            case ('wb'): {
+                // Draw constant wet bulb diagonal lines.
+                Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
+                    const data: PsyState[] = [];
+                    // Dry bulb is always equal or greater than wet bulb.
+                    for (let db = wb; db <= this.options.dbMax; db += this.options.resolution) {
+                        data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }, this.options));
+                    }
+                    // Draw the axis and the label
+                    this.drawAxis(data);
+                    this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 15, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
+                });
+                break;
             }
-            // Draw the axis and the label
-            this.drawAxis(data);
-            this.drawLabel(wb + (this.options.showUnits.axis ? this.units.temp : ''), data[0], TextAnchor.SE, 15, 'Wet Bulb' + (this.options.showUnits.tooltip ? ' [' + this.units.temp + ']' : ''));
-        });
+            case ('h'): {
+                // Draw constant enthalpy diagonal lines.
+                Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
+                    const data: PsyState[] = [];
+                    // Calculate the enthalpy of saturated air and dry bulb of dry air 
+                    const hSat: number = new PsyState({ db: wb, other: 1, measurement: 'dbrh' }, this.options).h;
+                    const dbMax: number = PsyState.getDryBulbWithEnthalpy(hSat);
+                    // Dry bulb is always equal or greater than wet bulb.
+                    for (let db = wb; (db <= this.options.dbMax && db <= dbMax); db += this.options.resolution) {
+                        data.push(new PsyState({ db: db, other: hSat, measurement: 'dbh' }, this.options));
+                    }
+                    // Draw the axis and the label
+                    this.drawAxis(data);
+                    this.drawLabel(SMath.round2(hSat * this.scaleFactor.h, 0.1) + (this.options.showUnits.axis ? this.units.h : ''), data[0], TextAnchor.SE, 15, 'Enthalpy' + (this.options.showUnits.tooltip ? ' [' + this.units.h + ']' : ''));
+                });
+                break;
+            }
+            default: {
+                throw new Error(`Invalid diagonal axis type: "${this.options.dAxis}"`);
+            }
+        }
         // Draw constant relative humidity lines.
         Psychart.getRange(0, 100, this.options.major.relHum).forEach(rh => {
             const data: PsyState[] = [];
@@ -489,6 +514,10 @@ export class Psychart extends Chart<Options> {
         }
         // Check for arbitrary origin point to draw a line.
         if (typeof options.line === 'object') {
+            // Divide by 100 if relHumType is set to 'percent'
+            if (options.line.measurement === 'dbrh' && options.relHumType === 'percent') {
+                options.line.other /= 100;
+            }
             lineFrom = new PsyState(options.line, this.options);
         }
         // Draw a line.

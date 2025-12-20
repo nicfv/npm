@@ -21,12 +21,13 @@ export interface State {
      * - Wet Bulb (wb)
      * - Dew Point (dp)
      * - Humidity Ratio (hr)
+     * - Enthalpy (h)
      */
     other: number;
     /**
      * The two types of measurements that were taken to fix the state.
      */
-    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp' | 'dbhr';
+    readonly measurement: 'dbwb' | 'dbrh' | 'dbdp' | 'dbhr' | 'dbh';
 }
 
 /**
@@ -111,6 +112,10 @@ export interface Options extends ChartOptions {
      * Defines whether to use dew point or humidity ratio on the Y-axis.
      */
     readonly yAxis: 'dp' | 'hr';
+    /**
+     * Defines whether to use wet bulb or enthalpy on the diagonal axis.
+     */
+    readonly dAxis: 'wb' | 'h';
     /**
      * Determine whether to show titles below the axes.
      */

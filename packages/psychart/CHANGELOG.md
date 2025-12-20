@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.0
+
+- Updates to `Psychart`:
+    - Allow dry bulb and enthalpy as a new measurement type to fix the state
+    - Add option to draw constant enthalpy lines instead of constant wet bulb lines
+    - Fix bug where arbitrary line origin relative humidity was restricted to `0-1` (float type) instead of `0-100` (percent type)
+    - Minor updates in examples to show off new features
+
 ## 0.9.0
 
 - Update documentation, show formulas in Pumpchart example
