@@ -216,6 +216,23 @@ export class Psychart extends Chart<Options> {
                 });
                 break;
             }
+            case ('h'): {
+                // Draw constant enthalpy diagonal lines.
+                Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
+                    const data: PsyState[] = [];
+                    // Calculate the enthalpy of saturated air and dry bulb of dry air 
+                    const hSat: number = new PsyState({ db: wb, other: 1, measurement: 'dbrh' }, this.options).h;
+                    const dbMax: number = PsyState.getDryBulbWithEnthalpy(hSat);
+                    // Dry bulb is always equal or greater than wet bulb.
+                    for (let db = wb; (db <= this.options.dbMax && db <= dbMax); db += this.options.resolution) {
+                        data.push(new PsyState({ db: db, other: hSat, measurement: 'dbh' }, this.options));
+                    }
+                    // Draw the axis and the label
+                    this.drawAxis(data);
+                    this.drawLabel(SMath.round2(hSat * this.scaleFactor.h, 0.1) + (this.options.showUnits.axis ? this.units.h : ''), data[0], TextAnchor.SE, 15, 'Enthalpy' + (this.options.showUnits.tooltip ? ' [' + this.units.h + ']' : ''));
+                });
+                break;
+            }
             default: {
                 throw new Error(`Invalid diagonal axis type: "${this.options.dAxis}"`);
             }
