@@ -21,6 +21,7 @@ export interface State {
      * - Wet Bulb (wb)
      * - Dew Point (dp)
      * - Humidity Ratio (hr)
+     * - Enthalpy (h)
      */
     other: number;
     /**
