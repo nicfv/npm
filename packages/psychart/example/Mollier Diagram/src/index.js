@@ -7,6 +7,7 @@ const psychart = new Psychart({
     dpMax: 40, // [deg C]
     flipXY: true,
     yAxis: 'hr', // Humidity Ratio
+    dAxis: 'h', // Enthalpy
     legend: false,
     showAxisNames: true,
 });
