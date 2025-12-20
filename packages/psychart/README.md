@@ -56,7 +56,7 @@ Different data series are independent from one another - one series may incorpor
 
 ## Errors & Troubleshooting
 
-Some errors can arise from plotting data due to the fact that wet bulb and dew point must be less than or equal to the dry bulb temperature and relative humidity must be within the range of 0-1. If relative humidity is a driving measurement, make sure that the measurement type is correct (0-1 or 0%-100%). For other measurements, make sure that they are correct, numerical values. For example, the wet bulb and dew point temperatures must be less than the dry bulb temperature.
+Some errors can arise from plotting data due to the fact that wet bulb and dew point must be less than or equal to the dry bulb temperature and relative humidity must be within the range of 0-1. If relative humidity is a driving measurement, make sure that the measurement type is correct (0-1 or 0%-100%). Errors may also occur when using dry bulb and enthalpy, if the enthalpy is below the enthalpy for dry air. Be sure to check your measurements, and enter the enthalpy as `J/kg` for SI units or `BTU/lb` for IP units. For other measurement types, make sure that they are correct, numerical values. For example, the wet bulb and dew point temperatures must be less than the dry bulb temperature.
 
 Psychart works best both visually and practically when observing a manageable amount of data, e.g. a short timespan of a few days at most. If Psychart is loading very slowly, try clicking on a data series in the legend to disable it, or clearing the plotted data using `Psychart.clearData()` and start fresh. However, this will **wipe all data** from Psychart, so make sure it's saved somewhere!
 
