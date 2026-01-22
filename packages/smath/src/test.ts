@@ -177,7 +177,9 @@ T6.is(SMath.lim(() => NaN, 0).toString(), 'NaN');
 T6.gt(SMath.lim(x => Math.sin(x) / x, 0), 0.99); // 1
 T6.le(SMath.lim(x => Math.sin(x) / x, 0), 1);
 T6.is(SMath.lim(x => Math.cos(x) / x, 0).toString(), 'NaN');
+T6.eq(SMath.lim(x => x * x / x, 0), 0);
 T6.eq(SMath.lim(x => x * x / x, 5), 5);
+T6.eq(SMath.lim(Math.cbrt, 0), 0);
 
 T6.gt(SMath.differentiate(f1, 2), 11.99); // 12
 T6.lt(SMath.differentiate(f1, 2), 12.01);
