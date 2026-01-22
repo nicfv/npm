@@ -351,7 +351,7 @@ export function shuffle<T>(stack: T[]): T[] {
  * @example
  * const y = SMath.lim(Math.log, 0); // -Infinity
  */
-export function lim(f: (x: number) => number, x: number, h = 1e-3, discontinuity_cutoff = 1): number {
+export function lim(f: (x: number) => number, x: number, h = 1e-6, discontinuity_cutoff = 1e-3): number {
     const center: number = f(x),
         left1: number = f(x - h),
         left2: number = f(x - h / 2),
@@ -364,41 +364,43 @@ export function lim(f: (x: number) => number, x: number, h = 1e-3, discontinuity
     }
     // Check the limit approaching from the left
     if (Number.isFinite(left1) && Number.isFinite(left2)) {
-        if (left2 > left1 + 2 * h) {
-            left = Infinity;
-        } else if (left2 < left1 - 2 * h) {
-            left = -Infinity;
+        if (approx(left1, left2, discontinuity_cutoff)) {
+            left = left2; // Converges
+        } else if (left1 > 0 && left2 > left1) {
+            left = Infinity; // Diverges to +inf
+        } else if (left1 < 0 && left2 < left1) {
+            left = -Infinity; // Diverges to -inf
         } else {
-            left = avg([left1, left2]);
+            left = NaN; // Diverges
         }
-    } else if (left1 === left2) { // Handles +/-Infinity case
-        left = left1;
     } else {
-        left = NaN;
+        left = NaN; // Discontinuous
     }
     // Check the limit approaching from the right
     if (Number.isFinite(right1) && Number.isFinite(right2)) {
-        if (right2 > right1 + 2 * h) {
-            right = Infinity;
-        } else if (right2 < right1 - 2 * h) {
-            right = -Infinity;
+        if (approx(right1, right2, discontinuity_cutoff)) {
+            right = right2; // Converges
+        } else if (right1 > 0 && right2 > right1) {
+            right = Infinity; // Diverges to +inf
+        } else if (right1 < 0 && right2 < right1) {
+            right = -Infinity; // Diverges to -inf
         } else {
-            right = avg([right1, right2]);
+            right = NaN; // Diverges
         }
-    } else if (right1 === right2) { // Handles +/-Infinity case
-        right = right1;
     } else {
-        right = NaN;
+        right = NaN; // Discontinuous
     }
     // Check if limits match or are close
     if (left === right) { // Handles +/-Infinity case
         return left;
-    } else if (approx(left, right, discontinuity_cutoff)) {
-        return avg([left, right]);
+    } else if (Number.isNaN(left) && Number.isNaN(right)) {
+        return center;
     } else if (!Number.isNaN(left) && Number.isNaN(right)) {
         return left;
     } else if (Number.isNaN(left) && !Number.isNaN(right)) {
         return right;
+    } else if (approx(left, right, discontinuity_cutoff)) {
+        return avg([left, right]);
     } else {
         return NaN;
     }
@@ -412,7 +414,7 @@ export function lim(f: (x: number) => number, x: number, h = 1e-3, discontinuity
  * @example
  * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
  */
-export function differentiate(f: (x: number) => number, x: number, epsilon = 1e-3): number {
+export function differentiate(f: (x: number) => number, x: number, epsilon = 1e-6): number {
     return lim(h => (f(x + h) - f(x - h)) / (2 * h), 0, epsilon);
 }
 /**
@@ -425,7 +427,7 @@ export function differentiate(f: (x: number) => number, x: number, epsilon = 1e-
  * @example
  * const y = SMath.integrate(x => 3 * x ** 2, 1, 2); // 7
  */
-export function integrate(f: (x: number) => number, a: number, b: number, Ndx = 1e3): number {
+export function integrate(f: (x: number) => number, a: number, b: number, Ndx = 1e6): number {
     return ((b - a) / Ndx) * sum(linspace(a, b, Ndx).map(x => f(x)));
 }
 /**
