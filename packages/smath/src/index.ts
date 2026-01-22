@@ -407,13 +407,13 @@ export function lim(f: (x: number) => number, x: number, h = 1e-3, discontinuity
  * Take the derivative of a function.
  * @param f Function `f(x)`
  * @param x The x-value where to evaluate the derivative
- * @param h Small step value
+ * @param epsilon Small step value
  * @returns `f'(x)`
  * @example
  * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
  */
-export function differentiate(f: (x: number) => number, x: number, h = 1e-3): number {
-    return (f(x + h) - f(x - h)) / (2 * h);
+export function differentiate(f: (x: number) => number, x: number, epsilon = 1e-3): number {
+    return lim(h => (f(x + h) - f(x - h)) / (2 * h), 0, epsilon);
 }
 /**
  * Compute the definite integral of a function.
