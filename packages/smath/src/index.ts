@@ -463,15 +463,3 @@ export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
 export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, den: number } {
     return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
 }
-/**
- * Convert any number to its hexadecimal equivalent.
- * @param n A decimal number to convert
- * @param length The minimum number of digits to show
- * @returns The number `n` converted to hexadecimal
- * @example
- * const hex = SMath.toHex(10, 2); // '0A'
- * @deprecated Use native `number.toString(16)`
- */
-export function toHex(n: number, length = 0): string {
-    return (n < 0 ? '-' : '') + (n < 0 ? -n : n).toString(16).padStart(length, '0').toUpperCase();
-}
