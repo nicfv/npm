@@ -148,11 +148,6 @@ switch (func) {
         console.log(SMath.mixed(nums[0], nums[1] ?? 1e-6));
         break;
     }
-    case ('tohex'): {
-        console.warn('toHex() is deprecated!');
-        console.log(SMath.toHex(nums[0], nums[1] ?? 0));
-        break;
-    }
     case (''): {
         console.error('Missing argument. Use with "help" for a list of commands.');
         process.exit(1);

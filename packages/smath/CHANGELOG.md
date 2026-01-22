@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.14.0
+
+- Remove `toHex` function (use native methods instead)
+- Use limit definition to differentiate
+- Fix edge cases for `lim()` and write tests
+
 ## 1.13.3
 
 - Minor tsdoc changes
