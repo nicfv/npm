@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.14.0
 
 - Remove `toHex` function (use native methods instead)
 - Use limit definition to differentiate
