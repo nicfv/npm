@@ -180,12 +180,15 @@ T6.is(SMath.lim(x => Math.cos(x) / x, 0).toString(), 'NaN');
 T6.eq(SMath.lim(x => x * x / x, 0), 0);
 T6.eq(SMath.lim(x => x * x / x, 5), 5);
 T6.eq(SMath.lim(Math.cbrt, 0), 0);
+T6.eq(SMath.lim(x => 100 * x * (x - 2) / (x - 2), 2), 200); // Need to test this with a steeper slope
 
 T6.gt(SMath.differentiate(f1, 2), 11.99); // 12
 T6.lt(SMath.differentiate(f1, 2), 12.01);
 T6.gt(SMath.differentiate(f2, -2), -0.26); // -0.25
 T6.lt(SMath.differentiate(f2, -2), -0.24);
+T6.eq(SMath.differentiate(Math.cbrt, 0), Infinity);
 T6.isTrue(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
+T6.isTrue(SMath.approx(SMath.differentiate(Math.sqrt, 0.01), 5));
 
 T6.gt(SMath.integrate(f1, 1, 3), 25.99); // 26
 T6.lt(SMath.integrate(f1, 1, 3), 26.01);
