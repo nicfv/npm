@@ -3,6 +3,8 @@
 ## Unreleased
 
 - Remove `toHex` function (use native methods instead)
+- Use limit definition to differentiate
+- Fix edge cases for `lim()` and write tests
 
 ## 1.13.3
 
