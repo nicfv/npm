@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Remove `toHex` function (use native methods instead)
+
 ## 1.13.3
 
 - Minor tsdoc changes
