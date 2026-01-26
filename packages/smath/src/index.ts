@@ -357,7 +357,9 @@ export function selectRandom<T>(stack: T[]): T {
 /**
  * Select a single index in an array at random with different weights.
  * @param weights The weights for each item
- * @returns The index of the randomly selected item
+ * @returns The 0-based index of the randomly selected item
+ * @example
+ * const index = SMath.selectRandomWeighted([3.5, 4, 1]); // 1
  */
 export function selectRandomWeighted(weights: number[]): number {
     const startWeights: number[] = [];
