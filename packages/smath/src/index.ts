@@ -341,6 +341,16 @@ export function shuffle<T>(stack: T[]): T[] {
     return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
 }
 /**
+ * Select a single item from an array at random.
+ * @param stack An array of arbirary elements
+ * @returns A single randomly selected element
+ * @example
+ * const selected = SMath.selectRandom([10, 20, 30, 40]); // 30
+ */
+export function selectRandom<T>(stack: T[]): T {
+    return stack[rint(0, stack.length - 1)];
+}
+/**
  * Take the limit of a function. A return value of `NaN` indicates
  * that no limit exists either due to a discontinuity or imaginary value.
  * @param f Function `f(x)`
