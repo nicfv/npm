@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Add `keepFocused` option to refocus the canvas when it loses focus
+
 ## 1.1.0
 
 - Add the ability to play audio!
