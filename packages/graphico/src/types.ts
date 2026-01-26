@@ -39,6 +39,10 @@ export interface Options {
      */
     readonly showMouse: boolean;
     /**
+     * Refocus the canvas when it loses focus
+     */
+    readonly keepFocused: boolean;
+    /**
      * The number of layers in this canvas
      */
     readonly numLayers: number;
