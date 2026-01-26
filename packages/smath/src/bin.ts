@@ -41,9 +41,14 @@ if (func.includes('help')) {
     console.log('  rint <min> <max>         : Generate a uniformly-distributed random integer, range inclusive');
     console.log('  rnorm [mean] [stdev]     : Generate a normally-distributed random float');
     console.log('  rdist <n> [mean] [stdev] : Generate `n` normally-distributed random floats');
+    console.log('  shuffle <c0> [c1] ... [cn]');
+    console.log('                           : Shuffle an array of arbirary elements');
+    console.log('  selectRandom <c0> [c1] ... [cn]');
+    console.log('                           : Select a number at random from a list');
+    console.log('  selectRandomWeighted <c0> [c1] ... [cn]');
+    console.log('                           : Select an index at random from a list of weights');
     console.log('  rat <n> [eps]            : Decompose `n` into a ratio');
     console.log('  mixed <n> [eps]          : Decompose `n` into a mixed number');
-    console.log('  toHex <n> [length]       : Convert decimal `n` into hexadecimal');
     process.exit(1);
 }
 
@@ -138,6 +143,18 @@ switch (func) {
     }
     case ('rdist'): {
         console.log(SMath.rdist(nums[0], nums[1], nums[2]));
+        break;
+    }
+    case ('shuffle'): {
+        console.log(SMath.shuffle(nums));
+        break;
+    }
+    case ('selectRandom'): {
+        console.log(SMath.selectRandom(nums));
+        break;
+    }
+    case ('selectRandomWeighted'): {
+        console.log(SMath.selectRandomWeighted(nums));
         break;
     }
     case ('rat'): {
