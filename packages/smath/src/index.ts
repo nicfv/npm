@@ -345,9 +345,9 @@ export function shuffle<T>(stack: T[]): T[] {
     return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
 }
 /**
- * Select a single item from an array at random.
- * @param stack An array of arbirary elements
- * @returns A single randomly selected element
+ * Select a single item from an array at random with uniform weights.
+ * @param stack An array of arbirary item
+ * @returns A single randomly selected item
  * @example
  * const selected = SMath.selectRandom([10, 20, 30, 40]); // 30
  */
@@ -355,7 +355,7 @@ export function selectRandom<T>(stack: T[]): T {
     return stack[rint(0, stack.length - 1)];
 }
 /**
- * Select a random index for items with different weights
+ * Select a single index in an array at random with different weights.
  * @param weights The weights for each item
  * @returns The index of the randomly selected item
  */
