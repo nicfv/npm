@@ -156,6 +156,12 @@ T6.eq(Math.min(...SMath.shuffle([1, 2, 3])), 1);
 T6.eq(Math.max(...SMath.shuffle([1, 2, 3])), 3);
 T6.eq(SMath.avg(SMath.shuffle([1, 2, 3])), 2);
 
+T6.eq(SMath.selectRandom([5]), 5);
+T6.eq(SMath.selectRandom([1, 1, 1, 1]), 1);
+T6.gt(SMath.selectRandom([1, 2, 3, 4]), 0);
+T6.lt(SMath.selectRandom([1, 2, 3, 4]), 5);
+T6.isTrue(typeof SMath.selectRandom([]) === 'undefined');
+
 function f1(x: number): number {
     return 3 * x ** 2;
 }
