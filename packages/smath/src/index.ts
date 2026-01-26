@@ -181,7 +181,11 @@ export function round2(n: number, base: number): number {
  * const e = SMath.error(22.5, 25); // -0.1
  */
 export function error(experimental: number, actual: number): number {
-    return (experimental - actual) / actual;
+    if (experimental === 0 && actual === 0) {
+        return 0;
+    } else {
+        return (experimental - actual) / actual;
+    }
 }
 /**
  * Add up all the inputs.
