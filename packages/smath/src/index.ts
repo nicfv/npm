@@ -181,7 +181,11 @@ export function round2(n: number, base: number): number {
  * const e = SMath.error(22.5, 25); // -0.1
  */
 export function error(experimental: number, actual: number): number {
-    return (experimental - actual) / actual;
+    if (experimental === 0 && actual === 0) {
+        return 0;
+    } else {
+        return (experimental - actual) / actual;
+    }
 }
 /**
  * Add up all the inputs.
@@ -339,6 +343,31 @@ export function shuffle<T>(stack: T[]): T[] {
         rawData.push({ index: Math.random(), value: item });
     }
     return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
+}
+/**
+ * Select a single item from an array at random with uniform weights.
+ * @param stack An array of arbirary item
+ * @returns A single randomly selected item
+ * @example
+ * const selected = SMath.selectRandom([10, 20, 30, 40]); // 30
+ */
+export function selectRandom<T>(stack: T[]): T {
+    return stack[rint(0, stack.length - 1)];
+}
+/**
+ * Select a single index in an array at random with different weights.
+ * @param weights The weights for each item
+ * @returns The index of the randomly selected item
+ */
+export function selectRandomWeighted(weights: number[]): number {
+    const startWeights: number[] = [];
+    let accumulation = 0;
+    for (const weight of weights) {
+        accumulation += clamp(0, weight, Infinity);
+        startWeights.push(accumulation);
+    }
+    const random = runif(0, accumulation);
+    return startWeights.findIndex(weight => random < weight);
 }
 /**
  * Take the limit of a function. A return value of `NaN` indicates
