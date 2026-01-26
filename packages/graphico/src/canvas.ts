@@ -17,6 +17,7 @@ export class Canvas {
         border: 'transparent',
         borderBlur: 'transparent',
         showMouse: true,
+        keepFocused: false,
         numLayers: 1,
         numTracks: 1,
         keydown() { return; },
@@ -191,10 +192,14 @@ export class Canvas {
             this.animation = requestAnimationFrame(time => this.startAnimate(time));
         });
         main.addEventListener('focusout', e => {
-            this.focused = false;
-            main.style.borderColor = this.config.borderBlur;
-            this.log(e.type, this.focused);
-            cancelAnimationFrame(this.animation);
+            if (this.config.keepFocused) {
+                main.focus();
+            } else {
+                this.focused = false;
+                main.style.borderColor = this.config.borderBlur;
+                this.log(e.type, this.focused);
+                cancelAnimationFrame(this.animation);
+            }
         });
         window.addEventListener('blur', e => {
             this.log(e.type);
