@@ -350,6 +350,16 @@ export function shuffle<T>(stack: T[]): T[] {
 export function selectRandom<T>(stack: T[]): T {
     return stack[rint(0, stack.length - 1)];
 }
+export function selectRandomWeighted(weights: number[]): number {
+    const startWeights: number[] = [];
+    let accumulation = 0;
+    for (const weight of weights) {
+        accumulation += clamp(0, weight, Infinity);
+        startWeights.push(accumulation);
+    }
+    const random = runif(0, accumulation);
+    return startWeights.findIndex(weight => random < weight);
+}
 /**
  * Take the limit of a function. A return value of `NaN` indicates
  * that no limit exists either due to a discontinuity or imaginary value.
