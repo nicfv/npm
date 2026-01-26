@@ -354,6 +354,11 @@ export function shuffle<T>(stack: T[]): T[] {
 export function selectRandom<T>(stack: T[]): T {
     return stack[rint(0, stack.length - 1)];
 }
+/**
+ * Select a random index for items with different weights
+ * @param weights The weights for each item
+ * @returns The index of the randomly selected item
+ */
 export function selectRandomWeighted(weights: number[]): number {
     const startWeights: number[] = [];
     let accumulation = 0;
