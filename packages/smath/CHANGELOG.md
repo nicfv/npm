@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.15.1
+
+- Add example for `selectRandomWeighted()`
+- Fix minor issue in tests
+
 ## 1.15.0
 
 - Fix a bug where `error(0, 0)` would return `NaN` instead of `0`
