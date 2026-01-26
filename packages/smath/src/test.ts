@@ -162,6 +162,30 @@ T6.gt(SMath.selectRandom([1, 2, 3, 4]), 0);
 T6.lt(SMath.selectRandom([1, 2, 3, 4]), 5);
 T6.isTrue(typeof SMath.selectRandom([]) === 'undefined');
 
+T6.eq(SMath.selectRandomWeighted([]), -1);
+T6.eq(SMath.selectRandomWeighted([0]), -1);
+T6.eq(SMath.selectRandomWeighted([1]), 0);
+T6.eq(SMath.selectRandomWeighted([0.1, 0, 0]), 0);
+T6.eq(SMath.selectRandomWeighted([0, 15, -3]), 1);
+T6.eq(SMath.selectRandomWeighted([-4, 0, 20]), 2);
+
+{
+    const trials = 1000;
+    const weights = [1, 6.5, 0, 2.5];
+    const counts = [0, 0, 0, 0];
+    for (let i = 0; i < trials; i++) {
+        const selected = SMath.selectRandomWeighted(weights);
+        counts[selected]++;
+    }
+    T6.eq(counts[2], 0);
+    const totalWeight = SMath.sum(weights);
+    for (const i in weights) {
+        const actual = counts[i];
+        const expected = weights[i] / totalWeight * trials;
+        T6.le(SMath.error(expected, actual), 0.2, 'Random error bars exceeded 20% allowance, try running again.');
+    }
+}
+
 function f1(x: number): number {
     return 3 * x ** 2;
 }
