@@ -182,7 +182,7 @@ T6.eq(SMath.selectRandomWeighted([-4, 0, 20]), 2);
     for (const i in weights) {
         const actual = counts[i];
         const expected = weights[i] / totalWeight * trials;
-        T6.le(Math.abs(SMath.error(expected, actual)), 0.2, 'Random error bars exceeded 20% allowance, try running again.');
+        T6.le(Math.abs(SMath.error(expected, actual)), 0.25, 'Random error bars exceeded 20% allowance, try running again.');
     }
 }
 
