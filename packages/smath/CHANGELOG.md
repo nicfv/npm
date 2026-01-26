@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.0
+
+- Fix a bug where `error(0, 0)` would return `NaN` instead of `0`
+- Remove documentation for `toHex`
+- Add function `selectRandom()` to select a random item from a list
+- Add function `selectRandomWeighted()` to select a random index from a list of weights
+- Add `shuffle`, `selectRandom`, and `selectRandomWeighted` to the executable
+
 ## 1.14.0
 
 - Remove `toHex` function (use native methods instead)
