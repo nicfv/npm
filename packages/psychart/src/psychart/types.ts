@@ -181,6 +181,10 @@ export interface DataOptions {
      */
     readonly showId: boolean;
     /**
+     * The placement for the numeric ID, represented as quadrants on a cartesian plane.
+     */
+    readonly idPlacement: 'I' | 'II' | 'III' | 'IV';
+    /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
     readonly relHumType: 'percent' | 'float';
