@@ -217,19 +217,25 @@ export class Psychart extends Chart<Options> {
                 break;
             }
             case ('h'): {
+                // Calculate the minimum and maximum enthalpy bounds
+                const minH: number = new PsyState({ db: this.options.dbMin, other: 0, measurement: 'dbrh' }, this.options).h;
+                const maxH: number = new PsyState({ db: this.options.dpMax, other: 1, measurement: 'dbrh' }, this.options).h;
                 // Draw constant enthalpy diagonal lines.
-                Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
+                Psychart.getRange(minH, maxH, this.options.major.enthalpy).forEach(h => {
                     const data: PsyState[] = [];
-                    // Calculate the enthalpy of saturated air and dry bulb of dry air 
-                    const hSat: number = new PsyState({ db: wb, other: 1, measurement: 'dbrh' }, this.options).h;
-                    const dbMax: number = PsyState.getDryBulbWithEnthalpy(hSat);
-                    // Dry bulb is always equal or greater than wet bulb.
-                    for (let db = wb; (db <= this.options.dbMax && db <= dbMax); db += this.options.resolution) {
-                        data.push(new PsyState({ db: db, other: hSat, measurement: 'dbh' }, this.options));
+                    // Calculate the dry bulb for dry air with the current enthalpy
+                    const dbDry: number = SMath.clamp(PsyState.getDryBulbWithEnthalpy(h), this.options.dbMin, this.options.dbMax);
+                    // Compute the diagonal line representing the current enthalpy axis
+                    for (let db = dbDry; db >= this.options.dbMin; db -= this.options.resolution) {
+                        try {
+                            data.unshift(new PsyState({ db: db, other: h, measurement: 'dbh' }, this.options));
+                        } catch {
+                            // Stop computation when reaching saturation line, or when new PsyState fails
+                        }
                     }
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(SMath.round2(hSat * this.scaleFactor.h, 0.1) + (this.options.showUnits.axis ? this.units.h : ''), data[0], TextAnchor.SE, 15, 'Enthalpy' + (this.options.showUnits.tooltip ? ' [' + this.units.h + ']' : ''));
+                    this.drawLabel(SMath.round2(h * this.scaleFactor.h, 0.1) + (this.options.showUnits.axis ? this.units.h : ''), data[0], TextAnchor.SE, 15, 'Enthalpy' + (this.options.showUnits.tooltip ? ' [' + this.units.h + ']' : ''));
                 });
                 break;
             }
