@@ -81,7 +81,7 @@ export class PsyState {
             case ('dbhr'): {
                 this.dp = Psychrolib.GetTDewPointFromHumRatio(state.db, state.other, this.atm);
                 [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, this.dp, this.atm);
-                if (!SMath.approx(this.hr, state.other) && SMath.error(this.hr, state.other) > PsyState.TOL) {
+                if (!SMath.approx(this.hr, state.other) && Math.abs(SMath.error(this.hr, state.other)) > PsyState.TOL) {
                     throw new Error(`Error in psychrolib computation. Expected "${state.other}" but found "${this.hr}" for ${state.measurement}.`);
                 }
                 break;
@@ -90,7 +90,7 @@ export class PsyState {
                 this.hr = Psychrolib.GetHumRatioFromEnthalpyAndTDryBulb(state.other, state.db);
                 this.dp = Psychrolib.GetTDewPointFromHumRatio(state.db, this.hr, this.atm);
                 [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, this.dp, this.atm);
-                if (!SMath.approx(this.h, state.other) && SMath.error(this.h, state.other) > PsyState.TOL) {
+                if (!SMath.approx(this.h, state.other) && Math.abs(SMath.error(this.h, state.other)) > PsyState.TOL) {
                     throw new Error(`Error in psychrolib computation. Expected "${state.other}" but found "${this.h}" for ${state.measurement}.`);
                 }
                 break;
