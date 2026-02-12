@@ -83,6 +83,10 @@ export interface Options extends ChartOptions {
          * Relative Humidity
          */
         readonly relHum: number;
+        /**
+         * Enthalpy
+         */
+        readonly enthalpy: number;
     };
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
