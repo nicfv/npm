@@ -53,6 +53,7 @@ export const defaultDataOptions: DataOptions = {
     advanced: false,
     color: '#FF0000',
     gradient: 'Viridis',
+    idPlacement: 'IV',
     legend: true,
     line: true,
     name: '',
