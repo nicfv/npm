@@ -510,7 +510,13 @@ export class Psychart extends Chart<Options> {
             this.series[seriesName].pointGroup.appendChild(point);
             // Create an ID label for the point if the ID has been assigned.
             if (options.showId) {
-                const idLabel: SVGTextElement = super.createLabel(this.pointId.toString(), location, color, TextAnchor.NW, 0);
+                const anchors: Record<DataOptions['idPlacement'], TextAnchor> = {
+                    I: TextAnchor.SW,
+                    II: TextAnchor.SE,
+                    III: TextAnchor.NE,
+                    IV: TextAnchor.NW,
+                };
+                const idLabel: SVGTextElement = super.createLabel(this.pointId.toString(), location, color, anchors[options.idPlacement], 0);
                 this.series[seriesName].pointGroup.appendChild(idLabel);
             }
 
