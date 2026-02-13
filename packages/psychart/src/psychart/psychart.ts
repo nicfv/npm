@@ -83,8 +83,9 @@ export class Psychart extends Chart<Options> {
      * Get a range of numbers used for an axis.
      */
     private static getRange(min: number, max: number, step: number): number[] {
-        const stepMin: number = SMath.round2(min + step * 1.1, step),
-            stepMax: number = SMath.round2(max - step * 1.1, step),
+        const padding = 0.9,
+            stepMin: number = SMath.round2(min + step * padding, step),
+            stepMax: number = SMath.round2(max - step * padding, step),
             range: number[] = [];
         for (let i = stepMin; i <= stepMax; i += step) {
             range.push(i);
@@ -220,8 +221,18 @@ export class Psychart extends Chart<Options> {
                 // Calculate the minimum and maximum enthalpy bounds
                 const minH: number = new PsyState({ db: this.options.dbMin, other: 0, measurement: 'dbrh' }, this.options).h;
                 const maxH: number = new PsyState({ db: this.options.dpMax, other: 1, measurement: 'dbrh' }, this.options).h;
+                // The first iteration is at the point (dbMin, 0%rh) which essentially is a single point at the lower-left of Psychart
+                // We don't want the first iteration to be at (dbMin, 100%rh) because in that case we lose any possible enthalpy lines
+                // generated lower than (dbMin, 100%rh). I'll probably forget why I did this, so try this with a high dbMin and 100%rh
+                // and notice that a large chunk of the constant enthalpy lines are "missing". This is purely a visual decision.
+                let first = true;
                 // Draw constant enthalpy diagonal lines.
                 Psychart.getRange(minH, maxH, this.options.major.enthalpy / this.scaleFactor.h).forEach(h => {
+                    // Skip the first iteration
+                    if (first) {
+                        first = false;
+                        return;
+                    }
                     const data: PsyState[] = [];
                     // Calculate the dry bulb for dry air with the current enthalpy
                     const dbDry: number = SMath.clamp(PsyState.getDryBulbWithEnthalpy(h), this.options.dbMin, this.options.dbMax);
