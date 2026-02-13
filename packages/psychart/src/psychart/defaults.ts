@@ -28,7 +28,7 @@ export const defaultOptions: Options = {
     },
     lineHeight: 1.25,
     major: {
-        enthalpy: 10000,
+        enthalpy: 10,
         humRat: 10,
         relHum: 10,
         temp: 10,
