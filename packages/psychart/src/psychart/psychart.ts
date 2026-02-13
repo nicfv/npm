@@ -221,7 +221,7 @@ export class Psychart extends Chart<Options> {
                 const minH: number = new PsyState({ db: this.options.dbMin, other: 0, measurement: 'dbrh' }, this.options).h;
                 const maxH: number = new PsyState({ db: this.options.dpMax, other: 1, measurement: 'dbrh' }, this.options).h;
                 // Draw constant enthalpy diagonal lines.
-                Psychart.getRange(minH, maxH, this.options.major.enthalpy).forEach(h => {
+                Psychart.getRange(minH, maxH, this.options.major.enthalpy / this.scaleFactor.h).forEach(h => {
                     const data: PsyState[] = [];
                     // Calculate the dry bulb for dry air with the current enthalpy
                     const dbDry: number = SMath.clamp(PsyState.getDryBulbWithEnthalpy(h), this.options.dbMin, this.options.dbMax);
