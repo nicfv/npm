@@ -38,6 +38,31 @@ T6.eq(Pumpchart.getFlowUnits().length, Object.entries(FlowUnits).length);
 
     caught = false;
     try {
+        new PsyState({ db: 60, other: -10e-3, measurement: 'dbhr' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Uncaught invalid (low) humidity ratio');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 20e-3, measurement: 'dbhr' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Uncaught invalid (high) humidity ratio');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 10e-3, measurement: 'dbhr' }, defaultOptions);
+    } catch (e) {
+        console.log(e);
+        caught = true;
+    }
+    T6.isFalse(caught, 'Caught valid humidity ratio');
+
+    caught = false;
+    try {
         new PsyState({ db: 60, other: 10, measurement: 'dbh' }, defaultOptions);
     } catch {
         caught = true;
