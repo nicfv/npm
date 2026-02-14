@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.11.0
+
+- Updates to `Psychart`:
+    - Add a configuration option for enthalpy line axis intervals
+    - When rendered, constant enthalpy lines are generated for each enthalpy interval
+    - Add a configuration option for plotted point ID placement
+    - Expose a new function to calculate the pixel distance in between two points
+    - Fix an issue where some psychrometric validity checks were not performed, and improve error messaging
+    - Add some new unit tests for psychrometric calculations
+
 ## 0.10.0
 
 - Updates to `Psychart`:
