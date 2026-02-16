@@ -36,6 +36,55 @@ T6.eq(Pumpchart.getFlowUnits().length, Object.entries(FlowUnits).length);
     }
     T6.isTrue(caught, 'Uncaught wb > db.');
 
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: -10e-3, measurement: 'dbhr' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Uncaught invalid (low) humidity ratio');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 20e-3, measurement: 'dbhr' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Uncaught invalid (high) humidity ratio');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 10e-3, measurement: 'dbhr' }, defaultOptions);
+    } catch (e) {
+        console.log(e);
+        caught = true;
+    }
+    T6.isFalse(caught, 'Caught valid humidity ratio');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 10, measurement: 'dbh' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Uncaught invalid (low) enthalpy');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 30, measurement: 'dbh' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isTrue(caught, 'Uncaught invalid (high) enthalpy');
+
+    caught = false;
+    try {
+        new PsyState({ db: 60, other: 20, measurement: 'dbh' }, defaultOptions);
+    } catch {
+        caught = true;
+    }
+    T6.isFalse(caught, 'Caught valid enthalpy');
+
     // We will not be testing the accuracy of psychrolib, but will make sure that PsyState computes.
     const ps1: PsyState = new PsyState({ db: 70, other: 0.50, measurement: 'dbrh' }, defaultOptions);
     T6.eq(ps1.db, 70);

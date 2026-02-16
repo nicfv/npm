@@ -28,6 +28,7 @@ export const defaultOptions: Options = {
     },
     lineHeight: 1.25,
     major: {
+        enthalpy: 10,
         humRat: 10,
         relHum: 10,
         temp: 10,
@@ -52,6 +53,7 @@ export const defaultDataOptions: DataOptions = {
     advanced: false,
     color: '#FF0000',
     gradient: 'Viridis',
+    idPlacement: 'IV',
     legend: true,
     line: true,
     name: '',

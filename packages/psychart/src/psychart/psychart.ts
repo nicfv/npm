@@ -83,8 +83,9 @@ export class Psychart extends Chart<Options> {
      * Get a range of numbers used for an axis.
      */
     private static getRange(min: number, max: number, step: number): number[] {
-        const stepMin: number = SMath.round2(min + step * 1.1, step),
-            stepMax: number = SMath.round2(max - step * 1.1, step),
+        const padding = 0.9,
+            stepMin: number = SMath.round2(min + step * padding, step),
+            stepMax: number = SMath.round2(max - step * padding, step),
             range: number[] = [];
         for (let i = stepMin; i <= stepMax; i += step) {
             range.push(i);
@@ -217,19 +218,35 @@ export class Psychart extends Chart<Options> {
                 break;
             }
             case ('h'): {
+                // Calculate the minimum and maximum enthalpy bounds
+                const minH: number = new PsyState({ db: this.options.dbMin, other: 0, measurement: 'dbrh' }, this.options).h;
+                const maxH: number = new PsyState({ db: this.options.dpMax, other: 1, measurement: 'dbrh' }, this.options).h;
+                // The first iteration is at the point (dbMin, 0%rh) which essentially is a single point at the lower-left of Psychart
+                // We don't want the first iteration to be at (dbMin, 100%rh) because in that case we lose any possible enthalpy lines
+                // generated lower than (dbMin, 100%rh). I'll probably forget why I did this, so try this with a high dbMin and 100%rh
+                // and notice that a large chunk of the constant enthalpy lines are "missing". This is purely a visual decision.
+                let first = true;
                 // Draw constant enthalpy diagonal lines.
-                Psychart.getRange(this.options.dbMin, this.options.dpMax, this.options.major.temp).forEach(wb => {
+                Psychart.getRange(minH, maxH, this.options.major.enthalpy / this.scaleFactor.h).forEach(h => {
+                    // Skip the first iteration
+                    if (first) {
+                        first = false;
+                        return;
+                    }
                     const data: PsyState[] = [];
-                    // Calculate the enthalpy of saturated air and dry bulb of dry air 
-                    const hSat: number = new PsyState({ db: wb, other: 1, measurement: 'dbrh' }, this.options).h;
-                    const dbMax: number = PsyState.getDryBulbWithEnthalpy(hSat);
-                    // Dry bulb is always equal or greater than wet bulb.
-                    for (let db = wb; (db <= this.options.dbMax && db <= dbMax); db += this.options.resolution) {
-                        data.push(new PsyState({ db: db, other: hSat, measurement: 'dbh' }, this.options));
+                    // Calculate the dry bulb for dry air with the current enthalpy
+                    const dbDry: number = SMath.clamp(PsyState.getDryBulbWithEnthalpy(h), this.options.dbMin, this.options.dbMax);
+                    // Compute the diagonal line representing the current enthalpy axis
+                    for (let db = dbDry; db >= this.options.dbMin; db -= this.options.resolution) {
+                        try {
+                            data.unshift(new PsyState({ db: db, other: h, measurement: 'dbh' }, this.options));
+                        } catch {
+                            // Stop computation when reaching saturation line, or when new PsyState fails
+                        }
                     }
                     // Draw the axis and the label
                     this.drawAxis(data);
-                    this.drawLabel(SMath.round2(hSat * this.scaleFactor.h, 0.1) + (this.options.showUnits.axis ? this.units.h : ''), data[0], TextAnchor.SE, 15, 'Enthalpy' + (this.options.showUnits.tooltip ? ' [' + this.units.h + ']' : ''));
+                    this.drawLabel(SMath.round2(h * this.scaleFactor.h, 0.1) + (this.options.showUnits.axis ? this.units.h : ''), data[0], TextAnchor.SE, 15, 'Enthalpy' + (this.options.showUnits.tooltip ? ' [' + this.units.h + ']' : ''));
                 });
                 break;
             }
@@ -504,7 +521,13 @@ export class Psychart extends Chart<Options> {
             this.series[seriesName].pointGroup.appendChild(point);
             // Create an ID label for the point if the ID has been assigned.
             if (options.showId) {
-                const idLabel: SVGTextElement = super.createLabel(this.pointId.toString(), location, color, TextAnchor.NW, 0);
+                const anchors: Record<DataOptions['idPlacement'], TextAnchor> = {
+                    I: TextAnchor.SW,
+                    II: TextAnchor.SE,
+                    III: TextAnchor.NE,
+                    IV: TextAnchor.NW,
+                };
+                const idLabel: SVGTextElement = super.createLabel(this.pointId.toString(), location, color, anchors[options.idPlacement], 0);
                 this.series[seriesName].pointGroup.appendChild(idLabel);
             }
 
@@ -580,5 +603,16 @@ export class Psychart extends Chart<Options> {
         Chart.clearChildren(this.g.hilites);
         Chart.clearChildren(this.legendDefs);
         Chart.clearChildren(this.legendg);
+    }
+    /**
+     * Calculate the distance between 2 states, in pixels.
+     * Note: Relative humidity must be in range [0.0-1.0]
+     */
+    public distance(state1: State, state2: State): number {
+        const xy1 = new PsyState(state1, this.options).toXY();
+        const xy2 = new PsyState(state2, this.options).toXY();
+        const dx: number = xy1.x - xy2.x;
+        const dy: number = xy1.y - xy2.y;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 }

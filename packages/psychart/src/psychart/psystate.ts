@@ -7,6 +7,10 @@ import * as Psychrolib from 'psychrolib';
  */
 export class PsyState {
     /**
+     * Calculation tolerance
+     */
+    private static readonly TOL = 0.01;
+    /**
      * Dry Bulb
      */
     public readonly db: number;
@@ -77,8 +81,8 @@ export class PsyState {
             case ('dbhr'): {
                 this.dp = Psychrolib.GetTDewPointFromHumRatio(state.db, state.other, this.atm);
                 [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, this.dp, this.atm);
-                if (!SMath.approx(this.hr, state.other) && SMath.error(this.hr, state.other) > 0.01) {
-                    throw new Error('Error in psychrolib computation. Expected: ' + state.other + ', Found: ' + this.hr);
+                if (!SMath.approx(this.hr, state.other) && Math.abs(SMath.error(this.hr, state.other)) > PsyState.TOL) {
+                    throw new Error(`Error in psychrolib computation. Expected "${state.other}" but found "${this.hr}" for ${state.measurement}.`);
                 }
                 break;
             }
@@ -86,13 +90,13 @@ export class PsyState {
                 this.hr = Psychrolib.GetHumRatioFromEnthalpyAndTDryBulb(state.other, state.db);
                 this.dp = Psychrolib.GetTDewPointFromHumRatio(state.db, this.hr, this.atm);
                 [this.hr, this.wb, this.rh, this.vp, this.h, this.v, this.s] = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, this.dp, this.atm);
-                if (!SMath.approx(this.h, state.other) && SMath.error(this.h, state.other) > 0.01) {
-                    throw new Error('Error in psychrolib computation. Expected: ' + state.other + ', Found: ' + this.h);
+                if (!SMath.approx(this.h, state.other) && Math.abs(SMath.error(this.h, state.other)) > PsyState.TOL) {
+                    throw new Error(`Error in psychrolib computation. Expected "${state.other}" but found "${this.h}" for ${state.measurement}.`);
                 }
                 break;
             }
             default: {
-                throw new Error('Invalid measurement type ' + state.measurement + '.');
+                throw new Error(`Invalid measurement type ${state.measurement}.`);
             }
         }
     }

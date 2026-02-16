@@ -83,6 +83,10 @@ export interface Options extends ChartOptions {
          * Relative Humidity
          */
         readonly relHum: number;
+        /**
+         * Enthalpy
+         */
+        readonly enthalpy: number;
     };
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
@@ -176,6 +180,10 @@ export interface DataOptions {
      * Optionally assign a numeric ID value to this point which will be displayed within the legend and Pumpchart.
      */
     readonly showId: boolean;
+    /**
+     * The placement for the numeric ID, represented as quadrants on a cartesian plane.
+     */
+    readonly idPlacement: 'I' | 'II' | 'III' | 'IV';
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
