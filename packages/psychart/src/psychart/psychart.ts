@@ -605,6 +605,18 @@ export class Psychart extends Chart<Options> {
         Chart.clearChildren(this.legendg);
     }
     /**
+     * Calculate the distance between 2 states, in pixels.
+     * Note: Relative humidity must be in range [0.0-1.0]
+     * @deprecated Please use `Psychart.getXY(state)`
+     */
+    public distance(state1: State, state2: State): number {
+        const xy1 = new PsyState(state1, this.options).toXY();
+        const xy2 = new PsyState(state2, this.options).toXY();
+        const dx: number = xy1.x - xy2.x;
+        const dy: number = xy1.y - xy2.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    /**
      * Calculate the (x,y) coordinates for any state.
      * Note: Relative humidity must be in range [0.0-1.0]
      */
