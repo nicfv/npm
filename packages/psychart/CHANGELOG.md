@@ -3,7 +3,7 @@
 ## 0.11.1
 
 - Updates to `Psychart`:
-    - Remove `distance` function
+    - Mark `distance` function as deprecated
     - Expose new `getXY` function to calculate a state's (x,y) position on Psychart
 
 ## 0.11.0
