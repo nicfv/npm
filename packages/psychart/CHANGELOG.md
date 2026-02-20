@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0
+
+- Updates to `Psychart`:
+    - Remove `distance` function
+    - Expose new `getXY` function to calculate a state's (x,y) position on Psychart
+
 ## 0.11.0
 
 - Updates to `Psychart`:
