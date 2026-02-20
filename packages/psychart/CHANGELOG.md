@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.12.0
+## 0.11.1
 
 - Updates to `Psychart`:
     - Remove `distance` function
