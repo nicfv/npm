@@ -110,6 +110,7 @@ export class Canvas {
         main.style.height = `${this.config.height * this.config.scale}px`;
         main.style.border = `${this.config.scale}px solid ${this.config.border}`;
         main.style.cursor = this.config.showMouse ? 'default' : 'none';
+        main.style.boxSizing = 'content-box';
         this.config.parent.appendChild(main);
         // Create main canvas graphics object
         const graphics = main.getContext('2d');
