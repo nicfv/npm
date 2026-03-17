@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- Set `boxSizing` to `content-box` to fix canvas sizing in common CSS overrides
+
 ## 1.1.1
 
 - Add `keepFocused` option to refocus the canvas when it loses focus
