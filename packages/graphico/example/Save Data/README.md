@@ -8,6 +8,6 @@ We can use `graphico`'s built-in functions to save data, load data, or clear dat
 
 In this example we do just that - we define a set of user profiles, each containing data of the amount of time each key was pressed. (The canvas must be focused in order to capture keyboard input.) We can switch between different user profiles to see that a unique dataset was saved under each profile.
 
-#### Security Enhancements
-
-If you use the *Inspect Element* tool (on any website or web app), you can see your local storage by typing `localStorage` in the console, and you'll notice that most of these are stored in readable text. For slightly better security, `graphico` automatically encodes and decodes this data with a base64 encoding so it cannot be directly read and edited as easily using *Inspect Element*.
+> **Security Enhancements**
+>
+> If you use the *Inspect Element* tool (on any website or web app), you can see your local storage by typing `localStorage` in the console, and you'll notice that most of these are stored in readable text. For slightly better security, `graphico` automatically encodes and decodes this data with a base64 encoding so it cannot be directly read and edited as easily using *Inspect Element*.
