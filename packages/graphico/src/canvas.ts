@@ -429,10 +429,10 @@ export class Canvas {
     public saveData<T extends StoreData>(data: T, name = 'data'): void {
         for (const rawkey in data) {
             const rawval = data[rawkey as keyof T];
-            const key = `${this.encode(name)}.${this.encode(rawkey)}.${this.encode(typeof rawval)}`;
-            const value: string = this.encode(rawval);
+            const key: string = this.encode<string>([name, rawkey]);
+            const value: string = this.encode<unknown>([rawval, typeof rawval]);
             localStorage.setItem(key, value);
-            this.log(`Saved "${name}.${rawkey}" = "${rawval}" as "${key}" = "${value}".`);
+            this.log(`Saved "${name}.${rawkey}" = "${rawval}.${typeof rawval}" as "${key}" = "${value}".`);
         }
     }
     /**
@@ -447,15 +447,15 @@ export class Canvas {
             const key: string | null = localStorage.key(index);
             if (key) {
                 try {
-                    const parts: string[] = key.split('.').map(part => this.decode(part));
-                    if (parts[0] === name && parts.length === 3) {
-                        const decoded: string = this.decode(localStorage.getItem(key) ?? '');
-                        loaded[parts[1]] = decoded;
-                        this.log(`Loaded "${parts.join('.')}" = "${decoded}" from "${key}"`);
+                    const decodedKey: string[] = this.decode<string>(key);
+                    const decodedVal: string[] = this.decode<string>(localStorage.getItem(key) ?? '');
+                    if (decodedKey[0] === name && decodedKey.length >= 2 && decodedVal.length >= 1) {
+                        loaded[decodedKey[1]] = decodedVal[0];
+                        this.log(`Loaded "${decodedKey.join('.')}" = "${decodedVal.join('.')}" from "${key}"`);
                     }
                 }
                 catch {
-                    this.log(`Skipping "${key}"...`)
+                    this.log(`Skipping "${key}"...`);
                 }
             }
         }
@@ -463,22 +463,31 @@ export class Canvas {
     }
     /**
      * Clear **all** saved data. This action is permanent!
+     * @param name An optional "namespace" to clear data from.
      */
-    public clearData(): void {
-        this.log(`Clearing ${localStorage.length} items from local storage.`);
-        localStorage.clear();
+    public clearData(name = 'data'): void {
+        for (const key of Object.keys(localStorage)) {
+            try {
+                if (this.decode<string>(key)[0] === name) {
+                    localStorage.removeItem(key);
+                    this.log(`Removed ${key} from storage.`);
+                }
+            } catch {
+                this.log(`Skipping "${key}"...`);
+            }
+        }
     }
     /**
      * Encode data for local browser storage.
      */
-    private encode<T>(raw: T): string {
-        return btoa(encodeURIComponent(JSON.stringify(raw)));
+    private encode<T>(raw: T[]): string {
+        return raw.map(item => btoa(encodeURIComponent(JSON.stringify(item)))).join('.');
     }
     /**
      * Decode data from local browser storage.
      */
-    private decode<T>(code: string): T {
-        return JSON.parse(decodeURIComponent(atob(code)));
+    private decode<T>(code: string): T[] {
+        return code.split('.').map(item => JSON.parse(decodeURIComponent(atob(item))));
     }
     /**
      * Log a message to the debug console.
