@@ -443,20 +443,17 @@ export class Canvas {
      */
     public loadData<T extends StoreData>(name = 'data'): Partial<T> {
         const loaded: StoreData = {};
-        for (let index = 0; index < localStorage.length; index++) {
-            const key: string | null = localStorage.key(index);
-            if (key) {
-                try {
-                    const decodedKey: string[] = this.decode<string>(key);
-                    const decodedVal: string[] = this.decode<string>(localStorage.getItem(key) ?? '');
-                    if (decodedKey[0] === name && decodedKey.length >= 2 && decodedVal.length >= 1) {
-                        loaded[decodedKey[1]] = decodedVal[0];
-                        this.log(`Loaded "${decodedKey.join('.')}" = "${decodedVal.join('.')}" from "${key}"`);
-                    }
+        for (const key of Object.keys(localStorage)) {
+            try {
+                const decodedKey: string[] = this.decode<string>(key);
+                const decodedVal: string[] = this.decode<string>(localStorage.getItem(key) ?? '');
+                if (decodedKey[0] === name && decodedKey.length >= 2 && decodedVal.length >= 1) {
+                    loaded[decodedKey[1]] = decodedVal[0];
+                    this.log(`Loaded "${decodedKey.join('.')}" = "${decodedVal.join('.')}" from "${key}"`);
                 }
-                catch {
-                    this.log(`Skipping "${key}"...`);
-                }
+            }
+            catch {
+                this.log(`Skipping "${key}"...`);
             }
         }
         return loaded as Partial<T>;
