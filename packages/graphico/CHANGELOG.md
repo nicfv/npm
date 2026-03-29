@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- Add functions to save, load, and clear data (local browser storage)
+- Add new example showing how to save, load, and clear data
+
 ## 1.1.2
 
 - Set `boxSizing` to `content-box` to fix canvas sizing in common CSS overrides

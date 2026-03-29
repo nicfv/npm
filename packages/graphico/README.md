@@ -13,6 +13,7 @@
 - **User interaction** captured via keyboard inputs or mouse movements or clicks
 - Multiple audio tracks supported by system **audio player** with volume, mute, and loop toggle
 - Built-in logic for **screenshots** and **screen recordings** that capture both video and audio
+- Secure and convenient **browser storage** that persists across browser and system restarts
 
 ## Caveats
 

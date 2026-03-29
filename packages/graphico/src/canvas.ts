@@ -1,4 +1,4 @@
-import { Drawable, Options } from '.';
+import { Drawable, Options, StoreData } from '.';
 
 /**
  * Represents a canvas for drawing and animating
@@ -419,6 +419,72 @@ export class Canvas {
         } else {
             this.layers[layer].clearRect(0, 0, this.config.width, this.config.height);
         }
+    }
+    /**
+     * Save arbitrary data to the browser storage.
+     * **Warning:** This will overwrite any existing data under these object keys.
+     * @param data The arbirary data object to save
+     * @param name An optional "namespace" to store the data, which can be assigned when a user has multiple profiles, for example
+     */
+    public saveData<T extends StoreData>(data: T, name = 'data'): void {
+        for (const rawkey in data) {
+            const rawval = data[rawkey as keyof T];
+            const key: string = this.encode<string>([name, rawkey]);
+            const value: string = this.encode<unknown>([rawval, typeof rawval]);
+            localStorage.setItem(key, value);
+            this.log(`Saved "${name}.${rawkey}" = "${rawval}.${typeof rawval}" as "${key}" = "${value}".`);
+        }
+    }
+    /**
+     * Load arbitrary data from the browser storage.
+     * **Warning:** The loaded data object is not strictly type-checked or sanitized, so it may have missing fields or contain extra fields. It's good practice to manually validate the data once it's loaded from storage.
+     * @param name An optional "namespace" to load data from, assigned when saving data
+     * @returns The data object loaded from browser storage
+     */
+    public loadData<T extends StoreData>(name = 'data'): Partial<T> {
+        const loaded: StoreData = {};
+        for (const key of Object.keys(localStorage)) {
+            try {
+                const decodedKey: string[] = this.decode<string>(key);
+                const decodedVal: string[] = this.decode<string>(localStorage.getItem(key) ?? '');
+                if (decodedKey[0] === name && decodedKey.length >= 2 && decodedVal.length >= 1) {
+                    loaded[decodedKey[1]] = decodedVal[0];
+                    this.log(`Loaded "${decodedKey.join('.')}" = "${decodedVal.join('.')}" from "${key}"`);
+                }
+            }
+            catch {
+                this.log(`Skipping "${key}"...`);
+            }
+        }
+        return loaded as Partial<T>;
+    }
+    /**
+     * Clear **all** saved data. This action is permanent!
+     * @param name An optional "namespace" to clear data from.
+     */
+    public clearData(name = 'data'): void {
+        for (const key of Object.keys(localStorage)) {
+            try {
+                if (this.decode<string>(key)[0] === name) {
+                    localStorage.removeItem(key);
+                    this.log(`Removed ${key} from storage.`);
+                }
+            } catch {
+                this.log(`Skipping "${key}"...`);
+            }
+        }
+    }
+    /**
+     * Encode data for local browser storage.
+     */
+    private encode<T>(raw: T[]): string {
+        return raw.map(item => btoa(encodeURIComponent(JSON.stringify(item)))).join('.');
+    }
+    /**
+     * Decode data from local browser storage.
+     */
+    private decode<T>(code: string): T[] {
+        return code.split('.').map(item => JSON.parse(decodeURIComponent(atob(item))));
     }
     /**
      * Log a message to the debug console.
