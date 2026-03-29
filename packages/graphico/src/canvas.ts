@@ -429,10 +429,10 @@ export class Canvas {
     public saveData<T extends StoreData>(data: T, name = 'data'): void {
         for (const rawkey in data) {
             const rawval = data[rawkey as keyof T];
-            const key: string = `${btoa(encodeURIComponent(name))}.${btoa(encodeURIComponent(rawkey))}.${typeof rawval}`;
-            const value: string = btoa(encodeURIComponent(JSON.stringify(rawval)));
+            const key = `${this.encode(name)}.${this.encode(rawkey)}.${this.encode(typeof rawval)}`;
+            const value: string = this.encode(rawval);
             localStorage.setItem(key, value);
-            this.log(`Saved ${name}.${rawkey} = ${rawval} as ${key} = ${value}.`);
+            this.log(`Saved "${name}.${rawkey}" = "${rawval}" as "${key}" = "${value}".`);
         }
     }
     /**
@@ -446,11 +446,16 @@ export class Canvas {
         for (let index = 0; index < localStorage.length; index++) {
             const key: string | null = localStorage.key(index);
             if (key) {
-                const parts: string[] = key.split('.').map(part => decodeURIComponent(atob(part)));
-                if (parts[0] === name) {
-                    const decoded: string = JSON.parse(decodeURIComponent(atob(localStorage.getItem(key) ?? '')));
-                    loaded[parts[1]] = decoded;
-                    this.log(`Loaded ${name}.${parts[1]} = ${decoded} from ${key}`);
+                try {
+                    const parts: string[] = key.split('.').map(part => this.decode(part));
+                    if (parts[0] === name && parts.length === 3) {
+                        const decoded: string = this.decode(localStorage.getItem(key) ?? '');
+                        loaded[parts[1]] = decoded;
+                        this.log(`Loaded "${parts.join('.')}" = "${decoded}" from "${key}"`);
+                    }
+                }
+                catch {
+                    this.log(`Skipping "${key}"...`)
                 }
             }
         }
@@ -460,7 +465,20 @@ export class Canvas {
      * Clear **all** saved data. This action is permanent!
      */
     public clearData(): void {
+        this.log(`Clearing ${localStorage.length} items from local storage.`);
         localStorage.clear();
+    }
+    /**
+     * Encode data for local browser storage.
+     */
+    private encode<T>(raw: T): string {
+        return btoa(encodeURIComponent(JSON.stringify(raw)));
+    }
+    /**
+     * Decode data from local browser storage.
+     */
+    private decode<T>(code: string): T {
+        return JSON.parse(decodeURIComponent(atob(code)));
     }
     /**
      * Log a message to the debug console.
