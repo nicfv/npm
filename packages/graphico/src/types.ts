@@ -97,4 +97,4 @@ export interface Drawable {
 /**
  * An arbitrary object which can be saved or loaded from browser storage.
  */
-export type StoreData = Record<string, boolean | number | string | null | undefined>;
+export type StoreData = Record<string, unknown>;
