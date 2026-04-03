@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1
+
+- Overhaul saving, loading, and clearing local browser data
+    - Should run much faster now (e.g. O(1) instead of O(n))
+    - Now accepts generic data types, it doesn't have to extend `StoreData`
+- Minor updates in the example showing that loading data may return `undefined`
+- Remove unnecessary `StoreData` object
+
 ## 1.2.0
 
 - Add functions to save, load, and clear data (local browser storage)

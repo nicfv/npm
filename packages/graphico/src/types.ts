@@ -94,7 +94,3 @@ export interface Drawable {
      */
     draw(graphics: CanvasRenderingContext2D): void;
 }
-/**
- * An arbitrary object which can be saved or loaded from browser storage.
- */
-export type StoreData = Record<string, unknown>;
