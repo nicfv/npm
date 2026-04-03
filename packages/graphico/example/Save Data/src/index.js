@@ -50,7 +50,6 @@ x = Clear data for current profile.
 <any key> = Count # of times pressed.`);
 
 const canv = new Canvas({
-    debug: true,
     border: 'black',
     borderBlur: 'lightgray',
     width: 600,
@@ -59,7 +58,7 @@ const canv = new Canvas({
         if (/[1-9]/.test(key)) {
             // Pull up a user's profile
             user = `user${key}`;
-            data = canv.loadData(user);
+            data = canv.loadData(user) ?? {}; // loadData may be undefined, so default to empty object
             action.setText(`Loaded data for ${user}!`);
         } else if (key === '0') {
             // Log out of the current user
