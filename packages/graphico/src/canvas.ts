@@ -430,7 +430,7 @@ export class Canvas {
         const key: string = this.encode<string>(name);
         const value: string = this.encode<T>(data);
         localStorage.setItem(key, value);
-        this.log(`Saved "${name}" = "${data}" as "${key}" = "${value}".`);
+        this.log(`Saved "${data}" in ${name}.`);
     }
     /**
      * Load arbitrary data from the browser storage.
@@ -444,10 +444,10 @@ export class Canvas {
         if (value) {
             try {
                 const decoded: T = this.decode<T>(value);
-                this.log(`Loaded "${name}" = "${decoded}" from "${key}".`);
+                this.log(`Loaded "${decoded}" from ${name}.`);
                 return decoded;
             } catch {
-                this.log(`Failed to load "${name}" from "${key}".`);
+                this.log(`Failed to load ${name}.`);
             }
         }
         return undefined;
@@ -459,7 +459,7 @@ export class Canvas {
     public clearData(name = 'data'): void {
         const key: string = this.encode<string>(name);
         localStorage.removeItem(key);
-        this.log(`Removed ${key} from storage.`);
+        this.log(`Removed ${name} from storage.`);
     }
     /**
      * Encode data for local browser storage.
