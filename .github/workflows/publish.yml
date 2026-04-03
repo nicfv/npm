@@ -23,8 +23,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24
-      - name: Update NPM
-        run: npm i -g npm@latest
       - name: Publish packages
         run: .github/workflows/run publish
       - name: Setup Pages
