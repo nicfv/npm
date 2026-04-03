@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+- Overhaul saving, loading, and clearing local browser data
+    - Should run much faster now (e.g. O(1) instead of O(n))
+- Minor updates in the example showing that loading data may return `undefined`
+
 ## 1.2.0
 
 - Add functions to save, load, and clear data (local browser storage)
