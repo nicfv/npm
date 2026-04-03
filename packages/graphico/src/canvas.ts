@@ -1,4 +1,4 @@
-import { Drawable, Options, StoreData } from '.';
+import { Drawable, Options } from '.';
 
 /**
  * Represents a canvas for drawing and animating
@@ -426,14 +426,11 @@ export class Canvas {
      * @param data The arbirary data object to save
      * @param name An optional "namespace" to store the data, which can be assigned when a user has multiple profiles, for example
      */
-    public saveData<T extends StoreData>(data: T, name = 'data'): void {
-        for (const rawkey in data) {
-            const rawval = data[rawkey as keyof T];
-            const key: string = this.encode<string>([name, rawkey]);
-            const value: string = this.encode<unknown>([rawval, typeof rawval]);
-            localStorage.setItem(key, value);
-            this.log(`Saved "${name}.${rawkey}" = "${rawval}.${typeof rawval}" as "${key}" = "${value}".`);
-        }
+    public saveData<T>(data: T, name = 'data'): void {
+        const key: string = this.encode<string>(name);
+        const value: string = this.encode<T>(data);
+        localStorage.setItem(key, value);
+        this.log(`Saved "${name}" = "${data}" as "${key}" = "${value}".`);
     }
     /**
      * Load arbitrary data from the browser storage.
@@ -441,50 +438,40 @@ export class Canvas {
      * @param name An optional "namespace" to load data from, assigned when saving data
      * @returns The data object loaded from browser storage
      */
-    public loadData<T extends StoreData>(name = 'data'): Partial<T> {
-        const loaded: StoreData = {};
-        for (const key of Object.keys(localStorage)) {
+    public loadData<T>(name = 'data'): Partial<T> | undefined {
+        const key: string = this.encode<string>(name);
+        const value: string | null = localStorage.getItem(key);
+        if (value) {
             try {
-                const decodedKey: string[] = this.decode<string>(key);
-                const decodedVal: string[] = this.decode<string>(localStorage.getItem(key) ?? '');
-                if (decodedKey[0] === name && decodedKey.length >= 2 && decodedVal.length >= 1) {
-                    loaded[decodedKey[1]] = decodedVal[0];
-                    this.log(`Loaded "${decodedKey.join('.')}" = "${decodedVal.join('.')}" from "${key}"`);
-                }
-            }
-            catch {
-                this.log(`Skipping "${key}"...`);
+                const decoded: T = this.decode<T>(value);
+                this.log(`Loaded "${name}" = "${decoded}" from "${key}".`);
+                return decoded;
+            } catch {
+                this.log(`Failed to load "${name}" from "${key}".`);
             }
         }
-        return loaded as Partial<T>;
+        return undefined;
     }
     /**
      * Clear **all** saved data. This action is permanent!
      * @param name An optional "namespace" to clear data from.
      */
     public clearData(name = 'data'): void {
-        for (const key of Object.keys(localStorage)) {
-            try {
-                if (this.decode<string>(key)[0] === name) {
-                    localStorage.removeItem(key);
-                    this.log(`Removed ${key} from storage.`);
-                }
-            } catch {
-                this.log(`Skipping "${key}"...`);
-            }
-        }
+        const key: string = this.encode<string>(name);
+        localStorage.removeItem(key);
+        this.log(`Removed ${key} from storage.`);
     }
     /**
      * Encode data for local browser storage.
      */
-    private encode<T>(raw: T[]): string {
-        return raw.map(item => btoa(encodeURIComponent(JSON.stringify(item)))).join('.');
+    private encode<T>(raw: T): string {
+        return btoa(encodeURIComponent(JSON.stringify(raw)));
     }
     /**
      * Decode data from local browser storage.
      */
-    private decode<T>(code: string): T[] {
-        return code.split('.').map(item => JSON.parse(decodeURIComponent(atob(item))));
+    private decode<T>(code: string): T {
+        return JSON.parse(decodeURIComponent(atob(code)));
     }
     /**
      * Log a message to the debug console.
