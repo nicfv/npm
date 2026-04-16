@@ -1,10 +1,10 @@
 import { Color, Palette, PaletteName } from 'viridis';
-import { PsyState } from './psystate';
+import { PsyState } from './psystate.js';
 import * as SMath from 'smath';
-import { DataOptions, Options, Region, State } from './types';
-import { defaultDataOptions, defaultOptions, regions } from './defaults';
-import { Chart } from '../chart';
-import { TextAnchor } from '../types';
+import { DataOptions, Options, Region, State } from './types.js';
+import { defaultDataOptions, defaultOptions, regions } from './defaults.js';
+import { Chart } from '../chart.js';
+import { TextAnchor } from '../types.js';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.

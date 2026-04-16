@@ -1,4 +1,4 @@
-import { Prefix } from '../prefix';
+import { Prefix } from '../prefix.js';
 
 export const quetta = new Prefix('Q', 1e30);
 export const ronna = new Prefix('R', 1e27);

@@ -1,4 +1,4 @@
-import { Compound } from './compound';
+import { Compound } from './compound.js';
 
 /**
  * Represents a physical base dimension.

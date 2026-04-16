@@ -1,5 +1,5 @@
 import { Color } from 'viridis';
-import { ChartOptions, Point, TextAnchor } from './types';
+import { ChartOptions, Point, TextAnchor } from './types.js';
 
 /**
  * Represents a generic SVG chart to be inherited by another class.

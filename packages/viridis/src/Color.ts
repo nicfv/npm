@@ -1,6 +1,6 @@
 import * as SMath from 'smath';
-import { HSL, RGB } from './types';
-import { hsl2rgb, rgb2hsl } from './lib';
+import { HSL, RGB } from './types.js';
+import { hsl2rgb, rgb2hsl } from './lib.js';
 
 /**
  * Structure for storing colors based on RGBa values.

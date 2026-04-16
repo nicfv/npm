@@ -1,10 +1,10 @@
 import * as T6 from 't6';
 import * as SMath from 'smath';
-import { Color } from './Color';
-import { Gradient } from './Gradient';
-import { Palette, PaletteName } from './Palette';
-import { HSL, RGB } from './types';
-import { hsl2rgb, rgb2hsl } from './lib';
+import { Color } from './Color.js';
+import { Gradient } from './Gradient.js';
+import { Palette, PaletteName } from './Palette.js';
+import { HSL, RGB } from './types.js';
+import { hsl2rgb, rgb2hsl } from './lib.js';
 
 // Test conversion functions
 for (let red = 0; red < 256; red += 5) {

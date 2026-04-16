@@ -1,4 +1,4 @@
-import { DataOptions, Options } from './types';
+import { DataOptions, Options } from './types.js';
 
 /**
  * Default configuration options for Pumpchart

@@ -1,5 +1,5 @@
-import { config } from './config';
-import { Unit } from './unit';
+import { config } from './config.js';
+import { Unit } from './unit.js';
 import * as SMath from 'smath';
 
 /**

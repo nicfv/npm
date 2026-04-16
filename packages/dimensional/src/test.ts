@@ -1,7 +1,7 @@
 import * as T6 from 't6';
 import * as SMath from 'smath';
-import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity, config } from '.';
-import { AmountOfSubstance } from './defaults/dimensions';
+import { prefixes, dimensions, units, Prefix, Dimension, Unit, Quantity, config } from './index.js';
+import { AmountOfSubstance } from './defaults/dimensions.js';
 
 {
     // Dimension

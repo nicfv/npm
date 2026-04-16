@@ -1,5 +1,5 @@
 import { PaletteName } from 'viridis';
-import { ChartOptions, Point } from '../types';
+import { ChartOptions, Point } from '../types.js';
 export { Point };
 
 /**

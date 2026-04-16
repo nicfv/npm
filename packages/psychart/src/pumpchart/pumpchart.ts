@@ -1,11 +1,11 @@
 import * as SMath from 'smath';
-import { Chart } from '../chart';
-import { defaultOptions, defaultDataOptions } from './defaults';
-import { Flow, Head, Point, Power, DataOptions, Options, State, Speed } from './types';
+import { Chart } from '../chart.js';
+import { defaultOptions, defaultDataOptions } from './defaults.js';
+import { Flow, Head, Point, Power, DataOptions, Options, State, Speed } from './types.js';
 import { Color, Palette } from 'viridis';
-import { TextAnchor } from '../types';
-import { f, zero } from './lib';
-import { FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units';
+import { TextAnchor } from '../types.js';
+import { f, zero } from './lib.js';
+import { FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './units.js';
 import { dimensions, Quantity, units } from 'dimensional';
 
 /**

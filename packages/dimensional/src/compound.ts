@@ -1,5 +1,5 @@
 import * as SMath from 'smath';
-import { config } from './config';
+import { config } from './config.js';
 
 /**
  * Represents a compound number.
