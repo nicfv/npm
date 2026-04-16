@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0
+
+- Compatibility update for Typescript v6+
+
 ## 1.3.2
 
 - Fix major bug where custom units with prefixes would have incorrect conversion factors

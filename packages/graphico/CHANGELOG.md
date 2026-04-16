@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- Compatibility update for Typescript v6+
+
 ## 1.2.1
 
 - Overhaul saving, loading, and clearing local browser data
