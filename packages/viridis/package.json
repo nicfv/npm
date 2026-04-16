@@ -3,6 +3,7 @@
   "version": "1.4.2",
   "description": "Color gradients for data visualization",
   "homepage": "https://npm.nicfv.com/",
+  "type": "module",
   "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

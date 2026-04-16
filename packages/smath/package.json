@@ -3,6 +3,7 @@
   "version": "1.15.1",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/",
+  "type": "module",
   "bin": "dist/bin.js",
   "main": "dist/index.js",
   "types": "types/index.d.ts",

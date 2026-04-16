@@ -3,6 +3,7 @@
   "version": "0.11.1",
   "description": "View air conditions on a psychrometric chart",
   "homepage": "https://npm.nicfv.com/",
+  "type": "module",
   "bin": "",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
