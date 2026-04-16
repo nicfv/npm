@@ -1,4 +1,4 @@
-import * as T6 from '.';
+import * as T6 from './index.js';
 
 T6.isTrue(true);
 T6.isFalse(false);

@@ -1,4 +1,4 @@
-import { Dimension } from '../dimension';
+import { Dimension } from '../dimension.js';
 
 // ==== Special ==== //
 export const Dimensionless = new Dimension();

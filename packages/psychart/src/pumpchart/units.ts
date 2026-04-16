@@ -1,5 +1,5 @@
 import { prefixes, Unit, units } from 'dimensional';
-import { Flow, Head, Power, Speed } from './types';
+import { Flow, Head, Power, Speed } from './types.js';
 
 /**
  * Convert the string representation of the flow to the actual units

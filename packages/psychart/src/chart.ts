@@ -1,5 +1,5 @@
 import { Color } from 'viridis';
-import { ChartOptions, Point, TextAnchor } from './types';
+import { ChartOptions, Point, TextAnchor } from './types.js';
 
 /**
  * Represents a generic SVG chart to be inherited by another class.
@@ -183,8 +183,8 @@ export abstract class Chart<T extends ChartOptions> {
         back.setAttribute('rx', padding + 'px');
         back.setAttribute('stroke-width', '1px');
         // Adjust the position if the background is out-of-bounds
-        let dx = 0,
-            dy = 0;
+        let dx: number,
+            dy: number;
         if (location.x + width + padding > this.options.size.x) {
             dx = -(width + padding);
         } else {

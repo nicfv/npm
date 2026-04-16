@@ -1,4 +1,4 @@
-import { DataOptions, Options, Region, State } from './types';
+import { DataOptions, Options, Region, State } from './types.js';
 
 /**
  * Represents a set of default options for Psychart.

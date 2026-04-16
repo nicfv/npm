@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+- Compatibility update for Typescript v6+
+- Releasing as v1.0.0 since the package is now stable
+- Remove deprecated `distance` function
+
 ## 0.11.1
 
 - Updates to `Psychart`:

@@ -1,5 +1,5 @@
 import * as SMath from 'smath';
-import { HSL, RGB } from './types';
+import { HSL, RGB } from './types.js';
 
 /**
  * Convert RGB to HSL

@@ -4,7 +4,6 @@
     "rootDir": "src",
     "outDir": "dist",
     "declarationDir": "types",
-    "downlevelIteration": true,
   },
   "include": [
     "src",

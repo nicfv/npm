@@ -5,6 +5,6 @@
  * ![NPM Downloads](https://img.shields.io/npm/d18m/viridis)
  * ![NPM Last Update](https://img.shields.io/npm/last-update/viridis)
  */
-export * from './Color';
-export * from './Gradient';
-export * from './Palette';
+export * from './Color.js';
+export * from './Gradient.js';
+export * from './Palette.js';

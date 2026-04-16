@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0
+
+- Compatibility update for Typescript v6+
+
 ## 1.4.2
 
 - Minor tsdoc changes

@@ -1,10 +1,10 @@
 import { Color, Palette, PaletteName } from 'viridis';
-import { PsyState } from './psystate';
+import { PsyState } from './psystate.js';
 import * as SMath from 'smath';
-import { DataOptions, Options, Region, State } from './types';
-import { defaultDataOptions, defaultOptions, regions } from './defaults';
-import { Chart } from '../chart';
-import { TextAnchor } from '../types';
+import { DataOptions, Options, Region, State } from './types.js';
+import { defaultDataOptions, defaultOptions, regions } from './defaults.js';
+import { Chart } from '../chart.js';
+import { TextAnchor } from '../types.js';
 
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
@@ -603,18 +603,6 @@ export class Psychart extends Chart<Options> {
         Chart.clearChildren(this.g.hilites);
         Chart.clearChildren(this.legendDefs);
         Chart.clearChildren(this.legendg);
-    }
-    /**
-     * Calculate the distance between 2 states, in pixels.
-     * Note: Relative humidity must be in range [0.0-1.0]
-     * @deprecated Please use `Psychart.getXY(state)`
-     */
-    public distance(state1: State, state2: State): number {
-        const xy1 = new PsyState(state1, this.options).toXY();
-        const xy2 = new PsyState(state2, this.options).toXY();
-        const dx: number = xy1.x - xy2.x;
-        const dy: number = xy1.y - xy2.y;
-        return Math.sqrt(dx * dx + dy * dy);
     }
     /**
      * Calculate the (x,y) coordinates for any state.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.16.0
+
+- Compatibility update for Typescript v6+
+
 ## 1.15.1
 
 - Add example for `selectRandomWeighted()`

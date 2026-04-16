@@ -1,10 +1,10 @@
 import * as T6 from 't6';
 import * as SMath from 'smath';
-import { Psychart, Pumpchart } from '.';
-import { defaultOptions, regions } from './psychart/defaults';
-import { PsyState } from './psychart/psystate';
-import { f, zero } from './pumpchart/lib';
-import { FlowUnits } from './pumpchart/units';
+import { Psychart, Pumpchart } from './index.js';
+import { defaultOptions, regions } from './psychart/defaults.js';
+import { PsyState } from './psychart/psystate.js';
+import { f, zero } from './pumpchart/lib.js';
+import { FlowUnits } from './pumpchart/units.js';
 
 T6.eq(Psychart.getRegionNamesAndTips().length, Object.entries(regions).length);
 T6.eq(Pumpchart.getFlowUnits().length, Object.entries(FlowUnits).length);

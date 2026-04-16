@@ -1,6 +1,6 @@
 import * as SMath from 'smath';
-import { Options, Point, State } from './types';
-import * as Psychrolib from 'psychrolib';
+import { Options, Point, State } from './types.js';
+import Psychrolib from 'psychrolib';
 
 /**
  * Represents a single air condition using several states.

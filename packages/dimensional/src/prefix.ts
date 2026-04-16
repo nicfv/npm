@@ -1,4 +1,4 @@
-import { config } from './config';
+import { config } from './config.js';
 
 /**
  * Represents a unit prefix, which is effectively a unit modifier by a scaling factor.

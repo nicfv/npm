@@ -1,5 +1,5 @@
-import { dimensions, prefixes } from '..';
-import { Unit } from '../unit';
+import { dimensions, prefixes } from '../index.js';
+import { Unit } from '../unit.js';
 
 // ==== Special ==== //
 export const Unitless = new Unit();

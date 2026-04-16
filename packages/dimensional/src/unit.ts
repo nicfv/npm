@@ -1,6 +1,6 @@
-import { Compound } from './compound';
-import { Dimension } from './dimension';
-import { Prefix } from './prefix';
+import { Compound } from './compound.js';
+import { Dimension } from './dimension.js';
+import { Prefix } from './prefix.js';
 
 /**
  * Represents a measurable unit.
