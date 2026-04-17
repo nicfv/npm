@@ -1,4 +1,4 @@
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 
 // Define the suits and values of cards in the deck
 const suits = ['clubs', 'diamonds', 'spades', 'hearts'],

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.17.0
+
+- *Unreleased*
+
 ## 1.16.0
 
 - Compatibility update for Typescript v6+

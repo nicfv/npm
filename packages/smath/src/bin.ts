@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as SMath from './index.js';
+import { SMath } from './index.js';
 
 const func: string = (process.argv[2] ?? '').toLowerCase(),
     nums: number[] = process.argv.slice(3).map((arg, i) => {

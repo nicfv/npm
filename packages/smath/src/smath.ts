@@ -1,11 +1,4 @@
 /**
- * @packageDocumentation
- * Small math function library
- * 
- * ![NPM Downloads](https://img.shields.io/npm/d18m/smath)
- * ![NPM Last Update](https://img.shields.io/npm/last-update/smath)
- */
-/**
  * Check if two numbers are approximately equal with a maximum abolute error.
  * @param a Any number
  * @param b Any number
