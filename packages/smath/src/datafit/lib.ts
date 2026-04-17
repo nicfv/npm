@@ -1,5 +1,5 @@
-import * as SMath from 'smath';
-import { Datum, F, Summary, VariableType } from './types';
+import { SMath } from '../index.js';
+import { Datum, F, Summary, VariableType } from './types.js';
 
 /**
  * Minimize the sum of squared errors to fit a set of data

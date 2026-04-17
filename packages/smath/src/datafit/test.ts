@@ -1,6 +1,6 @@
 import { fit } from './lib';
 import { Datum, Summary } from './types';
-import * as SMath from 'smath';
+import { SMath } from '../index.js';
 import * as T6 from 't6';
 
 // Define f(x)
