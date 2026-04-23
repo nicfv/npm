@@ -308,6 +308,8 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
     T6.eq(data[4].y, -3);
     T6.eq(data[8].x, 5);
     T6.eq(data[8].y, 7);
+    // Make sure that summary contains the correct number of parameters
+    T6.eq(summary.params.length, a.length, `There are ${summary.params.length} parameters in the summary, but there should be ${a.length}.`);
     // Check accuracy of best fit
     // Values should be within 20%
     // of actual, but this could
