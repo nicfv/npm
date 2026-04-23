@@ -1,4 +1,4 @@
-import { SMath } from './index.js';
+import { SMath, DataFit } from './index.js';
 import * as T6 from 't6';
 
 T6.isTrue(SMath.approx(0.1 + 0.2, 0.3));
@@ -299,8 +299,8 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
         return a2 * x ** 2 + a1 * x + a0;
     }
     // Generate dataset and fit curve
-    const data: Datum<number>[] = SMath.linspace(-5, 5, 9).map(x => ({ x: x, y: f(x) })),
-        summary: Summary<number> = fit(f, data);
+    const data: DataFit.Datum<number>[] = SMath.linspace(-5, 5, 9).map(x => ({ x: x, y: f(x) })),
+        summary: DataFit.Summary<number> = DataFit.fit(f, data);
     // Make sure dataset is accurate
     T6.eq(data[0].x, -5);
     T6.eq(data[0].y, -3);
@@ -326,13 +326,13 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
         return bx * x + by * y + bz;
     }
     // Generate dataset and fit curve
-    const data2: Datum<number[]>[] = [];
+    const data2: DataFit.Datum<number[]>[] = [];
     SMath.linspace(-5, 5, 9).forEach(x => {
         SMath.linspace(-5, 5, 9).forEach(y => {
             data2.push({ x: [x, y], y: g([x, y]) });
         });
     });
-    const summary2: Summary<number[]> = fit(g, data2);
+    const summary2: DataFit.Summary<number[]> = DataFit.fit(g, data2);
     // Make sure dataset is accurate
     T6.eq(data2[0].x[0], -5);
     T6.eq(data2[0].x[1], -5);
@@ -349,8 +349,8 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
         return A * Math.sin(w * x);
     }
     // Generate dataset and fit curve
-    const data3: Datum<number>[] = SMath.linspace(0, 15, 100).map(x => ({ x: x, y: h(x) })),
-        summary3: Summary<number> = fit(h, data3);
+    const data3: DataFit.Datum<number>[] = SMath.linspace(0, 15, 100).map(x => ({ x: x, y: h(x) })),
+        summary3: DataFit.Summary<number> = DataFit.fit(h, data3);
     // Make sure dataset is accurate
     T6.eq(data3[0].x, 0);
     T6.eq(data3[0].y, 0);
