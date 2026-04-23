@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.17.0
+## 2.0.0
 
 - *Unreleased*
 
