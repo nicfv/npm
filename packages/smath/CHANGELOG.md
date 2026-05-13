@@ -2,7 +2,8 @@
 
 ## 2.0.0
 
-- *Unreleased*
+- Add `DataFit` submodule, can be imported via `import { DataFit } from 'smath'`
+- `import * as SMath from 'smath'` now changes to `import { SMath } from 'smath'`
 
 ## 1.16.0
 
