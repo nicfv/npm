@@ -26,13 +26,15 @@ npx smath normalize 4 0 10
 
 ## Data Fitting
 
-## Getting Started
+SMath also exports the `DataFit` object which contains only 1 function, `fit()` which is used for curve fitting. All other exports are purely for defining types used within `fit()`. `fit()` uses a genetic-style algorithm to fit a curve.
 
-`datafit` exports only 1 function, `fit()` which is used for curve fitting. All other exports are purely for information and defining types used within this package. `fit()` uses a genetic-style algorithm to fit a curve to. How it works is that it generates many sets of parameters to test, and keeps ones with smaller error than the previous iteration. Parameter sets with larger errors are discarded. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
+### How it works
+
+It generates many sets of parameters to test, and keeps ones with smaller error than the previous iteration. Parameter sets with larger errors are discarded. Each subsequent iteration uses the sets of parameters with the least error and "mutates" them randomly.
 
 > Because of these random mutations, running the same code multiple times may yield slightly different results. See [best practices](#best-practices) for mitigation tactics.
 
-## Complexity
+### Complexity
 
 The folling factors affect computation time and resources:
 
@@ -46,12 +48,13 @@ Each one alone has a linear effect on performance, but combined has an increment
 
 The dimensionality, or number of free `x` variables per data point, should not have an impact on computation time.
 
-## Best Practices
+### Best Practices
 
 For production software that relies on a best curve fit for data, it's best to avoid critical operations using `fit()` for a few reasons.
 
 1. `fit()` uses an algorithm that generates random mutations in a set of parameters, which could yield slightly different results, even if run on the same dataset.
 1. If the number of iterations is very high (in the millions or higher), it could have a significant effect on software performance.
+1. Due to a limitation in JavaScript/TypeScript, the input function parameters cannot be optional or have default values. If they do have default values, assign them inside the function body.
 
 To circumvent some of these issues, the following is recommended.
 
