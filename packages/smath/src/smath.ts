@@ -1,0 +1,491 @@
+/**
+ * Check if two numbers are approximately equal with a maximum abolute error.
+ * @param a Any number
+ * @param b Any number
+ * @param epsilon Maximum absolute error
+ * @returns True if `a` is approximately `b`
+ * @example
+ * const b1 = SMath.approx(1 / 3, 0.33, 1e-6), // false
+ *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
+ */
+export function approx(a: number, b: number, epsilon = 1e-6): boolean {
+    return a - b < epsilon && b - a < epsilon;
+}
+/**
+ * Clamp a number within a range.
+ * @param n The number to clamp
+ * @param min The minimum value of the range
+ * @param max The maximum value of the range
+ * @returns A clamped number
+ * @example
+ * const n1 = SMath.clamp(5, 0, 10),  // 5
+ *       n2 = SMath.clamp(-2, 0, 10); // 0
+ */
+export function clamp(n: number, min: number, max: number): number {
+    if (n < min) {
+        return min;
+    }
+    if (n > max) {
+        return max;
+    }
+    return n;
+}
+/**
+ * Normalize the number `n` from the range `min, max` to the range `0, 1`
+ * @param n The number to normalize
+ * @param min The minimum value in the range
+ * @param max The maximum value in the range
+ * @returns A normalized value
+ * @example
+ * const y = SMath.normalize(18, 9, 99); // 0.1
+ */
+export function normalize(n: number, min: number, max: number): number {
+    if (min === max) {
+        return 0;
+    }
+    return (n - min) / (max - min);
+}
+/**
+ * Expand a normalized number `n` to the range `min, max`
+ * @param n A normalized number
+ * @param min The minimum value in the range
+ * @param max The maximum value in the range
+ * @returns A value within the number range
+ * @example
+ * const y = SMath.expand(0.25, 4, 6); // 4.5
+ */
+export function expand(n: number, min: number, max: number): number {
+    return (max - min) * n + min;
+}
+/**
+ * Translate a number `n` from the range `min1, max1` to the range `min2, max2`
+ * @param n The number to translate
+ * @param min1 The minimum value from the initial range
+ * @param max1 The maximum value from the initial range
+ * @param min2 The minimum value for the final range
+ * @param max2 The maximum value for the final range
+ * @returns A translated number in the final range
+ * @example
+ * const C = 20,
+ *       F = SMath.translate(C, 0, 100, 32, 212); // 68
+ */
+export function translate(n: number, min1: number, max1: number, min2: number, max2: number): number {
+    return expand(normalize(n, min1, max1), min2, max2);
+}
+/**
+ * Generate an array of linearly spaced numbers.
+ * @param min The initial value of the linear space
+ * @param max The final value of the linear space
+ * @param count The number of values in the space
+ * @returns The linear space as an array of numbers
+ * @example
+ * const space = SMath.linspace(1, 5, 6);
+ * // [ 1, 1.8, 2.6, 3.4, 4.2, 5 ]
+ */
+export function linspace(min: number, max: number, count: number): number[] {
+    const space: number[] = [];
+    for (let i = 0; i < count; i++) {
+        space[i] = translate(i, 0, count - 1, min, max);
+    }
+    return space;
+}
+/**
+ * Generate an array of logarithmically spaced numbers.
+ * @param min The initial magnitude of the space
+ * @param max The final magnitude of the space
+ * @param count The number of values in the space
+ * @returns The logarithmic space as an array of numbers
+ * @example
+ * const space = SMath.logspace(0, 2, 5);
+ * // [ 1, 3.2, 10, 31.6, 100 ]
+ */
+export function logspace(min: number, max: number, count: number): number[] {
+    return linspace(min, max, count).map(n => 10 ** n);
+}
+/**
+ * Compute the factorial of `n`.
+ * @param n Any positive integer
+ * @returns `n!`
+ * @example
+ * const y = SMath.factorial(5); // 120
+ */
+export function factorial(n: number): number {
+    if (n < 0 || (n | 0) !== n) {
+        throw new Error('Input must be a positive integer.');
+    } else if (n === 0) {
+        return 1;
+    } else if (n <= 2) {
+        return n;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+/**
+ * Factorize `n` into its prime factors.
+ * @param n Any positive integer
+ * @returns The array of prime factors
+ * @example
+ * const y = SMath.factors(12); // [ 2, 2, 3 ]
+ */
+export function factors(n: number): number[] {
+    if (n < 0 || (n | 0) !== n) {
+        throw new Error('Input must be a positive integer!');
+    }
+    if (n <= 3) {
+        return [n];
+    }
+    const f: number[] = [];
+    let i = 2;
+    while (n > 1 && i <= n) {
+        if ((n / i) === ((n / i) | 0)) {
+            n /= i;
+            f.push(i);
+        } else {
+            i++;
+        }
+    }
+    return f;
+}
+/**
+ * Round a number to the nearest multiple of an arbitrary
+ * base. Does not round when the base is set to zero.
+ * @param n Any number to round
+ * @param base Any base to round to
+ * @returns `n` rounded to the nearest multiple of `base`
+ * @example
+ * const y = SMath.round2(Math.PI, 0.2); // 3.2
+ */
+export function round2(n: number, base: number): number {
+    const rounded: number = base ? base * Math.round(n / base) : n;
+    const precision = 10; // Removes precision errors
+    return parseFloat(rounded.toFixed(precision));
+}
+/**
+ * Calculate the relative normalized error or deviation from any
+ * value to an accepted value. An error of 0 indicates that the
+ * two values are identical. An error of -0.1 indicates that the
+ * experimental value is 10% smaller than (90% of) the accepted
+ * value. An error of 1.0 indicates that the experimental value
+ * is 100% greater (or twice the size) of the accepted value.
+ * @param experimental The value observed or produced by a test
+ * @param actual The accepted or theoretical value
+ * @returns The relative (normalized) error
+ * @example
+ * const e = SMath.error(22.5, 25); // -0.1
+ */
+export function error(experimental: number, actual: number): number {
+    if (experimental === 0 && actual === 0) {
+        return 0;
+    } else {
+        return (experimental - actual) / actual;
+    }
+}
+/**
+ * Add up all the inputs.
+ * If none are present, returns 0.
+ * @param data An array of numeric inputs
+ * @returns The sum total
+ * @example
+ * const y = SMath.sum([1, 2, 3]); // 6
+ */
+export function sum(data: number[]): number {
+    return data.reduce((a, b) => a + b, 0);
+}
+/**
+ * Multiply all the inputs.
+ * If none are present, returns 1.
+ * @param data An array of numeric inputs
+ * @returns The product
+ * @example
+ * const y = SMath.prod([2, 2, 3, 5]); // 60
+ */
+export function prod(data: number[]): number {
+    return data.reduce((a, b) => a * b, 1);
+}
+/**
+ * Compute the average, or mean, of a set of numbers.
+ * @param data An array of numeric inputs
+ * @returns The average, or mean
+ * @example
+ * const y = SMath.avg([1, 2, 4, 4]); // 2.75
+ */
+export function avg(data: number[]): number {
+    return sum(data) / data.length;
+}
+/**
+ * Compute the median of a set of numbers.
+ * @param data An array of numeric inputs
+ * @returns The median of the dataset
+ * @example
+ * const y = SMath.median([2, 5, 3, 1]); // 2.5
+ */
+export function median(data: number[]): number {
+    data.sort((a, b) => a - b);
+    if (data.length % 2) {
+        return data[(data.length - 1) / 2];
+    }
+    return avg([data[data.length / 2 - 1], data[data.length / 2]]);
+}
+/**
+ * Compute the variance of a **complete population**.
+ * @param data An array of numeric inputs
+ * @returns The population variance
+ * @example
+ * const y = SMath.varp([1, 2, 4, 4]); // 1.6875
+ */
+export function varp(data: number[]): number {
+    const mean: number = avg(data),
+        squares: number[] = data.map(x => (x - mean) ** 2);
+    return sum(squares) / data.length;
+}
+/**
+ * Compute the variance of a **sample**.
+ * @param data An array of numeric inputs
+ * @returns The sample variance
+ * @example
+ * const y = SMath.vars([1, 2, 4, 4]); // 2.25
+ */
+export function vars(data: number[]): number {
+    const mean: number = avg(data),
+        squares: number[] = data.map(x => (x - mean) ** 2);
+    return sum(squares) / (data.length - 1);
+}
+/**
+ * Compute the standard deviation of a **complete population**.
+ * @param data An array of numeric inputs
+ * @returns The population standard deviation
+ * @example
+ * const y = SMath.stdevp([1, 2, 3, 4]); // 1.118...
+ */
+export function stdevp(data: number[]): number {
+    return Math.sqrt(varp(data));
+}
+/**
+ * Compute the standard deviation of a **sample**.
+ * @param data An array of numeric inputs
+ * @returns The sample standard deviation
+ * @example
+ * const y = SMath.stdevs([1, 2, 3, 4]); // 1.29...
+ */
+export function stdevs(data: number[]): number {
+    return Math.sqrt(vars(data));
+}
+/**
+ * Generate a uniformly-distributed floating-point number within the range.
+ * @param min The minimum bound
+ * @param max The maximum bound
+ * @returns A random float within the range
+ * @example
+ * const y = SMath.runif(-2, 2); // 0.376...
+ */
+export function runif(min: number, max: number): number {
+    return expand(Math.random(), min, max);
+}
+/**
+ * Generate a uniformly-distributed integer within the range.
+ * @param min The minimum bound (inclusive)
+ * @param max The maximum bound (inclusive)
+ * @returns A random integer within the range
+ * @example
+ * const y = SMath.rint(-4, 3); // -4
+ */
+export function rint(min: number, max: number): number {
+    min |= 0;
+    max |= 0;
+    if (min < 0) { min--; }
+    if (max > 0) { max++; }
+    return clamp(runif(min, max), min, max) | 0; // `| 0` pulls toward 0
+}
+/**
+ * Generate a normally-distributed floating-point number.
+ * @param mean The mean of the population distribution
+ * @param stdev The standard deviation of the population
+ * @returns A random float
+ * @example
+ * const y = SMath.rnorm(2, 3); // 1.627...
+ */
+export function rnorm(mean = 0, stdev = 1): number {
+    return mean + stdev * Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+}
+/**
+ * Generate a population of normally-distributed floating-point numbers.
+ * @param count The number of values to generate
+ * @param mean The mean of the population distribution
+ * @param stdev The standard deviation of the population
+ * @returns A population of random floats
+ * @example
+ * const dataset = SMath.rdist(3); // [ 1.051..., -0.779..., -2.254... ]
+ */
+export function rdist(count: number, mean = 0, stdev = 1): number[] {
+    const distribution: number[] = [];
+    for (let i = 0; i < count; i++) {
+        distribution[i] = rnorm(mean, stdev);
+    }
+    return distribution;
+}
+/**
+ * Randomize an array of arbitrary elements.
+ * @param stack An array of arbitrary elements
+ * @returns The `stack` array in a random order
+ * @example
+ * const shuffled = SMath.shuffle(['a', 'b', 'c']); // [ 'c', 'a', 'b' ]
+ */
+export function shuffle<T>(stack: T[]): T[] {
+    const rawData: { index: number, value: T }[] = [];
+    for (const item of stack) {
+        rawData.push({ index: Math.random(), value: item });
+    }
+    return rawData.sort((a, b) => a.index - b.index).map(a => a.value);
+}
+/**
+ * Select a single item from an array at random with uniform weights.
+ * @param stack An array of arbirary item
+ * @returns A single randomly selected item
+ * @example
+ * const selected = SMath.selectRandom([10, 20, 30, 40]); // 30
+ */
+export function selectRandom<T>(stack: T[]): T {
+    return stack[rint(0, stack.length - 1)];
+}
+/**
+ * Select a single index in an array at random with different weights.
+ * @param weights The weights for each item
+ * @returns The 0-based index of the randomly selected item
+ * @example
+ * const index = SMath.selectRandomWeighted([3.5, 4, 1]); // 1
+ */
+export function selectRandomWeighted(weights: number[]): number {
+    const startWeights: number[] = [];
+    let accumulation = 0;
+    for (const weight of weights) {
+        accumulation += clamp(0, weight, Infinity);
+        startWeights.push(accumulation);
+    }
+    const random = runif(0, accumulation);
+    return startWeights.findIndex(weight => random < weight);
+}
+/**
+ * Take the limit of a function. A return value of `NaN` indicates
+ * that no limit exists either due to a discontinuity or imaginary value.
+ * @param f Function `f(x)`
+ * @param x The x-value where to take the limit
+ * @param h The approach distance
+ * @param discontinuity_cutoff The discontinuity cutoff
+ * @returns `lim(f(x->x))`
+ * @example
+ * const y = SMath.lim(Math.log, 0); // -Infinity
+ */
+export function lim(f: (x: number) => number, x: number, h = 1e-6, discontinuity_cutoff = 1e-3): number {
+    const center: number = f(x),
+        left1: number = f(x - h),
+        left2: number = f(x - h / 2),
+        right1: number = f(x + h),
+        right2: number = f(x + h / 2);
+    let left: number,
+        right: number;
+    if (Number.isFinite(center)) {
+        return center;
+    }
+    // Check the limit approaching from the left
+    if (Number.isFinite(left1) && Number.isFinite(left2)) {
+        if (approx(left1, left2, discontinuity_cutoff)) {
+            left = left2; // Converges
+        } else if (left1 > 0 && left2 > left1) {
+            left = Infinity; // Diverges to +inf
+        } else if (left1 < 0 && left2 < left1) {
+            left = -Infinity; // Diverges to -inf
+        } else {
+            left = NaN; // Diverges
+        }
+    } else {
+        left = NaN; // Discontinuous
+    }
+    // Check the limit approaching from the right
+    if (Number.isFinite(right1) && Number.isFinite(right2)) {
+        if (approx(right1, right2, discontinuity_cutoff)) {
+            right = right2; // Converges
+        } else if (right1 > 0 && right2 > right1) {
+            right = Infinity; // Diverges to +inf
+        } else if (right1 < 0 && right2 < right1) {
+            right = -Infinity; // Diverges to -inf
+        } else {
+            right = NaN; // Diverges
+        }
+    } else {
+        right = NaN; // Discontinuous
+    }
+    // Check if limits match or are close
+    if (left === right) { // Handles +/-Infinity case
+        return left;
+    } else if (Number.isNaN(left) && Number.isNaN(right)) {
+        return center;
+    } else if (!Number.isNaN(left) && Number.isNaN(right)) {
+        return left;
+    } else if (Number.isNaN(left) && !Number.isNaN(right)) {
+        return right;
+    } else if (approx(left, right, discontinuity_cutoff)) {
+        return avg([left, right]);
+    } else {
+        return NaN;
+    }
+}
+/**
+ * Take the derivative of a function.
+ * @param f Function `f(x)`
+ * @param x The x-value where to evaluate the derivative
+ * @param epsilon Small step value
+ * @returns `f'(x)`
+ * @example
+ * const y = SMath.differentiate(x => 3 * x ** 2, 2); // 12
+ */
+export function differentiate(f: (x: number) => number, x: number, epsilon = 1e-6): number {
+    return lim(h => (f(x + h) - f(x - h)) / (2 * h), 0, epsilon);
+}
+/**
+ * Compute the definite integral of a function.
+ * @param f Function `f(x)`
+ * @param a The miminum integral bound
+ * @param b The maximum integral bound
+ * @param Ndx The number of rectangles to compute
+ * @returns `F(b)-F(a)`
+ * @example
+ * const y = SMath.integrate(x => 3 * x ** 2, 1, 2); // 7
+ */
+export function integrate(f: (x: number) => number, a: number, b: number, Ndx = 1e6): number {
+    return ((b - a) / Ndx) * sum(linspace(a, b, Ndx).map(x => f(x)));
+}
+/**
+ * Convert an arbitrary decimal number into a simplified fraction (or ratio).
+ * See `mixed()` for instructions on how to break out the whole number part.
+ * @param n The decimal number to convert
+ * @param epsilon Maximum absolute error
+ * @returns An object containing the fraction's numerator and denominator
+ * @example
+ * const frac = SMath.rat(0.625); // { num: 5, den: 8 }
+ */
+export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
+    let num = 0,
+        den = 1;
+    const sign: number = n < 0 ? -1 : 1;
+    while (!approx(sign * n, num / den, epsilon)) {
+        if (sign * n > num / den) {
+            num++;
+        } else {
+            den++;
+        }
+    }
+    return { num: sign * num, den: den };
+}
+/**
+ * Convert an arbitrary decimal number into a simplified fraction, after
+ * breaking out the whole number part first. See `rat()` for keeping the
+ * number as a ratio without separating the whole number part.
+ * @param n A decimal number to convert
+ * @param epsilon Maximum absolute error
+ * @returns An object containing the whole part and fraction numerator and denominator
+ * @example
+ * const frac = SMath.mixed(-8 / 6); // { whole: -1, num: 1, den: 3 }
+ */
+export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, den: number } {
+    return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
+}

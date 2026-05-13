@@ -1,4 +1,4 @@
-import { fit } from 'datafit';
+import { DataFit } from 'smath';
 
 // Define a general 3D plane function where z = f(x, y)
 function f([x, y], cx, cy, cz) {
@@ -14,5 +14,5 @@ const data = [
 ];
 
 // Run the curve fitting algorithm
-const summary = fit(f, data);
+const summary = DataFit.fit(f, data);
 console.log(summary);

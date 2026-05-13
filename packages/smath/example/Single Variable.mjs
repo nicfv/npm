@@ -1,4 +1,4 @@
-import { fit } from 'datafit';
+import { DataFit } from 'smath';
 
 // Define a model function for curve fitting.
 // Let's use a generic 2nd degree polynomial
@@ -26,7 +26,7 @@ console.log('Dataset', data);
 // starting with an initial guess of [x^2 + x + 1]
 // with 10,000 iterations, and each parameter
 // can vary up to 50% on the first iteration
-const summary = fit(f, data, [1, 1, 1], 10000, 0.5);
+const summary = DataFit.fit(f, data, [1, 1, 1], 10000, 0.5);
 console.log('Summary', summary);
 
 // Compute the actual value and

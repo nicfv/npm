@@ -1,4 +1,4 @@
-import { fit } from 'datafit';
+import { DataFit } from 'smath';
 
 // Define our model function: y=mx+b
 function f(x, m, b) {
@@ -14,7 +14,7 @@ const data = [
 
 // Compute the best fit parameters to
 // get `m` and `b`, and print result.
-const summary = fit(f, data);
+const summary = DataFit.fit(f, data);
 const m_fit = summary.params[0];
 const b_fit = summary.params[1];
 console.log('The best-fit line is y = ' + m_fit.toFixed(2) + 'x + ' + b_fit.toFixed(2));

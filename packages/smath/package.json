@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "1.16.0",
+  "version": "2.0.0",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/",
   "type": "module",
@@ -39,7 +39,23 @@
     "extrapolate",
     "extrapolation",
     "linspace",
-    "logspace"
+    "logspace",
+    "curve",
+    "fit",
+    "fitting",
+    "least",
+    "squares",
+    "regression",
+    "data",
+    "dataset",
+    "point",
+    "parameters",
+    "linear",
+    "nonlinear",
+    "variable",
+    "multivariable",
+    "multivariant",
+    "multivariate"
   ],
   "author": {
     "name": "Nicolas Ventura",

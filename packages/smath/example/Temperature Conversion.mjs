@@ -1,4 +1,4 @@
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 
 // Water always freezes at the
 // same temperature, but the
