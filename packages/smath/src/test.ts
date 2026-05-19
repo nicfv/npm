@@ -64,6 +64,19 @@ for (let i = 0; i <= 100; i++) {
     T6.eq(SMath.prod(SMath.factors(i)), i);
 }
 
+T6.isFalse(SMath.isPrime(-4));
+T6.isFalse(SMath.isPrime(-2));
+T6.isFalse(SMath.isPrime(-1.5));
+T6.isFalse(SMath.isPrime(1));
+T6.isTrue(SMath.isPrime(2));
+T6.isTrue(SMath.isPrime(3));
+T6.isFalse(SMath.isPrime(4));
+T6.isTrue(SMath.isPrime(5));
+T6.isTrue(SMath.isPrime(23));
+T6.isFalse(SMath.isPrime(23.5));
+T6.isFalse(SMath.isPrime(81));
+T6.isTrue(SMath.isPrime(83));
+
 T6.eq(SMath.round2(6.12, 0.2), 6.2);
 T6.eq(SMath.round2(-0.53, 0.25), -0.5);
 T6.eq(SMath.round2(Math.PI, 0.125), 3.125);
