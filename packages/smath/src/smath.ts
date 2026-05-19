@@ -110,7 +110,7 @@ export function logspace(min: number, max: number, count: number): number[] {
  * const y = SMath.factorial(5); // 120
  */
 export function factorial(n: number): number {
-    if (n < 0 || n % 1 !== n) {
+    if (n < 0 || n % 1 !== 0) {
         throw new Error('Input must be a positive integer.');
     } else if (n === 0) {
         return 1;
@@ -128,7 +128,7 @@ export function factorial(n: number): number {
  * const y = SMath.factors(12); // [ 2, 2, 3 ]
  */
 export function factors(n: number): number[] {
-    if (n < 0 || n % 1 !== n) {
+    if (n < 0 || n % 1 !== 0) {
         throw new Error('Input must be a positive integer.');
     }
     if (n <= 3) {
