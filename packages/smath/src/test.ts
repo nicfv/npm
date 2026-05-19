@@ -304,6 +304,13 @@ T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
     T6.eq(frac.den, 3);
 }
 
+T6.eq(SMath.gcd(48, 18), 6);
+T6.eq(SMath.gcd(48, 49), 1);
+T6.eq(SMath.gcd(1, 1), 1);
+T6.eq(SMath.gcd(1, 49), 1);
+T6.eq(SMath.gcd(49, 49), 49);
+T6.eq(SMath.gcd(15, 0), 15);
+
 {
     // DataFit tests
     // Define f(x)

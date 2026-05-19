@@ -50,6 +50,7 @@ if (func.includes('help')) {
     console.log('                           : Select an index at random from a list of weights');
     console.log('  rat <n> [eps]            : Decompose `n` into a ratio');
     console.log('  mixed <n> [eps]          : Decompose `n` into a mixed number');
+    console.log('  gcd <a> <b>              : Compute the greatest common denominator of two numbers');
     process.exit(1);
 }
 
@@ -168,6 +169,10 @@ switch (func) {
     }
     case ('mixed'): {
         console.log(SMath.mixed(nums[0], nums[1] ?? 1e-6));
+        break;
+    }
+    case ('gcd'): {
+        console.log(SMath.gcd(nums[0], nums[1]));
         break;
     }
     case (''): {
