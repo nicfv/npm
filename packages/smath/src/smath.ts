@@ -516,8 +516,8 @@ export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, 
 }
 /**
  * Get the greatest common denominator (GCD) of two numbers.
- * @param a Any integer
- * @param b Any integer
+ * @param a Any positive integer
+ * @param b Any positive integer
  * @returns The GCD of two numbers
  * @example
  * const y = SMath.gcd(42, 30); // 6
