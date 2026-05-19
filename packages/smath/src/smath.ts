@@ -147,6 +147,29 @@ export function factors(n: number): number[] {
     return f;
 }
 /**
+ * An optimized algorithm to determine if any number is prime.
+ * @param n Any positive integer
+ * @returns `true` if `n` is prime
+ */
+export function isPrime(n: number): boolean {
+    if (n <= 1 || (n | 0) !== n) {
+        return false;
+    }
+    if (n <= 3) {
+        return true;
+    }
+    if (n % 2 === 0 || n % 3 === 0) {
+        return false;
+    }
+    // Check 6x-1 and 6x+1 (all prime forms)
+    for (let i = 5; i * i <= n; i += 6) {
+        if (n % i === 0 || n % (i + 2) === 0) {
+            return false;
+        }
+    }
+    return true;
+}
+/**
  * Round a number to the nearest multiple of an arbitrary
  * base. Does not round when the base is set to zero.
  * @param n Any number to round
