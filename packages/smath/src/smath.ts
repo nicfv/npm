@@ -150,6 +150,8 @@ export function factors(n: number): number[] {
  * An optimized algorithm to determine if any number is prime.
  * @param n Any positive integer
  * @returns `true` if `n` is prime
+ * @example
+ * const b = SMath.isPrime(5); // true
  */
 export function isPrime(n: number): boolean {
     if (n <= 1 || (n | 0) !== n) {
