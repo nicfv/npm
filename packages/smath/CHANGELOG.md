@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- Add `isPrime()` to check if any number is prime
+
 ## 2.0.0
 
 - Add `DataFit` submodule, can be imported via `import { DataFit } from 'smath'`
