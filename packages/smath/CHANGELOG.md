@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.0
+
+- Add `gcd()` to compute the greatest common denominator of two integers
+
 ## 2.1.0
 
 - Add `isPrime()` to check if any number is prime
