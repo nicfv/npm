@@ -129,7 +129,7 @@ export function factorial(n: number): number {
  */
 export function factors(n: number): number[] {
     if (n < 0 || (n | 0) !== n) {
-        throw new Error('Input must be a positive integer!');
+        throw new Error('Input must be a positive integer.');
     }
     if (n <= 3) {
         return [n];
@@ -137,7 +137,7 @@ export function factors(n: number): number[] {
     const f: number[] = [];
     let i = 2;
     while (n > 1 && i <= n) {
-        if ((n / i) === ((n / i) | 0)) {
+        if (n % i === 0) {
             n /= i;
             f.push(i);
         } else {
@@ -513,4 +513,30 @@ export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
  */
 export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, den: number } {
     return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
+}
+/**
+ * Get the greatest common denominator (GCD) of two numbers.
+ * @param a Any integer
+ * @param b Any integer
+ * @returns The GCD of two numbers
+ * @example
+ * const y = SMath.gcd(42, 30); // 6
+ */
+export function gcd(a: number, b: number): number {
+    // Make sure input is valid
+    if (a < 0 || a % 1 !== 0 || b < 0 || b % 1 !== 0) {
+        throw new Error('Input must be a positive integer.');
+    }
+    // Reached the end
+    if (a === 0) {
+        return b;
+    } else if (b === 0) {
+        return a;
+    }
+    // Compute the algorithm
+    if (a > b) {
+        return gcd(a % b, b);
+    } else {
+        return gcd(a, b % a);
+    }
 }
