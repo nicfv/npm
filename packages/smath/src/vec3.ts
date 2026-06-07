@@ -1,3 +1,5 @@
+import { SMath } from ".";
+
 /**
  * Structure for a vector in 3D space.
  */
@@ -35,6 +37,22 @@ export class Vec3 {
         return new Vec3(r * Math.cos(phi) * Math.cos(theta), r * Math.cos(phi) * Math.sin(theta), r * Math.sin(phi));
     }
     /**
+     * Determine if two vectors are equal (or approximately equal)
+     * @param other Arbitrary vector
+     * @param tolerance Optional absolute tolerance
+     * @returns `true` if v1 = v2
+     */
+    public equals(other: Vec3, tolerance = 0): boolean {
+        return SMath.approx(this.x, other.x, tolerance) && SMath.approx(this.y, other.y, tolerance) && SMath.approx(this.z, other.z, tolerance);
+    }
+    /**
+     * Get a unit vector in this direction
+     * @returns v1 (with length 1)
+     */
+    public unit(): Vec3 {
+        return Vec3.fromPolar(1, this.theta, this.phi);
+    }
+    /**
      * Scale this vector by a numeric factor
      * @param factor Scaling factor
      * @returns A scaled vector
@@ -65,5 +83,21 @@ export class Vec3 {
      */
     public dot(other: Vec3): number {
         return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
+    /**
+     * Compute the cross product between this vector and another vector
+     * @param other Arbitrary vector
+     * @returns v1 x v2
+     */
+    public cross(other: Vec3): Vec3 {
+        return new Vec3(this.y * other.z - this.z * other.y, this.z * other.x - this.x * other.z, this.x * other.y - this.y * other.x);
+    }
+    /**
+     * Project this vector onto another vector
+     * @param other Arbitrary vector
+     * @returns proj_v2(v1)
+     */
+    public projectOnto(other: Vec3): Vec3 {
+        return other.scaleBy(this.dot(other) / other.dot(other));
     }
 }
