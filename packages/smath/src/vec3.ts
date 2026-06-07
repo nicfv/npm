@@ -29,8 +29,9 @@ export class Vec3 {
     }
     /**
      * Create a vector from polar coordinates
-     * @param r Magnitude
-     * @param theta Angle
+     * @param r The magnitude/length of the vector
+     * @param theta The angle of the vector in radians, measured from the x-axis
+     * @param phi The angle of the vector in radians, measured from the xy-plane
      * @returns A vector created from polar coordinates
      */
     public static fromPolar(r: number, theta: number, phi = 0): Vec3 {
