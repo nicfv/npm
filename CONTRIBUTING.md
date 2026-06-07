@@ -11,7 +11,7 @@ Below is a list of requirements that must be followed when contributing to this 
 - Must contain a `README.md` and `CHANGELOG.md`
 - Source code must be written in `./packages/<name>/src/` and in the latest supported version of TypeScript
     - Includes `index.ts` as the entry point file
-    - Includes `test.ts` for unit/integration testing
+    - Includes `*.test.ts` for unit/integration testing
 - Tests should use the latest version of `t6` for assertion testing
 - Must contain examples in `example/`
 
