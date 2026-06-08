@@ -77,7 +77,7 @@ There are also some great arguments and use cases for this function, namely...
 
 ## Data Types
 
-`SMath` also exports two new data types: `Complex` for complex numbers and `Vec3` to represent vectors in 3D space! Each data type comes with a set of functions for object-oriented use. Functions can be chained together, for example, if \\\(\\textbf{A}\\\), \\\(\\textbf{B}\\\), and \\\(\\textbf{C}\\\) are complex numbers, you can add them all together in one line:
+`SMath` also exports two new data types: `Complex` for complex numbers and `Vec3` to represent vectors in 3D space! Each data type comes with a set of functions for object-oriented use. Functions can be chained together, for example, if **A**, **B**, and **C** are complex numbers, you can add them all together in one line:
 
 ```js
 A.plus(B).plus(C)
