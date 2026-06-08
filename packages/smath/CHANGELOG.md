@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+
+- Add two new data types, fully tested:
+    - `Vec3`, representing a vector in 3D space
+    - `Complex`, representing a complex number
+
 ## 2.2.0
 
 - Add `gcd()` to compute the greatest common denominator of two integers
