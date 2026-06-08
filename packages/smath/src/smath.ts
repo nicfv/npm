@@ -9,7 +9,7 @@
  *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
  */
 export function approx(a: number, b: number, epsilon = 1e-6): boolean {
-    return a - b < epsilon && b - a < epsilon;
+    return a - b <= epsilon && b - a <= epsilon;
 }
 /**
  * Clamp a number within a range.
