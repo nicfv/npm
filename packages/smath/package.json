@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/",
   "type": "module",
@@ -55,7 +55,12 @@
     "variable",
     "multivariable",
     "multivariant",
-    "multivariate"
+    "multivariate",
+    "vector",
+    "3d",
+    "complex",
+    "real",
+    "imaginary"
   ],
   "author": {
     "name": "Nicolas Ventura",
@@ -69,7 +74,7 @@
   "repository": "github:nicfv/npm",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "25.6.0",
+    "@types/node": "25.9.2",
     "t6": "1.3.0"
   }
 }
