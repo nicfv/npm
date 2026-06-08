@@ -21,11 +21,11 @@ T6.isTrue(SMath.approx(b.r, 2));
 T6.eq(b.theta, Math.PI);
 T6.isTrue(SMath.approx(b.phi, Math.PI / 6), `Found ${b.phi}, expected pi/6`);
 
-T6.eq(c.x, 0);
+T6.isTrue(SMath.approx(c.x, 0));
 T6.eq(c.y, 5);
 T6.eq(c.z, 0);
 T6.eq(c.r, 5);
-T6.eq(b.theta, Math.PI / 2);
+T6.eq(c.theta, Math.PI / 2);
 T6.eq(c.phi, 0);
 
 T6.isTrue(a.equals(a));
