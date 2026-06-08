@@ -5,6 +5,7 @@
 - Add two new data types, fully tested:
     - `Vec3`, representing a vector in 3D space
     - `Complex`, representing a complex number
+- Fix a bug in `approx()` to allow absolute error less than *or equal to* epsilon
 
 ## 2.2.0
 
