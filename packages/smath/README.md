@@ -74,3 +74,13 @@ There are also some great arguments and use cases for this function, namely...
 1. Quickly iterating on different model functions for determining which best fits the data.
 1. Curve fitting for multivariate or nonlinear models.
 1. The ease of use of it all! It's just one function call with as little as 2 inputs!
+
+## Data Types
+
+`SMath` also exports two new data types: `Complex` for complex numbers and `Vec3` to represent vectors in 3D space! Each data type comes with a set of functions for object-oriented use. Functions can be chained together, for example, if \\\(\\textbf{A}\\\), \\\(\\textbf{B}\\\), and \\\(\\textbf{C}\\\) are complex numbers, you can add them all together in one line:
+
+```js
+A.plus(B).plus(C)
+```
+
+Be sure to read the documentation for each data type to learn the full set of class methods they have to offer.
