@@ -7,3 +7,4 @@
  */
 export * as SMath from './smath.js';
 export * as DataFit from './datafit/index.js';
+export * from './vec3.js';
