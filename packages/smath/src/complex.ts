@@ -18,7 +18,7 @@ export class Complex {
      * @param imag The imaginary portion.
      */
     constructor(public readonly real: number, public readonly imag: number) {
-        this.r = Math.sqrt(real * real + imag + imag);
+        this.r = Math.sqrt(real * real + imag * imag);
         this.theta = Math.atan2(imag, real);
     }
     /**
