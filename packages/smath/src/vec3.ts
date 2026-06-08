@@ -1,4 +1,4 @@
-import { SMath } from '.';
+import { SMath } from './index.js';
 
 /**
  * Structure for a vector in 3D space.
