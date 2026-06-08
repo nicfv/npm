@@ -55,7 +55,12 @@
     "variable",
     "multivariable",
     "multivariant",
-    "multivariate"
+    "multivariate",
+    "vector",
+    "3d",
+    "complex",
+    "real",
+    "imaginary"
   ],
   "author": {
     "name": "Nicolas Ventura",
