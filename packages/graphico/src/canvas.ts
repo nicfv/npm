@@ -26,6 +26,7 @@ export class Canvas {
         mousedown() { return; },
         mouseup() { return; },
         loop() { return; },
+        focus() { return; },
     };
     /**
      * Configuration options for this canvas
@@ -251,6 +252,9 @@ export class Canvas {
      */
     private startAnimate(time: DOMHighResTimeStamp): void {
         this.log('startAnimate', time);
+        if (this.lastFrame > 0 && time > this.lastFrame) {
+            this.config.focus(time - this.lastFrame);
+        }
         this.lastFrame = time;
         this.animation = requestAnimationFrame(time => this.animate(time));
     }
