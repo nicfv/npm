@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+- Added `focus` option which is an event listener called whenever the canvas regains focus
+- Fixed minor bug `Animation` example where ball would not bounce properly
+- Fixed bug where multiple animation frames would be called in succession when canvas was focused
+
 ## 1.3.0
 
 - Compatibility update for Typescript v6+
