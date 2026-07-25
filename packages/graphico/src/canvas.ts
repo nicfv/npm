@@ -196,6 +196,7 @@ export class Canvas {
         main.addEventListener('focusout', e => {
             if (this.config.keepFocused) {
                 main.focus();
+                cancelAnimationFrame(this.animation); // Required because a new animation frame is immediately requested
             } else {
                 this.focused = false;
                 main.style.borderColor = this.config.borderBlur;
