@@ -79,9 +79,13 @@ export interface Options {
     /**
      * Event listener for a the main animation loop
      * @param dt The number of milliseconds in between frames
-     * @returns An array of `Drawable` to render on layer 0, or void
      */
     readonly loop: (dt: number) => void;
+    /**
+     * Even listener for when the canvas gains focus
+     * @param dt The number of milliseconds the canvas was out of focus
+     */
+    readonly focus: (dt: number) => void;
 }
 
 /**
