@@ -1,6 +1,6 @@
 {
   "name": "graphico",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Canvas 2D rendering toolkit for games and visual projects",
   "homepage": "https://npm.nicfv.com/",
   "type": "module",
