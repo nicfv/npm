@@ -82,10 +82,14 @@ export interface Options {
      */
     readonly loop: (dt: number) => void;
     /**
-     * Even listener for when the canvas gains focus
+     * Event listener for when the canvas gains focus
      * @param dt The number of milliseconds the canvas was out of focus
      */
     readonly focus: (dt: number) => void;
+    /**
+     * Event listener for when the canvas loses focus
+     */
+    readonly blur: () => void;
 }
 
 /**

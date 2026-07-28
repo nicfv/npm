@@ -27,6 +27,7 @@ export class Canvas {
         mouseup() { return; },
         loop() { return; },
         focus() { return; },
+        blur() { return; },
     };
     /**
      * Configuration options for this canvas
