@@ -72,7 +72,7 @@ export class Canvas {
     /**
      * The last frame's high resolution timestamp
      */
-    private lastFrame = 0;
+    private lastFrame: number | null = null;
     /**
      * Determine whether the client is focused or not
      */
@@ -151,7 +151,7 @@ export class Canvas {
             if (!this.focused) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
-            this.log(e.type, this.keys);
+            this.log(e.type, key, this.keys);
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
                 this.config.keydown(key);
@@ -161,7 +161,7 @@ export class Canvas {
             if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
-            this.log(e.type, this.keys);
+            this.log(e.type, key, this.keys);
             if (index >= 0) {
                 this.keys.splice(index, 1);
                 this.config.keyup(key);
@@ -172,7 +172,7 @@ export class Canvas {
             this.interacted = true;
             if (!this.focused) { return; }
             const button: number = e.button;
-            this.log(e.type, this.mouseButtons);
+            this.log(e.type, button, this.mouseButtons);
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
                 this.config.mousedown(button);
@@ -182,35 +182,43 @@ export class Canvas {
             if (!this.focused) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
-            this.log(e.type, this.mouseButtons);
+            this.log(e.type, button, this.mouseButtons);
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
                 this.config.mouseup(button);
             }
         });
         main.addEventListener('focusin', e => {
+            if (!this.focused && this.lastFrame !== null) {
+                this.config.focus(performance.now() - this.lastFrame);
+            }
             this.focused = true;
             main.style.borderColor = this.config.border;
             this.log(e.type, this.focused);
-            this.animation = requestAnimationFrame(time => this.startAnimate(time));
+            this.startAnimate();
         });
         main.addEventListener('focusout', e => {
             if (this.config.keepFocused) {
-                main.focus();
                 this.stopAnimate(); // Required because a new animation frame is immediately requested
+                main.focus();
             } else {
-                this.config.blur();
                 this.focused = false;
                 main.style.borderColor = this.config.borderBlur;
                 this.log(e.type, this.focused);
+                this.config.blur();
                 this.stopAnimate();
+                this.render();
             }
         });
         window.addEventListener('blur', e => {
             if (this.config.keepFocused) {
+                this.focused = false;
+                main.style.borderColor = this.config.borderBlur;
+                this.log(e.type, this.focused);
                 this.config.blur();
+                this.stopAnimate();
+                this.render();
             }
-            this.log(e.type);
         });
         main.addEventListener('contextmenu', e => e.preventDefault());
         // Initialize audio tracks for recording
@@ -255,14 +263,10 @@ export class Canvas {
     /**
      * Start the animation.
      */
-    private startAnimate(time: DOMHighResTimeStamp): void {
-        this.log('startAnimate', time);
-        this.stopAnimate();
-        if (this.lastFrame > 0 && time > this.lastFrame) {
-            this.config.focus(time - this.lastFrame);
-        }
+    private startAnimate(): void {
+        this.log('startAnimate', this.animation);
         if (this.animation === null) {
-            this.lastFrame = time;
+            this.lastFrame = null;
             this.animation = requestAnimationFrame(time => this.animate(time));
         }
     }
@@ -280,17 +284,21 @@ export class Canvas {
      * Run the main animation loop.
      */
     private animate(time: DOMHighResTimeStamp): void {
-        const currentFrame: number = time;
-        const dt: number = currentFrame - this.lastFrame;
-        this.lastFrame = currentFrame;
+        const dt: number = time - (this.lastFrame ?? time);
+        this.lastFrame = time;
         this.config.loop(dt);
-        // Draw all the layers onto the main canvas
+        this.render();
+        this.animation = requestAnimationFrame(time => this.animate(time));
+    }
+    /**
+     * Draw all layers of the current frame onto the main canvas.
+     */
+    private render(): void {
         this.graphic.fillStyle = this.config.background;
         this.graphic.fillRect(0, 0, this.width, this.height);
         for (const layer of this.layers) {
             this.graphic.drawImage(layer.canvas, 0, 0);
         }
-        this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
      * Determine whether a key is currently pressed.

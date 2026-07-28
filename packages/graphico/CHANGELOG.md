@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.6.0
+
+- Allow one final frame to be rendered after `blur()` is called
+- Improved debug messages slightly
+- Fix bug where animation would stop when `keepFocused` was `true` but window was still focused
+- Follow "blur" logic when page loses focus but when `keepFocused` is set to `true`
+- Decoupled `focus()` callback from animation starting
+- Simplified starting animations, removing a redundant call
+- Simplified calculating delta T per frame (frame 0; dt = 0)
+
 ## 1.5.0
 
 - Added `blur` option to provide a callback function whenever the canvas loses focus
