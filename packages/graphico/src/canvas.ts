@@ -207,14 +207,18 @@ export class Canvas {
                 main.style.borderColor = this.config.borderBlur;
                 this.log(e.type, this.focused);
                 this.stopAnimate();
+                this.render();
             }
         });
         window.addEventListener('blur', e => {
             if (this.config.keepFocused) {
                 this.config.blur();
                 this.focused = false;
+                main.style.borderColor = this.config.borderBlur;
+                this.stopAnimate();
+                this.render();
             }
-            this.log(e.type);
+            this.log(e.type, this.focused);
         });
         main.addEventListener('contextmenu', e => e.preventDefault());
         // Initialize audio tracks for recording
@@ -283,13 +287,18 @@ export class Canvas {
         const dt: number = time - (this.lastFrame ?? time);
         this.lastFrame = time;
         this.config.loop(dt);
-        // Draw all the layers onto the main canvas
+        this.render();
+        this.animation = requestAnimationFrame(time => this.animate(time));
+    }
+    /**
+     * Draw all layers of the current frame onto the main canvas.
+     */
+    private render(): void {
         this.graphic.fillStyle = this.config.background;
         this.graphic.fillRect(0, 0, this.width, this.height);
         for (const layer of this.layers) {
             this.graphic.drawImage(layer.canvas, 0, 0);
         }
-        this.animation = requestAnimationFrame(time => this.animate(time));
     }
     /**
      * Determine whether a key is currently pressed.
