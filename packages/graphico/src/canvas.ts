@@ -151,7 +151,7 @@ export class Canvas {
             if (!this.focused) { return; }
             e.preventDefault();
             const key: string = e.key.toLowerCase();
-            this.log(e.type, this.keys);
+            this.log(e.type, key, this.keys);
             if (!this.keys.includes(key)) {
                 this.keys.push(key);
                 this.config.keydown(key);
@@ -161,7 +161,7 @@ export class Canvas {
             if (!this.focused) { return; }
             const key: string = e.key.toLowerCase();
             const index: number = this.keys.indexOf(key);
-            this.log(e.type, this.keys);
+            this.log(e.type, key, this.keys);
             if (index >= 0) {
                 this.keys.splice(index, 1);
                 this.config.keyup(key);
@@ -172,7 +172,7 @@ export class Canvas {
             this.interacted = true;
             if (!this.focused) { return; }
             const button: number = e.button;
-            this.log(e.type, this.mouseButtons);
+            this.log(e.type, button, this.mouseButtons);
             if (!this.mouseButtons.includes(button)) {
                 this.mouseButtons.push(button);
                 this.config.mousedown(button);
@@ -182,7 +182,7 @@ export class Canvas {
             if (!this.focused) { return; }
             const button: number = e.button;
             const index: number = this.mouseButtons.indexOf(button);
-            this.log(e.type, this.mouseButtons);
+            this.log(e.type, button, this.mouseButtons);
             if (index >= 0) {
                 this.mouseButtons.splice(index, 1);
                 this.config.mouseup(button);
@@ -202,23 +202,23 @@ export class Canvas {
                 this.stopAnimate(); // Required because a new animation frame is immediately requested
                 main.focus();
             } else {
-                this.config.blur();
                 this.focused = false;
                 main.style.borderColor = this.config.borderBlur;
                 this.log(e.type, this.focused);
+                this.config.blur();
                 this.stopAnimate();
                 this.render();
             }
         });
         window.addEventListener('blur', e => {
             if (this.config.keepFocused) {
-                this.config.blur();
                 this.focused = false;
                 main.style.borderColor = this.config.borderBlur;
+                this.log(e.type, this.focused);
+                this.config.blur();
                 this.stopAnimate();
                 this.render();
             }
-            this.log(e.type, this.focused);
         });
         main.addEventListener('contextmenu', e => e.preventDefault());
         // Initialize audio tracks for recording
