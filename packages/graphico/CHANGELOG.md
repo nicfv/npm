@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0
+
+- Added `blur` option to provide a callback function whenever the canvas loses focus
+- Improved animation handling
+    - Removed extra start/stop calls
+- Fix minor typo in `focus` documentation
+
 ## 1.4.0
 
 - Added `focus` option which is an event listener called whenever the canvas regains focus
