@@ -199,6 +199,7 @@ export class Canvas {
                 main.focus();
                 this.stopAnimate(); // Required because a new animation frame is immediately requested
             } else {
+                this.config.blur();
                 this.focused = false;
                 main.style.borderColor = this.config.borderBlur;
                 this.log(e.type, this.focused);
@@ -206,6 +207,9 @@ export class Canvas {
             }
         });
         window.addEventListener('blur', e => {
+            if (this.config.keepFocused) {
+                this.config.blur();
+            }
             this.log(e.type);
             this.stopAnimate(); // might be unnecessary
         });
