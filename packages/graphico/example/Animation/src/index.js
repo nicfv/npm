@@ -74,4 +74,7 @@ const canvas = new Canvas({
             ball.reset(100);
         }
     },
+    focus() { console.log('focused!') },
+    blur() { console.log('blurred!') },
+    keepFocused: false,
 });
