@@ -211,7 +211,6 @@ export class Canvas {
                 this.config.blur();
             }
             this.log(e.type);
-            this.stopAnimate(); // might be unnecessary
         });
         main.addEventListener('contextmenu', e => e.preventDefault());
         // Initialize audio tracks for recording
@@ -258,14 +257,14 @@ export class Canvas {
      */
     private startAnimate(time: DOMHighResTimeStamp): void {
         this.log('startAnimate', time);
-        if (this.animation !== null) {
-            cancelAnimationFrame(this.animation);
-        }
+        this.stopAnimate();
         if (this.lastFrame > 0 && time > this.lastFrame) {
             this.config.focus(time - this.lastFrame);
         }
-        this.lastFrame = time;
-        this.animation = requestAnimationFrame(time => this.animate(time));
+        if (this.animation === null) {
+            this.lastFrame = time;
+            this.animation = requestAnimationFrame(time => this.animate(time));
+        }
     }
     /**
      * Stop the animation.
