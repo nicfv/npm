@@ -189,6 +189,9 @@ export class Canvas {
             }
         });
         main.addEventListener('focusin', e => {
+            if (!this.focused && this.lastFrame !== null) {
+                this.config.focus(performance.now() - this.lastFrame);
+            }
             this.focused = true;
             main.style.borderColor = this.config.border;
             this.log(e.type, this.focused);
@@ -209,6 +212,7 @@ export class Canvas {
         window.addEventListener('blur', e => {
             if (this.config.keepFocused) {
                 this.config.blur();
+                this.focused = false;
             }
             this.log(e.type);
         });
@@ -258,9 +262,6 @@ export class Canvas {
     private startAnimate(): void {
         this.log('startAnimate', this.animation);
         if (this.animation === null) {
-            if (this.lastFrame !== null) {
-                this.config.focus(performance.now() - this.lastFrame);
-            }
             this.lastFrame = null;
             this.animation = requestAnimationFrame(time => this.animate(time));
         }
