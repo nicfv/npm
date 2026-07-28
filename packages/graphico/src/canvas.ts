@@ -196,8 +196,8 @@ export class Canvas {
         });
         main.addEventListener('focusout', e => {
             if (this.config.keepFocused) {
-                main.focus();
                 this.stopAnimate(); // Required because a new animation frame is immediately requested
+                main.focus();
             } else {
                 this.config.blur();
                 this.focused = false;
