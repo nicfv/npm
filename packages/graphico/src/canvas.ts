@@ -27,6 +27,7 @@ export class Canvas {
         mouseup() { return; },
         loop() { return; },
         focus() { return; },
+        blur() { return; },
     };
     /**
      * Configuration options for this canvas
@@ -67,7 +68,7 @@ export class Canvas {
     /**
      * Represents the animation ID handle to cancel the animation
      */
-    private animation = 0;
+    private animation: number | null = null;
     /**
      * The last frame's high resolution timestamp
      */
@@ -196,17 +197,20 @@ export class Canvas {
         main.addEventListener('focusout', e => {
             if (this.config.keepFocused) {
                 main.focus();
-                cancelAnimationFrame(this.animation); // Required because a new animation frame is immediately requested
+                this.stopAnimate(); // Required because a new animation frame is immediately requested
             } else {
+                this.config.blur();
                 this.focused = false;
                 main.style.borderColor = this.config.borderBlur;
                 this.log(e.type, this.focused);
-                cancelAnimationFrame(this.animation);
+                this.stopAnimate();
             }
         });
         window.addEventListener('blur', e => {
+            if (this.config.keepFocused) {
+                this.config.blur();
+            }
             this.log(e.type);
-            cancelAnimationFrame(this.animation);
         });
         main.addEventListener('contextmenu', e => e.preventDefault());
         // Initialize audio tracks for recording
@@ -253,11 +257,24 @@ export class Canvas {
      */
     private startAnimate(time: DOMHighResTimeStamp): void {
         this.log('startAnimate', time);
+        this.stopAnimate();
         if (this.lastFrame > 0 && time > this.lastFrame) {
             this.config.focus(time - this.lastFrame);
         }
-        this.lastFrame = time;
-        this.animation = requestAnimationFrame(time => this.animate(time));
+        if (this.animation === null) {
+            this.lastFrame = time;
+            this.animation = requestAnimationFrame(time => this.animate(time));
+        }
+    }
+    /**
+     * Stop the animation.
+     */
+    private stopAnimate(): void {
+        this.log('stopAnimate', this.animation);
+        if (this.animation !== null) {
+            cancelAnimationFrame(this.animation);
+            this.animation = null;
+        }
     }
     /**
      * Run the main animation loop.
