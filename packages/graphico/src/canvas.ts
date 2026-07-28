@@ -72,7 +72,7 @@ export class Canvas {
     /**
      * The last frame's high resolution timestamp
      */
-    private lastFrame = 0;
+    private lastFrame: number | null = null;
     /**
      * Determine whether the client is focused or not
      */
@@ -192,7 +192,7 @@ export class Canvas {
             this.focused = true;
             main.style.borderColor = this.config.border;
             this.log(e.type, this.focused);
-            this.animation = requestAnimationFrame(time => this.startAnimate(time));
+            this.startAnimate();
         });
         main.addEventListener('focusout', e => {
             if (this.config.keepFocused) {
@@ -255,14 +255,13 @@ export class Canvas {
     /**
      * Start the animation.
      */
-    private startAnimate(time: DOMHighResTimeStamp): void {
-        this.log('startAnimate', time);
-        this.stopAnimate();
-        if (this.lastFrame > 0 && time > this.lastFrame) {
-            this.config.focus(time - this.lastFrame);
-        }
+    private startAnimate(): void {
+        this.log('startAnimate', this.animation);
         if (this.animation === null) {
-            this.lastFrame = time;
+            if (this.lastFrame !== null) {
+                this.config.focus(performance.now() - this.lastFrame);
+            }
+            this.lastFrame = null;
             this.animation = requestAnimationFrame(time => this.animate(time));
         }
     }
@@ -280,9 +279,8 @@ export class Canvas {
      * Run the main animation loop.
      */
     private animate(time: DOMHighResTimeStamp): void {
-        const currentFrame: number = time;
-        const dt: number = currentFrame - this.lastFrame;
-        this.lastFrame = currentFrame;
+        const dt: number = time - (this.lastFrame ?? time);
+        this.lastFrame = time;
         this.config.loop(dt);
         // Draw all the layers onto the main canvas
         this.graphic.fillStyle = this.config.background;
