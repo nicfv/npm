@@ -1,5 +1,5 @@
 import * as T6 from 't6';
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 import { Color } from './Color.js';
 import { Gradient } from './Gradient.js';
 import { Palette, PaletteName } from './Palette.js';
