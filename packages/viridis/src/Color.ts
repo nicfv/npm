@@ -129,7 +129,7 @@ export class Color {
         return new Color(red, green, blue, alpha);
     }
     /**
-     * 
+     * Define a new color from HSL values.
      * @param hue The color hue, in degrees [0, 360)
      * @param saturation The saturation percent [0, 100]
      * @param lightness The lightness percent [0, 100]
