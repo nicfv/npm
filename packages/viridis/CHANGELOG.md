@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+- Add missing documentation for `Color.hsl()`
+- Add newlines at the end of each file
+- Add new function `Gradient.setColorStops(CanvasGradient)` to support adding color stops to various HTML canvas gradients
+- Update `SMath` dependency to v3.0.0
+
 ## 1.5.0
 
 - Compatibility update for Typescript v6+
