@@ -108,7 +108,7 @@ export class Gradient {
      */
     public setColorStops(gradient: CanvasGradient): void {
         for (let i = 0; i < this.colors.length; i++) {
-            gradient.addColorStop(SMath.normalize(i, 0, this.colors.length), this.colors[i].toString());
+            gradient.addColorStop(SMath.normalize(i, 0, this.colors.length - 1), this.colors[i].toString());
         }
     }
 }
