@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1
+
+- Fix bug where color stops would not span the full range of \[0,1\]
+
 ## 1.6.0
 
 - Add missing documentation for `Color.hsl()`
