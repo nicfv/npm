@@ -1,4 +1,4 @@
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 import { Color } from './Color.js';
 /**
  * Represents a linear, uniform color gradient.
@@ -92,5 +92,14 @@ export class Gradient {
             linearGradient.append(colorStop);
         });
         return linearGradient;
+    }
+    /**
+     * Add color stops to an HTML canvas gradient.
+     * @param gradient Any canvas gradient created with
+     */
+    public setColorStops(gradient: CanvasGradient): void {
+        for (let i = 0; i < this.colors.length; i++) {
+            gradient.addColorStop(SMath.normalize(i, 0, this.colors.length), this.colors[i].toString());
+        }
     }
 }
