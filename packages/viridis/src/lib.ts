@@ -1,4 +1,4 @@
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 import { HSL, RGB } from './types.js';
 
 /**
