@@ -15,6 +15,13 @@ describe('approx', () => {
         assert.ok(SMath.approx(1 + 1e-5, 1, 1e-4));
         assert.ok(SMath.approx(1 - 1e-5, 1, 1e-4));
     });
+
+    it('should treat negative tolerance values as absolute tolerances and reject NaN comparisons', () => {
+        assert.ok(SMath.approx(1.2, 1, -0.25));
+        assert.ok(!SMath.approx(1.2, 1, -0.1));
+        assert.ok(!SMath.approx(NaN, 0));
+        assert.ok(!SMath.approx(0, NaN));
+    });
 });
 
 describe('clamp', () => {
@@ -81,6 +88,11 @@ describe('factorial', () => {
         assert.strictEqual(SMath.factorial(3), 6);
         assert.strictEqual(SMath.factorial(4), 24);
         assert.strictEqual(SMath.factorial(5), 120);
+    });
+
+    it('should reject invalid factorial inputs', () => {
+        assert.throws(() => SMath.factorial(-1), /positive integer/i);
+        assert.throws(() => SMath.factorial(1.5), /positive integer/i);
     });
 });
 
@@ -170,6 +182,13 @@ describe('average and median', () => {
         assert.strictEqual(SMath.median([10, 2, 30, 4]), 7);
         assert.strictEqual(SMath.median([10, 2, 30, 4, 5]), 5);
     });
+
+    it('should not mutate the original dataset when computing the median', () => {
+        const input = [3, 1, 2];
+        const snapshot = [...input];
+        assert.strictEqual(SMath.median(input), 2);
+        assert.deepStrictEqual(input, snapshot);
+    });
 });
 
 describe('variance and standard deviation', () => {
@@ -246,6 +265,12 @@ describe('random generators', () => {
         assert.strictEqual(SMath.selectRandomWeighted([0.1, 0, 0]), 0);
         assert.strictEqual(SMath.selectRandomWeighted([0, 15, -3]), 1);
         assert.strictEqual(SMath.selectRandomWeighted([-4, 0, 20]), 2);
+    });
+
+    it('should handle zero-sum and zero-input weighted selection safely', () => {
+        assert.strictEqual(SMath.selectRandomWeighted([0, 0, 0]), -1);
+        assert.strictEqual(SMath.selectRandomWeighted([-1, -2, -3]), -1);
+        assert.strictEqual(SMath.selectRandom([]), undefined);
     });
 
     it('should weight random selection reasonably over repeated trials', () => {
@@ -389,6 +414,11 @@ describe('rat and mixed', () => {
         assert.strictEqual(mixedFrac.num, 1);
         assert.strictEqual(mixedFrac.den, 3);
     });
+
+    it('should return undefined for invalid inputs', () => {
+        assert.throws(() => SMath.rat(NaN), /finite/i);
+        assert.throws(() => SMath.mixed(NaN), /finite/i);
+    });
 });
 
 describe('gcd', () => {
@@ -399,5 +429,12 @@ describe('gcd', () => {
         assert.strictEqual(SMath.gcd(1, 49), 1);
         assert.strictEqual(SMath.gcd(49, 49), 49);
         assert.strictEqual(SMath.gcd(15, 0), 15);
+    });
+
+    it('should cover boundary conditions', () => {
+        assert.strictEqual(SMath.gcd(0, 0), 0);
+        assert.strictEqual(SMath.gcd(0, 1), 1);
+        assert.strictEqual(SMath.gcd(1, 0), 1);
+        assert.throws(() => SMath.gcd(-1, 2), /positive integer/i);
     });
 });
