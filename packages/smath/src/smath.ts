@@ -9,7 +9,7 @@
  *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
  */
 export function approx(a: number, b: number, epsilon = 1e-6): boolean {
-    return Math.abs(a - b) <= epsilon;
+    return Math.abs(a - b) <= Math.abs(epsilon);
 }
 /**
  * Clamp a number within a range.
@@ -496,6 +496,9 @@ export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
     let num = 0,
         den = 1;
     const sign: number = n < 0 ? -1 : 1;
+    if (!Number.isFinite(n)) {
+        throw new Error('Input must be a finite number');
+    }
     while (!approx(sign * n, num / den, epsilon)) {
         if (sign * n > num / den) {
             num++;
@@ -516,7 +519,7 @@ export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
  * const frac = SMath.mixed(-8 / 6); // { whole: -1, num: 1, den: 3 }
  */
 export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, den: number } {
-    return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
+    return { whole: n > 0 ? Math.floor(n) : n > -1 ? 0 : Math.ceil(n), ...rat((n < -1 ? Math.abs(n) : n) % 1, epsilon) };
 }
 /**
  * Get the greatest common denominator (GCD) of two numbers.
