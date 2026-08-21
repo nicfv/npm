@@ -1,42 +1,67 @@
-import * as T6 from 't6';
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { SMath } from './index.js';
 
-T6.isTrue(SMath.approx(0.1 + 0.2, 0.3));
-T6.isTrue(SMath.approx(0.3 - 0.1, 0.2));
-T6.isTrue(SMath.approx(1 + 1e-7, 1));
-T6.isTrue(SMath.approx(1 - 1e-7, 1));
-T6.isFalse(SMath.approx(1 + 1e-5, 1));
-T6.isFalse(SMath.approx(1 - 1e-5, 1));
-T6.isFalse(SMath.approx(1 + 1e-7, 1, 1e-8));
-T6.isFalse(SMath.approx(1 - 1e-7, 1, 1e-8));
-T6.isTrue(SMath.approx(1 + 1e-5, 1, 1e-4));
-T6.isTrue(SMath.approx(1 - 1e-5, 1, 1e-4));
+describe('approx', () => {
+    it('should determine if numbers are approximate', () => {
+        assert.ok(SMath.approx(0.1 + 0.2, 0.3));
+        assert.ok(SMath.approx(0.3 - 0.1, 0.2));
+        assert.ok(SMath.approx(1 + 1e-7, 1));
+        assert.ok(SMath.approx(1 - 1e-7, 1));
+        assert.ok(!SMath.approx(1 + 1e-5, 1));
+        assert.ok(!SMath.approx(1 - 1e-5, 1));
+        assert.ok(!SMath.approx(1 + 1e-7, 1, 1e-8));
+        assert.ok(!SMath.approx(1 - 1e-7, 1, 1e-8));
+        assert.ok(SMath.approx(1 + 1e-5, 1, 1e-4));
+        assert.ok(SMath.approx(1 - 1e-5, 1, 1e-4));
+    });
+});
 
-T6.eq(SMath.clamp(4, 2, 6), 4);
-T6.eq(SMath.clamp(1, 2, 6), 2);
-T6.eq(SMath.clamp(7, 2, 6), 6);
+describe('clamp', () => {
+    it('should clamp a number within bounds', () => {
+        assert.equal(SMath.clamp(4, 2, 6), 4);
+        assert.equal(SMath.clamp(1, 2, 6), 2);
+        assert.equal(SMath.clamp(7, 2, 6), 6);
+    });
+});
 
-T6.eq(SMath.expand(-1, 4, 8), 0);
-T6.eq(SMath.expand(0, 4, 8), 4);
-T6.eq(SMath.expand(0.5, 4, 8), 6);
-T6.eq(SMath.expand(1, 4, 8), 8);
-T6.eq(SMath.expand(2, 4, 8), 12);
+describe('expand', () => {
+    it('should expand a normalized number', () => {
+        assert.equal(SMath.expand(-1, 4, 8), 0);
+        assert.equal(SMath.expand(0, 4, 8), 4);
+        assert.equal(SMath.expand(0.5, 4, 8), 6);
+        assert.equal(SMath.expand(1, 4, 8), 8);
+        assert.equal(SMath.expand(2, 4, 8), 12);
+    });
+});
 
-T6.eq(SMath.normalize(8, 10, 12), -1);
-T6.eq(SMath.normalize(10, 10, 12), 0);
-T6.eq(SMath.normalize(11, 10, 12), 0.5);
-T6.eq(SMath.normalize(12, 10, 12), 1);
-T6.eq(SMath.normalize(14, 10, 12), 2);
+describe('normalize', () => {
+    it('should normalize a number', () => {
+        assert.equal(SMath.normalize(8, 10, 12), -1);
+        assert.equal(SMath.normalize(10, 10, 12), 0);
+        assert.equal(SMath.normalize(11, 10, 12), 0.5);
+        assert.equal(SMath.normalize(12, 10, 12), 1);
+        assert.equal(SMath.normalize(14, 10, 12), 2);
+    });
+});
 
-T6.eq(SMath.translate(20, 0, 100, 32, 212), 68);
-T6.eq(SMath.translate(-40, 0, 100, 32, 212), -40);
-T6.eq(SMath.translate(68, 32, 212, 0, 100), 20);
-T6.eq(SMath.translate(-40, 32, 212, 0, 100), -40);
+describe('translate', () => {
+    it('should translate a number', () => {
+        assert.equal(SMath.translate(20, 0, 100, 32, 212), 68);
+        assert.equal(SMath.translate(-40, 0, 100, 32, 212), -40);
+        assert.equal(SMath.translate(68, 32, 212, 0, 100), 20);
+        assert.equal(SMath.translate(-40, 32, 212, 0, 100), -40);
+    });
+});
 
-T6.is(SMath.linspace(1, 5, 6).join(), '1,1.8,2.6,3.4,4.2,5');
-T6.is(SMath.linspace(10, 20, 3).join(), '10,15,20');
-T6.is(SMath.linspace(3, -3, 5).join(), '3,1.5,0,-1.5,-3');
-T6.is(SMath.linspace(0, 0, -1).join(), '');
+describe('linspace', () => {
+    it('should generate an array of linearly-spaced numbers', () => {
+        assert.deepEqual(SMath.linspace(1, 5, 6), [1, 1.8, 2.6, 3.4, 4.2, 5]);
+        assert.deepEqual(SMath.linspace(10, 20, 3), [10, 15, 20]);
+        assert.deepEqual(SMath.linspace(3, -3, 5), [3, 1.5, 0, -1.5, -3]);
+        assert.deepEqual(SMath.linspace(0, 0, -1), []);
+    });
+});
 
 T6.gt(SMath.logspace(0, 2, 5)[3], 31.622); // Approx 31.6227766...
 T6.lt(SMath.logspace(0, 2, 5)[3], 31.623);
