@@ -63,275 +63,341 @@ describe('linspace', () => {
     });
 });
 
-T6.gt(SMath.logspace(0, 2, 5)[3], 31.622); // Approx 31.6227766...
-T6.lt(SMath.logspace(0, 2, 5)[3], 31.623);
-T6.is(SMath.logspace(2, -2, 5).join(), '100,10,1,0.1,0.01');
-T6.is(SMath.logspace(0, 0, -1).join(), '');
+describe('logspace', () => {
+    it('should generate logarithmically spaced values', () => {
+        const values = SMath.logspace(0, 2, 5);
+        assert.ok(values[3] > 31.622);
+        assert.ok(values[3] < 31.623);
+        assert.deepStrictEqual(SMath.logspace(2, -2, 5), [100, 10, 1, 0.1, 0.01]);
+        assert.deepStrictEqual(SMath.logspace(0, 0, -1), []);
+    });
+});
 
-T6.eq(SMath.factorial(0), 1);
-T6.eq(SMath.factorial(1), 1);
-T6.eq(SMath.factorial(2), 2);
-T6.eq(SMath.factorial(3), 6);
-T6.eq(SMath.factorial(4), 24);
-T6.eq(SMath.factorial(5), 120);
+describe('factorial', () => {
+    it('should compute factorials', () => {
+        assert.strictEqual(SMath.factorial(0), 1);
+        assert.strictEqual(SMath.factorial(1), 1);
+        assert.strictEqual(SMath.factorial(2), 2);
+        assert.strictEqual(SMath.factorial(3), 6);
+        assert.strictEqual(SMath.factorial(4), 24);
+        assert.strictEqual(SMath.factorial(5), 120);
+    });
+});
 
-T6.is(SMath.factors(0).join(), '0');
-T6.is(SMath.factors(1).join(), '1');
-T6.is(SMath.factors(2).join(), '2');
-T6.is(SMath.factors(3).join(), '3');
-T6.is(SMath.factors(4).join(), '2,2');
-T6.is(SMath.factors(5).join(), '5');
-T6.is(SMath.factors(6).join(), '2,3');
-T6.is(SMath.factors(7).join(), '7');
-T6.is(SMath.factors(8).join(), '2,2,2');
-T6.is(SMath.factors(24).join(), '2,2,2,3');
-for (let i = 0; i <= 100; i++) {
-    T6.eq(SMath.prod(SMath.factors(i)), i);
-}
+describe('factors', () => {
+    it('should factor integers into prime factors', () => {
+        assert.deepStrictEqual(SMath.factors(0), [0]);
+        assert.deepStrictEqual(SMath.factors(1), [1]);
+        assert.deepStrictEqual(SMath.factors(2), [2]);
+        assert.deepStrictEqual(SMath.factors(3), [3]);
+        assert.deepStrictEqual(SMath.factors(4), [2, 2]);
+        assert.deepStrictEqual(SMath.factors(5), [5]);
+        assert.deepStrictEqual(SMath.factors(6), [2, 3]);
+        assert.deepStrictEqual(SMath.factors(7), [7]);
+        assert.deepStrictEqual(SMath.factors(8), [2, 2, 2]);
+        assert.deepStrictEqual(SMath.factors(24), [2, 2, 2, 3]);
+        for (let i = 0; i <= 100; i++) {
+            assert.strictEqual(SMath.prod(SMath.factors(i)), i);
+        }
+    });
+});
 
-T6.isFalse(SMath.isPrime(-4));
-T6.isFalse(SMath.isPrime(-2));
-T6.isFalse(SMath.isPrime(-1.5));
-T6.isFalse(SMath.isPrime(1));
-T6.isTrue(SMath.isPrime(2));
-T6.isTrue(SMath.isPrime(3));
-T6.isFalse(SMath.isPrime(4));
-T6.isTrue(SMath.isPrime(5));
-T6.isTrue(SMath.isPrime(23));
-T6.isFalse(SMath.isPrime(23.5));
-T6.isFalse(SMath.isPrime(81));
-T6.isTrue(SMath.isPrime(83));
+describe('isPrime', () => {
+    it('should detect prime numbers', () => {
+        assert.ok(!SMath.isPrime(-4));
+        assert.ok(!SMath.isPrime(-2));
+        assert.ok(!SMath.isPrime(-1.5));
+        assert.ok(!SMath.isPrime(1));
+        assert.ok(SMath.isPrime(2));
+        assert.ok(SMath.isPrime(3));
+        assert.ok(!SMath.isPrime(4));
+        assert.ok(SMath.isPrime(5));
+        assert.ok(SMath.isPrime(23));
+        assert.ok(!SMath.isPrime(23.5));
+        assert.ok(!SMath.isPrime(81));
+        assert.ok(SMath.isPrime(83));
+    });
+});
 
-T6.eq(SMath.round2(6.12, 0.2), 6.2);
-T6.eq(SMath.round2(-0.53, 0.25), -0.5);
-T6.eq(SMath.round2(Math.PI, 0.125), 3.125);
-T6.eq(SMath.round2(2.2, -1), 2);
-T6.eq(SMath.round2(2.7 + 0.35, 0.01), 3.05);
+describe('round2', () => {
+    it('should round to the nearest multiple of a base', () => {
+        assert.strictEqual(SMath.round2(6.12, 0.2), 6.2);
+        assert.strictEqual(SMath.round2(-0.53, 0.25), -0.5);
+        assert.strictEqual(SMath.round2(Math.PI, 0.125), 3.125);
+        assert.strictEqual(SMath.round2(2.2, -1), 2);
+        assert.strictEqual(SMath.round2(2.7 + 0.35, 0.01), 3.05);
+    });
+});
 
-T6.eq(SMath.error(9, 10), -0.1);
-T6.eq(SMath.error(11, 10), 0.1);
-T6.eq(SMath.error(-1, 2), -1.5);
-T6.eq(SMath.error(2.5, 2), 0.25);
+describe('error', () => {
+    it('should compute relative normalized error', () => {
+        assert.strictEqual(SMath.error(9, 10), -0.1);
+        assert.strictEqual(SMath.error(11, 10), 0.1);
+        assert.strictEqual(SMath.error(-1, 2), -1.5);
+        assert.strictEqual(SMath.error(2.5, 2), 0.25);
+    });
+});
 
-T6.eq(SMath.sum([]), 0);
-T6.eq(SMath.sum([1]), 1);
-T6.eq(SMath.sum([1, 2]), 3);
-T6.eq(SMath.sum([1, 2, 3]), 6);
-T6.eq(SMath.sum([1, 2, 3, 4]), 10);
+describe('sum and prod', () => {
+    it('should sum and multiply collections', () => {
+        assert.strictEqual(SMath.sum([]), 0);
+        assert.strictEqual(SMath.sum([1]), 1);
+        assert.strictEqual(SMath.sum([1, 2]), 3);
+        assert.strictEqual(SMath.sum([1, 2, 3]), 6);
+        assert.strictEqual(SMath.sum([1, 2, 3, 4]), 10);
 
-T6.eq(SMath.prod([]), 1);
-T6.eq(SMath.prod([1]), 1);
-T6.eq(SMath.prod([1, 2]), 2);
-T6.eq(SMath.prod([1, 2, 3]), 6);
-T6.eq(SMath.prod([1, 2, 3, 4]), 24);
+        assert.strictEqual(SMath.prod([]), 1);
+        assert.strictEqual(SMath.prod([1]), 1);
+        assert.strictEqual(SMath.prod([1, 2]), 2);
+        assert.strictEqual(SMath.prod([1, 2, 3]), 6);
+        assert.strictEqual(SMath.prod([1, 2, 3, 4]), 24);
+    });
+});
 
-T6.is(SMath.avg([]).toString(), 'NaN');
-T6.eq(SMath.avg([1]), 1);
-T6.eq(SMath.avg([1, 2]), 1.5);
-T6.eq(SMath.avg([1, 2, 3]), 2);
-T6.eq(SMath.avg([1, 2, 3, 4]), 2.5);
+describe('average and median', () => {
+    it('should compute average and median values', () => {
+        assert.ok(Number.isNaN(SMath.avg([])));
+        assert.strictEqual(SMath.avg([1]), 1);
+        assert.strictEqual(SMath.avg([1, 2]), 1.5);
+        assert.strictEqual(SMath.avg([1, 2, 3]), 2);
+        assert.strictEqual(SMath.avg([1, 2, 3, 4]), 2.5);
 
-T6.is(SMath.median([]).toString(), 'NaN');
-T6.eq(SMath.median([1]), 1);
-T6.eq(SMath.median([1, 3]), 2);
-T6.eq(SMath.median([1, 3, 2]), 2);
-T6.eq(SMath.median([5, 1, 2, 3]), 2.5);
-T6.eq(SMath.median([10, 2, 30, 4]), 7);
-T6.eq(SMath.median([10, 2, 30, 4, 5]), 5);
+        assert.ok(Number.isNaN(SMath.median([])));
+        assert.strictEqual(SMath.median([1]), 1);
+        assert.strictEqual(SMath.median([1, 3]), 2);
+        assert.strictEqual(SMath.median([1, 3, 2]), 2);
+        assert.strictEqual(SMath.median([5, 1, 2, 3]), 2.5);
+        assert.strictEqual(SMath.median([10, 2, 30, 4]), 7);
+        assert.strictEqual(SMath.median([10, 2, 30, 4, 5]), 5);
+    });
+});
 
-const ds1: number[] = [1, 2, 3, 4],
-    ds2: number[] = [-3, 0, 1, 1, 2];
+describe('variance and standard deviation', () => {
+    it('should compute population and sample stats', () => {
+        const ds1 = [1, 2, 3, 4];
+        const ds2 = [-3, 0, 1, 1, 2];
 
-T6.eq(SMath.varp(ds1), 1.25);
-T6.gt(SMath.varp(ds2), 2.95); // 2.96
-T6.lt(SMath.varp(ds2), 2.97);
+        assert.strictEqual(SMath.varp(ds1), 1.25);
+        assert.ok(SMath.varp(ds2) > 2.95);
+        assert.ok(SMath.varp(ds2) < 2.97);
 
-T6.gt(SMath.vars(ds1), 1.66); // 1.666...
-T6.lt(SMath.vars(ds1), 1.67);
-T6.gt(SMath.vars(ds2), 3.69); // 3.7
-T6.lt(SMath.vars(ds2), 3.71);
+        assert.ok(SMath.vars(ds1) > 1.66);
+        assert.ok(SMath.vars(ds1) < 1.67);
+        assert.ok(SMath.vars(ds2) > 3.69);
+        assert.ok(SMath.vars(ds2) < 3.71);
 
-T6.gt(SMath.stdevp(ds1), 1.11); // 1.118...
-T6.lt(SMath.stdevp(ds1), 1.12);
-T6.gt(SMath.stdevp(ds2), 1.72); // 1.720...
-T6.lt(SMath.stdevp(ds2), 1.73);
+        assert.ok(SMath.stdevp(ds1) > 1.11);
+        assert.ok(SMath.stdevp(ds1) < 1.12);
+        assert.ok(SMath.stdevp(ds2) > 1.72);
+        assert.ok(SMath.stdevp(ds2) < 1.73);
 
-T6.gt(SMath.stdevs(ds1), 1.29); // 1.291...
-T6.lt(SMath.stdevs(ds1), 1.30);
-T6.gt(SMath.stdevs(ds2), 1.92); // 1.923...
-T6.lt(SMath.stdevs(ds2), 1.93);
+        assert.ok(SMath.stdevs(ds1) > 1.29);
+        assert.ok(SMath.stdevs(ds1) < 1.30);
+        assert.ok(SMath.stdevs(ds2) > 1.92);
+        assert.ok(SMath.stdevs(ds2) < 1.93);
+    });
+});
 
-for (let i = 0; i < 100; i++) {
-    const randMin: number = i - 75,
-        randMax: number = i - 25,
-        rf: number = SMath.runif(randMin, randMax),
-        ri: number = SMath.rint(randMin, randMax);
-    T6.ge(rf, randMin);
-    T6.le(rf, randMax);
-    T6.ge(ri, randMin);
-    T6.le(ri, randMax);
-}
+describe('random generators', () => {
+    it('should generate random values within bounds', () => {
+        for (let i = 0; i < 100; i++) {
+            const randMin = i - 75;
+            const randMax = i - 25;
+            const rf = SMath.runif(randMin, randMax);
+            const ri = SMath.rint(randMin, randMax);
+            assert.ok(rf >= randMin && rf <= randMax);
+            assert.ok(ri >= randMin && ri <= randMax);
+        }
+    });
 
-{
-    const tolerance = 0.5,
-        normMean = -1,
-        normStdev = 3,
-        normDist1: number[] = SMath.linspace(0, 0, 1000).map(() => SMath.rnorm(normMean, normStdev)),
-        normDist2: number[] = SMath.rdist(1000, normMean, normStdev),
-        normMeanCalc1: number = SMath.avg(normDist1),
-        normStdevCalc1: number = SMath.stdevp(normDist1),
-        normMeanCalc2: number = SMath.avg(normDist2),
-        normStdevCalc2: number = SMath.stdevp(normDist2);
-    T6.isTrue(SMath.approx(normMeanCalc1, normMean, tolerance));
-    T6.isTrue(SMath.approx(normStdevCalc1, normStdev, tolerance));
-    T6.isTrue(SMath.approx(normMeanCalc2, normMean, tolerance));
-    T6.isTrue(SMath.approx(normStdevCalc2, normStdev, tolerance));
-}
+    it('should generate approximately normal random data', () => {
+        const tolerance = 0.5;
+        const normMean = -1;
+        const normStdev = 3;
+        const normDist1 = SMath.linspace(0, 0, 1000).map(() => SMath.rnorm(normMean, normStdev));
+        const normDist2 = SMath.rdist(1000, normMean, normStdev);
+        const normMeanCalc1 = SMath.avg(normDist1);
+        const normStdevCalc1 = SMath.stdevp(normDist1);
+        const normMeanCalc2 = SMath.avg(normDist2);
+        const normStdevCalc2 = SMath.stdevp(normDist2);
 
-T6.eq(SMath.shuffle(['a', 'b', 'c']).length, 3);
-T6.eq(SMath.shuffle([1, 2, 3]).length, 3);
-T6.eq(Math.min(...SMath.shuffle([1, 2, 3])), 1);
-T6.eq(Math.max(...SMath.shuffle([1, 2, 3])), 3);
-T6.eq(SMath.avg(SMath.shuffle([1, 2, 3])), 2);
+        assert.ok(SMath.approx(normMeanCalc1, normMean, tolerance));
+        assert.ok(SMath.approx(normStdevCalc1, normStdev, tolerance));
+        assert.ok(SMath.approx(normMeanCalc2, normMean, tolerance));
+        assert.ok(SMath.approx(normStdevCalc2, normStdev, tolerance));
+    });
 
-T6.eq(SMath.selectRandom([5]), 5);
-T6.eq(SMath.selectRandom([1, 1, 1, 1]), 1);
-T6.gt(SMath.selectRandom([1, 2, 3, 4]), 0);
-T6.lt(SMath.selectRandom([1, 2, 3, 4]), 5);
-T6.isTrue(typeof SMath.selectRandom([]) === 'undefined');
+    it('should shuffle and select values', () => {
+        assert.strictEqual(SMath.shuffle(['a', 'b', 'c']).length, 3);
+        assert.strictEqual(SMath.shuffle([1, 2, 3]).length, 3);
+        assert.strictEqual(Math.min(...SMath.shuffle([1, 2, 3])), 1);
+        assert.strictEqual(Math.max(...SMath.shuffle([1, 2, 3])), 3);
+        assert.strictEqual(SMath.avg(SMath.shuffle([1, 2, 3])), 2);
 
-T6.eq(SMath.selectRandomWeighted([]), -1);
-T6.eq(SMath.selectRandomWeighted([0]), -1);
-T6.eq(SMath.selectRandomWeighted([1]), 0);
-T6.eq(SMath.selectRandomWeighted([0.1, 0, 0]), 0);
-T6.eq(SMath.selectRandomWeighted([0, 15, -3]), 1);
-T6.eq(SMath.selectRandomWeighted([-4, 0, 20]), 2);
+        assert.strictEqual(SMath.selectRandom([5]), 5);
+        assert.strictEqual(SMath.selectRandom([1, 1, 1, 1]), 1);
+        assert.ok(SMath.selectRandom([1, 2, 3, 4]) > 0);
+        assert.ok(SMath.selectRandom([1, 2, 3, 4]) < 5);
+        assert.strictEqual(typeof SMath.selectRandom([]), 'undefined');
 
-{
-    const trials = 1000;
-    const weights = [1, 6.5, 0, 2.5];
-    const counts = [0, 0, 0, 0];
-    for (let i = 0; i < trials; i++) {
-        const selected = SMath.selectRandomWeighted(weights);
-        counts[selected]++;
-    }
-    T6.eq(counts[2], 0);
-    const totalWeight = SMath.sum(weights);
-    for (const i in weights) {
-        const actual = counts[i];
-        const expected = weights[i] / totalWeight * trials;
-        T6.le(Math.abs(SMath.error(expected, actual)), 0.25, 'Random error bars exceeded 20% allowance, try running again.');
-    }
-}
+        assert.strictEqual(SMath.selectRandomWeighted([]), -1);
+        assert.strictEqual(SMath.selectRandomWeighted([0]), -1);
+        assert.strictEqual(SMath.selectRandomWeighted([1]), 0);
+        assert.strictEqual(SMath.selectRandomWeighted([0.1, 0, 0]), 0);
+        assert.strictEqual(SMath.selectRandomWeighted([0, 15, -3]), 1);
+        assert.strictEqual(SMath.selectRandomWeighted([-4, 0, 20]), 2);
+    });
 
-function f1(x: number): number {
-    return 3 * x ** 2;
-}
+    it('should weight random selection reasonably over repeated trials', () => {
+        const trials = 1000;
+        const weights = [1, 6.5, 0, 2.5];
+        const counts = [0, 0, 0, 0];
 
-function f2(x: number): number {
-    return 1 / x;
-}
+        for (let i = 0; i < trials; i++) {
+            const selected = SMath.selectRandomWeighted(weights);
+            counts[selected]++;
+        }
 
-T6.eq(SMath.lim(f1, -1), 3);
-T6.is(SMath.lim(f2, 0).toString(), 'NaN');
-T6.eq(SMath.lim(Math.log, 0), -Infinity);
-T6.is(SMath.lim(Math.log, -1).toString(), 'NaN');
-T6.eq(SMath.lim(x => x ** -2, 0), Infinity);
-T6.is(SMath.lim(x => x > 0 ? 1 : (x < 0 ? -1 : NaN), 0).toString(), 'NaN');
-T6.eq(SMath.lim(() => 0, 0), 0);
-T6.eq(SMath.lim(() => Infinity, 0), Infinity);
-T6.eq(SMath.lim(() => -Infinity, 0), -Infinity);
-T6.is(SMath.lim(() => NaN, 0).toString(), 'NaN');
-T6.gt(SMath.lim(x => Math.sin(x) / x, 0), 0.99); // 1
-T6.le(SMath.lim(x => Math.sin(x) / x, 0), 1);
-T6.is(SMath.lim(x => Math.cos(x) / x, 0).toString(), 'NaN');
-T6.eq(SMath.lim(x => x * x / x, 0), 0);
-T6.eq(SMath.lim(x => x * x / x, 5), 5);
-T6.eq(SMath.lim(Math.cbrt, 0), 0);
-T6.eq(SMath.lim(x => 100 * x * (x - 2) / (x - 2), 2), 200); // Need to test this with a steeper slope
+        assert.strictEqual(counts[2], 0);
 
-T6.gt(SMath.differentiate(f1, 2), 11.99); // 12
-T6.lt(SMath.differentiate(f1, 2), 12.01);
-T6.gt(SMath.differentiate(f2, -2), -0.26); // -0.25
-T6.lt(SMath.differentiate(f2, -2), -0.24);
-T6.eq(SMath.differentiate(Math.cbrt, 0), Infinity);
-T6.isTrue(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
-T6.isTrue(SMath.approx(SMath.differentiate(Math.sqrt, 0.01), 5));
+        const totalWeight = SMath.sum(weights);
+        for (const i in weights) {
+            const actual = counts[i];
+            const expected = weights[i] / totalWeight * trials;
+            assert.ok(Math.abs(SMath.error(expected, actual)) <= 0.25, 'Random error bars exceeded 20% allowance, try running again.');
+        }
+    });
+});
 
-T6.gt(SMath.integrate(f1, 1, 3), 25.99); // 26
-T6.lt(SMath.integrate(f1, 1, 3), 26.01);
-T6.gt(SMath.integrate(f2, 2, 4), 0.69); // 0.693...
-T6.lt(SMath.integrate(f2, 2, 4), 0.70);
-T6.isTrue(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
+describe('limits, differentiation, and integration', () => {
+    const f1 = (x: number): number => 3 * x ** 2;
+    const f2 = (x: number): number => 1 / x;
 
-{
-    let frac: { num: number, den: number };
-    frac = SMath.rat(1 / 3);
-    T6.eq(frac.num, 1);
-    T6.eq(frac.den, 3);
-    frac = SMath.rat(0.625);
-    T6.eq(frac.num, 5);
-    T6.eq(frac.den, 8);
-    frac = SMath.rat(-9 / 21);
-    T6.eq(frac.num, -3);
-    T6.eq(frac.den, 7);
-    frac = SMath.rat(0);
-    T6.eq(frac.num, 0);
-    T6.eq(frac.den, 1);
-    frac = SMath.rat(1);
-    T6.eq(frac.num, 1);
-    T6.eq(frac.den, 1);
-    frac = SMath.rat(-1);
-    T6.eq(frac.num, -1);
-    T6.eq(frac.den, 1);
-    frac = SMath.rat(2.75);
-    T6.eq(frac.num, 11);
-    T6.eq(frac.den, 4);
-}
+    it('should evaluate limits', () => {
+        assert.strictEqual(SMath.lim(f1, -1), 3);
+        assert.ok(Number.isNaN(SMath.lim(f2, 0)));
+        assert.strictEqual(SMath.lim(Math.log, 0), -Infinity);
+        assert.ok(Number.isNaN(SMath.lim(Math.log, -1)));
+        assert.strictEqual(SMath.lim(x => x ** -2, 0), Infinity);
+        assert.ok(Number.isNaN(SMath.lim(x => x > 0 ? 1 : (x < 0 ? -1 : NaN), 0)));
+        assert.strictEqual(SMath.lim(() => 0, 0), 0);
+        assert.strictEqual(SMath.lim(() => Infinity, 0), Infinity);
+        assert.strictEqual(SMath.lim(() => -Infinity, 0), -Infinity);
+        assert.ok(Number.isNaN(SMath.lim(() => NaN, 0)));
+        assert.ok(SMath.lim(x => Math.sin(x) / x, 0) > 0.99);
+        assert.ok(SMath.lim(x => Math.sin(x) / x, 0) <= 1);
+        assert.ok(Number.isNaN(SMath.lim(x => Math.cos(x) / x, 0)));
+        assert.strictEqual(SMath.lim(x => x * x / x, 0), 0);
+        assert.strictEqual(SMath.lim(x => x * x / x, 5), 5);
+        assert.strictEqual(SMath.lim(Math.cbrt, 0), 0);
+        assert.strictEqual(SMath.lim(x => 100 * x * (x - 2) / (x - 2), 2), 200);
+    });
 
-{
-    let frac: { whole: number, num: number, den: number };
-    frac = SMath.mixed(1 / 3);
-    T6.eq(frac.whole, 0);
-    T6.eq(frac.num, 1);
-    T6.eq(frac.den, 3);
-    frac = SMath.mixed(1.625);
-    T6.eq(frac.whole, 1);
-    T6.eq(frac.num, 5);
-    T6.eq(frac.den, 8);
-    frac = SMath.mixed(-9 / 20);
-    T6.eq(frac.whole, 0);
-    T6.eq(frac.num, -9);
-    T6.eq(frac.den, 20);
-    frac = SMath.mixed(0);
-    T6.eq(frac.whole, 0);
-    T6.eq(frac.num, 0);
-    T6.eq(frac.den, 1);
-    frac = SMath.mixed(1);
-    T6.eq(frac.whole, 1);
-    T6.eq(frac.num, 0);
-    T6.eq(frac.den, 1);
-    frac = SMath.mixed(-1);
-    T6.eq(frac.whole, -1);
-    T6.eq(frac.num, 0);
-    T6.eq(frac.den, 1);
-    frac = SMath.mixed(2.75);
-    T6.eq(frac.whole, 2);
-    T6.eq(frac.num, 3);
-    T6.eq(frac.den, 4);
-    frac = SMath.mixed(-4 / 2);
-    T6.eq(frac.whole, -2);
-    T6.eq(frac.num, 0);
-    T6.eq(frac.den, 1);
-    frac = SMath.mixed(-8 / 6);
-    T6.eq(frac.whole, -1);
-    T6.eq(frac.num, 1);
-    T6.eq(frac.den, 3);
-}
+    it('should compute derivatives', () => {
+        assert.ok(SMath.differentiate(f1, 2) > 11.99);
+        assert.ok(SMath.differentiate(f1, 2) < 12.01);
+        assert.ok(SMath.differentiate(f2, -2) > -0.26);
+        assert.ok(SMath.differentiate(f2, -2) < -0.24);
+        assert.strictEqual(SMath.differentiate(Math.cbrt, 0), Infinity);
+        assert.ok(SMath.approx(SMath.differentiate(Math.sin, 1), Math.cos(1)));
+        assert.ok(SMath.approx(SMath.differentiate(Math.sqrt, 0.01), 5));
+    });
 
-T6.eq(SMath.gcd(48, 18), 6);
-T6.eq(SMath.gcd(48, 49), 1);
-T6.eq(SMath.gcd(1, 1), 1);
-T6.eq(SMath.gcd(1, 49), 1);
-T6.eq(SMath.gcd(49, 49), 49);
-T6.eq(SMath.gcd(15, 0), 15);
+    it('should compute definite integrals', () => {
+        assert.ok(SMath.integrate(f1, 1, 3) > 25.99);
+        assert.ok(SMath.integrate(f1, 1, 3) < 26.01);
+        assert.ok(SMath.integrate(f2, 2, 4) > 0.69);
+        assert.ok(SMath.integrate(f2, 2, 4) < 0.70);
+        assert.ok(SMath.approx(SMath.integrate(Math.cos, 0, 1, 1e7), Math.sin(1)));
+    });
+});
+
+describe('rat and mixed', () => {
+    it('should convert decimals to ratios and mixed fractions', () => {
+        let frac: { num: number, den: number };
+        frac = SMath.rat(1 / 3);
+        assert.strictEqual(frac.num, 1);
+        assert.strictEqual(frac.den, 3);
+
+        frac = SMath.rat(0.625);
+        assert.strictEqual(frac.num, 5);
+        assert.strictEqual(frac.den, 8);
+
+        frac = SMath.rat(-9 / 21);
+        assert.strictEqual(frac.num, -3);
+        assert.strictEqual(frac.den, 7);
+
+        frac = SMath.rat(0);
+        assert.strictEqual(frac.num, 0);
+        assert.strictEqual(frac.den, 1);
+
+        frac = SMath.rat(1);
+        assert.strictEqual(frac.num, 1);
+        assert.strictEqual(frac.den, 1);
+
+        frac = SMath.rat(-1);
+        assert.strictEqual(frac.num, -1);
+        assert.strictEqual(frac.den, 1);
+
+        frac = SMath.rat(2.75);
+        assert.strictEqual(frac.num, 11);
+        assert.strictEqual(frac.den, 4);
+
+        let mixedFrac: { whole: number, num: number, den: number };
+        mixedFrac = SMath.mixed(1 / 3);
+        assert.strictEqual(mixedFrac.whole, 0);
+        assert.strictEqual(mixedFrac.num, 1);
+        assert.strictEqual(mixedFrac.den, 3);
+
+        mixedFrac = SMath.mixed(1.625);
+        assert.strictEqual(mixedFrac.whole, 1);
+        assert.strictEqual(mixedFrac.num, 5);
+        assert.strictEqual(mixedFrac.den, 8);
+
+        mixedFrac = SMath.mixed(-9 / 20);
+        assert.strictEqual(mixedFrac.whole, 0);
+        assert.strictEqual(mixedFrac.num, -9);
+        assert.strictEqual(mixedFrac.den, 20);
+
+        mixedFrac = SMath.mixed(0);
+        assert.strictEqual(mixedFrac.whole, 0);
+        assert.strictEqual(mixedFrac.num, 0);
+        assert.strictEqual(mixedFrac.den, 1);
+
+        mixedFrac = SMath.mixed(1);
+        assert.strictEqual(mixedFrac.whole, 1);
+        assert.strictEqual(mixedFrac.num, 0);
+        assert.strictEqual(mixedFrac.den, 1);
+
+        mixedFrac = SMath.mixed(-1);
+        assert.strictEqual(mixedFrac.whole, -1);
+        assert.strictEqual(mixedFrac.num, 0);
+        assert.strictEqual(mixedFrac.den, 1);
+
+        mixedFrac = SMath.mixed(2.75);
+        assert.strictEqual(mixedFrac.whole, 2);
+        assert.strictEqual(mixedFrac.num, 3);
+        assert.strictEqual(mixedFrac.den, 4);
+
+        mixedFrac = SMath.mixed(-4 / 2);
+        assert.strictEqual(mixedFrac.whole, -2);
+        assert.strictEqual(mixedFrac.num, 0);
+        assert.strictEqual(mixedFrac.den, 1);
+
+        mixedFrac = SMath.mixed(-8 / 6);
+        assert.strictEqual(mixedFrac.whole, -1);
+        assert.strictEqual(mixedFrac.num, 1);
+        assert.strictEqual(mixedFrac.den, 3);
+    });
+});
+
+describe('gcd', () => {
+    it('should compute greatest common divisors', () => {
+        assert.strictEqual(SMath.gcd(48, 18), 6);
+        assert.strictEqual(SMath.gcd(48, 49), 1);
+        assert.strictEqual(SMath.gcd(1, 1), 1);
+        assert.strictEqual(SMath.gcd(1, 49), 1);
+        assert.strictEqual(SMath.gcd(49, 49), 49);
+        assert.strictEqual(SMath.gcd(15, 0), 15);
+    });
+});
