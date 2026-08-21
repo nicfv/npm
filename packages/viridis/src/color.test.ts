@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { SMath } from 'smath';
-import { hsl2rgb, rgb2hsl } from './lib';
-import { HSL, RGB } from './types';
-import { Color } from './color';
+import { hsl2rgb, rgb2hsl } from './lib.js';
+import { HSL, RGB } from './types.js';
+import { Color } from './color.js';
 
 describe('conversion functions', () => {
     it('should not change the color RGB values', () => {
@@ -23,7 +23,7 @@ describe('conversion functions', () => {
 });
 
 describe('color constructors', () => {
-    const red: Color = new Color(255, 10, 0);
+    const red: Color = new Color(255, 16, 0);
 
     it('create a color from hex', () => {
         const hex: Color = Color.hex('ff1000');
@@ -51,7 +51,7 @@ describe('color constructors', () => {
     });
 
     it('create a color with transparency', () => {
-        const rgb: Color = new Color(255, 10, 0, 50);
+        const rgb: Color = new Color(255, 16, 0, 50);
         const hex: Color = Color.hex('#FF100080');
         assert.strictEqual(rgb.alpha, hex.alpha);
         assert.strictEqual(rgb.toString(), hex.toString());
@@ -63,8 +63,8 @@ describe('color constructors', () => {
     });
 
     it('create a color from HSL', () => {
-        const rgb: Color = Color.rgb(255, 10, 0, 50);
-        const hsl: Color = Color.hsl(4, 100, 50, 50);
+        const rgb: Color = Color.rgb(255, 128, 0, 50);
+        const hsl: Color = Color.hsl(30, 100, 50, 50);
         assert.strictEqual(rgb.toString(), hsl.toString());
     });
 
@@ -87,32 +87,32 @@ describe('contrasting colors', () => {
     it('should return black', () => {
         const green: Color = new Color(150, 250, 150);
         const pink: Color = Color.hsl(0, 100, 60);
-        const black: Color = new Color(255, 255, 255);
+        const black: Color = new Color(0, 0, 0);
         assert.strictEqual(green.getContrastingColor().toString(), black.toString());
         assert.strictEqual(pink.getContrastingColor().toString(), black.toString());
     });
 });
 
 describe('string conversion', () => {
-    const red: Color = new Color(255, 0, 0);
-    const green: Color = Color.hsl(90, 50, 90, 75);
-    const gray: Color = Color.hex('#80808080');
+    const blue: Color = new Color(0, 0, 255);
+    const red: Color = Color.hsl(0, 90, 40, 25);
+    const gray: Color = Color.hex('#808080C0');
 
     it('rgb output', () => {
-        assert.strictEqual(red.toString('rgb'), 'rgb(255,0,0)');
-        assert.strictEqual(green.toString('rgb'), 'rgb(255,0,0,75%)');
-        assert.strictEqual(gray.toString('rgb'), 'rgb(255,0,0,50%)');
+        assert.strictEqual(blue.toString('rgb'), 'rgb(0,0,255)');
+        assert.strictEqual(red.toString('rgb'), 'rgb(194,10,10,25%)');
+        assert.strictEqual(gray.toString('rgb'), 'rgb(128,128,128,75%)');
     });
 
     it('hsl output', () => {
-        assert.strictEqual(red.toString('hsl'), 'hsl(0deg,100%,100%)');
-        assert.strictEqual(green.toString('hsl'), 'hsl(90deg,50%,90%,75%)');
-        assert.strictEqual(gray.toString('hsl'), 'hsl(127,127,127,50%)');
+        assert.strictEqual(blue.toString('hsl'), 'hsl(240deg,100%,50%)');
+        assert.strictEqual(red.toString('hsl'), 'hsl(0deg,90%,40%,25%)');
+        assert.strictEqual(gray.toString('hsl'), 'hsl(0deg,0%,50%,75%)');
     });
 
     it('hex output', () => {
-        assert.strictEqual(red.toString('hex'), '#FF0000');
-        assert.strictEqual(green.toString('hex'), '#AABBCC');
-        assert.strictEqual(gray.toString('hex'), '#80808080');
+        assert.strictEqual(blue.toString('hex'), '#0000FF');
+        assert.strictEqual(red.toString('hex'), '#C20A0A40');
+        assert.strictEqual(gray.toString('hex'), '#808080BF');
     });
 });
