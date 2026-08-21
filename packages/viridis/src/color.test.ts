@@ -3,6 +3,7 @@ import { describe, it } from 'node:test';
 import { SMath } from 'smath';
 import { hsl2rgb, rgb2hsl } from './lib';
 import { HSL, RGB } from './types';
+import { Color } from './Color';
 
 describe('conversion functions', () => {
     it('should not change the color RGB values', () => {
@@ -18,5 +19,52 @@ describe('conversion functions', () => {
                 }
             }
         }
+    });
+});
+
+describe('color constructors', () => {
+    const red: Color = new Color(255, 10, 0);
+
+    it('create a color from hex', () => {
+        const hex: Color = Color.hex('ff1000');
+        assert.strictEqual(red.toString(), hex.toString());
+    });
+
+    it('create a color from hex', () => {
+        const hex: Color = Color.hex('#ff1000');
+        assert.strictEqual(red.toString(), hex.toString());
+    });
+
+    it('create a color from hex', () => {
+        const hex: Color = Color.hex('FF1000');
+        assert.strictEqual(red.toString(), hex.toString());
+    });
+
+    it('create a color from hex', () => {
+        const hex: Color = Color.hex('#FF1000');
+        assert.strictEqual(red.toString(), hex.toString());
+    });
+
+    it('create a color from hex', () => {
+        const hex: Color = Color.hex('#FF1000FF');
+        assert.strictEqual(red.toString(), hex.toString());
+    });
+
+    it('create a color with transparency', () => {
+        const rgb: Color = new Color(255, 10, 0, 50);
+        const hex: Color = Color.hex('#FF100080');
+        assert.strictEqual(rgb.alpha, hex.alpha);
+        assert.strictEqual(rgb.toString(), hex.toString());
+    });
+
+    it('create a color from out-of-range values', () => {
+        const red_clamp: Color = new Color(300, 16, -1, 1e3);
+        assert.strictEqual(red.toString(), red_clamp.toString());
+    });
+
+    it('create a color from HSL', () => {
+        const rgb: Color = Color.rgb(255, 10, 0, 50);
+        const hsl: Color = Color.hsl(4, 100, 50, 50);
+        assert.strictEqual(rgb.toString(), hsl.toString());
     });
 });
