@@ -9,7 +9,7 @@
  *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
  */
 export function approx(a: number, b: number, epsilon = 1e-6): boolean {
-    return a - b <= epsilon && b - a <= epsilon;
+    return Math.abs(a - b) <= epsilon;
 }
 /**
  * Clamp a number within a range.
@@ -22,6 +22,9 @@ export function approx(a: number, b: number, epsilon = 1e-6): boolean {
  *       n2 = SMath.clamp(-2, 0, 10); // 0
  */
 export function clamp(n: number, min: number, max: number): number {
+    if (min > max) {
+        throw new Error('Invalid range: min > max');
+    }
     if (n < min) {
         return min;
     }
@@ -154,7 +157,7 @@ export function factors(n: number): number[] {
  * const b = SMath.isPrime(5); // true
  */
 export function isPrime(n: number): boolean {
-    if (n <= 1 || (n | 0) !== n) {
+    if (n <= 1 || n % 1 !== 0) {
         return false;
     }
     if (n <= 3) {
@@ -245,11 +248,11 @@ export function avg(data: number[]): number {
  * const y = SMath.median([2, 5, 3, 1]); // 2.5
  */
 export function median(data: number[]): number {
-    data.sort((a, b) => a - b);
-    if (data.length % 2) {
-        return data[(data.length - 1) / 2];
+    const sorted: number[] = [...data].sort((a, b) => a - b);
+    if (sorted.length % 2) {
+        return sorted[(sorted.length - 1) / 2];
     }
-    return avg([data[data.length / 2 - 1], data[data.length / 2]]);
+    return avg([sorted[sorted.length / 2 - 1], sorted[sorted.length / 2]]);
 }
 /**
  * Compute the variance of a **complete population**.
@@ -315,11 +318,9 @@ export function runif(min: number, max: number): number {
  * const y = SMath.rint(-4, 3); // -4
  */
 export function rint(min: number, max: number): number {
-    min |= 0;
-    max |= 0;
-    if (min < 0) { min--; }
-    if (max > 0) { max++; }
-    return clamp(runif(min, max), min, max) | 0; // `| 0` pulls toward 0
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return clamp(Math.round(runif(min, max)), min, max);
 }
 /**
  * Generate a normally-distributed floating-point number.
