@@ -1,5 +1,5 @@
 import { SMath } from 'smath';
-import { Color } from './Color.js';
+import { Color } from './color.js';
 /**
  * Represents a linear, uniform color gradient.
  */
