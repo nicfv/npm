@@ -12,8 +12,18 @@ Below is a list of requirements that must be followed when contributing to this 
 - Source code must be written in `./packages/<name>/src/` and in the latest supported version of TypeScript
     - Includes `index.ts` as the entry point file
     - Includes `*.test.ts` for unit/integration testing
-- Tests should use the latest version of `t6` for assertion testing
 - Must contain examples in `example/`
+
+### Testing
+- Tests should use the standard NodeJS testing suite
+- Tests should be named `src/<name>.test.ts` for each `src/<name>.ts` "testable" file
+- Suites should be broken down by function or broad functionality
+- Tests can contain multiple asserts, which should validate a single test case
+
+```js
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
+```
 
 ### Examples
 - Must depend on the latest version of the package
