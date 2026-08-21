@@ -28,15 +28,15 @@ export class Color {
      * const red = new Color(255, 0, 0);
      */
     constructor(public readonly red: number, public readonly green: number, public readonly blue: number, public readonly alpha = 100) {
-        this.red = SMath.clamp(red, 0, 255) | 0;
-        this.green = SMath.clamp(green, 0, 255) | 0;
-        this.blue = SMath.clamp(blue, 0, 255) | 0;
-        this.alpha = SMath.clamp(alpha, 0, 100) | 0;
+        this.red = Math.round(SMath.clamp(red, 0, 255));
+        this.green = Math.round(SMath.clamp(green, 0, 255));
+        this.blue = Math.round(SMath.clamp(blue, 0, 255));
+        this.alpha = Math.round(SMath.clamp(alpha, 0, 100));
         // Compute HSL color values
         const hsl: HSL = rgb2hsl({ red: this.red, green: this.green, blue: this.blue });
-        this.hue = (hsl.hue % 360) | 0;
-        this.saturation = SMath.clamp(hsl.saturation, 0, 100) | 0;
-        this.lightness = SMath.clamp(hsl.lightness, 0, 100) | 0;
+        this.hue = Math.round(hsl.hue % 360);
+        this.saturation = Math.round(SMath.clamp(hsl.saturation, 0, 100));
+        this.lightness = Math.round(SMath.clamp(hsl.lightness, 0, 100));
     }
     /**
      * Convert a decimal byte [0-255] to a hexadecimal [00-FF] byte.
@@ -44,7 +44,7 @@ export class Color {
      * @returns Hexadecimal byte value
      */
     private static toHex(byte: number): string {
-        return SMath.clamp(byte | 0, 0, 255).toString(16).padStart(2, '0').toUpperCase();
+        return SMath.clamp(Math.round(byte), 0, 255).toString(16).padStart(2, '0').toUpperCase();
     }
     /**
      * Return the most contrasting color for
@@ -86,7 +86,7 @@ export class Color {
             case ('hex'): {
                 const noTransparency = `#${Color.toHex(this.red)}${Color.toHex(this.green)}${Color.toHex(this.blue)}`;
                 if (this.alpha < 100) {
-                    const alpha255: number = SMath.clamp(SMath.translate(this.alpha, 0, 100, 0, 255) | 0, 0, 255);
+                    const alpha255: number = Math.round(SMath.clamp(SMath.translate(this.alpha, 0, 100, 0, 255), 0, 255));
                     return noTransparency + Color.toHex(alpha255);
                 } else {
                     return noTransparency;
