@@ -377,7 +377,8 @@ export function selectRandom<T>(stack: T[]): T {
     return stack[rint(0, stack.length - 1)];
 }
 /**
- * Select a single index in an array at random with different weights.
+ * Select a single index in an array at random with different
+ * weights. Indices with negative weights are ignored.
  * @param weights The weights for each item
  * @returns The 0-based index of the randomly selected item
  * @example
