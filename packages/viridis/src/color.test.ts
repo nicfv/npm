@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 import { SMath } from 'smath';
 import { hsl2rgb, rgb2hsl } from './lib';
 import { HSL, RGB } from './types';
-import { Color } from './Color';
+import { Color } from './color';
 
 describe('conversion functions', () => {
     it('should not change the color RGB values', () => {
