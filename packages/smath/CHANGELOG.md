@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.1.0
+
+- Remove all dependencies and devDependencies (`SMath` is now completely standalone!)
+- Several fixes and improvements within `SMath`
+    - `approx` now allows negative absolute errors
+    - `clamp` now throws an error when the range is invalid
+    - Better integer checking for `isPrime`
+    - `median` doesn't mutate input array anymore
+    - `rint` optimized, will also throw error when range is invalid
+    - `selectRandom` will return `undefined` when input array is empty
+    - Improved `selectRandomWeighted` documentation
+    - `rat` throws an error when input is infinite or NaN
+    - `mixed` whole number part will not return as `-0` for numbers between `[-1, 0]`
+- Fix typos and wording in README
+- Convert all tests to use NodeJS's standard `node:test` and `node:assert` suites
+
 ## 3.0.0
 
 - Add two new data types, fully tested:
