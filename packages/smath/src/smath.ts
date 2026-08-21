@@ -9,7 +9,7 @@
  *       b2 = SMath.approx(1 / 3, 0.33, 1e-2); // true
  */
 export function approx(a: number, b: number, epsilon = 1e-6): boolean {
-    return a - b <= epsilon && b - a <= epsilon;
+    return Math.abs(a - b) <= Math.abs(epsilon);
 }
 /**
  * Clamp a number within a range.
@@ -22,6 +22,9 @@ export function approx(a: number, b: number, epsilon = 1e-6): boolean {
  *       n2 = SMath.clamp(-2, 0, 10); // 0
  */
 export function clamp(n: number, min: number, max: number): number {
+    if (min > max) {
+        throw new Error('Invalid range: min > max');
+    }
     if (n < min) {
         return min;
     }
@@ -154,7 +157,7 @@ export function factors(n: number): number[] {
  * const b = SMath.isPrime(5); // true
  */
 export function isPrime(n: number): boolean {
-    if (n <= 1 || (n | 0) !== n) {
+    if (n <= 1 || n % 1 !== 0) {
         return false;
     }
     if (n <= 3) {
@@ -245,11 +248,11 @@ export function avg(data: number[]): number {
  * const y = SMath.median([2, 5, 3, 1]); // 2.5
  */
 export function median(data: number[]): number {
-    data.sort((a, b) => a - b);
-    if (data.length % 2) {
-        return data[(data.length - 1) / 2];
+    const sorted: number[] = [...data].sort((a, b) => a - b);
+    if (sorted.length % 2) {
+        return sorted[(sorted.length - 1) / 2];
     }
-    return avg([data[data.length / 2 - 1], data[data.length / 2]]);
+    return avg([sorted[sorted.length / 2 - 1], sorted[sorted.length / 2]]);
 }
 /**
  * Compute the variance of a **complete population**.
@@ -315,11 +318,9 @@ export function runif(min: number, max: number): number {
  * const y = SMath.rint(-4, 3); // -4
  */
 export function rint(min: number, max: number): number {
-    min |= 0;
-    max |= 0;
-    if (min < 0) { min--; }
-    if (max > 0) { max++; }
-    return clamp(runif(min, max), min, max) | 0; // `| 0` pulls toward 0
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return clamp(Math.round(runif(min, max)), min, max);
 }
 /**
  * Generate a normally-distributed floating-point number.
@@ -370,10 +371,14 @@ export function shuffle<T>(stack: T[]): T[] {
  * const selected = SMath.selectRandom([10, 20, 30, 40]); // 30
  */
 export function selectRandom<T>(stack: T[]): T {
+    if (stack.length === 0) {
+        return undefined as T;
+    }
     return stack[rint(0, stack.length - 1)];
 }
 /**
- * Select a single index in an array at random with different weights.
+ * Select a single index in an array at random with different
+ * weights. Indices with negative weights are ignored.
  * @param weights The weights for each item
  * @returns The 0-based index of the randomly selected item
  * @example
@@ -492,6 +497,9 @@ export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
     let num = 0,
         den = 1;
     const sign: number = n < 0 ? -1 : 1;
+    if (!Number.isFinite(n)) {
+        throw new Error('Input must be a finite number');
+    }
     while (!approx(sign * n, num / den, epsilon)) {
         if (sign * n > num / den) {
             num++;
@@ -512,7 +520,7 @@ export function rat(n: number, epsilon = 1e-6): { num: number, den: number } {
  * const frac = SMath.mixed(-8 / 6); // { whole: -1, num: 1, den: 3 }
  */
 export function mixed(n: number, epsilon = 1e-6): { whole: number, num: number, den: number } {
-    return { whole: n | 0, ...rat(n < -1 ? (n | 0) - n : n - (n | 0), epsilon) };
+    return { whole: n > 0 ? Math.floor(n) : n > -1 ? 0 : Math.ceil(n), ...rat((n < -1 ? Math.abs(n) : n) % 1, epsilon) };
 }
 /**
  * Get the greatest common denominator (GCD) of two numbers.
