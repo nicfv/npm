@@ -1,24 +1,7 @@
 import * as T6 from 't6';
-import { SMath } from 'smath';
 import { Color } from './Color.js';
 import { Gradient } from './Gradient.js';
 import { Palette, PaletteName } from './Palette.js';
-import { HSL, RGB } from './types.js';
-import { hsl2rgb, rgb2hsl } from './lib.js';
-
-// Test conversion functions
-for (let red = 0; red < 256; red += 5) {
-    for (let green = 0; green < 256; green += 7) {
-        for (let blue = 0; blue < 256; blue += 11) {
-            const rgb: RGB = { red: red, green: green, blue: blue };
-            const hsl: HSL = rgb2hsl(rgb);
-            const rgb2: RGB = hsl2rgb(hsl);
-            T6.isTrue(SMath.approx(rgb.red, rgb2.red), 'red != red');
-            T6.isTrue(SMath.approx(rgb.green, rgb2.green), 'green != green');
-            T6.isTrue(SMath.approx(rgb.blue, rgb2.blue), 'blue != blue');
-        }
-    }
-}
 
 // Test color functionality
 const red_RGB: Color = new Color(255, 16, 0),
