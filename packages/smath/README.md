@@ -4,7 +4,7 @@ Small math? Simple math? Or supplemental math? Canonically, "SMath" is pronounce
 
 ## Executables
 
-SMath is also packaged with an executabe that can be run directly through `npx` in the terminal - even outside of a NodeJS project! In fact, open your terminal now, and type the following to show a list of valid `npx smath` commands!
+SMath is also packaged with an executable that can be run directly through `npx` in the terminal - even outside of a NodeJS project! In fact, open your terminal now, and type the following to show a list of valid `npx smath` commands!
 
 ```shell
 npx smath help
@@ -36,7 +36,7 @@ It generates many sets of parameters to test, and keeps ones with smaller error 
 
 ### Complexity
 
-The folling factors affect computation time and resources:
+The following factors affect computation time and resources:
 
 - Number of iterations
 - Number of independent/unknown function parameters
