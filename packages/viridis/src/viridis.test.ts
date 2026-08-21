@@ -3,11 +3,6 @@ import { Color } from './Color.js';
 import { Gradient } from './Gradient.js';
 import { Palette, PaletteName } from './Palette.js';
 
-// Make sure all the string representations work
-T6.is(red_hex6.toString('rgb'), 'rgb(255,16,0,50%)');
-T6.is(red_hex6.toString('hsl'), 'hsl(3deg,100%,50%,50%)');
-T6.is(red_hex6.toString('hex'), '#FF10007F');
-
 // Test gradient functionality
 const gradient: Gradient = new Gradient([
     new Color(255, 0, 0),

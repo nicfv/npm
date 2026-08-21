@@ -92,3 +92,27 @@ describe('contrasting colors', () => {
         assert.strictEqual(pink.getContrastingColor().toString(), black.toString());
     });
 });
+
+describe('string conversion', () => {
+    const red: Color = new Color(255, 0, 0);
+    const green: Color = Color.hsl(90, 50, 90, 75);
+    const gray: Color = Color.hex('#80808080');
+
+    it('rgb output', () => {
+        assert.strictEqual(red.toString('rgb'), 'rgb(255,0,0)');
+        assert.strictEqual(green.toString('rgb'), 'rgb(255,0,0,75%)');
+        assert.strictEqual(gray.toString('rgb'), 'rgb(255,0,0,50%)');
+    });
+
+    it('hsl output', () => {
+        assert.strictEqual(red.toString('hsl'), 'hsl(0deg,100%,100%)');
+        assert.strictEqual(green.toString('hsl'), 'hsl(90deg,50%,90%,75%)');
+        assert.strictEqual(gray.toString('hsl'), 'hsl(127,127,127,50%)');
+    });
+
+    it('hex output', () => {
+        assert.strictEqual(red.toString('hex'), '#FF0000');
+        assert.strictEqual(green.toString('hex'), '#AABBCC');
+        assert.strictEqual(gray.toString('hex'), '#80808080');
+    });
+});
