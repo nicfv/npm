@@ -19,38 +19,38 @@ describe('approx', () => {
 
 describe('clamp', () => {
     it('should clamp a number within bounds', () => {
-        assert.equal(SMath.clamp(4, 2, 6), 4);
-        assert.equal(SMath.clamp(1, 2, 6), 2);
-        assert.equal(SMath.clamp(7, 2, 6), 6);
+        assert.strictEqual(SMath.clamp(4, 2, 6), 4);
+        assert.strictEqual(SMath.clamp(1, 2, 6), 2);
+        assert.strictEqual(SMath.clamp(7, 2, 6), 6);
     });
 });
 
 describe('expand', () => {
     it('should expand a normalized number', () => {
-        assert.equal(SMath.expand(-1, 4, 8), 0);
-        assert.equal(SMath.expand(0, 4, 8), 4);
-        assert.equal(SMath.expand(0.5, 4, 8), 6);
-        assert.equal(SMath.expand(1, 4, 8), 8);
-        assert.equal(SMath.expand(2, 4, 8), 12);
+        assert.strictEqual(SMath.expand(-1, 4, 8), 0);
+        assert.strictEqual(SMath.expand(0, 4, 8), 4);
+        assert.strictEqual(SMath.expand(0.5, 4, 8), 6);
+        assert.strictEqual(SMath.expand(1, 4, 8), 8);
+        assert.strictEqual(SMath.expand(2, 4, 8), 12);
     });
 });
 
 describe('normalize', () => {
     it('should normalize a number', () => {
-        assert.equal(SMath.normalize(8, 10, 12), -1);
-        assert.equal(SMath.normalize(10, 10, 12), 0);
-        assert.equal(SMath.normalize(11, 10, 12), 0.5);
-        assert.equal(SMath.normalize(12, 10, 12), 1);
-        assert.equal(SMath.normalize(14, 10, 12), 2);
+        assert.strictEqual(SMath.normalize(8, 10, 12), -1);
+        assert.strictEqual(SMath.normalize(10, 10, 12), 0);
+        assert.strictEqual(SMath.normalize(11, 10, 12), 0.5);
+        assert.strictEqual(SMath.normalize(12, 10, 12), 1);
+        assert.strictEqual(SMath.normalize(14, 10, 12), 2);
     });
 });
 
 describe('translate', () => {
     it('should translate a number', () => {
-        assert.equal(SMath.translate(20, 0, 100, 32, 212), 68);
-        assert.equal(SMath.translate(-40, 0, 100, 32, 212), -40);
-        assert.equal(SMath.translate(68, 32, 212, 0, 100), 20);
-        assert.equal(SMath.translate(-40, 32, 212, 0, 100), -40);
+        assert.strictEqual(SMath.translate(20, 0, 100, 32, 212), 68);
+        assert.strictEqual(SMath.translate(-40, 0, 100, 32, 212), -40);
+        assert.strictEqual(SMath.translate(68, 32, 212, 0, 100), 20);
+        assert.strictEqual(SMath.translate(-40, 32, 212, 0, 100), -40);
     });
 });
 
