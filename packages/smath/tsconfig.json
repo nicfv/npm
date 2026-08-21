@@ -4,9 +4,6 @@
     "rootDir": "src",
     "outDir": "dist",
     "declarationDir": "types",
-    "types": [
-      "node",
-    ],
   },
   "include": [
     "src",
