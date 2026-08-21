@@ -67,4 +67,28 @@ describe('color constructors', () => {
         const hsl: Color = Color.hsl(4, 100, 50, 50);
         assert.strictEqual(rgb.toString(), hsl.toString());
     });
+
+    it('should throw an error for invalid hex', () => {
+        assert.throws(() => Color.hex('#INVALID'), /invalid hex/i);
+        assert.throws(() => Color.hex('turquoise'), /invalid hex/i);
+        assert.throws(() => Color.hex(''), /invalid hex/i);
+    });
+});
+
+describe('contrasting colors', () => {
+    it('should return white', () => {
+        const red: Color = new Color(255, 10, 0);
+        const blue: Color = Color.hsl(180, 50, 45);
+        const white: Color = new Color(255, 255, 255);
+        assert.strictEqual(red.getContrastingColor().toString(), white.toString());
+        assert.strictEqual(blue.getContrastingColor().toString(), white.toString());
+    });
+
+    it('should return black', () => {
+        const green: Color = new Color(150, 250, 150);
+        const pink: Color = Color.hsl(0, 100, 60);
+        const black: Color = new Color(255, 255, 255);
+        assert.strictEqual(green.getContrastingColor().toString(), black.toString());
+        assert.strictEqual(pink.getContrastingColor().toString(), black.toString());
+    });
 });

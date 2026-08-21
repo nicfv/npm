@@ -8,15 +8,6 @@ T6.is(red_hex6.toString('rgb'), 'rgb(255,16,0,50%)');
 T6.is(red_hex6.toString('hsl'), 'hsl(3deg,100%,50%,50%)');
 T6.is(red_hex6.toString('hex'), '#FF10007F');
 
-// Make sure that an error is caught for an invalid color code
-let caught = false;
-try {
-    Color.hex('#INVALID');
-} catch {
-    caught = true;
-}
-T6.isTrue(caught);
-
 // Test gradient functionality
 const gradient: Gradient = new Gradient([
     new Color(255, 0, 0),
