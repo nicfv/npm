@@ -371,6 +371,9 @@ export function shuffle<T>(stack: T[]): T[] {
  * const selected = SMath.selectRandom([10, 20, 30, 40]); // 30
  */
 export function selectRandom<T>(stack: T[]): T {
+    if (stack.length === 0) {
+        return undefined as T;
+    }
     return stack[rint(0, stack.length - 1)];
 }
 /**
