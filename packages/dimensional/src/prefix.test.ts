@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { Prefix } from './prefix';
-import { config } from './config';
+import { config, Prefix } from './index.js';
 
 describe('prefix constructor', () => {
     it('generate LaTeX', () => {
