@@ -7,7 +7,7 @@ describe('Dimension', () => {
     it('string conversion', () => {
         assert.strictEqual(dimensions.Dimensionless.toString(), '1');
         assert.strictEqual(dimensions.Mass.toString(), '{\\textbf{M}}');
-        assert.strictEqual(dimensions.acceleration.toString(), '\\frac{{\\textbf{L}}}{{\\textbf{T}}}^{2}');
+        assert.strictEqual(dimensions.acceleration.toString(), '\\frac{{\\textbf{L}}}{{\\textbf{T}}^{2}}');
         assert.strictEqual(dimensions.Temperature.toString(), '{\\boldsymbol{\\Theta}}');
     });
 
