@@ -1,4 +1,4 @@
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 import { Options, Point, State } from './types.js';
 import Psychrolib from 'psychrolib';
 
