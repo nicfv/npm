@@ -29,14 +29,14 @@ describe('units', () => {
         assert.ok(customKm.dimensions.is(dimensions.Length));
         assert.ok(!customKm.is(units.meter));
         assert.ok(!customKm.is(units.kilometer)); // Not seen as the same unit [1a0cffd]
-        assert.equal(customKm.to(units.kilometer), 1);
-        assert.equal(customKm.to(units.meter), 1000);
-        assert.equal(units.year.prefix(prefixes.giga).to(units.year), 1e9); // Need to test with non-base units too
-        assert.equal(units.year.prefix(prefixes.deci).to(units.minute), 60 * 24 * 365.25 / 10);
-        assert.equal(units.watt.to(units.volt.times(units.ampere)), 1);
-        assert.equal(units.watt.prefix(prefixes.kilo).to(units.volt.times(units.ampere)), 1000);
-        assert.equal(units.watt.prefix(prefixes.kilo).to(units.watt), 1000);
-        assert.equal(units.watt.prefix(prefixes.centi).to(units.watt), 0.01);
+        assert.strictEqual(customKm.to(units.kilometer), 1);
+        assert.strictEqual(customKm.to(units.meter), 1000);
+        assert.strictEqual(units.year.prefix(prefixes.giga).to(units.year), 1e9); // Need to test with non-base units too
+        assert.strictEqual(units.year.prefix(prefixes.deci).to(units.minute), 60 * 24 * 365.25 / 10);
+        assert.strictEqual(units.watt.to(units.volt.times(units.ampere)), 1);
+        assert.strictEqual(units.watt.prefix(prefixes.kilo).to(units.volt.times(units.ampere)), 1000);
+        assert.strictEqual(units.watt.prefix(prefixes.kilo).to(units.watt), 1000);
+        assert.strictEqual(units.watt.prefix(prefixes.centi).to(units.watt), 0.01);
         assert.throws(() => customKm.prefix(prefixes.centi), /can only add a prefix to named base units/i);
     });
 
@@ -46,12 +46,12 @@ describe('units', () => {
     });
 
     it('(convert) to', () => {
-        assert.equal(units.foot.to(units.inch), 12);
-        assert.equal(units.Rankine.to(units.Rankine), 1);
-        assert.equal(units.watt.to(units.volt.times(units.ampere)), 1);
+        assert.strictEqual(units.foot.to(units.inch), 12);
+        assert.strictEqual(units.Rankine.to(units.Rankine), 1);
+        assert.strictEqual(units.watt.to(units.volt.times(units.ampere)), 1);
         assert.ok(SMath.approx(units.slug.to(units.poundMass), units.Gs.to(units.foot.over(units.second.pow(2)))));
         assert.ok(SMath.approx(units.slug.to(units.poundMass), 32.174));
-        assert.equal(units.watt.times(units.hour).to(units.Joule), 3600);
+        assert.strictEqual(units.watt.times(units.hour).to(units.Joule), 3600);
         assert.ok(SMath.approx(units.inch.to(units.millimeter), units.inchesOfMercury.to(units.millimetersOfMercury)));
         assert.ok(SMath.approx(units.inch.to(units.millimeter), 25.4));
         assert.throws(() => units.poundForce.to(units.poundMass), /does not match/i);
