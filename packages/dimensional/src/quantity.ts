@@ -1,6 +1,6 @@
 import { config } from './config.js';
 import { Unit } from './unit.js';
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 
 /**
  * Represents a physical, measurable quantity.
