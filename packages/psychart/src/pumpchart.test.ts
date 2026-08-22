@@ -14,55 +14,34 @@ describe('pumpchart static methods', () => {
     });
 });
 
-const f1: f = x => x * x - 9; // Has 2 solutions
-T6.isTrue(SMath.approx(zero(f1, 0, 10), 3));
-T6.isTrue(SMath.approx(zero(f1, 0, -10), -3));
-const f2: f = x => x * x * x - 64;
-T6.isTrue(SMath.approx(zero(f2, 0, 10), 4));
-T6.isTrue(SMath.approx(zero(f2, 0, 4), 4));
-T6.isTrue(SMath.approx(zero(f2, 4, 0), 4));
-let caught: boolean;
-let message: string;
-caught = false;
-message = '';
-try {
-    zero(f1, -5, -4);
-} catch (e) {
-    caught = true;
-    message = (e as Error).message;
-}
-T6.isTrue(caught, 'Did not catch f1 [-5, -4]');
-T6.is(message, 'A solution cannot be found.');
-caught = false;
-message = '';
-try {
-    zero(f1, -5, 5); // Cannot find both solutions at once
-} catch (e) {
-    caught = true;
-    message = (e as Error).message;
-}
-T6.isTrue(caught, 'Did not catch f1 [-5, 5]');
-T6.is(message, 'A solution cannot be found.');
-caught = false;
-message = '';
-try {
-    zero(f2, -5, -10);
-} catch (e) {
-    caught = true;
-    message = (e as Error).message;
-}
-T6.isTrue(caught, 'Did not catch f2');
-T6.is(message, 'A solution cannot be found.');
-T6.isTrue(SMath.approx(zero(Math.sin, 1, 5), Math.PI), 'sin');
-T6.isTrue(SMath.approx(zero(Math.cos, 0, 4), Math.PI / 2), 'cos');
-T6.isTrue(SMath.approx(zero(Math.log, 0, 10), 1), 'log');
-caught = false;
-message = '';
-try {
-    zero(Math.log, -1, 10); // Bad domain
-} catch (e) {
-    caught = true;
-    message = (e as Error).message;
-}
-T6.isTrue(caught, 'Did not catch log(-1)');
-T6.is(message, 'f(-1) is NaN');
+describe('zero', () => {
+    const f1: f = x => x * x - 9; // Has 2 solutions
+    const f2: f = x => x * x * x - 64;
+
+    it('should find the zeroes for the functions', () => {
+        assert.ok(SMath.approx(zero(f1, 0, 10), 3));
+        assert.ok(SMath.approx(zero(f1, 0, -10), -3));
+        assert.ok(SMath.approx(zero(f2, 0, 10), 4));
+        assert.ok(SMath.approx(zero(f2, 0, 4), 4));
+        assert.ok(SMath.approx(zero(f2, 4, 0), 4));
+    });
+
+    it('no zeros in this range', () => {
+        assert.throws(() => zero(f1, -5, -4), /a solution cannot be found/i);
+        assert.throws(() => zero(f2, -5, -10), /a solution cannot be found/i);
+    });
+
+    it('two zeros in this range', () => {
+        assert.throws(() => zero(f1, -5, 5), /a solution cannot be found/i); // Cannot find both solutions at once
+    });
+
+    it('bad domain for function', () => {
+        assert.throws(() => zero(Math.log, -1, 10), 'f(-1) is NaN');
+    });
+
+    it('generic math functions', () => {
+        assert.ok(SMath.approx(zero(Math.sin, 1, 5), Math.PI), 'sin');
+        assert.ok(SMath.approx(zero(Math.cos, 0, 4), Math.PI / 2), 'cos');
+        assert.ok(SMath.approx(zero(Math.log, 0, 10), 1), 'log');
+    });
+});
