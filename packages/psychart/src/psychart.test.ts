@@ -13,18 +13,18 @@ describe('psychart static methods', () => {
 describe('psystate', () => {
     describe('error catching', () => {
         it('rh out of bounds', () => {
-            assert.throws(() => new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' }, defaultOptions), /bounds/i);
-            assert.throws(() => new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' }, defaultOptions), /bounds/i);
+            assert.throws(() => new PsyState({ db: 70, other: 1.60, measurement: 'dbrh' }, defaultOptions), /relative humidity is outside range/i);
+            assert.throws(() => new PsyState({ db: 70, other: -0.60, measurement: 'dbrh' }, defaultOptions), /relative humidity is outside range/i);
         });
 
         it('wb > db', () => {
-            assert.throws(() => new PsyState({ db: 70, other: 80, measurement: 'dbwb' }, defaultOptions), /bulb/i);
-            assert.throws(() => new PsyState({ db: 50, other: 51, measurement: 'dbwb' }, defaultOptions), /bulb/i);
+            assert.throws(() => new PsyState({ db: 70, other: 80, measurement: 'dbwb' }, defaultOptions), /wet bulb temperature is above dry bulb temperature/i);
+            assert.throws(() => new PsyState({ db: 50, other: 51, measurement: 'dbwb' }, defaultOptions), /wet bulb temperature is above dry bulb temperature/i);
         });
 
         it('invalid hr', () => {
-            assert.throws(() => new PsyState({ db: 60, other: -10e-3, measurement: 'dbhr' }, defaultOptions), /ratio/i);
-            assert.throws(() => new PsyState({ db: 60, other: 20e-3, measurement: 'dbhr' }, defaultOptions), /ratio/i);
+            assert.throws(() => new PsyState({ db: 60, other: -10e-3, measurement: 'dbhr' }, defaultOptions), /humidity ratio is negative/i);
+            assert.throws(() => new PsyState({ db: 60, other: 20e-3, measurement: 'dbhr' }, defaultOptions), /error in psychrolib computation/i);
         });
 
         it('valid hr', () => {
@@ -32,8 +32,8 @@ describe('psystate', () => {
         });
 
         it('invalid enthalpy', () => {
-            assert.throws(() => new PsyState({ db: 60, other: 10, measurement: 'dbh' }, defaultOptions), /ratio/i);
-            assert.throws(() => new PsyState({ db: 60, other: 30, measurement: 'dbh' }, defaultOptions), /ratio/i);
+            assert.throws(() => new PsyState({ db: 60, other: 10, measurement: 'dbh' }, defaultOptions), /error in psychrolib computation/i);
+            assert.throws(() => new PsyState({ db: 60, other: 30, measurement: 'dbh' }, defaultOptions), /error in psychrolib computation/i);
         });
 
         it('valid enthalpy', () => {
