@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import { config, Dimension, dimensions, prefixes, Quantity, Unit, units } from './index.js';
 
 // Quantity
 // .as
