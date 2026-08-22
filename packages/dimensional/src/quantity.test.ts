@@ -7,13 +7,13 @@ describe('Quantity', () => {
         const wattage = new Quantity(1500, units.watt);
         const kW = units.watt.prefix(prefixes.kilo);
 
-        assert.equal(wattage.as(kW).quantity, 1.5);
+        assert.strictEqual(wattage.as(kW).quantity, 1.5);
         assert.strictEqual(wattage.as(kW).toString(), '1.5 \\left[ {\\text{k}\\text{W}} \\right]');
 
         const mph = new Quantity(55, units.mile.over(units.hour));
         const mps = mph.as(units.meter.over(units.second));
 
-        assert.equal(mph.quantity, 55);
+        assert.strictEqual(mph.quantity, 55);
         assert.ok(mps.quantity >= 24.5);
         assert.ok(mps.quantity < 24.6);
         assert.strictEqual(mph.toString(), '55 \\left[ \\frac{\\text{mi}}{\\text{hr}} \\right]');
@@ -22,8 +22,8 @@ describe('Quantity', () => {
         const psi = new Quantity(25, units.poundsPerSquareInch);
         const psi2 = psi.as(units.poundForce.over(units.inch.pow(2)));
 
-        assert.equal(psi.quantity, 25);
-        assert.equal(psi.quantity, psi2.quantity);
+        assert.strictEqual(psi.quantity, 25);
+        assert.strictEqual(psi.quantity, psi2.quantity);
         assert.ok(!psi.units.is(psi2.units));
         assert.throws(() => psi.as(units.Joule.over(units.Celsius)), /bad unit conversion|does not match|cannot/i);
     });
@@ -33,7 +33,7 @@ describe('Quantity', () => {
         const cfm: Quantity = lps.as(units.foot.pow(3).over(units.minute));
         const combo: Quantity = lps.plus(cfm);
 
-        assert.equal(combo.quantity, 4);
+        assert.strictEqual(combo.quantity, 4);
         assert.strictEqual(combo.toString(), '4 \\left[ \\frac{\\text{L}}{\\text{s}} \\right]');
     });
 
@@ -42,9 +42,9 @@ describe('Quantity', () => {
         const cfm: Quantity = lps.as(units.foot.pow(3).over(units.minute));
         const combo2: Quantity = lps.minus(cfm);
 
-        assert.equal(combo2.quantity, 0);
+        assert.strictEqual(combo2.quantity, 0);
         assert.strictEqual(combo2.toString(), '0 \\left[ \\frac{\\text{L}}{\\text{s}} \\right]');
-        assert.equal(combo2.as(cfm.units).quantity, 0);
+        assert.strictEqual(combo2.as(cfm.units).quantity, 0);
         assert.strictEqual(combo2.as(cfm.units).toString(), '0 \\left[ \\frac{\\text{ft}^{3}}{\\text{min}} \\right]');
     });
 
@@ -53,13 +53,13 @@ describe('Quantity', () => {
         const a1: Quantity = x1.pow(2);
         const a2: Quantity = a1.as(units.inch.pow(2));
 
-        assert.equal(a1.quantity, 4);
+        assert.strictEqual(a1.quantity, 4);
         assert.strictEqual(a1.toString(), '4 \\left[ \\text{ft}^{2} \\right]');
         assert.ok(!a1.units.is(x1.units));
         assert.ok(!a1.units.is(a2.units));
-        assert.equal(a2.quantity, 144 * 4);
+        assert.strictEqual(a2.quantity, 144 * 4);
         assert.strictEqual(a2.toString(), '576 \\left[ \\text{in}^{2} \\right]');
-        assert.equal(a2.pow(1 / 2).quantity, 12 * 2);
+        assert.strictEqual(a2.pow(1 / 2).quantity, 12 * 2);
     });
 
     it('scaleBy', () => {
@@ -67,11 +67,11 @@ describe('Quantity', () => {
         const x2: Quantity = x1.scaleBy(3);
         const x3: Quantity = x2.as(units.centimeter);
 
-        assert.equal(x2.quantity, 6);
+        assert.strictEqual(x2.quantity, 6);
         assert.ok(x3.quantity >= 182);
         assert.ok(x3.quantity < 183);
-        assert.equal(x2.scaleBy(-1).quantity, -6);
-        assert.equal(x3.scaleBy(0).quantity, 0);
+        assert.strictEqual(x2.scaleBy(-1).quantity, -6);
+        assert.strictEqual(x3.scaleBy(0).quantity, 0);
     });
 
     it('times', () => {
@@ -80,7 +80,7 @@ describe('Quantity', () => {
         const energy: Quantity = weight.times(height);
         const energySI: Quantity = energy.as(units.Joule);
 
-        assert.equal(energy.quantity, 100);
+        assert.strictEqual(energy.quantity, 100);
         assert.ok(energy.units.is(units.foot.times(units.poundForce)));
         assert.ok(energySI.quantity >= 135.5);
         assert.ok(energySI.quantity < 135.6);
@@ -92,7 +92,7 @@ describe('Quantity', () => {
         const mileTime: Quantity = duration.over(distance);
         const speedMPH: Quantity = distance.over(duration).as(units.mile.over(units.hour));
 
-        assert.equal(duration.quantity, 22.25);
+        assert.strictEqual(duration.quantity, 22.25);
         assert.ok(duration.units.is(units.minute));
         assert.ok(mileTime.quantity >= 7.1);
         assert.ok(mileTime.quantity < 7.2);
@@ -129,7 +129,7 @@ describe('Quantity', () => {
         const height: Quantity = new Quantity(5, units.foot).plus(new Quantity(9, units.inch));
         const height2: Quantity = height.as(footballField);
 
-        assert.equal(height.quantity, 5.75);
+        assert.strictEqual(height.quantity, 5.75);
         assert.ok(height.units.is(units.foot));
         assert.strictEqual(height.toString(), '5.75 \\left[ \\text{ft} \\right]');
         assert.ok(height2.quantity >= 0.019);
