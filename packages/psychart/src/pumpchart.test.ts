@@ -1,4 +1,5 @@
-import * as T6 from 't6';
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import * as SMath from 'smath';
 import { Pumpchart } from './index.js';
 import { f, zero } from './pumpchart/lib.js';

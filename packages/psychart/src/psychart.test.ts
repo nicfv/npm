@@ -1,4 +1,5 @@
-import * as T6 from 't6';
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
 import { Psychart } from './index.js';
 import { defaultOptions, regions } from './psychart/defaults.js';
 import { PsyState } from './psychart/psystate.js';
