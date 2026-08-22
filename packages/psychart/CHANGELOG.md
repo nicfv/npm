@@ -3,6 +3,7 @@
 ## 1.1.0
 
 - Replace `t6` test suite with standard built-in `node:test` framework
+- Update depdencies
 
 ## 1.0.0
 
