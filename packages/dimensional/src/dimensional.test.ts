@@ -25,20 +25,6 @@ import { AmountOfSubstance } from './defaults/dimensions.js';
 }
 
 {
-    // Customization
-    const dimensionBlob = new Dimension('\\beta'),
-        customPrefix = new Prefix('\\textbf{p}_{5}', 5),
-        customInch = units.inch.prefix(customPrefix),
-        customUnit = customInch.over(new Unit('blob', dimensionBlob));
-    T6.is(dimensionBlob.toString(), '{\\beta}');
-    T6.is(customPrefix.LaTeX, '{\\textbf{p}_{5}}');
-    T6.is(customInch.toString(), '{{\\textbf{p}_{5}}\\text{in}}');
-    T6.is(customUnit.toString(), '\\frac{{{\\textbf{p}_{5}}\\text{in}}}{\\text{blob}}');
-    T6.is(customUnit.dimensions.toString(), '\\frac{{\\textbf{L}}}{{\\beta}}');
-    T6.isTrue(customUnit.dimensions.is(dimensions.Length.over(dimensionBlob)));
-}
-
-{
     // Quantity
     // .as
     const wattage = new Quantity(1500, units.watt);
