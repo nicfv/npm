@@ -4,7 +4,7 @@ import { SMath } from 'smath';
 import { Dimension, dimensions, Prefix, prefixes, Unit, units } from './index.js';
 
 describe('units', () => {
-    it('toString', () => {
+    it('string conversion', () => {
         assert.strictEqual(units.kelvin.toString(), '\\text{K}');
         assert.strictEqual(units.mile.toString(), '\\text{mi}');
         assert.strictEqual(units.Rankine.toString(), '{^{\\circ}\\text{R}}');
@@ -45,7 +45,7 @@ describe('units', () => {
         assert.throws(() => units.millimetersOfMercury.prefix(prefixes.atto), /can only add a prefix to named base units/i);
     });
 
-    it('to', () => {
+    it('(convert) to', () => {
         assert.equal(units.foot.to(units.inch), 12);
         assert.equal(units.Rankine.to(units.Rankine), 1);
         assert.equal(units.watt.to(units.volt.times(units.ampere)), 1);
