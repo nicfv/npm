@@ -3,9 +3,16 @@ import { describe, it } from 'node:test';
 import * as SMath from 'smath';
 import { Pumpchart } from './index.js';
 import { f, zero } from './pumpchart/lib.js';
-import { FlowUnits } from './pumpchart/units.js';
+import { FlowUnits, HeadUnits, PowerUnits, SpeedUnits } from './pumpchart/units.js';
 
-T6.eq(Pumpchart.getFlowUnits().length, Object.entries(FlowUnits).length);
+describe('pumpchart static methods', () => {
+    it('get units', () => {
+        assert.strictEqual(Pumpchart.getFlowUnits().length, Object.entries(FlowUnits).length);
+        assert.strictEqual(Pumpchart.getHeadUnits().length, Object.entries(HeadUnits).length);
+        assert.strictEqual(Pumpchart.getPowerUnits().length, Object.entries(PowerUnits).length);
+        assert.strictEqual(Pumpchart.getSpeedUnits().length, Object.entries(SpeedUnits).length);
+    });
+});
 
 const f1: f = x => x * x - 9; // Has 2 solutions
 T6.isTrue(SMath.approx(zero(f1, 0, 10), 3));
