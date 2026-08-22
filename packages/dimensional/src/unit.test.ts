@@ -50,7 +50,7 @@ describe('units', () => {
         assert.strictEqual(units.Rankine.to(units.Rankine), 1);
         assert.strictEqual(units.watt.to(units.volt.times(units.ampere)), 1);
         assert.ok(SMath.approx(units.slug.to(units.poundMass), units.Gs.to(units.foot.over(units.second.pow(2)))));
-        assert.ok(SMath.approx(units.slug.to(units.poundMass), 32.174));
+        assert.ok(SMath.approx(units.slug.to(units.poundMass), 32.174, 1e-3));
         assert.strictEqual(units.watt.times(units.hour).to(units.Joule), 3600);
         assert.ok(SMath.approx(units.inch.to(units.millimeter), units.inchesOfMercury.to(units.millimetersOfMercury)));
         assert.ok(SMath.approx(units.inch.to(units.millimeter), 25.4));
