@@ -1,6 +1,6 @@
 import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from './psystate.js';
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 import { DataOptions, Options, Region, State } from './types.js';
 import { defaultDataOptions, defaultOptions, regions } from './defaults.js';
 import { Chart } from '../chart.js';

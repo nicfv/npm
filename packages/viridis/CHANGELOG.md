@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0
+
+- Fix rounding issues in color constructor
+- Internal file renaming to match consistent pattern
+- Remove `t6` dependency, update tests to use standard `node:test` framework
+- Update `SMath` dependency
+
 ## 1.6.1
 
 - Fix bug where color stops would not span the full range of \[0,1\]

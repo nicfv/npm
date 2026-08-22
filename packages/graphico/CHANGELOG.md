@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0
+
+- Remove `t6` devDependency
+- Rewrite test suite to use standard `node:test` framework
+- Optimize `canvas.ts` import statements
+
 ## 1.6.0
 
 - Allow one final frame to be rendered after `blur()` is called

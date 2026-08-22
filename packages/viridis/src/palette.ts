@@ -1,5 +1,5 @@
-import { Color } from './Color.js';
-import { Gradient } from './Gradient.js';
+import { Color } from './color.js';
+import { Gradient } from './gradient.js';
 
 /**
  * Defines the list of valid builtin palette names.

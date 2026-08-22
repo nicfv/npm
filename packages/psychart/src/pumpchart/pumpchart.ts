@@ -1,4 +1,4 @@
-import * as SMath from 'smath';
+import { SMath } from 'smath';
 import { Chart } from '../chart.js';
 import { defaultOptions, defaultDataOptions } from './defaults.js';
 import { Flow, Head, Point, Power, DataOptions, Options, State, Speed } from './types.js';

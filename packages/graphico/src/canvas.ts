@@ -1,4 +1,4 @@
-import { Drawable, Options } from './index.js';
+import type { Drawable, Options } from './types.js';
 
 /**
  * Represents a canvas for drawing and animating

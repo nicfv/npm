@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+
+- Replace `t6` testing framework with standardized `node:test` built-in framework
+- Update dependencies
+
 ## 1.4.0
 
 - Compatibility update for Typescript v6+
