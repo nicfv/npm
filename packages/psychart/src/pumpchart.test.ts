@@ -36,7 +36,7 @@ describe('zero', () => {
     });
 
     it('bad domain for function', () => {
-        assert.throws(() => zero(Math.log, -1, 10), 'f(-1) is NaN');
+        assert.throws(() => zero(Math.log, -1, 10), /f\(-1\) is NaN/i);
     });
 
     it('generic math functions', () => {
