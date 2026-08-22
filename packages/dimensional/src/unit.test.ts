@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 import { SMath } from 'smath';
 import { Dimension, dimensions, Prefix, prefixes, Unit, units } from './index.js';
 
-describe('Unit', () => {
+describe('units', () => {
     it('toString', () => {
         assert.strictEqual(units.kelvin.toString(), '\\text{K}');
         assert.strictEqual(units.mile.toString(), '\\text{mi}');
@@ -25,7 +25,6 @@ describe('Unit', () => {
 
     it('prefix', () => {
         const customKm = units.meter.prefix(prefixes.kilo);
-
         assert.strictEqual(customKm.toString(), units.kilometer.toString());
         assert.ok(customKm.dimensions.is(dimensions.Length));
         assert.ok(!customKm.is(units.meter));
@@ -38,65 +37,24 @@ describe('Unit', () => {
         assert.equal(units.watt.prefix(prefixes.kilo).to(units.volt.times(units.ampere)), 1000);
         assert.equal(units.watt.prefix(prefixes.kilo).to(units.watt), 1000);
         assert.equal(units.watt.prefix(prefixes.centi).to(units.watt), 0.01);
+        assert.throws(() => customKm.prefix(prefixes.centi), /can only add a prefix to named base units/i);
+    });
 
-        let caught = false;
-        try {
-            customKm.prefix(prefixes.centi);
-        } catch {
-            caught = true;
-        }
-        assert.ok(caught, 'Cannot apply a prefix to this unit.');
-
-        caught = false;
-        try {
-            units.Celsius.over(units.minute).prefix(prefixes.tera);
-        } catch {
-            caught = true;
-        }
-        assert.ok(caught, 'Cannot apply a prefix to this unit.');
-
-        caught = false;
-        try {
-            units.millimetersOfMercury.prefix(prefixes.atto);
-        } catch {
-            caught = true;
-        }
-        assert.ok(caught, 'Cannot apply a prefix to this unit.');
+    it('prefix fail', () => {
+        assert.throws(() => units.Celsius.over(units.minute).prefix(prefixes.tera), /can only add a prefix to named base units/i);
+        assert.throws(() => units.millimetersOfMercury.prefix(prefixes.atto), /can only add a prefix to named base units/i);
     });
 
     it('to', () => {
-        let f: number,
-            g: number;
-
-        f = units.foot.to(units.inch);
-        assert.equal(f, 12);
-
-        f = units.Rankine.to(units.Rankine);
-        assert.equal(f, 1);
-
-        f = units.watt.to(units.volt.times(units.ampere));
-        assert.equal(f, 1);
-
-        f = units.slug.to(units.poundMass);
-        g = units.Gs.to(units.foot.over(units.second.pow(2)));
-        assert.ok(SMath.approx(f, g));
-        assert.ok(f >= 32.17);
-        assert.ok(f < 32.18);
-
-        f = units.watt.times(units.hour).to(units.Joule);
-        assert.equal(f, 3600);
-
-        f = units.inch.to(units.millimeter);
-        g = units.inchesOfMercury.to(units.millimetersOfMercury);
-        assert.ok(SMath.approx(f, g));
-
-        let caught = false;
-        try {
-            units.poundForce.to(units.poundMass);
-        } catch {
-            caught = true;
-        }
-        assert.ok(caught, 'Can only convert between like dimensions.');
+        assert.equal(units.foot.to(units.inch), 12);
+        assert.equal(units.Rankine.to(units.Rankine), 1);
+        assert.equal(units.watt.to(units.volt.times(units.ampere)), 1);
+        assert.ok(SMath.approx(units.slug.to(units.poundMass), units.Gs.to(units.foot.over(units.second.pow(2)))));
+        assert.ok(SMath.approx(units.slug.to(units.poundMass), 32.174));
+        assert.equal(units.watt.times(units.hour).to(units.Joule), 3600);
+        assert.ok(SMath.approx(units.inch.to(units.millimeter), units.inchesOfMercury.to(units.millimetersOfMercury)));
+        assert.ok(SMath.approx(units.inch.to(units.millimeter), 25.4));
+        assert.throws(() => units.poundForce.to(units.poundMass), /does not match/i);
     });
 
     it('customization', () => {
@@ -104,7 +62,6 @@ describe('Unit', () => {
             customPrefix = new Prefix('\\textbf{p}_{5}', 5),
             customInch = units.inch.prefix(customPrefix),
             customUnit = customInch.over(new Unit('blob', dimensionBlob));
-
         assert.strictEqual(dimensionBlob.toString(), '{\\beta}');
         assert.strictEqual(customPrefix.LaTeX, '{\\textbf{p}_{5}}');
         assert.strictEqual(customInch.toString(), '{{\\textbf{p}_{5}}\\text{in}}');
