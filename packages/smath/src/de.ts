@@ -15,7 +15,7 @@ export class DifferentialEquation {
         if (x0.length < 1) {
             throw new Error('This differential equation should be at least first order.');
         }
-        // Calculate d(n)x(0)/dt(n)
+        // Calculate d(n)x/dt(n)|0
         const dnx0: number = dnx(0, ...x0);
         // Set initial time and derivative array
         this.time = [0];
