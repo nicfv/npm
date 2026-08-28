@@ -4,14 +4,14 @@ import { SMath } from './index.js';
  * Represents a one dimensional time-dependent differential equation.
  */
 export class DifferentialEquation {
-    private readonly time: Array<number>;
-    private readonly data: Array<Array<number>>;
+    private readonly time: number[];
+    private readonly data: number[][];
     /**
      * Create a new differential equation.
      * @param f For one-dimensional DEs, define the equation as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ... `d(n-1)x/dt(n-1)` where `n` is the order.
      * @param x0 An array of `n` initial conditions for all derivatives starting with `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)` where `n` is the order.
      */
-    constructor(private readonly f: (t: number, ...x: Array<number>) => number, ...x0: Array<number>) {
+    constructor(private readonly f: (t: number, ...x: number[]) => number, ...x0: number[]) {
         if (x0.length < 1) {
             throw new Error('This differential equation should be at least first order.');
         }
@@ -37,7 +37,7 @@ export class DifferentialEquation {
      * @param dt The timestep
      * @param params Leave this empty (overrides parameters for differential equation.)
      */
-    public step(dt: number, params: Array<number> = this.getCurrentValues()): void {
+    public step(dt: number, params: number[] = this.getCurrentValues()): void {
         const order: number = this.getOrder(),
             t1: number = this.getCurrentTimestep(),
             t0: number = t1 - 1;
@@ -71,7 +71,7 @@ export class DifferentialEquation {
      * @param n The order number
      * @returns Values across time for derivative `n` of this equation.
      */
-    public getNthDerivative(n: number): Array<number> {
+    public getNthDerivative(n: number): number[] {
         if (n < 0 || n > this.getOrder()) {
             throw new Error('Order number is out of bounds.');
         }
@@ -81,14 +81,14 @@ export class DifferentialEquation {
      * Build and return an array containing `x` and all its derivative values for the current time.
      * @returns `[x, dx/dt, ... d(n)x/dt(n)]`
      */
-    public getCurrentValues(): Array<number> {
+    public getCurrentValues(): number[] {
         return this.data.map(deriv => deriv[deriv.length - 1]);
     }
     /**
      * Return the array of timesteps after solving the differential equation.
      * @returns The time array
      */
-    public getTimeArray(): Array<number> {
+    public getTimeArray(): number[] {
         return this.time;
     }
 }
@@ -115,7 +115,7 @@ export class DifferentialSystem {
      * Where `i` is the highest order of `x` (dimension 0), `j` is the highest order of `y` (dimension 1) and `k` is the highest order of `z` (dimension 2)
      * @param x0 The initial conditions for this dimension
      */
-    public setEquationFor(dimension: number, f: (t: number, ...x: Array<number>) => number, ...x0: Array<number>): void {
+    public setEquationFor(dimension: number, f: (t: number, ...x: number[]) => number, ...x0: number[]): void {
         if (this.equations[dimension] instanceof DifferentialEquation) {
             throw new Error('Already set equation for dimension ' + dimension);
         }
@@ -142,14 +142,14 @@ export class DifferentialSystem {
      * @param order The order number
      * @returns A time series array of data
      */
-    public getData(dimension: number, order: number): Array<number> {
+    public getData(dimension: number, order: number): number[] {
         return this.equations[dimension].getNthDerivative(order);
     }
     /**
      * Returns a formatted array of equation parameters.
      * @returns `[x, dx/dt, ... y, dy/dt, ... z, dz/dt, ...]`
      */
-    private getParameters(): Array<number> {
+    private getParameters(): number[] {
         return this.equations.map(de => de.getCurrentValues()).flat();
     }
     /**
