@@ -1,3 +1,5 @@
+import { SMath } from './index.js';
+
 /**
  * Represents a one dimensional time-dependent differential equation.
  */
@@ -44,7 +46,7 @@ export class DifferentialEquation {
             this.data[i][t1] = this.data[i][t0];
             for (let j = i + 1; j <= order; j++) {
                 const d: number = j - i;
-                this.data[i][t1] += (dt ** d) * this.data[j][t0] / this.factorial(d);
+                this.data[i][t1] += (dt ** d) * this.data[j][t0] / SMath.factorial(d);
             }
         }
         const fParamCount: number = this.f.length,
@@ -62,18 +64,6 @@ export class DifferentialEquation {
     public solve(dt: number, tf: number): void {
         for (let t = 0; t < tf; t += dt) {
             this.step(dt);
-        }
-    }
-    /**
-     * Calculate the factorial of a number `n`
-     * @param n The number to compute the factorial of.
-     * @returns `n! = n * (n-1) * ... * 2 * 1`
-     */
-    private factorial(n: number): number {
-        if (n < 2) {
-            return 1;
-        } else {
-            return n * this.factorial(n - 1);
         }
     }
     /**
