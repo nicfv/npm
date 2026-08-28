@@ -38,6 +38,8 @@ export class DifferentialEquation {
         const n1: number = this.time.length; // current array index
         const n0: number = n1 - 1; // last array index
         this.time[n1] = this.time[n0] + dt;
+        // Compute Taylor expansions for all "i" derivatives
+        // x(t0+dt) = x(t0) + dt*x'(t0) + 1/2*dt^2*x"(t0) + ... 1/n!*dt^n^x(n)(t0)
         for (let i = 0; i < order; i++) {
             this.data[i][n1] = this.data[i][n0];
             for (let j = i + 1; j <= order; j++) {
