@@ -8,18 +8,18 @@ export class DifferentialEquation {
     private readonly data: number[][];
     /**
      * Create a new differential equation.
-     * @param f For one-dimensional DEs, define the equation as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ... `d(n-1)x/dt(n-1)` where `n` is the order.
+     * @param dnx For one-dimensional DEs, define the equation for `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ... `d(n-1)x/dt(n-1)` where `n` is the order.
      * @param x0 An array of `n` initial conditions for all derivatives starting with `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)` where `n` is the order.
      */
-    constructor(private readonly f: (t: number, ...x: number[]) => number, ...x0: number[]) {
+    constructor(private readonly dnx: (t: number, ...x: number[]) => number, ...x0: number[]) {
         if (x0.length < 1) {
             throw new Error('This differential equation should be at least first order.');
         }
         // Calculate d(n)x(0)/dt(n)
-        const fn0: number = f(0, ...x0);
+        const dnx0: number = dnx(0, ...x0);
         // Set initial time and derivative array
         this.time = [0];
-        this.data = [...x0.map(xi => [xi]), [fn0]];
+        this.data = [...x0.map(xi => [xi]), [dnx0]];
     }
     /**
      * Return the order of this differential equation.
@@ -52,12 +52,12 @@ export class DifferentialEquation {
                 this.data[i][t1] += (dt ** d) * this.data[j][t0] / SMath.factorial(d);
             }
         }
-        const fParamCount: number = this.f.length,
+        const fParamCount: number = this.dnx.length,
             numParams: number = params.length + 1;
         if (fParamCount !== numParams) {
             throw new Error('Differential equation (order ' + order + ') should accept ' + numParams + ' parameters but accepts ' + fParamCount + ' parameters.');
         }
-        this.data[order][t1] = this.f(this.time[t1], ...params);
+        this.data[order][t1] = this.dnx(this.time[t1], ...params);
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`
