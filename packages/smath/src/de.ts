@@ -29,27 +29,20 @@ export class DifferentialEquation {
         return this.data.length - 1;
     }
     /**
-     * Return the next index of values to compute.
-     * @returns The next timestep index
-     */
-    private getCurrentTimestep(): number {
-        return this.time.length;
-    }
-    /**
      * Calculate `x` and all its derivatives after a timestep `dt`
      * @param dt The timestep
      * @param params Leave this empty (overrides parameters for differential equation.)
      */
     public step(dt: number, params: number[] = this.getCurrentValues()): void {
-        const order: number = this.getOrder(),
-            t1: number = this.getCurrentTimestep(),
-            t0: number = t1 - 1;
-        this.time[t1] = this.time[t0] + dt;
+        const order: number = this.getOrder();
+        const n1: number = this.time.length; // current array index
+        const n0: number = n1 - 1; // last array index
+        this.time[n1] = this.time[n0] + dt;
         for (let i = 0; i < order; i++) {
-            this.data[i][t1] = this.data[i][t0];
+            this.data[i][n1] = this.data[i][n0];
             for (let j = i + 1; j <= order; j++) {
                 const d: number = j - i;
-                this.data[i][t1] += (dt ** d) * this.data[j][t0] / SMath.factorial(d);
+                this.data[i][n1] += (dt ** d) * this.data[j][n0] / SMath.factorial(d);
             }
         }
         const fParamCount: number = this.dnx.length,
@@ -57,7 +50,7 @@ export class DifferentialEquation {
         if (fParamCount !== numParams) {
             throw new Error('Differential equation (order ' + order + ') should accept ' + numParams + ' parameters but accepts ' + fParamCount + ' parameters.');
         }
-        this.data[order][t1] = this.dnx(this.time[t1], ...params);
+        this.data[order][n1] = this.dnx(this.time[n1], ...params);
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`
