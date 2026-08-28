@@ -8,11 +8,11 @@ export class DifferentialEquation {
     private readonly data: Array<Array<number>>;
     /**
      * Create a new differential equation.
-     * @param f For one-dimensional DEs, define the equation as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ... `d(n)x/dt(n)` where `n` is the order.
-     * @param x0 An array of `n` initial conditions for all derivatives starting with `x`, `dx/dt`, `d2x/dt2`, ..., `d(n)x/dt(n)` where `n` is the order.
+     * @param f For one-dimensional DEs, define the equation as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ... `d(n-1)x/dt(n-1)` where `n` is the order.
+     * @param x0 An array of `n` initial conditions for all derivatives starting with `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)` where `n` is the order.
      */
     constructor(private readonly f: (t: number, ...x: Array<number>) => number, ...x0: Array<number>) {
-        if (x0.length < 2) {
+        if (x0.length < 1) {
             throw new Error('This differential equation should be at least first order.');
         }
         this.time = [0];
@@ -97,14 +97,11 @@ export class DifferentialEquation {
  * Represents a system of differential equations.
  */
 export class DifferentialSystem {
-    private readonly equations: Array<DifferentialEquation>;
     /**
      * Initialize a new system of differential equations.
-     * @param dimensions The number of equations in this system
+     * @param equations The differential equations that make up this system
      */
-    constructor(dimensions: number) {
-        this.equations = new Array(dimensions);
-    }
+    constructor(private readonly equations: DifferentialEquation[]) { }
     /**
      * Set a differential equation for a specific dimension. All differential equations must be set before solving.
      * @param dimension The 0-indexed dimension number to initialize the equation for
