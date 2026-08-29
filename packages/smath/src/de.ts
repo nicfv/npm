@@ -8,8 +8,8 @@ export class DifferentialEquation {
     private readonly data: number[][];
     /**
      * Create a new differential equation.
-     * @param dnx For one-dimensional DEs, define the equation for `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ... `d(n-1)x/dt(n-1)` where `n` is the order.
-     * @param x0 An array of `n` initial conditions for all derivatives starting with `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)` where `n` is the order.
+     * @param dnx For a one-dimensional DE of order `n`, define `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
+     * @param x0 An array of the first `n` initial conditions for `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
      */
     constructor(private readonly dnx: (t: number, ...x: number[]) => number, ...x0: number[]) {
         if (x0.length < 1) {
@@ -29,17 +29,20 @@ export class DifferentialEquation {
         return this.data.length - 1;
     }
     /**
-     * Calculate `x` and all its derivatives after a timestep `dt`
-     * @param dt The timestep
-     * @param params Leave this empty (overrides parameters for differential equation.)
+     * Calculate `x` and all its derivatives after a timestep `dt`.
+     * @param dt The timestep.
+     * @param params The current state excluding the highest derivative, or the full state when a compatibility override is supplied.
      */
     public step(dt: number, params: number[] = this.getCurrentValues()): void {
+        if (!Number.isFinite(dt) || dt <= 0) {
+            throw new Error('Timestep must be positive.');
+        }
         const order: number = this.getOrder();
         const n1: number = this.time.length; // current array index
         const n0: number = n1 - 1; // last array index
         this.time[n1] = this.time[n0] + dt;
-        // Compute Taylor expansions for all "i" derivatives
-        // x(t0+dt) = x(t0) + dt*x'(t0) + 1/2*dt^2*x"(t0) + ... 1/n!*dt^n^x(n)(t0)
+        // Compute Taylor expansions for all lower-order derivatives.
+        // x(t0 + dt) = x(t0) + dt*x'(t0) + 1/2*dt^2*x"(t0) + ... + 1/n!*dt^n*x^(n)(t0)
         for (let i = 0; i < order; i++) {
             this.data[i][n1] = this.data[i][n0];
             for (let j = i + 1; j <= order; j++) {
@@ -55,25 +58,31 @@ export class DifferentialEquation {
         this.data[order][n1] = this.dnx(this.time[n1], ...params);
     }
     /**
-     * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`
-     * @param dt The timestep
-     * @param tf The final time
+     * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`.
+     * @param dt The timestep.
+     * @param tf The final time.
      */
     public solve(dt: number, tf: number): void {
+        if (!Number.isFinite(dt) || dt <= 0) {
+            throw new Error('Timestep must be positive.');
+        }
+        if (!Number.isFinite(tf) || tf < 0) {
+            throw new Error('Final time must be non-negative.');
+        }
         for (let t = 0; t < tf; t += dt) {
             this.step(dt);
         }
     }
     /**
      * Return an array of all values for time derivative `n` after solving this equation.
-     * @param n The order number
+     * @param n The order number.
      * @returns Values across time for derivative `n` of this equation.
      */
     public getNthDerivative(n: number): number[] {
         if (n < 0 || n > this.getOrder()) {
             throw new Error('Order number is out of bounds.');
         }
-        return this.data[n];
+        return [...this.data[n]];
     }
     /**
      * Build and return an array containing `x` and all its derivative values for the current time.
@@ -87,7 +96,7 @@ export class DifferentialEquation {
      * @returns The time array
      */
     public getTimeArray(): number[] {
-        return this.time;
+        return [...this.time];
     }
 }
 
