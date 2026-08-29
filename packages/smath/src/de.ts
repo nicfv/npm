@@ -1,18 +1,24 @@
 import { SMath } from './index.js';
 
 /**
+ * Represents a time-dependent equation with an arbitrary array of parameters.
+ */
+export type Equation = (t: number, ...x: number[]) => number;
+
+/**
  * Represents a one dimensional time-dependent differential equation.
  */
 export class DifferentialEquation {
     private readonly time: number[];
     private readonly data: number[][];
+    private dnx?: Equation;
     /**
      * Create a new differential equation.
      * @param dnx For a one-dimensional DE of order `n`, define `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
      * @param x0 An array of the first `n` initial conditions for `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
      */
-    constructor(private readonly dnx: (t: number, ...x: number[]) => number, ...x0: number[]) {
-        if (x0.length < 1) {
+    constructor(private readonly order: number) {
+        if (order < 1) {
             throw new Error('This differential equation should be at least first order.');
         }
         // Calculate d(n)x/dt(n)|0
@@ -22,11 +28,31 @@ export class DifferentialEquation {
         this.data = [...x0.map(xi => [xi]), [dnx0]];
     }
     /**
-     * Return the order of this differential equation.
-     * @returns The highest derivative order
+     * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`
+     * @param dnx The formula for `d(n)x/dt(n)` where `n` is the highest order
+     * @param x0 Initial conditions for all `n-1` derivative orders ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      */
-    private getOrder(): number {
-        return this.data.length - 1;
+    public set(dnx: Equation, ...x0: number[]): void {
+        if (this.dnx) {
+            throw new Error(`Equation for d${this.order}x/dt${this.order} is already defined.`);
+        }
+        if (x0.length !== this.order - 1) {
+            throw new Error(`Expected ${this.order - 1} initial conditions, found ${x0.length}.`);
+        }
+        this.dnx = dnx;
+        this.time.push(0);
+    }
+    /**
+     * Get the current value for the `i`th derivative
+     * @param i The derivative order
+     * @returns `d(i)x/dt(i)` evaluated at the current time
+     */
+    public d(i: number): number {
+        if (i < 0 || i >= this.order) {
+            throw new Error(`Derivative order ${i} is out of range [0,${this.order - 1}]`);
+        }
+        const lastIndex: number = this.time.length - 1;
+        return this.data[i][lastIndex];
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
