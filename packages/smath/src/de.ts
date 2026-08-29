@@ -3,7 +3,7 @@ import { SMath } from './index.js';
 /**
  * Represents a time-dependent equation with an arbitrary array of parameters.
  */
-export type Equation = (t: number, ...x: number[]) => number;
+export type Equation = (t: number) => number;
 
 /**
  * Contains data for a single point in time
@@ -69,44 +69,38 @@ export class DifferentialEquation {
         return this.data[this.data.length - 1].dx[i];
     }
     /**
-     * Calculate `d(n)x/dt(n)` at `t=0`
-     */
-    public calc_dnx_dtn_0(): void {
-        if (!this.dnx || this.data.length < 1) {
-            throw new Error('Differential equation and initial conditions have not been set up yet.');
-        } else if (this.data.length > 1 || typeof this.data[0].dx[this.order] === 'number') {
-            throw new Error('Equation already solved at initial conditions.');
-        }
-        this.data[0].dx[this.order] = this.dnx(0);
-    }
-    /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
      * @param dt The timestep.
-     * @param params The current state excluding the highest derivative, or the full state when a compatibility override is supplied.
      */
-    public step(dt: number, params: number[] = this.getCurrentValues()): void {
+    public step(dt: number): void {
+        // Check for invalid inputs
+        if (!this.dnx || this.data.length < 1) {
+            throw new Error('Differential equation and initial conditions have not been set up yet.');
+        }
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
         }
-        const order: number = this.getOrder();
-        const n1: number = this.time.length; // current array index
-        const n0: number = n1 - 1; // last array index
-        this.time[n1] = this.time[n0] + dt;
+        // Determine next and current array indices
+        const n1: number = this.data.length;
+        const n0: number = n1 - 1;
+        // Evaluate `d(n)x/dt(n)` at time `t=0`
+        if (typeof this.data[0].dx[this.order] !== 'number') {
+            this.data[0].dx[this.order] = this.dnx(0);
+        }
+        // Determine current timestamp & copy dx array
+        this.data[n1] = {
+            time: this.data[n0].time + dt,
+            dx: [...this.data[n0].dx],
+        };
         // Compute Taylor expansions for all lower-order derivatives.
         // x(t0 + dt) = x(t0) + dt*x'(t0) + 1/2*dt^2*x"(t0) + ... + 1/n!*dt^n*x^(n)(t0)
-        for (let i = 0; i < order; i++) {
-            this.data[i][n1] = this.data[i][n0];
-            for (let j = i + 1; j <= order; j++) {
+        for (let i = 0; i < this.order; i++) {
+            for (let j = i + 1; j <= this.order; j++) {
                 const d: number = j - i;
-                this.data[i][n1] += (dt ** d) * this.data[j][n0] / SMath.factorial(d);
+                this.data[n1].dx[i] += (dt ** d) * this.data[n0].dx[j] / SMath.factorial(d);
             }
         }
-        const fParamCount: number = this.dnx.length,
-            numParams: number = params.length + 1;
-        if (fParamCount !== numParams) {
-            throw new Error('Differential equation (order ' + order + ') should accept ' + numParams + ' parameters but accepts ' + fParamCount + ' parameters.');
-        }
-        this.data[order][n1] = this.dnx(this.time[n1], ...params);
+        this.data[n1].dx[this.order] = this.dnx(this.data[n1].time);
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`.
