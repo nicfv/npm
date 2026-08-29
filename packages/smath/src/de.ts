@@ -6,11 +6,30 @@ import { SMath } from './index.js';
 export type Equation = (t: number, ...x: number[]) => number;
 
 /**
+ * Contains data for a single point in time
+ */
+interface Step {
+    /**
+     * The timestamp for this step
+     */
+    readonly time: number;
+    /**
+     * The array of all derivative orders by `x`, `dx/dt`, `d2x/dt2`, ..., `dnx/dtn`
+     */
+    readonly dx: number[];
+}
+
+/**
  * Represents a one dimensional time-dependent differential equation.
  */
 export class DifferentialEquation {
-    private readonly time: number[];
-    private readonly data: number[][];
+    /**
+     * Stores information for this differential equation
+     */
+    private readonly data: Step[];
+    /**
+     * Represents the actual time-dependent differential equation
+     */
     private dnx?: Equation;
     /**
      * Create a new differential equation.
@@ -21,11 +40,7 @@ export class DifferentialEquation {
         if (order < 1) {
             throw new Error('This differential equation should be at least first order.');
         }
-        // Calculate d(n)x/dt(n)|0
-        const dnx0: number = dnx(0, ...x0);
-        // Set initial time and derivative array
-        this.time = [0];
-        this.data = [...x0.map(xi => [xi]), [dnx0]];
+        this.data = [];
     }
     /**
      * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`
@@ -40,7 +55,7 @@ export class DifferentialEquation {
             throw new Error(`Expected ${this.order - 1} initial conditions, found ${x0.length}.`);
         }
         this.dnx = dnx;
-        this.time.push(0);
+        this.data.push({ time: 0, dx: [...x0] });
     }
     /**
      * Get the current value for the `i`th derivative
@@ -48,11 +63,21 @@ export class DifferentialEquation {
      * @returns `d(i)x/dt(i)` evaluated at the current time
      */
     public d(i: number): number {
-        if (i < 0 || i >= this.order) {
-            throw new Error(`Derivative order ${i} is out of range [0,${this.order - 1}]`);
+        if (i < 0 || i > this.order) {
+            throw new Error(`Derivative order ${i} is out of range [0,${this.order}]`);
         }
-        const lastIndex: number = this.time.length - 1;
-        return this.data[i][lastIndex];
+        return this.data[this.data.length - 1].dx[i];
+    }
+    /**
+     * Calculate `d(n)x/dt(n)` at `t=0`
+     */
+    public calc_dnx_dtn_0(): void {
+        if (!this.dnx || this.data.length < 1) {
+            throw new Error('Differential equation and initial conditions have not been set up yet.');
+        } else if (this.data.length > 1 || typeof this.data[0].dx[this.order] === 'number') {
+            throw new Error('Equation already solved at initial conditions.');
+        }
+        this.data[0].dx[this.order] = this.dnx(0);
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
