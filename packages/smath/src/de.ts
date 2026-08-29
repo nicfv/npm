@@ -64,7 +64,7 @@ export class DifferentialEquation {
      */
     public d(i: number): number {
         if (i < 0 || i > this.order || !Number.isInteger(i)) {
-            throw new Error(`Derivative order ${i} is out of range [0,${this.order}]`);
+            throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
         }
         return this.data[this.data.length - 1].dx[i];
     }
