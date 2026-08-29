@@ -1,7 +1,7 @@
 import { SMath } from './index.js';
 
 /**
- * Represents a time-dependent equation with an arbitrary array of parameters.
+ * Represents a time-dependent equation.
  */
 export type Equation = (t: number) => number;
 
