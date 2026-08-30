@@ -92,8 +92,8 @@ export class DifferentialEquationBase {
         return this.data[this.data.length - 1].time;
     }
     /**
-     * Get the solution data for this differential equation.
-     * @returns An array containing the timestamp and all derivatives evaluated at that timestamp
+     * Get all data for this differential equation.
+     * @returns An array containing each timestamp and all derivatives evaluated at that timestamp
      */
     public getData(): Step[] {
         return structuredClone(this.data);
