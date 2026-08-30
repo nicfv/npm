@@ -6,42 +6,29 @@ import { Equation, Step } from './types.js';
  */
 export class DifferentialEquationBase {
     /**
+     * The highest derivative order of this differential equation
+     */
+    private readonly order: number;
+    /**
      * Stores information for this differential equation
      */
     private readonly data: Step[];
-    /**
-     * Represents the actual time-dependent differential equation
-     */
-    private dnx?: Equation;
     /**
      * Arbitrary array of parameters used for the `d(n)x/dt(n)` equation
      */
     private params: number[];
     /**
      * Create a new differential equation.
-     * @param order The highest derivative order of this differential equation
-     */
-    constructor(private readonly order: number) {
-        if (order < 1) {
-            throw new Error('This differential equation should be at least first order.');
-        }
-        this.data = [];
-        this.params = [];
-    }
-    /**
-     * Set the differential equation as a function of time and arbitrary parameters and the initial conditions at time `t=0`.
      * @param dnx The formula for `d(n)x/dt(n)` where `n` is the highest order
      * @param x0 Initial conditions for all `n-1` derivative orders ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      */
-    public set(dnx: Equation, ...x0: number[]): void {
-        if (this.dnx) {
-            throw new Error(`Equation for d${this.order}x/dt${this.order} is already defined.`);
+    constructor(private readonly dnx: Equation, ...x0: number[]) {
+        if (x0.length !== dnx.length - 1) {
+            throw new Error(`Formula accepts ${dnx.length} parameters (including "t") but there were ${x0.length} initial conditions found.`);
         }
-        if (x0.length !== this.order) {
-            throw new Error(`Expected ${this.order} initial conditions, found ${x0.length}.`);
-        }
-        this.dnx = dnx;
-        this.data.push({ time: 0, dx: [...x0] });
+        this.order = x0.length;
+        this.data = [{ time: 0, dx: [...x0] }];
+        this.params = [];
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
