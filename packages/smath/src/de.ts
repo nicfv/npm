@@ -133,7 +133,7 @@ class DifferentialEquationBase {
      */
     public getTime(): number {
         if (this.data.length < 1) {
-            throw new Error('Data is empty.');
+            throw new Error('Differential equation and initial conditions have not been set up yet.');
         }
         return this.data[this.data.length - 1].time;
     }
