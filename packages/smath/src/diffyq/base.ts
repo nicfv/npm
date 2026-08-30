@@ -23,9 +23,6 @@ export class DifferentialEquationBase {
      * @param x0 Initial conditions for all `n-1` derivative orders ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      */
     constructor(private readonly dnx: Equation, ...x0: number[]) {
-        if (x0.length !== dnx.length - 1) {
-            throw new Error(`Formula accepts ${dnx.length} parameters (including "t") but there were ${x0.length} initial conditions found.`);
-        }
         this.order = x0.length;
         this.data = [{ time: 0, dx: [...x0] }];
         this.params = [];
@@ -82,7 +79,7 @@ export class DifferentialEquationBase {
         if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
         }
-        return this.data[this.data.length - 1].dx.slice(0, -1);
+        return this.data[this.data.length - 1].dx.slice(0, this.order);
     }
     /**
      * Get the current time of the solution.
