@@ -12,7 +12,7 @@ export class DifferentialSystem {
     private readonly equations: DifferentialEquationBase[];
     /**
      * Initialize a new system of differential equations.
-     * @param equations The differential equations that make up this system
+     * @param dimensions The number of equations in this system
      */
     constructor(private readonly dimensions: number) {
         if (dimensions < 1 || !Number.isInteger(dimensions)) {
@@ -23,16 +23,24 @@ export class DifferentialSystem {
     /**
      * Set a differential equation for a specific dimension. All differential equations must be set before solving.
      * @param dimension The 0-indexed dimension number to set the equation for
-     * @param equation The differential equation to use for this dimension
+     * @param de The differential equation for this dimension, which must accept a global state vector ordered as follows:
+     * ```
+     * x, dx/dt, ..., d(i-1)x/dt(i-1),
+     * y, dy/dt, ..., d(j-1)y/dt(j-1),
+     * z, dz/dt, ..., d(k-1)z/dt(k-1),
+     * ... (higher dimensions)
+     * ```
+     * Where `i` is the highest order of `x` (dimension 0), `j` is the highest order of `y` (dimension 1) and `k` is the highest order of `z` (dimension 2)
+     * @param ic Initial conditions for this dimension, ordered `x`, `dx/dt`, ..., `d(n-1)x/dt(n-1)`
      */
-    public setEquationFor(dimension: number, dnx: Equation, ...x0: number[]): void {
+    public setEquationFor(dimension: number, de: Equation, ...ic: number[]): void {
         if (dimension < 0 || dimension >= this.dimensions || !Number.isInteger(dimension)) {
             throw new Error(`Dimension ${dimension} is outside range [0,${this.dimensions - 1}] or is not an integer.`);
         }
         if (this.equations[dimension] instanceof DifferentialEquationBase) {
             throw new Error(`Equation for dimension ${dimension} has already been set.`);
         }
-        this.equations[dimension] = new DifferentialEquationBase(dnx, ...x0);
+        this.equations[dimension] = new DifferentialEquationBase(de, ...ic);
     }
     /**
      * Solve this system of differential equations from `t=0` to `t=tf` with timestep `dt`.
