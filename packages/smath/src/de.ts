@@ -40,11 +40,11 @@ class DifferentialEquationBase {
     /**
      * Stores information for this differential equation
      */
-    protected readonly data: Step[];
+    private readonly data: Step[];
     /**
      * Represents the actual time-dependent differential equation
      */
-    protected dnx?: Equation;
+    private dnx?: Equation;
     /**
      * Create a new differential equation.
      * @param dnx For a one-dimensional DE of order `n`, define `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
@@ -75,7 +75,7 @@ class DifferentialEquationBase {
     /**
      * Evaluate `d(n)x/dt(n)` at `t=0`
      */
-    protected calc_dnx0(): void {
+    public calc_dnx0(): void {
         // Check for invalid inputs
         if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
@@ -101,7 +101,7 @@ class DifferentialEquationBase {
      * Calculate `x` and all its derivatives after a timestep `dt`.
      * @param dt The timestep.
      */
-    protected step(dt: number): void {
+    public step(dt: number): void {
         // Check for invalid inputs
         if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
@@ -128,6 +128,13 @@ class DifferentialEquationBase {
         this.data[n1].dx[this.order] = this.dnx(this.data[n1].time);
     }
     /**
+     * Get the current time of the solution.
+     * @returns The current time `t`
+     */
+    public getTime(): number {
+        return this.data[this.data.length - 1].time;
+    }
+    /**
      * Get a timeseries array for the `i`th derivative
      * @param i The derivative order (default = 0)
      * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
@@ -146,10 +153,12 @@ class DifferentialEquationBase {
 /**
  * Represents a one dimensional time-dependent differential equation.
  */
-export class DifferentialEquation extends DifferentialEquationBase {
-    public override set(dnx: Equation, ...x0: number[]): void {
-        super.set(dnx, ...x0);
-        this.calc_dnx0();
+export class DifferentialEquation {
+    private readonly DE: DifferentialEquationBase;
+    constructor(dnx: Equation, ...x0: number[]) {
+        this.DE = new DifferentialEquationBase(x0.length - 1);
+        this.DE.set(dnx, ...x0);
+        this.DE.calc_dnx0();
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`.
@@ -164,12 +173,12 @@ export class DifferentialEquation extends DifferentialEquationBase {
         if (!Number.isFinite(tf) || tf < 0) {
             throw new Error('Final time must be non-negative.');
         }
-        if (this.data.length > 1) {
+        if (this.DE.getTime() > 0) {
             throw new Error('Solution already computed.');
         }
         // Actually solve the equation
-        while (this.data[this.data.length - 1].time < tf) {
-            this.step(dt);
+        while (this.DE.getTime() < tf) {
+            this.DE.step(dt);
         }
     }
 }
@@ -181,7 +190,7 @@ export class DifferentialSystem {
     /**
      * Represents the actual differential equations within the system.
      */
-    private readonly equations: DifferentialEquation[];
+    private readonly equations: DifferentialEquationBase[];
     /**
      * Initialize a new system of differential equations.
      * @param equations The differential equations that make up this system
@@ -198,7 +207,7 @@ export class DifferentialSystem {
         if (dimension < 0 || dimension >= this.dimensions || !Number.isInteger(dimension)) {
             throw new Error(`Dimension ${dimension} is outside range [0,${this.dimensions - 1}] or is not an integer.`);
         }
-        if (this.equations[dimension] instanceof DifferentialEquation) {
+        if (this.equations[dimension] instanceof DifferentialEquationBase) {
             throw new Error(`Equation for dimension ${dimension} has already been set.`);
         }
         this.equations[dimension] = equation;
@@ -222,6 +231,7 @@ export class DifferentialSystem {
                 throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
             }
         }
+        this.equations.forEach(de => de.)
         // Step through each differential equation
         for (let t = 0; t < tf; t += dt) {
             this.equations.forEach(de => de.step(dt));
