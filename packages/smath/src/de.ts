@@ -212,7 +212,7 @@ export class DifferentialSystem {
      * @returns An array containing the timestamp and all dimensions of `d(i)x/dt(i)` evaluated at that timestamp
      */
     public getTimeseries(i = 0): Timeseries<number[]>[] {
-        const data = this.equations.map(eqn => eqn.getTimeseries(i));
+        const data: Timeseries<number>[][] = this.equations.map(eqn => eqn.getTimeseries(i));
         const timeseries: Timeseries<number[]>[] = [];
         for (const value of data[0]) {
             timeseries.push({ time: value.time, data: [value.data] });
