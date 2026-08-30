@@ -38,6 +38,7 @@ export class DifferentialSystem {
      * Solve this system of differential equations from `t=0` to `t=tf` with timestep `dt`.
      * @param dt The timestep
      * @param tf The final time
+     * @returns Square array with the first index being the 0-indexed dimension and second index being the time index, each entry contains the timestamp and all orders of derivatives
      */
     public solve(dt: number, tf: number): Step[][] {
         // Validate inputs
