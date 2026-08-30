@@ -14,9 +14,9 @@ export class DifferentialEquationBase {
      */
     private readonly data: Step[];
     /**
-     * Arbitrary array of parameters used for the `d(n)x/dt(n)` equation
+     * Current state of the system used for the `d(n)x/dt(n)` equation
      */
-    private params: number[];
+    private state: number[];
     /**
      * Create a new differential equation.
      * @param dnx The formula for `d(n)x/dt(n)` where `n` is the highest order
@@ -25,7 +25,7 @@ export class DifferentialEquationBase {
     constructor(private readonly dnx: Equation, ...x0: number[]) {
         this.order = x0.length;
         this.data = [{ time: 0, dx: [...x0] }];
-        this.params = [];
+        this.state = [];
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
@@ -39,12 +39,12 @@ export class DifferentialEquationBase {
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
         }
-        if (this.params.length !== this.dnx.length - 1) {
-            throw new Error(`Equation should accept ${this.params.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
+        if (this.state.length !== this.dnx.length - 1) {
+            throw new Error(`Equation should accept ${this.state.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
         }
         // Evaluate `d(n)x/dt(n)` at `t=0`
         if (this.data.length === 1 && typeof this.data[0].dx[this.order] !== 'number') {
-            this.data[0].dx[this.order] = this.dnx(0, ...this.params);
+            this.data[0].dx[this.order] = this.dnx(0, ...this.state);
         }
         // Determine next and current array indices
         const n1: number = this.data.length;
@@ -62,20 +62,20 @@ export class DifferentialEquationBase {
                 this.data[n1].dx[i] += (dt ** d) * this.data[n0].dx[j] / SMath.factorial(d);
             }
         }
-        this.data[n1].dx[this.order] = this.dnx(this.data[n1].time, ...this.params);
+        this.data[n1].dx[this.order] = this.dnx(this.data[n1].time, ...this.state);
     }
     /**
      * Set the parameters for the next timestep of this differential equation.
      * @param x Parameters used in `d(n)x/dt(n)`, such as `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
-    public setParams(...x: number[]): void {
-        this.params = [...x];
+    public setState(...x: number[]): void {
+        this.state = [...x];
     }
     /**
      * Get all the derivatives for this equation at time `t` in order from lowest to highest order.
      * @returns `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
-    public getParams(): number[] {
+    public getState(): number[] {
         if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
         }
