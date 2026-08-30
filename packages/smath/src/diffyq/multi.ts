@@ -1,3 +1,4 @@
+import { SMath } from '../index.js';
 import { DifferentialEquationBase } from './base.js';
 
 /**
@@ -13,6 +14,9 @@ export class DifferentialSystem {
      * @param equations The differential equations that make up this system
      */
     constructor(private readonly dimensions: number) {
+        if (dimensions < 1 || !Number.isInteger(dimensions)) {
+            throw new Error(`Dimension (${dimensions}) should be a positive integer.`);
+        }
         this.equations = [];
     }
     /**
@@ -48,10 +52,12 @@ export class DifferentialSystem {
                 throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
             }
         }
-        this.equations.forEach(de => de.)
         // Step through each differential equation
-        for (let t = 0; t < tf; t += dt) {
-            this.equations.forEach(de => de.step(dt));
+        while (this.equations[0].getTime() < tf) {
+            const dth: number = SMath.clamp(dt, 0, tf - this.equations[0].getTime());
+            const params: number[] = this.equations.map(eq => eq.getParams()).flat();
+            this.equations.forEach(de => de.setParams(...params));
+            this.equations.forEach(de => de.step(dth));
         }
     }
     /**
