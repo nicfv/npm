@@ -108,6 +108,7 @@ export class DifferentialEquation {
      * @param tf The final time.
      */
     public solve(dt: number, tf: number): void {
+        // Validate inputs
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
         }
@@ -117,6 +118,7 @@ export class DifferentialEquation {
         if (this.data.length > 1) {
             throw new Error('Solution already computed.');
         }
+        // Actually solve the equation
         for (let t = 0; t < tf; t += dt) {
             this.step(dt);
         }
@@ -127,6 +129,9 @@ export class DifferentialEquation {
      * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
      */
     public getTimeseries(i: number): [number, number][] {
+        if (i < 0 || i > this.order || !Number.isInteger(i)) {
+            throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
+        }
         return this.data.map(step => [step.time, step.dx[i]]);
     }
 }
