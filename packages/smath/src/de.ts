@@ -46,6 +46,10 @@ class DifferentialEquationBase {
      */
     private dnx?: Equation;
     /**
+     * Arbitrary array of parameters used for the `d(n)x/dt(n)` equation
+     */
+    private params: number[];
+    /**
      * Create a new differential equation.
      * @param dnx For a one-dimensional DE of order `n`, define `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
      * @param x0 An array of the first `n` initial conditions for `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
@@ -55,6 +59,7 @@ class DifferentialEquationBase {
             throw new Error('This differential equation should be at least first order.');
         }
         this.data = [];
+        this.params = [];
     }
     /**
      * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`.
@@ -75,7 +80,7 @@ class DifferentialEquationBase {
     /**
      * Evaluate `d(n)x/dt(n)` at `t=0`
      */
-    public calc_dnx0(): void {
+    public step0(): void {
         // Check for invalid inputs
         if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
@@ -83,8 +88,11 @@ class DifferentialEquationBase {
         if (typeof this.data[0].dx[this.order] === 'number') {
             throw new Error(`Derivative order ${this.order} already computed for t=0.`);
         }
+        if (this.params.length !== this.dnx.length - 1) {
+            throw new Error(`Equation should accept ${this.params.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
+        }
         // Actually evaluate d(n)x/dt(n) at t=0
-        this.data[0].dx[this.order] = this.dnx(0);
+        this.data[0].dx[this.order] = this.dnx(0, ...this.params);
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
@@ -97,6 +105,9 @@ class DifferentialEquationBase {
         }
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
+        }
+        if (this.params.length !== this.dnx.length - 1) {
+            throw new Error(`Equation should accept ${this.params.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
         }
         // Determine next and current array indices
         const n1: number = this.data.length;
@@ -114,7 +125,24 @@ class DifferentialEquationBase {
                 this.data[n1].dx[i] += (dt ** d) * this.data[n0].dx[j] / SMath.factorial(d);
             }
         }
-        this.data[n1].dx[this.order] = this.dnx(this.data[n1].time);
+        this.data[n1].dx[this.order] = this.dnx(this.data[n1].time, ...this.params);
+    }
+    /**
+     * Set the parameters for the next step of the differential equation
+     * @param x Parameters used in `d(n)x/dt(n)`, such as `x`, `dx` ... `d(n-1)x/dt(n-1)`
+     */
+    public setParams(...x: number[] = this.getParams()): void {
+        this.params = [...x];
+    }
+    /**
+     * Get all the derivatives for this equation at time `t`
+     * @returns `x`, `dx` ... `d(n-1)x/dt(n-1)`
+     */
+    public getParams(): number[] {
+        if (!this.dnx || this.data.length < 1) {
+            throw new Error('Differential equation and initial conditions have not been set up yet.');
+        }
+        return this.data[this.data.length - 1].dx.slice(0, -1);
     }
     /**
      * Get the current time of the solution.
@@ -150,7 +178,7 @@ export class DifferentialEquation {
     constructor(dnx: Equation, ...x0: number[]) {
         this.DE = new DifferentialEquationBase(x0.length - 1);
         this.DE.set(dnx, ...x0);
-        this.DE.calc_dnx0();
+        this.DE.step0();
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`.
@@ -170,6 +198,7 @@ export class DifferentialEquation {
         }
         // Actually solve the equation
         while (this.DE.getTime() < tf) {
+            this.DE.setParams();
             this.DE.step(dt);
         }
     }
