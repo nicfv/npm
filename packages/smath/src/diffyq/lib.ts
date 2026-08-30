@@ -1,4 +1,5 @@
 import { SMath } from '../index.js';
+import { Equation, Step, Timeseries } from './types.js';
 
 /**
  * Represents basic functions for a differential equation.
