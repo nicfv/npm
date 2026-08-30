@@ -78,23 +78,6 @@ class DifferentialEquationBase {
         this.data.push({ time: 0, dx: [...x0] });
     }
     /**
-     * Evaluate `d(n)x/dt(n)` at `t=0`
-     */
-    public step0(): void {
-        // Check for invalid inputs
-        if (!this.dnx || this.data.length < 1) {
-            throw new Error('Differential equation and initial conditions have not been set up yet.');
-        }
-        if (typeof this.data[0].dx[this.order] === 'number') {
-            throw new Error(`Derivative order ${this.order} already computed for t=0.`);
-        }
-        if (this.params.length !== this.dnx.length - 1) {
-            throw new Error(`Equation should accept ${this.params.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
-        }
-        // Actually evaluate d(n)x/dt(n) at t=0
-        this.data[0].dx[this.order] = this.dnx(0, ...this.params);
-    }
-    /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
      * @param dt The timestep.
      */
@@ -108,6 +91,10 @@ class DifferentialEquationBase {
         }
         if (this.params.length !== this.dnx.length - 1) {
             throw new Error(`Equation should accept ${this.params.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
+        }
+        // Evaluate `d(n)x/dt(n)` at `t=0`
+        if (this.data.length === 1 && typeof this.data[0].dx[this.order] !== 'number') {
+            this.data[0].dx[this.order] = this.dnx(0, ...this.params);
         }
         // Determine next and current array indices
         const n1: number = this.data.length;
@@ -149,7 +136,7 @@ class DifferentialEquationBase {
      * @returns The current time `t`
      */
     public getTime(): number {
-        if (this.data.length < 1) {
+        if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
         }
         return this.data[this.data.length - 1].time;
