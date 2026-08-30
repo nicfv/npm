@@ -54,6 +54,9 @@ export class DifferentialSystem {
                 throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
             }
         }
+        if (this.equations[0].getTime() > 0) {
+            throw new Error('Solution already computed.');
+        }
         // Step through each differential equation
         while (this.equations[0].getTime() < tf) {
             const dth: number = SMath.clamp(dt, 0, tf - this.equations[0].getTime());
