@@ -1,20 +1,6 @@
 import { SMath } from '../index.js';
 
 /**
- * Contains data for a single point in time
- */
-interface Step {
-    /**
-     * The timestamp for this step
-     */
-    readonly time: number;
-    /**
-     * The array of all derivative orders by `x`, `dx/dt`, `d2x/dt2`, ..., `dnx/dtn`
-     */
-    readonly dx: number[];
-}
-
-/**
  * Represents basic functions for a differential equation.
  */
 class DifferentialEquationBase {

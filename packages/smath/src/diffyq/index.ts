@@ -1,2 +1,2 @@
 export * from './lib.js';
-export * from './types.js';
+export { Equation, Timeseries } from './types.js';

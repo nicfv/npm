@@ -16,3 +16,17 @@ export interface Timeseries<T extends number | number[]> {
      */
     readonly data: T;
 }
+
+/**
+ * Contains data for a single point in time
+ */
+export interface Step {
+    /**
+     * The timestamp for this step
+     */
+    readonly time: number;
+    /**
+     * The array of all derivative orders by `x`, `dx/dt`, `d2x/dt2`, ..., `dnx/dtn`
+     */
+    readonly dx: number[];
+}
