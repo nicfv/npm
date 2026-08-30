@@ -1,12 +1,13 @@
 import { SMath } from '../index.js';
 import { DifferentialEquationBase } from './base.js';
+import { Equation, Step } from './types.js';
 
 /**
  * Represents a system of differential equations.
  */
 export class DifferentialSystem {
     /**
-     * Represents the actual differential equations within the system.
+     * Represents the actual differential equations within the system
      */
     private readonly equations: DifferentialEquationBase[];
     /**
@@ -24,21 +25,21 @@ export class DifferentialSystem {
      * @param dimension The 0-indexed dimension number to set the equation for
      * @param equation The differential equation to use for this dimension
      */
-    public setEquationFor(dimension: number, equation: DifferentialEquationBase): void {
+    public setEquationFor(dimension: number, dnx: Equation, ...x0: number[]): void {
         if (dimension < 0 || dimension >= this.dimensions || !Number.isInteger(dimension)) {
             throw new Error(`Dimension ${dimension} is outside range [0,${this.dimensions - 1}] or is not an integer.`);
         }
         if (this.equations[dimension] instanceof DifferentialEquationBase) {
             throw new Error(`Equation for dimension ${dimension} has already been set.`);
         }
-        this.equations[dimension] = equation;
+        this.equations[dimension] = new DifferentialEquationBase(dnx, ...x0);
     }
     /**
-     * Solve this system of differential equations from `t=0` to `t=tf` with timestep `dt`
+     * Solve this system of differential equations from `t=0` to `t=tf` with timestep `dt`.
      * @param dt The timestep
      * @param tf The final time
      */
-    public solve(dt: number, tf: number): void {
+    public solve(dt: number, tf: number): Step[][] {
         // Validate inputs
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
@@ -59,21 +60,6 @@ export class DifferentialSystem {
             this.equations.forEach(de => de.setParams(...params));
             this.equations.forEach(de => de.step(dth));
         }
-    }
-    /**
-     * Get a timeseries array of values for the `i`th derivative across all dimensions
-     * @param i The derivative order (default = 0)
-     * @returns An array containing the timestamp and all dimensions of `d(i)x/dt(i)` evaluated at that timestamp
-     */
-    public getTimeseries(i = 0): Timeseries<number[]>[] {
-        const data: Timeseries<number>[][] = this.equations.map(eqn => eqn.getTimeseries(i));
-        const timeseries: Timeseries<number[]>[] = [];
-        for (const value of data[0]) {
-            timeseries.push({ time: value.time, data: [value.data] });
-            for (let dim = 1; dim < this.dimensions; dim++) {
-                timeseries[timeseries.length - 1].data.push(data[dim][timeseries.length - 1].data);
-            }
-        }
-        return timeseries;
+        return this.equations.map(de => de.getData());
     }
 }
