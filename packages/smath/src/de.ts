@@ -65,8 +65,8 @@ export class DifferentialEquation {
         if (this.dnx) {
             throw new Error(`Equation for d${this.order}x/dt${this.order} is already defined.`);
         }
-        if (x0.length !== this.order - 1) {
-            throw new Error(`Expected ${this.order - 1} initial conditions, found ${x0.length}.`);
+        if (x0.length !== this.order) {
+            throw new Error(`Expected ${this.order} initial conditions, found ${x0.length}.`);
         }
         this.dnx = dnx;
         this.data.push({ time: 0, dx: [...x0] });
