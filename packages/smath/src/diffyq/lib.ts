@@ -1,5 +1,5 @@
 import { SMath } from '../index.js';
-import { Equation, Step, Timeseries } from './types.js';
+import { Equation, Step } from './types.js';
 
 /**
  * Represents basic functions for a differential equation.
@@ -19,8 +19,7 @@ class DifferentialEquationBase {
     private params: number[];
     /**
      * Create a new differential equation.
-     * @param dnx For a one-dimensional DE of order `n`, define `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
-     * @param x0 An array of the first `n` initial conditions for `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
+     * @param order The highest derivative order of this differential equation
      */
     constructor(private readonly order: number) {
         if (order < 1) {
@@ -30,8 +29,7 @@ class DifferentialEquationBase {
         this.params = [];
     }
     /**
-     * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`.
-     * Parameters for `dnx` should be ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
+     * Set the differential equation as a function of time and arbitrary parameters and the initial conditions at time `t=0`.
      * @param dnx The formula for `d(n)x/dt(n)` where `n` is the highest order
      * @param x0 Initial conditions for all `n-1` derivative orders ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      */
@@ -83,14 +81,14 @@ class DifferentialEquationBase {
         this.data[n1].dx[this.order] = this.dnx(this.data[n1].time, ...this.params);
     }
     /**
-     * Set the parameters for the next step of the differential equation
+     * Set the parameters for the next timestep of this differential equation.
      * @param x Parameters used in `d(n)x/dt(n)`, such as `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
     public setParams(...x: number[] = this.getParams()): void {
         this.params = [...x];
     }
     /**
-     * Get all the derivatives for this equation at time `t`
+     * Get all the derivatives for this equation at time `t` in order from lowest to highest order.
      * @returns `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
     public getParams(): number[] {
@@ -110,18 +108,11 @@ class DifferentialEquationBase {
         return this.data[this.data.length - 1].time;
     }
     /**
-     * Get a timeseries array for the `i`th derivative
-     * @param i The derivative order (default = 0)
-     * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
+     * Get the solution data for this differential equation.
+     * @returns An array containing the timestamp and all derivatives evaluated at that timestamp
      */
-    public getTimeseries(i = 0): Timeseries<number>[] {
-        if (i < 0 || i > this.order || !Number.isInteger(i)) {
-            throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
-        }
-        // Format the time series data
-        const timeseries: Timeseries<number>[] = [];
-        this.data.forEach(step => timeseries.push({ time: step.time, data: step.dx[i] }));
-        return timeseries;
+    public getData(): Step[] {
+        return structuredClone(this.data);
     }
 }
 
