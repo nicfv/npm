@@ -45,7 +45,7 @@ export class DifferentialEquationBase {
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
-     * @param dt The timestep.
+     * @param dt The timestep
      */
     public step(dt: number): void {
         // Check for invalid inputs
