@@ -1,9 +1,9 @@
 import { SMath } from './index.js';
 
 /**
- * Represents a time-dependent equation.
+ * Represents a time-dependent equation with an arbitrary number of parameters.
  */
-export type Equation = (t: number) => number;
+export type Equation = (t: number, ...x: number[]) => number;
 
 /**
  * Contains a single timestep for timeseries data.
@@ -40,7 +40,7 @@ class DifferentialEquationBase {
     /**
      * Stores information for this differential equation
      */
-    private readonly data: Step[];
+    public readonly data: Step[];
     /**
      * Represents the actual time-dependent differential equation
      */
@@ -85,17 +85,6 @@ class DifferentialEquationBase {
         }
         // Actually evaluate d(n)x/dt(n) at t=0
         this.data[0].dx[this.order] = this.dnx(0);
-    }
-    /**
-     * Get the current value for the `i`th derivative
-     * @param i The derivative order
-     * @returns `d(i)x/dt(i)` evaluated at the current time
-     */
-    public d(i: number): number {
-        if (i < 0 || i > this.order || !Number.isInteger(i)) {
-            throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
-        }
-        return this.data[this.data.length - 1].dx[i];
     }
     /**
      * Calculate `x` and all its derivatives after a timestep `dt`.
