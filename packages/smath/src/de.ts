@@ -150,28 +150,29 @@ export class DifferentialEquation {
  */
 export class DifferentialSystem {
     /**
+     * Represents the actual differential equations within the system.
+     */
+    private readonly equations: DifferentialEquation[];
+    /**
      * Initialize a new system of differential equations.
      * @param equations The differential equations that make up this system
      */
-    constructor(private readonly equations: DifferentialEquation[]) { }
+    constructor(private readonly dimensions: number) {
+        this.equations = [];
+    }
     /**
      * Set a differential equation for a specific dimension. All differential equations must be set before solving.
-     * @param dimension The 0-indexed dimension number to initialize the equation for
-     * @param f The differential equation as a function of time and every derivative of every dimension, ordered by:
-     * ```
-     * x, dx/dt, ..., d(i)x/dt(i),
-     * y, dy/dt, ..., d(j)y/dt(j),
-     * z, dz/dt, ..., d(k)z/dt(k),
-     * ... (higher dimensions)
-     * ```
-     * Where `i` is the highest order of `x` (dimension 0), `j` is the highest order of `y` (dimension 1) and `k` is the highest order of `z` (dimension 2)
-     * @param x0 The initial conditions for this dimension
+     * @param dimension The 0-indexed dimension number to set the equation for
+     * @param equation The differential equation to use for this dimension
      */
-    public setEquationFor(dimension: number, f: (t: number, ...x: number[]) => number, ...x0: number[]): void {
-        if (this.equations[dimension] instanceof DifferentialEquation) {
-            throw new Error('Already set equation for dimension ' + dimension);
+    public setEquationFor(dimension: number, equation: DifferentialEquation): void {
+        if (dimension < 0 || dimension >= this.dimensions || !Number.isInteger(dimension)) {
+            throw new Error(`Dimension ${dimension} is outside range [0,${this.dimensions - 1}] or is not an integer.`);
         }
-        this.equations[dimension] = new DifferentialEquation(f, ...x0);
+        if (this.equations[dimension] instanceof DifferentialEquation) {
+            throw new Error(`Equation for dimension ${dimension} has already been set.`);
+        }
+        this.equations[dimension] = equation;
     }
     /**
      * Solve this system of differential equations from `t=0` to `t=tf` with timestep `dt`
@@ -179,13 +180,22 @@ export class DifferentialSystem {
      * @param tf The final time
      */
     public solve(dt: number, tf: number): void {
-        for (let dim = 0; dim < this.getDimensions(); dim++) {
+        // Validate inputs
+        if (!Number.isFinite(dt) || dt <= 0) {
+            throw new Error('Timestep must be positive.');
+        }
+        if (!Number.isFinite(tf) || tf < 0) {
+            throw new Error('Final time must be non-negative.');
+        }
+        // Make sure that all equations have been set
+        for (let dim = 0; dim < this.dimensions; dim++) {
             if (!(this.equations[dim] instanceof DifferentialEquation)) {
-                throw new Error('Missing differential equation for dimension ' + dim);
+                throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
             }
         }
+        // Step through each differential equation
         for (let t = 0; t < tf; t += dt) {
-            this.equations.forEach(de => de.step(dt, this.getParameters()));
+            this.equations.forEach(de => de.step(dt));
         }
     }
     /**
@@ -196,19 +206,5 @@ export class DifferentialSystem {
      */
     public getData(dimension: number, order: number): number[] {
         return this.equations[dimension].getNthDerivative(order);
-    }
-    /**
-     * Returns a formatted array of equation parameters.
-     * @returns `[x, dx/dt, ... y, dy/dt, ... z, dz/dt, ...]`
-     */
-    private getParameters(): number[] {
-        return this.equations.map(de => de.getCurrentValues()).flat();
-    }
-    /**
-     * Determine the number of equations in this system.
-     * @returns The number of equations
-     */
-    private getDimensions(): number {
-        return this.equations.length;
     }
 }
