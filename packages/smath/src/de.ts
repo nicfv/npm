@@ -40,7 +40,7 @@ class DifferentialEquationBase {
     /**
      * Stores information for this differential equation
      */
-    public readonly data: Step[];
+    private readonly data: Step[];
     /**
      * Represents the actual time-dependent differential equation
      */
@@ -63,7 +63,7 @@ class DifferentialEquationBase {
     }
     /**
      * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`.
-     * The equation `dnx` should call `DifferentialEquation.d(i)` to read lower order derivatives.
+     * Parameters for `dnx` should be ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      * @param dnx The formula for `d(n)x/dt(n)` where `n` is the highest order
      * @param x0 Initial conditions for all `n-1` derivative orders ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      */
@@ -165,7 +165,6 @@ export class DifferentialEquation {
     constructor(dnx: Equation, ...x0: number[]) {
         this.DE = new DifferentialEquationBase(x0.length - 1);
         this.DE.set(dnx, ...x0);
-        this.DE.step0();
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`.
