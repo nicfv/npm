@@ -14,6 +14,9 @@ export class DifferentialEquation {
      * Initialize a new one-dimensional differential equation.
      * @param dnx Equation for `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, ..., `d(n-1)x/dt(n-1)`
      * @param x0 Initial conditions ordered by `x`, `dx/dt`, ..., `d(n-1)x/dt(n-1)`
+     * @example
+     * // y = e^x can be represented by dx/dt = x, at time t=0, x=1
+     * const exp = new DifferentialEquation((t, x) => x, 1);
      */
     constructor(dnx: Equation, ...x0: number[]) {
         this.DE = new DifferentialEquationBase(dnx, ...x0);
@@ -23,6 +26,8 @@ export class DifferentialEquation {
      * @param dt The timestep
      * @param tf The final time
      * @returns An array containing each timestep and all orders of derivatives
+     * @example
+     * const data = exp.solve(1e-3, 4);
      */
     public solve(dt: number, tf: number): Step[] {
         // Validate inputs
