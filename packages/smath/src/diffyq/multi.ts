@@ -1,4 +1,4 @@
-import { Equation, Step } from './types.js';
+import { DifferentialEquationBase } from './base.js';
 
 /**
  * Represents a system of differential equations.
@@ -20,7 +20,7 @@ export class DifferentialSystem {
      * @param dimension The 0-indexed dimension number to set the equation for
      * @param equation The differential equation to use for this dimension
      */
-    public setEquationFor(dimension: number, equation: DifferentialEquation): void {
+    public setEquationFor(dimension: number, equation: DifferentialEquationBase): void {
         if (dimension < 0 || dimension >= this.dimensions || !Number.isInteger(dimension)) {
             throw new Error(`Dimension ${dimension} is outside range [0,${this.dimensions - 1}] or is not an integer.`);
         }
@@ -44,7 +44,7 @@ export class DifferentialSystem {
         }
         // Make sure that all equations have been set
         for (let dim = 0; dim < this.dimensions; dim++) {
-            if (!(this.equations[dim] instanceof DifferentialEquation)) {
+            if (!(this.equations[dim] instanceof DifferentialEquationBase)) {
                 throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
             }
         }
