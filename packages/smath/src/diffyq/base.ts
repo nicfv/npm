@@ -84,7 +84,7 @@ export class DifferentialEquationBase {
      * Set the parameters for the next timestep of this differential equation.
      * @param x Parameters used in `d(n)x/dt(n)`, such as `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
-    public setParams(...x: number[] = this.getParams()): void {
+    public setParams(...x: number[]): void {
         this.params = [...x];
     }
     /**
