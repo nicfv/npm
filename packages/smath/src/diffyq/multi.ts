@@ -60,8 +60,8 @@ export class DifferentialSystem {
         // Step through each differential equation
         while (this.equations[0].getTime() < tf) {
             const dth: number = SMath.clamp(dt, 0, tf - this.equations[0].getTime());
-            const params: number[] = this.equations.map(eq => eq.getParams()).flat();
-            this.equations.forEach(de => de.setParams(...params));
+            const state: number[] = this.equations.map(eq => eq.getState()).flat();
+            this.equations.forEach(de => de.setState(...state));
             this.equations.forEach(de => de.step(dth));
         }
         return this.equations.map(de => de.getData());
