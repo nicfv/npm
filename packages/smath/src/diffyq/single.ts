@@ -38,7 +38,7 @@ export class DifferentialEquation {
         // Actually solve the equation
         while (this.DE.getTime() < tf) {
             const dth: number = SMath.clamp(dt, 0, tf - this.DE.getTime());
-            this.DE.setParams(...this.DE.getParams());
+            this.DE.setState(...this.DE.getState());
             this.DE.step(dth);
         }
         return this.DE.getData();
