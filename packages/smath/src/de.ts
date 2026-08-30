@@ -114,34 +114,20 @@ export class DifferentialEquation {
         if (!Number.isFinite(tf) || tf < 0) {
             throw new Error('Final time must be non-negative.');
         }
+        if (this.data.length > 1) {
+            throw new Error('Solution already computed.');
+        }
         for (let t = 0; t < tf; t += dt) {
             this.step(dt);
         }
     }
     /**
-     * Return an array of all values for time derivative `n` after solving this equation.
-     * @param n The order number.
-     * @returns Values across time for derivative `n` of this equation.
+     * Get a timeseries array for the `i`th derivative
+     * @param i The derivative order
+     * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
      */
-    public getNthDerivative(n: number): number[] {
-        if (n < 0 || n > this.getOrder()) {
-            throw new Error('Order number is out of bounds.');
-        }
-        return [...this.data[n]];
-    }
-    /**
-     * Build and return an array containing `x` and all its derivative values for the current time.
-     * @returns `[x, dx/dt, ... d(n)x/dt(n)]`
-     */
-    public getCurrentValues(): number[] {
-        return this.data.map(deriv => deriv[deriv.length - 1]);
-    }
-    /**
-     * Return the array of timesteps after solving the differential equation.
-     * @returns The time array
-     */
-    public getTimeArray(): number[] {
-        return [...this.time];
+    public getTimeseries(i: number): [number, number][] {
+        return this.data.map(step => [step.time, step.dx[i]]);
     }
 }
 
