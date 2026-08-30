@@ -57,7 +57,8 @@ export class DifferentialEquation {
         this.data = [];
     }
     /**
-     * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`
+     * Set the differential equation as a function of `d(i)x` where `i` is the derivative order from `[0,n-1]` and the initial conditions at time `t=0`.
+     * The equation `dnx` should call `DifferentialEquation.d(i)` to read lower order derivatives.
      * @param dnx The formula for `d(n)x/dt(n)` where `n` is the highest order
      * @param x0 Initial conditions for all `n-1` derivative orders ordered by `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`
      */
