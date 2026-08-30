@@ -132,6 +132,9 @@ class DifferentialEquationBase {
      * @returns The current time `t`
      */
     public getTime(): number {
+        if (this.data.length < 1) {
+            throw new Error('Data is empty.');
+        }
         return this.data[this.data.length - 1].time;
     }
     /**
