@@ -6,6 +6,20 @@ import { SMath } from './index.js';
 export type Equation = (t: number) => number;
 
 /**
+ * Contains a single timestep for timeseries data.
+ */
+export interface Timeseries<T extends number | number[]> {
+    /**
+     * The timestamp for this data point
+     */
+    readonly time: number;
+    /**
+     * The actual data value(s)
+     */
+    readonly data: T;
+}
+
+/**
  * Contains data for a single point in time
  */
 interface Step {
@@ -125,14 +139,17 @@ export class DifferentialEquation {
     }
     /**
      * Get a timeseries array for the `i`th derivative
-     * @param i The derivative order
+     * @param i The derivative order (default = 0)
      * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
      */
-    public getTimeseries(i: number): [number, number][] {
+    public getTimeseries(i = 0): Timeseries<number>[] {
         if (i < 0 || i > this.order || !Number.isInteger(i)) {
             throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
         }
-        return this.data.map(step => [step.time, step.dx[i]]);
+        // Format the time series data
+        const timeseries: Timeseries<number>[] = [];
+        this.data.forEach(step => timeseries.push({ time: step.time, data: step.dx[i] }));
+        return timeseries;
     }
 }
 
@@ -190,12 +207,19 @@ export class DifferentialSystem {
         }
     }
     /**
-     * Return a single time-series array of values from the solution of this differential system.
-     * @param dimension The dimension
-     * @param order The order number
-     * @returns A time series array of data
+     * Get a timeseries array of values for the `i`th derivative across all dimensions
+     * @param i The derivative order (default = 0)
+     * @returns An array containing the timestamp and all dimensions of `d(i)x/dt(i)` evaluated at that timestamp
      */
-    public getData(dimension: number, order: number): number[] {
-        return this.equations[dimension].getNthDerivative(order);
+    public getTimeseries(i = 0): Timeseries<number[]>[] {
+        const data = this.equations.map(eqn => eqn.getTimeseries(i));
+        const timeseries: Timeseries<number[]>[] = [];
+        for (const value of data[0]) {
+            timeseries.push({ time: value.time, data: [value.data] });
+            for (let dim = 1; dim < this.dimensions; dim++) {
+                timeseries[timeseries.length - 1].data.push(data[dim][timeseries.length - 1].data);
+            }
+        }
+        return timeseries;
     }
 }
