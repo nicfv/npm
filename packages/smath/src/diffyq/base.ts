@@ -65,14 +65,14 @@ export class DifferentialEquationBase {
         this.data[n1].dx[this.order] = this.dnx(this.data[n1].time, ...this.state);
     }
     /**
-     * Set the parameters for the next timestep of this differential equation.
+     * Set the state of the system for the next timestep of this differential equation.
      * @param x Parameters used in `d(n)x/dt(n)`, such as `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
     public setState(...x: number[]): void {
         this.state = [...x];
     }
     /**
-     * Get all the derivatives for this equation at time `t` in order from lowest to highest order.
+     * Get all the derivatives for this equation at time `t` in order from lowest to highest order, excluding order `n`.
      * @returns `x`, `dx` ... `d(n-1)x/dt(n-1)`
      */
     public getState(): number[] {
