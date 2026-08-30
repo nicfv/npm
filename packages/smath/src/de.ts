@@ -34,17 +34,17 @@ interface Step {
 }
 
 /**
- * Represents a one dimensional time-dependent differential equation.
+ * Represents basic functions for a differential equation.
  */
-export class DifferentialEquation {
+class DifferentialEquationBase {
     /**
      * Stores information for this differential equation
      */
-    private readonly data: Step[];
+    protected readonly data: Step[];
     /**
      * Represents the actual time-dependent differential equation
      */
-    private dnx?: Equation;
+    protected dnx?: Equation;
     /**
      * Create a new differential equation.
      * @param dnx For a one-dimensional DE of order `n`, define `d(n)x/dt(n)` as a function of `t`, `x`, `dx/dt`, `d2x/dt2`, ..., `d(n-1)x/dt(n-1)`.
@@ -73,6 +73,20 @@ export class DifferentialEquation {
         this.data.push({ time: 0, dx: [...x0] });
     }
     /**
+     * Evaluate `d(n)x/dt(n)` at `t=0`
+     */
+    protected calc_dnx0(): void {
+        // Check for invalid inputs
+        if (!this.dnx || this.data.length < 1) {
+            throw new Error('Differential equation and initial conditions have not been set up yet.');
+        }
+        if (typeof this.data[0].dx[this.order] === 'number') {
+            throw new Error(`Derivative order ${this.order} already computed for t=0.`);
+        }
+        // Actually evaluate d(n)x/dt(n) at t=0
+        this.data[0].dx[this.order] = this.dnx(0);
+    }
+    /**
      * Get the current value for the `i`th derivative
      * @param i The derivative order
      * @returns `d(i)x/dt(i)` evaluated at the current time
@@ -87,7 +101,7 @@ export class DifferentialEquation {
      * Calculate `x` and all its derivatives after a timestep `dt`.
      * @param dt The timestep.
      */
-    public step(dt: number): void {
+    protected step(dt: number): void {
         // Check for invalid inputs
         if (!this.dnx || this.data.length < 1) {
             throw new Error('Differential equation and initial conditions have not been set up yet.');
@@ -98,10 +112,6 @@ export class DifferentialEquation {
         // Determine next and current array indices
         const n1: number = this.data.length;
         const n0: number = n1 - 1;
-        // Evaluate `d(n)x/dt(n)` at time `t=0`
-        if (typeof this.data[0].dx[this.order] !== 'number') {
-            this.data[0].dx[this.order] = this.dnx(0);
-        }
         // Determine current timestamp & copy dx array
         this.data[n1] = {
             time: this.data[n0].time + dt,
@@ -116,6 +126,30 @@ export class DifferentialEquation {
             }
         }
         this.data[n1].dx[this.order] = this.dnx(this.data[n1].time);
+    }
+    /**
+     * Get a timeseries array for the `i`th derivative
+     * @param i The derivative order (default = 0)
+     * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
+     */
+    public getTimeseries(i = 0): Timeseries<number>[] {
+        if (i < 0 || i > this.order || !Number.isInteger(i)) {
+            throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
+        }
+        // Format the time series data
+        const timeseries: Timeseries<number>[] = [];
+        this.data.forEach(step => timeseries.push({ time: step.time, data: step.dx[i] }));
+        return timeseries;
+    }
+}
+
+/**
+ * Represents a one dimensional time-dependent differential equation.
+ */
+export class DifferentialEquation extends DifferentialEquationBase {
+    public override set(dnx: Equation, ...x0: number[]): void {
+        super.set(dnx, ...x0);
+        this.calc_dnx0();
     }
     /**
      * Solve this differential equation from `t=0` to `t=tf` with timestep `dt`.
@@ -137,20 +171,6 @@ export class DifferentialEquation {
         while (this.data[this.data.length - 1].time < tf) {
             this.step(dt);
         }
-    }
-    /**
-     * Get a timeseries array for the `i`th derivative
-     * @param i The derivative order (default = 0)
-     * @returns An array containing the timestamp and `d(i)x/dt(i)` evaluated at that timestamp
-     */
-    public getTimeseries(i = 0): Timeseries<number>[] {
-        if (i < 0 || i > this.order || !Number.isInteger(i)) {
-            throw new Error(`Derivative order ${i} is out of range [0,${this.order}] or is not an integer.`);
-        }
-        // Format the time series data
-        const timeseries: Timeseries<number>[] = [];
-        this.data.forEach(step => timeseries.push({ time: step.time, data: step.dx[i] }));
-        return timeseries;
     }
 }
 
