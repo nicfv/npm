@@ -133,7 +133,7 @@ export class DifferentialEquation {
             throw new Error('Solution already computed.');
         }
         // Actually solve the equation
-        for (let t = 0; t < tf; t += dt) {
+        while (this.data[this.data.length - 1].time < tf) {
             this.step(dt);
         }
     }
