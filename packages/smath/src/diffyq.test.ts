@@ -24,6 +24,16 @@ describe('differential equation', () => {
                 assert.strictEqual(data[i - 1].dx[0], data[i].dx[1]);
             }
         });
+        it('continue solution', () => {
+            assert.throws(() => exp.solve(0, 5), /timestep must be positive/i);
+            assert.throws(() => exp.solve(1e-2, 4), /final time must be in the future/i);
+            const data2: DiffyQ.Step[] = exp.solve(1e-2, 5);
+            const e5: number = Math.E ** 5;
+            assert.strictEqual(data2.length, 4e3 + 2 + 1e2 + 1);
+            assert.strictEqual(data2[data2.length - 1].time, 5);
+            assert.ok(SMath.approx(data2[data2.length - 1].dx[0], e5, 5));
+            assert.ok(SMath.approx(data2[data2.length - 1].dx[1], e5, 5));
+        });
     });
 
     describe('mass-spring-damper', () => {
