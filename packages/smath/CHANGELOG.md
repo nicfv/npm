@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.0.2
+
+- Optimize copying data for better performance
+- Standardize error messages instead of duplicating code
+
 ## 4.0.1
 
 - You can now call `.solve()` successively with higher values for `tf`, which will retain and return the prior solution
