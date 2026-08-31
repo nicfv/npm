@@ -8,7 +8,6 @@ describe('differential equation', () => {
         const data: DiffyQ.Step[] = exp.solve(1e-3, 4);
         const last: DiffyQ.Step = data[data.length - 1];
         const e4: number = Math.E ** 4;
-        console.log(last, e4);
         it('check solution', () => {
             assert.strictEqual(data.length, 4e3 + 2);
             assert.strictEqual(last.time, 4);
@@ -71,9 +70,6 @@ describe('differential system', () => {
         });
         it('check x,y,z bounds', () => {
             for (let i = 0; i < data[0].length; i++) {
-                if (!(i % 1e3)) {
-                    console.log(data[0][i], data[1][i], data[2][i]);
-                }
                 assert.ok(data[0][i].dx[0] < 30);
                 assert.ok(data[1][i].dx[0] < 30);
                 assert.ok(data[2][i].dx[0] < 30);
