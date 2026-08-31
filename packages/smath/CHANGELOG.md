@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.0.0
+
+- Released differential equation solver `Diffy`! Can be used to simulate and solve any of the following types of differential equations:
+    - Ordinary (ODEs)
+    - Linear
+    - Non-linear
+    - Homogeneous
+    - Heterogeneous
+- Add new mass-spring-damper example to show off new library
+
 ## 3.1.0
 
 - Remove all dependencies and devDependencies (`SMath` is now completely standalone!)

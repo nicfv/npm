@@ -1,6 +1,6 @@
 {
   "name": "smath",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Small math function library",
   "homepage": "https://npm.nicfv.com/",
   "type": "module",
@@ -60,7 +60,13 @@
     "3d",
     "complex",
     "real",
-    "imaginary"
+    "imaginary",
+    "differential",
+    "derivative",
+    "equation",
+    "solve",
+    "solver",
+    "system"
   ],
   "author": {
     "name": "Nicolas Ventura",
