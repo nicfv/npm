@@ -2,7 +2,12 @@
 
 ## 4.0.0
 
-- Released differential equation solver `Diffy`!
+- Released differential equation solver `Diffy`! Can be used to simulate and solve any of the following types of differential equations:
+    - Ordinary (ODEs)
+    - Linear
+    - Non-linear
+    - Homogeneous
+    - Heterogeneous
 
 ## 3.1.0
 
