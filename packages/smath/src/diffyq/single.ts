@@ -34,8 +34,8 @@ export class DifferentialEquation {
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
         }
-        if (!Number.isFinite(tf) || tf < 0) {
-            throw new Error('Final time must be non-negative.');
+        if (!Number.isFinite(tf) || tf <= this.DE.getTime()) {
+            throw new Error('Final time must be in the future.');
         }
         // For a single equation, the state vector is the local state of the equation
         while (this.DE.getTime() < tf) {
