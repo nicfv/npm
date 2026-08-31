@@ -60,7 +60,13 @@
     "3d",
     "complex",
     "real",
-    "imaginary"
+    "imaginary",
+    "differential",
+    "derivative",
+    "equation",
+    "solve",
+    "solver",
+    "system"
   ],
   "author": {
     "name": "Nicolas Ventura",
