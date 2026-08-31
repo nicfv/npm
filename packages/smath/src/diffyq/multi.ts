@@ -63,18 +63,18 @@ export class DifferentialSystem {
      * const data = system.solve(1e-3, 4);
      */
     public solve(dt: number, tf: number): Step[][] {
+        // Make sure that all equations have been set
+        for (let dim = 0; dim < this.dimensions; dim++) {
+            if (!(this.equations[dim] instanceof DifferentialEquationBase)) {
+                throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
+            }
+        }
         // Validate inputs
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
         }
         if (!Number.isFinite(tf) || tf < 0) {
             throw new Error('Final time must be non-negative.');
-        }
-        // Make sure that all equations have been set
-        for (let dim = 0; dim < this.dimensions; dim++) {
-            if (!(this.equations[dim] instanceof DifferentialEquationBase)) {
-                throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
-            }
         }
         // Generate a flattened global state vector at every timestep
         while (this.equations[0].getTime() < tf) {
