@@ -25,7 +25,7 @@ export class DifferentialSystem {
     /**
      * Set a differential equation for a specific dimension. All differential equations must be set before solving.
      * @param dimension The 0-indexed dimension number to set the equation for
-     * @param de The differential equation for this dimension, which must accept a global state vector ordered as follows:
+     * @param de The differential equation for this dimension must accept a global state vector ordered by dimension and derivative order
      * ```
      * x, dx/dt, ..., d(i-1)x/dt(i-1),
      * y, dy/dt, ..., d(j-1)y/dt(j-1),
@@ -79,7 +79,7 @@ export class DifferentialSystem {
         if (this.equations[0].getTime() > 0) {
             throw new Error('Solution already computed.');
         }
-        // Step through each differential equation
+        // Generate a flattened global state vector at every timestep
         while (this.equations[0].getTime() < tf) {
             const dth: number = SMath.clamp(dt, 0, tf - this.equations[0].getTime());
             const state: number[] = this.equations.map(eq => eq.getState()).flat();
