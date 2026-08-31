@@ -73,8 +73,8 @@ export class DifferentialSystem {
         if (!Number.isFinite(dt) || dt <= 0) {
             throw new Error('Timestep must be positive.');
         }
-        if (!Number.isFinite(tf) || tf < 0) {
-            throw new Error('Final time must be non-negative.');
+        if (!Number.isFinite(tf) || tf <= this.equations[0].getTime()) {
+            throw new Error('Final time must be in the future.');
         }
         // Generate a flattened global state vector at every timestep
         while (this.equations[0].getTime() < tf) {
