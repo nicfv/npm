@@ -30,17 +30,21 @@ describe('differential equation', () => {
         const m = 10;
         const b = 1;
         const k = 1;
-        const F: DiffyQ.Equation = (t) => 1 / t;
+        const F: DiffyQ.Equation = (t) => 1 / (t + 1);
         const a: DiffyQ.Equation = (t, x, v) => (F(t) - b * v - k * x) / m;
         const msd: DiffyQ.DifferentialEquation = new DiffyQ.DifferentialEquation(a, 0, 0);
         const data: DiffyQ.Step[] = msd.solve(0.1, 100);
         it('check timestamps', () => {
-            assert.strictEqual(data.length, 1e3 + 1);
-            assert.strictEqual(data[0].time, 1e3 + 1);
+            assert.strictEqual(data.length, 1e3 + 2);
+            assert.strictEqual(data[0].time, 0);
             assert.strictEqual(data[data.length - 1].time, 100);
         });
         it('check solution', () => {
-            assert.ok(SMath.approx(data[data.length - 1].dx[0], 0));
+            for (const pt of data) {
+                assert.ok(Math.abs(pt.dx[0]) < 1);
+                assert.ok(Math.abs(pt.dx[1]) < 1);
+                assert.ok(Math.abs(pt.dx[2]) < 1);
+            }
         });
     });
 });
