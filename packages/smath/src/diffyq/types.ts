@@ -1,18 +1,7 @@
 /**
- * Represents equation that depends on time and system state.
+ * Represents equation that depends on time and system state
  */
-export interface Equation {
-    (
-        /**
-         * Current simulation time
-         */
-        t: number,
-        /**
-         * System state vector at time `t`
-         */
-        ...state: number[]
-    ): number;
-}
+export type Equation = (t: number, ...state: number[]) => number;
 
 /**
  * Contains data for a single point in time
