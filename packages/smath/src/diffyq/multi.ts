@@ -13,6 +13,8 @@ export class DifferentialSystem {
     /**
      * Initialize a new system of differential equations.
      * @param dimensions The number of equations in this system
+     * @example
+     * const system = new DifferentialSystem(3); // x, y, z
      */
     constructor(private readonly dimensions: number) {
         if (dimensions < 1 || !Number.isInteger(dimensions)) {
@@ -32,6 +34,16 @@ export class DifferentialSystem {
      * ```
      * Where `i` is the highest order of `x` (dimension 0), `j` is the highest order of `y` (dimension 1) and `k` is the highest order of `z` (dimension 2)
      * @param ic Initial conditions for this dimension, ordered `x`, `dx/dt`, ..., `d(n-1)x/dt(n-1)`
+     * @example
+     * const sigma = 1;
+     * const rho = 1;
+     * const beta = 8 / 3;
+     * const dx = (t, x, y, z) => sigma * (y - x);
+     * const dy = (t, x, y, z) => x * (rho - z) - y;
+     * const dz = (t, x, y, z) => x * y - beta * z;
+     * system.setEquationFor(0, dx, 10); // x0 = 10
+     * system.setEquationFor(1, dy, 10); // y0 = 10
+     * system.setEquationFor(2, dz, 10); // z0 = 10
      */
     public setEquationFor(dimension: number, de: Equation, ...ic: number[]): void {
         if (dimension < 0 || dimension >= this.dimensions || !Number.isInteger(dimension)) {
@@ -47,6 +59,8 @@ export class DifferentialSystem {
      * @param dt The timestep
      * @param tf The final time
      * @returns Square array with the first index being the 0-indexed dimension and second index being the time index, each entry contains the timestamp and all orders of derivatives
+     * @example
+     * const data = system.solve(1e-3, 4);
      */
     public solve(dt: number, tf: number): Step[][] {
         // Validate inputs
