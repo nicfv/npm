@@ -8,6 +8,7 @@
     - Non-linear
     - Homogeneous
     - Heterogeneous
+- Add new mass-spring-damper example to show off new library
 
 ## 3.1.0
 
