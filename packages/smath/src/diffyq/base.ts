@@ -96,6 +96,6 @@ export class DifferentialEquationBase {
      * @returns An array containing each timestamp and all derivatives evaluated at that timestamp
      */
     public getData(): Step[] {
-        return structuredClone(this.data);
+        return [...this.data];
     }
 }
