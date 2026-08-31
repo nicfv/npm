@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0
+
+- Released differential equation solver `Diffy`!
+
 ## 3.1.0
 
 - Remove all dependencies and devDependencies (`SMath` is now completely standalone!)
