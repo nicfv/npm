@@ -14,7 +14,7 @@ export class DifferentialEquationBase {
      */
     private readonly data: Step[];
     /**
-     * Current state of the system used for the `d(n)x/dt(n)` equation
+     * Current state vector used to evaluate the derivative equation
      */
     private state: number[];
     /**
@@ -65,15 +65,15 @@ export class DifferentialEquationBase {
         this.data[n1].dx[this.order] = this.dnx(this.data[n1].time, ...this.state);
     }
     /**
-     * Set the state of the system for the next timestep of this differential equation.
-     * @param x Parameters used in `d(n)x/dt(n)`, such as `x`, `dx` ... `d(n-1)x/dt(n-1)`
+     * Set the global state vector used by `d(n)x/dt(n)` in the next timestep, such as `x`, `dx/dt`, ..., `d(n-1)x/dt(n-1)`.
+     * @param x State values used in `d(n)x/dt(n)`
      */
     public setState(...x: number[]): void {
         this.state = [...x];
     }
     /**
-     * Get all the derivatives for this equation at time `t` in order from lowest to highest order, excluding order `n`.
-     * @returns `x`, `dx` ... `d(n-1)x/dt(n-1)`
+     * Get the current state vector for this equation at time `t`, ordered from lowest derivative to highest order, excluding order `n`.
+     * @returns `x`, `dx/dt`, ..., `d(n-1)x/dt(n-1)`
      */
     public getState(): number[] {
         if (!this.dnx || this.data.length < 1) {
