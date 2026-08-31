@@ -76,9 +76,6 @@ export class DifferentialSystem {
                 throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
             }
         }
-        if (this.equations[0].getTime() > 0) {
-            throw new Error('Solution already computed.');
-        }
         // Generate a flattened global state vector at every timestep
         while (this.equations[0].getTime() < tf) {
             const dth: number = SMath.clamp(dt, 0, tf - this.equations[0].getTime());

@@ -37,9 +37,6 @@ export class DifferentialEquation {
         if (!Number.isFinite(tf) || tf < 0) {
             throw new Error('Final time must be non-negative.');
         }
-        if (this.DE.getTime() > 0) {
-            throw new Error('Solution already computed.');
-        }
         // For a single equation, the state vector is the local state of the equation
         while (this.DE.getTime() < tf) {
             const dth: number = SMath.clamp(dt, 0, tf - this.DE.getTime());
