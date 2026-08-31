@@ -3,7 +3,7 @@
  */
 export class NotInitializedError extends Error {
     constructor(dimension: number | null = null) {
-        super(`Differential equation and initial conditions ${Number.isFinite(dimension) ? `for dimension ${dimension}` : ''} have not been set up yet.`);
+        super(`Differential equation and initial conditions ${Number.isFinite(dimension) ? `for dimension ${dimension}` : ''} have not been assigned yet.`);
     }
 }
 /**
