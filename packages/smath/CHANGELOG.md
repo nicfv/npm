@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.1
+
+- You can now call `.solve()` successively with higher values for `tf`, which will retain and return the prior solution
+    - For example, if you call `.solve(0.01, 1)` and then `.solve(0.1, 2)`, it will return the full solution from `t=0` to `t=2` with a timestep of 0.01 between 0s and 1s (computed by `.solve(0.01, 1)`), and a timestep of 0.1 between 1s and 2s (computed by `.solve(0.1, 2)`)
+    - Calling `.solve(...)` with a `tf` value at or lower than the current simulation time will result in an error
+- Added more unit tests for `DiffyQ`
+- Added a few prior changelog notes
+
 ## 4.0.0
 
 - Released differential equation solver `Diffy`! Can be used to simulate and solve any of the following types of differential equations:
@@ -8,6 +16,8 @@
     - Non-linear
     - Homogeneous
     - Heterogeneous
+    - Single dimensional
+    - Multi-dimensional
 - Add new mass-spring-damper example to show off new library
 
 ## 3.1.0

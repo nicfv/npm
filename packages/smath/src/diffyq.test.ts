@@ -24,6 +24,16 @@ describe('differential equation', () => {
                 assert.strictEqual(data[i - 1].dx[0], data[i].dx[1]);
             }
         });
+        it('continue solution', () => {
+            assert.throws(() => exp.solve(0, 5), /timestep must be positive/i);
+            assert.throws(() => exp.solve(1e-2, 4), /final time must be in the future/i);
+            const data2: DiffyQ.Step[] = exp.solve(1e-2, 5);
+            const e5: number = Math.E ** 5;
+            assert.strictEqual(data2.length, 4e3 + 2 + 1e2 + 1);
+            assert.strictEqual(data2[data2.length - 1].time, 5);
+            assert.ok(SMath.approx(data2[data2.length - 1].dx[0], e5, 5));
+            assert.ok(SMath.approx(data2[data2.length - 1].dx[1], e5, 5));
+        });
     });
 
     describe('mass-spring-damper', () => {
@@ -78,6 +88,22 @@ describe('differential system', () => {
                 assert.ok(data[1][i].dx[0] < 30);
                 assert.ok(data[2][i].dx[0] < 30);
             }
+        });
+        it('fail when unset', () => {
+            assert.throws(() => new DiffyQ.DifferentialSystem(3).solve(0, 0), /not been assigned/i);
+        });
+        it('fail when set', () => {
+            assert.throws(() => system.setEquationFor(0, dx, 0), /has already been set/i);
+        });
+        it('continue solution', () => {
+            assert.throws(() => system.solve(0, 5), /timestep must be positive/i);
+            assert.throws(() => system.solve(1e-2, 4), /final time must be in the future/i);
+            const data2: DiffyQ.Step[][] = system.solve(1e-2, 5);
+            const lastX: DiffyQ.Step = data2[0][data2[0].length - 1];
+            assert.strictEqual(data2[0].length, 4e3 + 2 + 1e2 + 1);
+            assert.strictEqual(lastX.time, 5);
+            assert.ok(lastX.dx[0] < 30);
+            assert.ok(lastX.dx[0] > -30);
         });
     });
 });
