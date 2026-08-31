@@ -1,5 +1,6 @@
 import { SMath } from '../index.js';
 import { DifferentialEquationBase } from './base.js';
+import { InvalidFinalTimeError, InvalidTimestepError } from './errors.js';
 import { Equation, Step } from './types';
 
 /**
@@ -32,10 +33,10 @@ export class DifferentialEquation {
     public solve(dt: number, tf: number): Step[] {
         // Validate inputs
         if (!Number.isFinite(dt) || dt <= 0) {
-            throw new Error('Timestep must be positive.');
+            throw new InvalidTimestepError();
         }
         if (!Number.isFinite(tf) || tf <= this.DE.getTime()) {
-            throw new Error('Final time must be in the future.');
+            throw new InvalidFinalTimeError();
         }
         // For a single equation, the state vector is the local state of the equation
         while (this.DE.getTime() < tf) {

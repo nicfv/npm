@@ -1,5 +1,6 @@
 import { SMath } from '../index.js';
 import { DifferentialEquationBase } from './base.js';
+import { InvalidFinalTimeError, InvalidTimestepError, NotInitializedError } from './errors.js';
 import { Equation, Step } from './types.js';
 
 /**
@@ -66,15 +67,15 @@ export class DifferentialSystem {
         // Make sure that all equations have been set
         for (let dim = 0; dim < this.dimensions; dim++) {
             if (!(this.equations[dim] instanceof DifferentialEquationBase)) {
-                throw new Error(`Dimension ${dim} has not been assigned a differential equation.`);
+                throw new NotInitializedError(dim);
             }
         }
         // Validate inputs
         if (!Number.isFinite(dt) || dt <= 0) {
-            throw new Error('Timestep must be positive.');
+            throw new InvalidTimestepError();
         }
         if (!Number.isFinite(tf) || tf <= this.equations[0].getTime()) {
-            throw new Error('Final time must be in the future.');
+            throw new InvalidFinalTimeError();
         }
         // Generate a flattened global state vector at every timestep
         while (this.equations[0].getTime() < tf) {

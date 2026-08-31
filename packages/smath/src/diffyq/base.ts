@@ -1,4 +1,5 @@
 import { SMath } from '../index.js';
+import { InvalidTimestepError, NotInitializedError } from './errors.js';
 import { Equation, Step } from './types.js';
 
 /**
@@ -34,10 +35,10 @@ export class DifferentialEquationBase {
     public step(dt: number): void {
         // Check for invalid inputs
         if (!this.dnx || this.data.length < 1) {
-            throw new Error('Differential equation and initial conditions have not been set up yet.');
+            throw new NotInitializedError();
         }
         if (!Number.isFinite(dt) || dt <= 0) {
-            throw new Error('Timestep must be positive.');
+            throw new InvalidTimestepError();
         }
         if (this.state.length !== this.dnx.length - 1) {
             throw new Error(`Equation should accept ${this.state.length + 1} parameters, but actually accepts ${this.dnx.length}.`);
@@ -77,7 +78,7 @@ export class DifferentialEquationBase {
      */
     public getState(): number[] {
         if (!this.dnx || this.data.length < 1) {
-            throw new Error('Differential equation and initial conditions have not been set up yet.');
+            throw new NotInitializedError();
         }
         return this.data[this.data.length - 1].dx.slice(0, this.order);
     }
@@ -87,7 +88,7 @@ export class DifferentialEquationBase {
      */
     public getTime(): number {
         if (!this.dnx || this.data.length < 1) {
-            throw new Error('Differential equation and initial conditions have not been set up yet.');
+            throw new NotInitializedError();
         }
         return this.data[this.data.length - 1].time;
     }
@@ -96,6 +97,6 @@ export class DifferentialEquationBase {
      * @returns An array containing each timestamp and all derivatives evaluated at that timestamp
      */
     public getData(): Step[] {
-        return structuredClone(this.data);
+        return [...this.data];
     }
 }
