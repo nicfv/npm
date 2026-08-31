@@ -10,19 +10,19 @@ describe('differential equation', () => {
         const e4: number = Math.E ** 4;
         console.log(last, e4);
         it('check solution', () => {
-            assert.equal(data.length, 4e3 + 2);
-            assert.equal(last.time, 4);
+            assert.strictEqual(data.length, 4e3 + 2);
+            assert.strictEqual(last.time, 4);
             assert.ok(SMath.approx(last.dx[0], e4, 0.5));
             assert.ok(SMath.approx(last.dx[1], e4, 0.5));
         });
         it('make sure that all orders exist', () => {
             for (const point of data) {
-                assert.equal(point.dx.length, 2);
+                assert.strictEqual(point.dx.length, 2);
             }
         });
         it('make sure that x = dx', () => {
             for (let i = 1; i < data.length; i++) {
-                assert.equal(data[i - 1].dx[0], data[i].dx[1]);
+                assert.strictEqual(data[i - 1].dx[0], data[i].dx[1]);
             }
         });
     });
