@@ -74,7 +74,7 @@ export abstract class Compound<T extends Compound<T>> {
             product.set(iFactor, (product.get(iFactor) ?? 0) + iExponent);
         }
         return this.fromMap(product);
-    };
+    }
     /**
      * Raise this compound to an exponent.
      * @param exponent The exponent to raise this compound by
@@ -86,7 +86,7 @@ export abstract class Compound<T extends Compound<T>> {
             power.set(iFactor, iExponent * exponent);
         }
         return this.fromMap(power);
-    };
+    }
     /**
      * Divide this compound by another.
      * @param dividend The compound to divide by
