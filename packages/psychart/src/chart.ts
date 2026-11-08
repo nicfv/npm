@@ -75,7 +75,7 @@ export abstract class Chart<T extends ChartOptions> {
      */
     protected static clearChildren(parent: Node): void {
         while (parent.firstChild) {
-            parent.removeChild(parent.firstChild)
+            parent.removeChild(parent.firstChild);
         }
     }
     /**
