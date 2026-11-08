@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Minor code linting fixes
+
 ## 1.1.0
 
 - Replace `t6` test suite with standard built-in `node:test` framework
