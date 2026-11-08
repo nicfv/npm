@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1
+
+- Fix minor typo in `types.ts`
+
 ## 1.7.0
 
 - Remove `t6` devDependency
