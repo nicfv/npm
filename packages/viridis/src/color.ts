@@ -71,14 +71,14 @@ export class Color {
         switch (type) {
             case ('rgb'): {
                 if (this.alpha < 100) {
-                    return `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.alpha / 100})`;
+                    return `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.alpha}%)`;
                 } else {
                     return `rgb(${this.red}, ${this.green}, ${this.blue})`;
                 }
             }
             case ('hsl'): {
                 if (this.alpha < 100) {
-                    return `hsla(${this.hue}deg, ${this.saturation}%, ${this.lightness}%, ${this.alpha / 100})`;
+                    return `hsla(${this.hue}deg, ${this.saturation}%, ${this.lightness}%, ${this.alpha}%)`;
                 } else {
                     return `hsl(${this.hue}deg, ${this.saturation}%, ${this.lightness}%)`;
                 }
