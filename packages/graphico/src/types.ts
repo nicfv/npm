@@ -77,7 +77,7 @@ export interface Options {
      */
     readonly mouseup: (button: number) => void;
     /**
-     * Event listener for a the main animation loop
+     * Event listener for the main animation loop
      * @param dt The number of milliseconds in between frames
      */
     readonly loop: (dt: number) => void;
