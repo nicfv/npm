@@ -71,16 +71,16 @@ export class Color {
         switch (type) {
             case ('rgb'): {
                 if (this.alpha < 100) {
-                    return `rgb(${this.red},${this.green},${this.blue},${this.alpha}%)`;
+                    return `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.alpha / 100})`;
                 } else {
-                    return `rgb(${this.red},${this.green},${this.blue})`;
+                    return `rgb(${this.red}, ${this.green}, ${this.blue})`;
                 }
             }
             case ('hsl'): {
                 if (this.alpha < 100) {
-                    return `hsl(${this.hue}deg,${this.saturation}%,${this.lightness}%,${this.alpha}%)`;
+                    return `hsla(${this.hue}deg, ${this.saturation}%, ${this.lightness}%, ${this.alpha / 100})`;
                 } else {
-                    return `hsl(${this.hue}deg,${this.saturation}%,${this.lightness}%)`;
+                    return `hsl(${this.hue}deg, ${this.saturation}%, ${this.lightness}%)`;
                 }
             }
             case ('hex'): {
@@ -134,7 +134,7 @@ export class Color {
      * @param saturation The saturation percent [0, 100]
      * @param lightness The lightness percent [0, 100]
      * @param alpha Alpha channel intensity [0, 100]
-     * @returns A new color defined by hue, sautration, and lightness
+     * @returns A new color defined by hue, saturation, and lightness
      * @example
      * const red = Color.hsl(0, 100, 50); // #FF0000
      */
