@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.0.3
 
 - Fix typo in `absolute()` documentation
 - Add note in `selectRandomWeighted()` that function will return `-1` when all weights are `<=0`
