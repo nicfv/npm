@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.1
+
+- Fix typo in `Color.hsl()` documentation
+- `Color.toString()` will output `rgba()` or `hsla()` values if transparency is less than 100%
+
 ## 1.7.0
 
 - Fix rounding issues in color constructor

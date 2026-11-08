@@ -8,7 +8,7 @@ import { SMath } from 'smath';
 export class Quantity {
     /**
      * Define a new quantity.
-     * @param quantity The numeric value of the quanity
+     * @param quantity The numeric value of the quantity
      * @param units The units of this quantity
      */
     constructor(public readonly quantity: number, public readonly units: Unit) { }
@@ -73,11 +73,12 @@ export class Quantity {
      * @returns LaTeX code for this quantity
      */
     public toString(): string {
-        const magnitude: number = Math.floor(Math.log10(Math.abs(this.quantity)));
+        const isZero = SMath.approx(this.quantity, 0, 1e-10);
+        const magnitude: number = Number.isFinite(this.quantity) && !isZero ? Math.floor(Math.log10(Math.abs(this.quantity))) : 0;
         // Regular notation
-        let quantityString: string = SMath.round2(this.quantity, 10 ** -config.decimalsShown).toString();
+        let quantityString: string = isZero ? '0' : SMath.round2(this.quantity, 10 ** -config.decimalsShown).toString();
         // Scientific notation
-        if (!SMath.approx(this.quantity, 0, 1e-10) && magnitude !== SMath.clamp(magnitude, config.scientificNotationMagnitude.min, config.scientificNotationMagnitude.max)) {
+        if (!isZero && magnitude !== SMath.clamp(magnitude, config.scientificNotationMagnitude.min, config.scientificNotationMagnitude.max)) {
             const scaledQuantity: number = this.quantity / (10 ** magnitude);
             quantityString = SMath.round2(scaledQuantity, 10 ** -config.decimalsShown).toString() + ' \\times 10^{' + magnitude + '}';
         }

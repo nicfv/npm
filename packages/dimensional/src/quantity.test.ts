@@ -100,6 +100,12 @@ describe('Quantity', () => {
         assert.ok(speedMPH.quantity < 8.4);
     });
 
+    it('zero', () => {
+        assert.strictEqual(new Quantity(0, units.meter).toString(), '0 \\left[ \\text{m} \\right]')
+        assert.strictEqual(new Quantity(1e-11, units.meter).toString(), '0 \\left[ \\text{m} \\right]')
+        assert.strictEqual(new Quantity(-1e-11, units.meter).toString(), '0 \\left[ \\text{m} \\right]')
+    });
+
     it('scientific notation', () => {
         const ft_1 = new Quantity(1, units.foot);
         const nm_1 = ft_1.as(units.meter.prefix(prefixes.nano));

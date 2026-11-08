@@ -17,9 +17,9 @@ export class Unit extends Compound<Unit> {
     /**
      * Define a new named unit.
      * @param LaTeXsymbol The LaTeX code for this unit
-     * @param base The base dimension or makeup of unit(s)
+     * @param base The base dimension or composition of unit(s)
      * @param scale The scale factor of this unit relative to the units in `base`
-     * @param allowPrefix Whether or not this unit can have a prefix applied
+     * @param allowPrefix Whether this unit may have a prefix applied to it
      */
     constructor(LaTeXsymbol?: string | Map<Unit, number>, base?: Dimension | Unit, scale = 1, private readonly allowPrefix = true) {
         super(() => this, LaTeXsymbol);

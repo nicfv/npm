@@ -7,7 +7,7 @@ import Psychrolib from 'psychrolib';
  */
 export class PsyState {
     /**
-     * Calculation tolerance
+     * Calculation relative tolerance
      */
     private static readonly TOL = 0.01;
     /**

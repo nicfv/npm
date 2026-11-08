@@ -1,5 +1,5 @@
 /**
- * Check if two numbers are approximately equal with a maximum abolute error.
+ * Check if two numbers are approximately equal with a maximum absolute error.
  * @param a Any number
  * @param b Any number
  * @param epsilon Maximum absolute error
@@ -379,6 +379,7 @@ export function selectRandom<T>(stack: T[]): T {
 /**
  * Select a single index in an array at random with different
  * weights. Indices with negative weights are ignored.
+ * If all weights are <=0, this will return -1.
  * @param weights The weights for each item
  * @returns The 0-based index of the randomly selected item
  * @example

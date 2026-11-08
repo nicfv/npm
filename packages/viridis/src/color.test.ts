@@ -99,15 +99,15 @@ describe('string conversion', () => {
     const gray: Color = Color.hex('#808080C0');
 
     it('rgb output', () => {
-        assert.strictEqual(blue.toString('rgb'), 'rgb(0,0,255)');
-        assert.strictEqual(red.toString('rgb'), 'rgb(194,10,10,25%)');
-        assert.strictEqual(gray.toString('rgb'), 'rgb(128,128,128,75%)');
+        assert.strictEqual(blue.toString('rgb'), 'rgb(0, 0, 255)');
+        assert.strictEqual(red.toString('rgb'), 'rgba(194, 10, 10, 25%)');
+        assert.strictEqual(gray.toString('rgb'), 'rgba(128, 128, 128, 75%)');
     });
 
     it('hsl output', () => {
-        assert.strictEqual(blue.toString('hsl'), 'hsl(240deg,100%,50%)');
-        assert.strictEqual(red.toString('hsl'), 'hsl(0deg,90%,40%,25%)');
-        assert.strictEqual(gray.toString('hsl'), 'hsl(0deg,0%,50%,75%)');
+        assert.strictEqual(blue.toString('hsl'), 'hsl(240deg, 100%, 50%)');
+        assert.strictEqual(red.toString('hsl'), 'hsla(0deg, 90%, 40%, 25%)');
+        assert.strictEqual(gray.toString('hsl'), 'hsla(0deg, 0%, 50%, 75%)');
     });
 
     it('hex output', () => {

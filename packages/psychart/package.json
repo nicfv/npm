@@ -1,6 +1,6 @@
 {
   "name": "psychart",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "View air conditions on a psychrometric chart",
   "homepage": "https://npm.nicfv.com/",
   "type": "module",
@@ -59,9 +59,9 @@
   "repository": "github:nicfv/npm",
   "license": "BSD-3-Clause-LBNL",
   "dependencies": {
-    "dimensional": "1.5.0",
+    "dimensional": "1.5.1",
     "psychrolib": "1.1.1",
-    "smath": "3.1.0",
-    "viridis": "1.7.0"
+    "smath": "4.0.3",
+    "viridis": "1.7.1"
   }
 }

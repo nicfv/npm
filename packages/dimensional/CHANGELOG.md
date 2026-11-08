@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.1
+
+- Minor documentation updates & typo fixes
+- Remove unnecessary semicolons
+- When quantity is reasonably close to zero, `.toString()` now strictly outputs a `0` with the unit
+
 ## 1.5.0
 
 - Replace `t6` testing framework with standardized `node:test` built-in framework

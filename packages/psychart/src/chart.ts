@@ -8,7 +8,7 @@ export abstract class Chart<T extends ChartOptions> {
     /**
      * Initialization counter for any chart
      */
-    private static id_count = 0;
+    private static idCount = 0;
     /**
      * Unique numeric identifier for this chart
      */
@@ -36,7 +36,7 @@ export abstract class Chart<T extends ChartOptions> {
      */
     constructor(options: Partial<T>, defaults: T) {
         // Set the unique ID for this chart
-        this.id = Chart.id_count++;
+        this.id = Chart.idCount++;
         // Set the default options
         this.options = Chart.setDefaults(options, defaults);
         // Create the base elements
@@ -75,7 +75,7 @@ export abstract class Chart<T extends ChartOptions> {
      */
     protected static clearChildren(parent: Node): void {
         while (parent.firstChild) {
-            parent.removeChild(parent.firstChild)
+            parent.removeChild(parent.firstChild);
         }
     }
     /**
